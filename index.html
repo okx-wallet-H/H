@@ -3,192 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Web3 Wallet Mobile</title>
+    <title>Web3 Wallet - Pro Mobile</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { 
-            background-color: #ffffff; 
-            color: #1e293b; 
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto; 
-            -webkit-tap-highlight-color: transparent;
-        }
+        body { background-color: #ffffff; color: #1e293b; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
         .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-        .token-card:active { background-color: #f8fafc; transform: scale(0.98); transition: 0.1s; }
-        .nav-item.active { color: #8b5cf6; }
+        .page { display: none; min-height: 100vh; animation: slideIn 0.2s ease-out; }
+        .page.active { display: flex; flex-direction: column; }
+        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .glass-input { background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 1rem; width: 100%; padding: 1rem; outline: none; transition: all 0.2s; }
+        .glass-input:focus { border-color: #8b5cf6; background: #fff; box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1); }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        
-        /* 拟物化卡片阴影 */
-        .wallet-shadow {
-            box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.15), 0 8px 10px -6px rgba(139, 92, 246, 0.1);
-        }
     </style>
 </head>
-<body class="flex flex-col h-screen overflow-hidden">
+<body class="overflow-hidden">
 
-    <header class="flex justify-between items-center px-5 pt-4 pb-2 bg-white sticky top-0 z-10">
-        <div class="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200/50">
-            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <select id="network-select" class="bg-transparent text-xs font-bold text-slate-700 outline-none appearance-none pr-4" style="background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right center; background-size: 8px;">
-                <option value="x-layer">X Layer</option>
-                <option value="bnb">BNB Chain</option>
-                <option value="solana">Solana</option>
-            </select>
-        </div>
-        <div class="flex space-x-4">
-            <button class="w-8 h-8 flex items-center justify-center text-slate-600"><i class="fa-solid fa-expand text-lg"></i></button>
-            <button class="w-8 h-8 flex items-center justify-center text-slate-600"><i class="fa-solid fa-bell text-lg"></i></button>
-        </div>
-    </header>
+    <div id="page-home" class="page active">
+        <header class="flex justify-between items-center px-5 pt-4 pb-2 bg-white sticky top-0 z-10">
+            <div class="flex items-center space-x-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200/50">
+                <i class="fa-solid fa-layer-group text-[10px] text-purple-600"></i>
+                <select id="network-select" class="bg-transparent text-xs font-bold text-slate-700 outline-none">
+                    <option value="all" selected>全部网络</option>
+                    <option value="x-layer">X Layer</option>
+                    <option value="bnb">BNB Chain</option>
+                    <option value="solana">Solana</option>
+                </select>
+            </div>
+            <div class="flex space-x-4 text-slate-600">
+                <i class="fa-solid fa-expand text-lg"></i>
+                <i class="fa-solid fa-bell text-lg"></i>
+            </div>
+        </header>
 
-    <main class="flex-1 overflow-y-auto px-5 pt-2 pb-24 hide-scrollbar">
-        
-        <section class="relative overflow-hidden bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[2rem] p-6 mb-8 wallet-shadow text-white">
-            <div class="absolute -right-10 -top-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
-            
-            <p class="text-purple-100/80 text-sm font-medium mb-1">总资产估值</p>
-            <div class="flex items-baseline space-x-2">
+        <main class="flex-1 overflow-y-auto px-5 pt-2 pb-24 hide-scrollbar">
+            <section class="bg-gradient-to-br from-purple-600 to-indigo-700 rounded-[2rem] p-6 mb-8 text-white shadow-xl shadow-purple-200">
+                <p class="text-purple-100/80 text-sm font-medium mb-1">总资产估值</p>
                 <h1 class="text-3xl font-bold tracking-tight">$12,450.88</h1>
-                <i class="fa-solid fa-eye-slash text-white/50 text-xs"></i>
-            </div>
-            <div class="mt-4 flex items-center space-x-2">
-                <span class="bg-white/20 px-2 py-0.5 rounded text-[10px] font-bold">今日 +$312.45</span>
-                <span class="text-emerald-300 text-xs font-bold">+2.45%</span>
-            </div>
-
-            <div class="grid grid-cols-4 gap-2 mt-8">
-                <button class="flex flex-col items-center space-y-1.5">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-                        <i class="fa-solid fa-arrow-down-long text-sm"></i>
-                    </div>
-                    <span class="text-[11px] font-medium">接收</span>
-                </button>
-                <button class="flex flex-col items-center space-y-1.5">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-                        <i class="fa-solid fa-arrow-up-long text-sm"></i>
-                    </div>
-                    <span class="text-[11px] font-medium">发送</span>
-                </button>
-                <button class="flex flex-col items-center space-y-1.5">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-                        <i class="fa-solid fa-credit-card text-sm"></i>
-                    </div>
-                    <span class="text-[11px] font-medium">买币</span>
-                </button>
-                <button class="flex flex-col items-center space-y-1.5">
-                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
-                        <i class="fa-solid fa-ellipsis text-sm"></i>
-                    </div>
-                    <span class="text-[11px] font-medium">更多</span>
-                </button>
-            </div>
-        </section>
-
-        <section>
-            <div class="flex space-x-6 border-b border-slate-100 mb-4 sticky top-0 bg-white py-2 z-10">
-                <button onclick="switchTab('tokens')" id="tab-tokens" class="pb-2 text-sm font-bold tab-active transition-all">代币</button>
-                <button onclick="switchTab('nft')" id="tab-nft" class="pb-2 text-sm font-bold text-slate-400">NFTs</button>
-                <button onclick="switchTab('defi')" id="tab-defi" class="pb-2 text-sm font-bold text-slate-400">DeFi</button>
-            </div>
-
-            <div id="content-tokens" class="space-y-1">
-                <div class="token-card flex justify-between items-center py-4 px-2 rounded-2xl">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">OKB</div>
-                        <div>
-                            <p class="font-bold text-slate-800">OKB</p>
-                            <p class="text-[10px] text-slate-400 font-bold">$43.50 <span class="text-green-500">+1.2%</span></p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-bold text-slate-800">120.50</p>
-                        <p class="text-xs text-slate-500">$5,240.20</p>
-                    </div>
-                </div>
-
-                <div class="token-card flex justify-between items-center py-4 px-2 rounded-2xl">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white font-bold italic text-sm">T</div>
-                        <div>
-                            <p class="font-bold text-slate-800">USDT</p>
-                            <p class="text-[10px] text-slate-400 font-bold">$1.00 <span class="text-slate-400">0.0%</span></p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-bold text-slate-800">7,210.68</p>
-                        <p class="text-xs text-slate-500">$7,210.68</p>
-                    </div>
-                </div>
                 
-                <button class="w-full py-4 text-xs font-bold text-slate-400 flex items-center justify-center">
-                    没有找到代币？<span class="text-purple-600 ml-1">导入代币</span>
-                </button>
-            </div>
-        </section>
+                <div class="grid grid-cols-3 gap-2 mt-8">
+                    <button onclick="navigateTo('page-deposit')" class="flex flex-col items-center space-y-1.5 py-2">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                            <i class="fa-solid fa-arrow-down-long"></i>
+                        </div>
+                        <span class="text-[11px] font-medium">充币</span>
+                    </button>
+                    <button onclick="navigateTo('page-withdraw')" class="flex flex-col items-center space-y-1.5 py-2">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                            <i class="fa-solid fa-arrow-up-long"></i>
+                        </div>
+                        <span class="text-[11px] font-medium">提币</span>
+                    </button>
+                    <button onclick="navigateTo('page-swap')" class="flex flex-col items-center space-y-1.5 py-2">
+                        <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                            <i class="fa-solid fa-repeat"></i>
+                        </div>
+                        <span class="text-[11px] font-medium">交易</span>
+                    </button>
+                </div>
+            </section>
 
-        <section class="mt-8">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-sm font-bold text-slate-800 uppercase tracking-tight">热门行情</h3>
-                <span class="text-xs text-purple-600 font-bold">查看全部</span>
+            <h3 class="text-sm font-bold text-slate-800 mb-4 px-2">资产列表</h3>
+            <div class="space-y-1">
+                <div class="flex justify-between items-center py-4 px-2 active:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md shadow-purple-100">OKB</div>
+                            <div class="absolute -right-1 -bottom-1 w-4 h-4 bg-white border border-slate-100 rounded-full flex items-center justify-center text-[8px] text-purple-600">X</div>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm">OKB</p>
+                            <p class="text-[10px] text-slate-400 font-bold">X Layer</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-slate-800 text-sm">120.50</p>
+                        <p class="text-[10px] text-slate-400 font-bold">$5,240.20</p>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center py-4 px-2 active:bg-slate-50 rounded-2xl transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xs shadow-md shadow-yellow-100">BNB</div>
+                            <div class="absolute -right-1 -bottom-1 w-4 h-4 bg-white border border-slate-100 rounded-full flex items-center justify-center text-[8px] text-yellow-600">B</div>
+                        </div>
+                        <div>
+                            <p class="font-bold text-slate-800 text-sm">BNB</p>
+                            <p class="text-[10px] text-slate-400 font-bold">BNB Chain</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-slate-800 text-sm">2.45</p>
+                        <p class="text-[10px] text-slate-400 font-bold">$1,470.00</p>
+                    </div>
+                </div>
             </div>
-            <div class="flex space-x-3 overflow-x-auto hide-scrollbar">
-                <div class="min-w-[110px] p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <p class="text-[10px] font-bold text-slate-500 mb-1">BTC</p>
-                    <p class="font-bold text-sm">$64,231</p>
-                    <p class="text-[10px] font-bold text-green-500 mt-0.5">+1.2%</p>
-                </div>
-                <div class="min-w-[110px] p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <p class="text-[10px] font-bold text-slate-500 mb-1">ETH</p>
-                    <p class="font-bold text-sm">$3,452</p>
-                    <p class="text-[10px] font-bold text-red-500 mt-0.5">-0.5%</p>
-                </div>
-                <div class="min-w-[110px] p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <p class="text-[10px] font-bold text-slate-500 mb-1">SOL</p>
-                    <p class="font-bold text-sm">$145.2</p>
-                    <p class="text-[10px] font-bold text-green-500 mt-0.5">+5.8%</p>
-                </div>
-            </div>
-        </section>
-    </main>
+        </main>
+    </div>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-100 px-6 py-3 safe-bottom flex justify-between items-center z-20">
-        <div class="nav-item active flex flex-col items-center space-y-1">
+    <div id="page-deposit" class="page">
+        <header class="p-5 flex items-center">
+            <button onclick="navigateTo('page-home')" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mr-4">
+                <i class="fa-solid fa-chevron-left text-slate-600"></i>
+            </button>
+            <h2 class="text-lg font-bold">选择充币网络</h2>
+        </header>
+        <main class="flex-1 px-5 text-center">
+            <div class="bg-slate-50 rounded-3xl p-8 mb-6">
+                <div class="w-48 h-48 bg-white mx-auto mb-6 flex items-center justify-center border-2 border-slate-100 rounded-2xl">
+                    <i class="fa-solid fa-qrcode text-8xl text-slate-200"></i>
+                </div>
+                <p class="text-xs text-slate-400 mb-2">您的 X Layer 地址</p>
+                <div class="flex items-center justify-center bg-white p-3 rounded-xl border border-slate-200 mb-4">
+                    <span class="text-xs font-mono text-slate-600 truncate">0x71C...8eA3</span>
+                    <i class="fa-solid fa-copy ml-3 text-purple-600"></i>
+                </div>
+            </div>
+            <p class="text-xs text-red-400 font-medium px-4">请务必确保您在充值时选择的是 X Layer 网络，否则资产可能会丢失。</p>
+        </main>
+    </div>
+
+    <div id="page-withdraw" class="page">
+        <header class="p-5 flex items-center">
+            <button onclick="navigateTo('page-home')" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mr-4">
+                <i class="fa-solid fa-chevron-left text-slate-600"></i>
+            </button>
+            <h2 class="text-lg font-bold">发送代币</h2>
+        </header>
+        <main class="flex-1 px-5 space-y-6">
+            <div>
+                <label class="text-xs font-bold text-slate-400 ml-2 mb-2 block uppercase">接收地址</label>
+                <input type="text" placeholder="输入或粘贴地址" class="glass-input">
+            </div>
+            <div>
+                <label class="text-xs font-bold text-slate-400 ml-2 mb-2 block uppercase">发送金额</label>
+                <div class="relative">
+                    <input type="number" placeholder="0.00" class="glass-input pr-16">
+                    <span class="absolute right-4 top-4 font-bold text-purple-600">MAX</span>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-2 ml-2">可用余额: 120.50 OKB</p>
+            </div>
+            <button class="w-full bg-purple-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-purple-100 mt-8">下一步</button>
+        </main>
+    </div>
+
+    <div id="page-swap" class="page">
+        <header class="p-5 flex items-center justify-between">
+            <button onclick="navigateTo('page-home')" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+                <i class="fa-solid fa-chevron-left text-slate-600"></i>
+            </button>
+            <h2 class="text-lg font-bold">闪兑</h2>
+            <i class="fa-solid fa-sliders text-slate-600"></i>
+        </header>
+        <main class="flex-1 px-5">
+            <div class="space-y-2 relative">
+                <div class="bg-slate-50 p-5 rounded-3xl border border-slate-100">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-400">从</span>
+                        <span class="text-xs text-slate-400">余额: 120.50</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <input type="number" value="100" class="bg-transparent text-2xl font-bold outline-none w-1/2">
+                        <div class="flex items-center bg-white px-3 py-1.5 rounded-full border border-slate-100 shadow-sm">
+                            <span class="font-bold text-sm mr-2">OKB</span>
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white border-4 border-white shadow-md rounded-full flex items-center justify-center z-10">
+                    <i class="fa-solid fa-arrow-down-up-lock text-purple-600 text-sm"></i>
+                </div>
+
+                <div class="bg-slate-50 p-5 rounded-3xl border border-slate-100">
+                    <div class="flex justify-between mb-2">
+                        <span class="text-xs font-bold text-slate-400">至</span>
+                        <span class="text-xs text-slate-400">余额: 7,210.68</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <input type="number" placeholder="4350.2" class="bg-transparent text-2xl font-bold outline-none w-1/2">
+                        <div class="flex items-center bg-emerald-500 text-white px-3 py-1.5 rounded-full shadow-sm">
+                            <span class="font-bold text-sm mr-2">USDT</span>
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-purple-50 rounded-2xl">
+                <div class="flex justify-between text-xs mb-2">
+                    <span class="text-slate-500">汇率</span>
+                    <span class="font-medium text-slate-700">1 OKB ≈ 43.5 USDT</span>
+                </div>
+                <div class="flex justify-between text-xs">
+                    <span class="text-slate-500">网络费用</span>
+                    <span class="font-medium text-slate-700">~$0.24</span>
+                </div>
+            </div>
+
+            <button class="w-full bg-purple-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-purple-100 mt-8">确认兑换</button>
+        </main>
+    </div>
+
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-100 px-6 py-3 safe-bottom flex justify-between items-center z-20">
+        <div class="flex flex-col items-center space-y-1 text-purple-600">
             <i class="fa-solid fa-wallet text-xl"></i>
             <span class="text-[10px] font-bold">钱包</span>
         </div>
-        <div class="nav-item flex flex-col items-center space-y-1 text-slate-400">
-            <i class="fa-solid fa-arrow-right-arrow-left text-xl"></i>
-            <span class="text-[10px] font-bold">交换</span>
-        </div>
-        <div class="nav-item flex flex-col items-center space-y-1 text-slate-400">
+        <div class="flex flex-col items-center space-y-1 text-slate-300">
             <i class="fa-solid fa-chart-line text-xl"></i>
             <span class="text-[10px] font-bold">行情</span>
         </div>
-        <div class="nav-item flex flex-col items-center space-y-1 text-slate-400">
+        <div class="flex flex-col items-center space-y-1 text-slate-300">
             <i class="fa-solid fa-compass text-xl"></i>
             <span class="text-[10px] font-bold">发现</span>
         </div>
-        <div class="nav-item flex flex-col items-center space-y-1 text-slate-400">
+        <div class="flex flex-col items-center space-y-1 text-slate-300">
             <i class="fa-solid fa-gear text-xl"></i>
             <span class="text-[10px] font-bold">设置</span>
         </div>
     </nav>
 
     <script>
-        function switchTab(tab) {
-            const tabs = ['tokens', 'nft', 'defi'];
-            tabs.forEach(t => {
-                const el = document.getElementById('tab-' + t);
-                if(t === tab) {
-                    el.classList.add('tab-active', 'text-purple-600');
-                    el.classList.remove('text-slate-400');
-                } else {
-                    el.classList.remove('tab-active', 'text-purple-600');
-                    el.classList.add('text-slate-400');
-                }
-            });
-            // 这里可以添加内容切换逻辑
+        // 简单的页面导航逻辑
+        function navigateTo(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // 显示目标页面
+            document.getElementById(pageId).classList.add('active');
+            
+            // 如果不是首页，隐藏底部导航栏以增加沉浸感
+            const bottomNav = document.getElementById('bottom-nav');
+            if(pageId === 'page-home') {
+                bottomNav.style.display = 'flex';
+            } else {
+                bottomNav.style.display = 'none';
+            }
         }
+
+        // 模拟网络切换
+        document.getElementById('network-select').addEventListener('change', (e) => {
+            console.log("切换到网络:", e.target.value);
+            // 这里可以添加根据网络过滤代币的逻辑
+        });
     </script>
 </body>
 </html>
