@@ -3,149 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haitun Wallet | 海豚 Web3 钱包</title>
+    <title>Web3 Alpha Wallet v2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body {
-            background: radial-gradient(circle at top right, #1e293b, #0f172a);
-            min-height: 100vh;
-            color: white;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #fcfcfc; color: #1a1a1a; overflow-x: hidden; }
+        .purple-gradient { background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%); }
+        .tab-active { color: #7C3AED; border-bottom: 2px solid #7C3AED; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Bottom Sheet Animation */
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(100%);
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .bottom-sheet.active {
+            transform: translateY(0);
         }
-        .dolphin-gradient {
-            background: linear-gradient(135deg, #0ea5e9 0%, #2dd4bf 100%);
+        .overlay {
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            opacity: 0;
+        }
+        .overlay.active {
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .network-pill.active {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
         }
     </style>
 </head>
-<body class="flex items-center justify-center p-4">
+<body class="max-w-md mx-auto min-h-screen border-x border-gray-100 shadow-2xl relative pb-20">
 
-    <div class="max-w-md w-full">
-        <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full dolphin-gradient shadow-lg shadow-cyan-500/20 mb-4">
-                <i data-lucide="waves" class="w-10 h-10 text-white"></i>
+    <div class="purple-gradient text-white p-8 rounded-b-[32px] shadow-lg">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex p-1 bg-black/10 rounded-full border border-white/10">
+                <button onclick="selectNet('all')" id="net-all" class="network-pill active px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">全部</button>
+                <button onclick="selectNet('xlayer')" id="net-xlayer" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">X Layer</button>
+                <button onclick="selectNet('bnb')" id="net-bnb" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">BNB</button>
             </div>
-            <h1 class="text-3xl font-bold tracking-tight">Haitun <span class="text-cyan-400">Wallet</span></h1>
-            <p class="text-slate-400 mt-2">安全、简洁的去中心化资产管理</p>
+            <i data-lucide="scan" class="w-6 h-6 opacity-80 cursor-pointer"></i>
         </div>
-
-        <div class="glass-card rounded-3xl p-6 shadow-2xl">
-            <div id="loggedOutView" class="space-y-6">
-                <div class="text-center py-6">
-                    <p class="text-slate-300">连接你的钱包以查看余额和交易</p>
-                </div>
-                <button onclick="connectWallet()" id="connectBtn" class="w-full dolphin-gradient hover:opacity-90 text-white font-bold py-4 rounded-2xl transition-all transform active:scale-95 flex items-center justify-center gap-2">
-                    <i data-lucide="wallet" class="w-5 h-5"></i>
-                    连接 MetaMask
-                </button>
-            </div>
-
-            <div id="loggedInView" class="hidden space-y-6">
-                <div class="flex items-center justify-between">
-                    <span class="text-sm text-slate-400">当前网络: <span class="text-emerald-400">Ethereum Mainnet</span></span>
-                    <button onclick="disconnect()" class="text-xs text-slate-500 hover:text-red-400 transition-colors">断开连接</button>
-                </div>
-
-                <div class="bg-white/5 rounded-2xl p-6 text-center border border-white/5">
-                    <p class="text-slate-400 text-sm mb-1">总余额</p>
-                    <h2 id="ethBalance" class="text-4xl font-extrabold tracking-tighter text-white">0.00 <span class="text-lg font-normal text-slate-400 ml-1">ETH</span></h2>
-                </div>
-
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between px-2 text-sm text-slate-400">
-                        <span>钱包地址</span>
-                        <span id="walletAddressShort" class="font-mono text-cyan-400">0x00...000</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl flex items-center justify-center gap-2 transition-colors">
-                            <i data-lucide="arrow-up-right" class="w-4 h-4"></i> 发送
-                        </button>
-                        <button class="bg-slate-800 hover:bg-slate-700 p-3 rounded-xl flex items-center justify-center gap-2 transition-colors">
-                            <i data-lucide="arrow-down-left" class="w-4 h-4"></i> 接收
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-8 text-center">
-            <p class="text-xs text-slate-500 italic">© 2026 Haitun Wallet. Powered by Ethereum.</p>
+        
+        <p class="text-sm opacity-80 mb-1">总资产估值 (USD)</p>
+        <h1 class="text-4xl font-bold tracking-tight mb-4">$ 10,390.50</h1>
+        <div class="flex items-center text-xs bg-black/10 w-fit px-2 py-1 rounded">
+            <span class="opacity-70">0x71C...a29E</span>
+            <i data-lucide="copy" class="w-3 h-3 ml-2 cursor-pointer"></i>
         </div>
     </div>
 
+    <div class="grid grid-cols-4 gap-4 px-6 -mt-8">
+        <div class="flex flex-col items-center">
+            <button onclick="toggleSheet('充币')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
+                <i data-lucide="arrow-down-to-line"></i>
+            </button>
+            <span class="text-xs mt-2 font-medium text-gray-600">充币</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <button onclick="toggleSheet('提币')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
+                <i data-lucide="arrow-up-from-line"></i>
+            </button>
+            <span class="text-xs mt-2 font-medium text-gray-600">提币</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <button onclick="toggleSheet('交易')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
+                <i data-lucide="repeat"></i>
+            </button>
+            <span class="text-xs mt-2 font-medium text-gray-600">交易</span>
+        </div>
+        <div class="flex flex-col items-center">
+            <button class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform">
+                <i data-lucide="layout-grid"></i>
+            </button>
+            <span class="text-xs mt-2 font-medium text-gray-600">应用</span>
+        </div>
+    </div>
+
+    <div class="mt-8 px-6">
+        <div class="flex space-x-8 border-b border-gray-100">
+            <button id="tokenTab" class="pb-3 text-sm font-bold tab-active transition-all" onclick="switchTab('tokens')">代币列表</button>
+            <button id="defiTab" class="pb-3 text-sm font-medium text-gray-400 hover:text-gray-600 transition-all" onclick="switchTab('defi')">DeFi 资产</button>
+        </div>
+
+        <div id="tokenContent" class="mt-4 space-y-5">
+            <div class="flex justify-between items-center group cursor-pointer">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">X</div>
+                    <div>
+                        <div class="font-bold">OKB</div>
+                        <div class="text-xs text-gray-400">X Layer Network</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-bold">120.50</div>
+                    <div class="text-xs text-gray-400">$7,230.00</div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center group cursor-pointer">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white">
+                        <i data-lucide="coins" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold">BNB</div>
+                        <div class="text-xs text-gray-400">BNB Smart Chain</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-bold">5.24</div>
+                    <div class="text-xs text-gray-400">$3,120.15</div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center group cursor-pointer border-t border-gray-50 pt-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white">
+                        <span class="font-bold text-sm">$</span>
+                    </div>
+                    <div>
+                        <div class="font-bold">USDT</div>
+                        <div class="text-xs text-gray-400">多链资产</div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="font-bold">40.35</div>
+                    <div class="text-xs text-gray-400">$40.35</div>
+                </div>
+            </div>
+
+            <button class="w-full py-3 mt-2 flex items-center justify-center space-x-2 text-violet-600 bg-violet-50 rounded-xl hover:bg-violet-100 transition-colors text-sm font-medium">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>币种管理</span>
+            </button>
+        </div>
+
+        <div id="defiContent" class="hidden mt-4 py-10 text-center text-gray-400 text-sm italic">
+            暂无 DeFi 持仓数据
+        </div>
+    </div>
+
+    <div class="mt-10 px-6">
+        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Market / 行情</h3>
+        <div class="flex space-x-3 overflow-x-auto hide-scrollbar">
+            <div class="min-w-[120px] p-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                <div class="text-[10px] text-gray-400 mb-1">BTC/USDT</div>
+                <div class="font-bold text-sm">64,210</div>
+                <div class="text-[10px] text-green-500 font-bold">+1.2%</div>
+            </div>
+            <div class="min-w-[120px] p-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                <div class="text-[10px] text-gray-400 mb-1">ETH/USDT</div>
+                <div class="font-bold text-sm">3,452</div>
+                <div class="text-[10px] text-red-500 font-bold">-0.5%</div>
+            </div>
+            <div class="min-w-[120px] p-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
+                <div class="text-[10px] text-gray-400 mb-1">OKB/USDT</div>
+                <div class="font-bold text-sm">60.12</div>
+                <div class="text-[10px] text-green-500 font-bold">+4.8%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 px-6 mb-12">
+        <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center space-x-3">
+            <div class="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center text-violet-600">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 overflow-hidden">
+                <p class="text-[11px] text-gray-500 truncate">安全提示：请务必妥善保管您的助记词，切勿泄露给任何人。</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 backdrop-blur-md border-t border-gray-50 px-10 py-3 flex justify-between items-center z-40">
+        <div class="text-violet-600 flex flex-col items-center">
+            <i data-lucide="wallet" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1 font-bold">钱包</span>
+        </div>
+        <div class="text-gray-300 flex flex-col items-center">
+            <i data-lucide="compass" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">发现</span>
+        </div>
+        <div class="text-gray-300 flex flex-col items-center">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+            <span class="text-[10px] mt-1">设置</span>
+        </div>
+    </nav>
+
+    <div id="overlay" class="overlay fixed inset-0 bg-black/40 z-50" onclick="toggleSheet()"></div>
+
+    <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[32px] z-[60] p-6 shadow-2xl">
+        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
+        <h2 id="sheetTitle" class="text-xl font-bold mb-6 text-center text-gray-800">操作</h2>
+        
+        <div class="space-y-4">
+            <div class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 transition-colors cursor-pointer group">
+                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-all">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                </div>
+                <div class="ml-4">
+                    <div class="font-bold text-sm">选择 X Layer 网络</div>
+                    <div class="text-xs text-gray-400">极速到账，低 Gas 费</div>
+                </div>
+            </div>
+            <div class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 transition-colors cursor-pointer group">
+                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-all">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                </div>
+                <div class="ml-4">
+                    <div class="font-bold text-sm">选择 BNB Smart Chain</div>
+                    <div class="text-xs text-gray-400">生态丰富，流动性强</div>
+                </div>
+            </div>
+        </div>
+
+        <button onclick="toggleSheet()" class="w-full mt-8 py-4 bg-gray-100 rounded-2xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">取消</button>
+    </div>
+
     <script>
-        // 初始化图标
         lucide.createIcons();
 
-        let userAddress = "";
+        // Network Selection Logic
+        function selectNet(net) {
+            document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
+            document.getElementById('net-' + net).classList.add('active');
+            // 这里可以添加过滤资产列表的逻辑
+        }
 
-        // 核心连接逻辑
-        async function connectWallet() {
-            const btn = document.getElementById('connectBtn');
-            
-            if (typeof window.ethereum !== 'undefined') {
-                try {
-                    btn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> 连接中...';
-                    lucide.createIcons();
+        // Tab Switching Logic
+        function switchTab(type) {
+            const tokenTab = document.getElementById('tokenTab');
+            const defiTab = document.getElementById('defiTab');
+            const tokenContent = document.getElementById('tokenContent');
+            const defiContent = document.getElementById('defiContent');
 
-                    // 请求账户
-                    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    userAddress = accounts[0];
-                    
-                    await updateUI();
-                } catch (error) {
-                    console.error(error);
-                    alert("连接取消或出错");
-                    resetBtn();
-                }
+            if (type === 'tokens') {
+                tokenTab.classList.add('tab-active', 'font-bold');
+                defiTab.classList.remove('tab-active', 'font-bold');
+                tokenContent.classList.remove('hidden');
+                defiContent.classList.add('hidden');
             } else {
-                alert("未检测到钱包！请安装 MetaMask 插件。");
+                defiTab.classList.add('tab-active', 'font-bold');
+                tokenTab.classList.remove('tab-active', 'font-bold');
+                defiContent.classList.remove('hidden');
+                tokenContent.classList.add('hidden');
             }
         }
 
-        async function updateUI() {
-            // 切换视图
-            document.getElementById('loggedOutView').classList.add('hidden');
-            document.getElementById('loggedInView').classList.remove('hidden');
+        // Bottom Sheet Logic
+        function toggleSheet(title = '') {
+            const sheet = document.getElementById('bottomSheet');
+            const overlay = document.getElementById('overlay');
+            const sheetTitle = document.getElementById('sheetTitle');
+            
+            if (title) sheetTitle.innerText = '选择网络进行' + title;
 
-            // 格式化地址 (0x1234...5678)
-            const shortAddr = userAddress.substring(0, 6) + "..." + userAddress.substring(userAddress.length - 4);
-            document.getElementById('walletAddressShort').innerText = shortAddr;
-
-            // 获取余额
-            const hexBalance = await window.ethereum.request({
-                method: 'eth_getBalance',
-                params: [userAddress, 'latest']
-            });
-            const ethBalance = (parseInt(hexBalance, 16) / 1e18).toFixed(4);
-            document.getElementById('ethBalance').innerHTML = `${ethBalance} <span class="text-lg font-normal text-slate-400 ml-1">ETH</span>`;
-        }
-
-        function disconnect() {
-            // Web3 无法真正从前端强行断开连接，只能刷新页面模拟断开
-            location.reload();
-        }
-
-        function resetBtn() {
-            const btn = document.getElementById('connectBtn');
-            btn.innerHTML = '<i data-lucide="wallet" class="w-5 h-5"></i> 连接 MetaMask';
-            lucide.createIcons();
-        }
-
-        // 监听账户切换
-        if (window.ethereum) {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                if (accounts.length > 0) {
-                    userAddress = accounts[0];
-                    updateUI();
-                } else {
-                    location.reload();
-                }
-            });
+            sheet.classList.toggle('active');
+            overlay.classList.toggle('active');
         }
     </script>
 </body>
