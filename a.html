@@ -2,8 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web3 Alpha Wallet v2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Web3 Alpha Wallet · 全能版</title>
+    <!-- Tailwind + Lucide 字体保持不变，完全沿用原有风格 -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -13,7 +14,7 @@
         .tab-active { color: #7C3AED; border-bottom: 2px solid #7C3AED; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Bottom Sheet Animation */
+        /* 底部滑出动画 —— 完全保留原有设计 */
         .bottom-sheet {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateY(100%);
@@ -35,10 +36,18 @@
             border-color: rgba(255, 255, 255, 0.5);
             font-weight: 600;
         }
+        /* 自定义卡片微交互 */
+        .action-card {
+            transition: all 0.2s ease;
+        }
+        .action-card:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen border-x border-gray-100 shadow-2xl relative pb-20">
 
+    <!-- ========= 顶部紫色渐变区 (完全保留原有设计) ========= -->
     <div class="purple-gradient text-white p-8 rounded-b-[32px] shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <div class="flex p-1 bg-black/10 rounded-full border border-white/10">
@@ -57,6 +66,7 @@
         </div>
     </div>
 
+    <!-- ========= 四大金刚按钮 (全部增加底部面板触发，且保持原图标风格) ========= -->
     <div class="grid grid-cols-4 gap-4 px-6 -mt-8">
         <div class="flex flex-col items-center">
             <button onclick="toggleSheet('充币')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
@@ -77,19 +87,21 @@
             <span class="text-xs mt-2 font-medium text-gray-600">交易</span>
         </div>
         <div class="flex flex-col items-center">
-            <button class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform">
+            <button onclick="toggleSheet('应用')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
                 <i data-lucide="layout-grid"></i>
             </button>
             <span class="text-xs mt-2 font-medium text-gray-600">应用</span>
         </div>
     </div>
 
+    <!-- ========= 代币 / DeFi 切换标签 (完全保留原有内容和结构) ========= -->
     <div class="mt-8 px-6">
         <div class="flex space-x-8 border-b border-gray-100">
             <button id="tokenTab" class="pb-3 text-sm font-bold tab-active transition-all" onclick="switchTab('tokens')">代币列表</button>
             <button id="defiTab" class="pb-3 text-sm font-medium text-gray-400 hover:text-gray-600 transition-all" onclick="switchTab('defi')">DeFi 资产</button>
         </div>
 
+        <!-- 代币列表内容 -->
         <div id="tokenContent" class="mt-4 space-y-5">
             <div class="flex justify-between items-center group cursor-pointer">
                 <div class="flex items-center space-x-3">
@@ -134,18 +146,19 @@
                     <div class="text-xs text-gray-400">$40.35</div>
                 </div>
             </div>
-
             <button class="w-full py-3 mt-2 flex items-center justify-center space-x-2 text-violet-600 bg-violet-50 rounded-xl hover:bg-violet-100 transition-colors text-sm font-medium">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 <span>币种管理</span>
             </button>
         </div>
 
+        <!-- DeFi 空状态 -->
         <div id="defiContent" class="hidden mt-4 py-10 text-center text-gray-400 text-sm italic">
             暂无 DeFi 持仓数据
         </div>
     </div>
 
+    <!-- ========= 行情卡片 (原样保留) ========= -->
     <div class="mt-10 px-6">
         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Market / 行情</h3>
         <div class="flex space-x-3 overflow-x-auto hide-scrollbar">
@@ -167,6 +180,7 @@
         </div>
     </div>
 
+    <!-- ========= 安全提示条 (原样保留) ========= -->
     <div class="mt-8 px-6 mb-12">
         <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center space-x-3">
             <div class="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center text-violet-600">
@@ -178,6 +192,7 @@
         </div>
     </div>
 
+    <!-- ========= 底部导航栏 (原样保留) ========= -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 backdrop-blur-md border-t border-gray-50 px-10 py-3 flex justify-between items-center z-40">
         <div class="text-violet-600 flex flex-col items-center">
             <i data-lucide="wallet" class="w-5 h-5"></i>
@@ -193,47 +208,172 @@
         </div>
     </nav>
 
+    <!-- ========= 遮罩层 (保持不变) ========= -->
     <div id="overlay" class="overlay fixed inset-0 bg-black/40 z-50" onclick="toggleSheet()"></div>
 
+    <!-- ========= 底部滑出面片 (BOTTOM SHEET) - 重构为四个独立功能面板 ========= -->
     <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[32px] z-[60] p-6 shadow-2xl">
-        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6"></div>
-        <h2 id="sheetTitle" class="text-xl font-bold mb-6 text-center text-gray-800">操作</h2>
+        <!-- 顶部抓柄 -->
+        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4"></div>
+        <!-- 动态标题，由JS控制 -->
+        <h2 id="sheetTitle" class="text-xl font-bold mb-5 text-center text-gray-800">操作</h2>
         
-        <div class="space-y-4">
-            <div class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 transition-colors cursor-pointer group">
-                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-all">
-                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <!-- 充币面板 (默认隐藏，JS控制显示) -->
+        <div id="panel-deposit" class="sheet-panel hidden space-y-4">
+            <div class="bg-violet-50 p-4 rounded-2xl flex items-center space-x-4">
+                <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-violet-600">
+                    <i data-lucide="qrcode" class="w-6 h-6"></i>
                 </div>
-                <div class="ml-4">
-                    <div class="font-bold text-sm">选择 X Layer 网络</div>
-                    <div class="text-xs text-gray-400">极速到账，低 Gas 费</div>
+                <div class="flex-1">
+                    <div class="text-xs text-gray-500">钱包地址</div>
+                    <div class="font-mono text-sm font-bold truncate">0x71C...a29E</div>
                 </div>
+                <button class="text-violet-600 bg-white p-2 rounded-lg shadow-sm">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
             </div>
-            <div class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 transition-colors cursor-pointer group">
-                <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-violet-600 group-hover:bg-violet-600 group-hover:text-white transition-all">
-                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                    <span class="text-sm">选择网络</span>
+                    <span class="text-sm font-medium text-violet-600">X Layer Network ▼</span>
                 </div>
-                <div class="ml-4">
-                    <div class="font-bold text-sm">选择 BNB Smart Chain</div>
-                    <div class="text-xs text-gray-400">生态丰富，流动性强</div>
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl">
+                    <span class="text-sm">最低充值</span>
+                    <span class="text-sm font-medium">0.01 OKB</span>
                 </div>
+                <div class="text-xs text-gray-400 flex items-center"><i data-lucide="clock" class="w-3 h-3 mr-1"></i> 预计到账: 3~20秒</div>
             </div>
+            <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm mt-2">查看充值记录</button>
         </div>
 
-        <button onclick="toggleSheet()" class="w-full mt-8 py-4 bg-gray-100 rounded-2xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">取消</button>
+        <!-- 提币面板 -->
+        <div id="panel-withdraw" class="sheet-panel hidden space-y-4">
+            <div>
+                <label class="text-xs text-gray-500 mb-1 block">提币地址</label>
+                <div class="flex items-center bg-gray-50 rounded-2xl px-4 py-3">
+                    <input type="text" placeholder="0x 或域名" class="w-full bg-transparent outline-none text-sm">
+                    <i data-lucide="contact" class="w-5 h-5 text-gray-300"></i>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="text-xs text-gray-500 mb-1 block">币种</label>
+                    <div class="bg-gray-50 rounded-xl px-4 py-3 flex items-center justify-between">
+                        <span class="font-medium">OKB</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500 mb-1 block">网络</label>
+                    <div class="bg-gray-50 rounded-xl px-4 py-3 flex items-center justify-between">
+                        <span class="font-medium">X Layer</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label class="text-xs text-gray-500 mb-1 block">数量</label>
+                <div class="bg-gray-50 rounded-2xl px-4 py-3 flex items-center">
+                    <input type="text" placeholder="0.00" class="w-full bg-transparent outline-none text-lg font-medium">
+                    <span class="text-violet-600 text-sm font-bold">全部</span>
+                </div>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-400">手续费</span>
+                <span class="font-medium">~0.0005 OKB ($0.03)</span>
+            </div>
+            <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">提交提币</button>
+        </div>
+
+        <!-- 交易面板 (兑换) -->
+        <div id="panel-swap" class="sheet-panel hidden space-y-4">
+            <div class="bg-gray-50 p-4 rounded-2xl relative">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs text-gray-400">卖出</span>
+                    <span class="text-xs text-gray-400">余额: 120.5</span>
+                </div>
+                <div class="flex items-center">
+                    <input type="text" value="1.0" class="w-full bg-transparent text-2xl font-bold outline-none">
+                    <div class="flex items-center bg-white px-3 py-1.5 rounded-full shadow-sm">
+                        <span class="font-bold">OKB</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center -my-2 relative z-10">
+                <div class="bg-white border-4 border-gray-50 rounded-full p-2 text-violet-600">
+                    <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-2xl">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs text-gray-400">买入</span>
+                    <span class="text-xs text-gray-400">余额: 40.35</span>
+                </div>
+                <div class="flex items-center">
+                    <input type="text" value="15.23" class="w-full bg-transparent text-2xl font-bold outline-none">
+                    <div class="flex items-center bg-white px-3 py-1.5 rounded-full shadow-sm">
+                        <span class="font-bold">USDT</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-400">
+                <span>价格: 1 OKB ≈ 15.23 USDT</span>
+                <span>滑点: 0.5%</span>
+            </div>
+            <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">兑换</button>
+        </div>
+
+        <!-- 应用面板 (DApp 推荐) -->
+        <div id="panel-dapps" class="sheet-panel hidden space-y-4">
+            <div class="relative">
+                <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-300"></i>
+                <input type="text" placeholder="搜索 DApp 或输入网址" class="w-full bg-gray-50 rounded-2xl py-3 pl-10 pr-4 text-sm outline-none">
+            </div>
+            <div class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1">
+                <span class="px-4 py-2 bg-violet-600 text-white rounded-full text-xs whitespace-nowrap">🔥 热门</span>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap">跨链桥</span>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap">借贷</span>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap">NFT</span>
+            </div>
+            <div class="grid grid-cols-4 gap-3">
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white text-xs">U</div>
+                    <span class="text-[10px] mt-1">Uniswap</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-xs">A</div>
+                    <span class="text-[10px] mt-1">Aave</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-purple-500 rounded-2xl flex items-center justify-center text-white text-xs">O</div>
+                    <span class="text-[10px] mt-1">OpenSea</span>
+                </div>
+                <div class="flex flex-col items-center">
+                    <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center text-white text-xs">B</div>
+                    <span class="text-[10px] mt-1">Bridge</span>
+                </div>
+            </div>
+            <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2">查看更多应用</button>
+        </div>
+
+        <!-- 通用取消按钮 (保留) -->
+        <button onclick="toggleSheet()" class="w-full mt-6 py-4 bg-gray-100 rounded-2xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">取消</button>
     </div>
 
     <script>
+        // 初始化 Lucide 图标
         lucide.createIcons();
 
-        // Network Selection Logic
+        // ---------- 网络筛选 (仅UI演示) ----------
         function selectNet(net) {
             document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
             document.getElementById('net-' + net).classList.add('active');
-            // 这里可以添加过滤资产列表的逻辑
+            // 可扩展资产过滤逻辑
         }
 
-        // Tab Switching Logic
+        // ---------- 顶部标签切换 ----------
         function switchTab(type) {
             const tokenTab = document.getElementById('tokenTab');
             const defiTab = document.getElementById('defiTab');
@@ -253,17 +393,43 @@
             }
         }
 
-        // Bottom Sheet Logic
+        // ---------- 底部滑出面板：根据标题显示不同内容 ----------
         function toggleSheet(title = '') {
             const sheet = document.getElementById('bottomSheet');
             const overlay = document.getElementById('overlay');
             const sheetTitle = document.getElementById('sheetTitle');
             
-            if (title) sheetTitle.innerText = '选择网络进行' + title;
+            // 所有面板先隐藏
+            document.querySelectorAll('.sheet-panel').forEach(panel => panel.classList.add('hidden'));
 
+            if (title) {
+                sheetTitle.innerText = title;  // 设置标题
+                // 根据标题显示对应的面板
+                if (title === '充币') document.getElementById('panel-deposit').classList.remove('hidden');
+                else if (title === '提币') document.getElementById('panel-withdraw').classList.remove('hidden');
+                else if (title === '交易') document.getElementById('panel-swap').classList.remove('hidden');
+                else if (title === '应用') document.getElementById('panel-dapps').classList.remove('hidden');
+                else {
+                    // 默认（比如直接点遮罩关闭再开）显示第一个面板或空，这里默认显示充币
+                    document.getElementById('panel-deposit').classList.remove('hidden');
+                    sheetTitle.innerText = '操作';
+                }
+            } else {
+                // 如果没有title（直接点遮罩关闭后再开），默认显示充币或提示
+                sheetTitle.innerText = '操作';
+                document.getElementById('panel-deposit').classList.remove('hidden');
+            }
+
+            // 切换显示状态
             sheet.classList.toggle('active');
             overlay.classList.toggle('active');
         }
+
+        // 确保初始状态底部面板是隐藏的，所有面板除了默认都不显示
+        window.onload = function() {
+            // 默认隐藏所有面板，但为了美观，预先让充币面板可见（因为初始面板未弹出，所以无影响）
+            // 让底部面板完全隐藏即可，无需额外操作
+        };
     </script>
 </body>
 </html>
