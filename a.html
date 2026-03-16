@@ -161,9 +161,59 @@
       max-height: 400px;
     }
 
-    /* 设置项卡片 */
-    .setting-item {
-      @apply flex justify-between items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-violet-200 transition cursor-pointer;
+    /* ===== 优化后的设置项样式 ===== */
+    .settings-section {
+      @apply mb-6;
+    }
+    .settings-section-title {
+      @apply text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1;
+    }
+    .settings-item {
+      @apply flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 mb-2 hover:border-violet-200 transition-all cursor-pointer shadow-sm hover:shadow;
+    }
+    .settings-item-left {
+      @apply flex items-center gap-3;
+    }
+    .settings-item-icon {
+      @apply w-8 h-8 bg-violet-50 rounded-lg flex items-center justify-center text-violet-600;
+    }
+    .settings-item-content {
+      @apply flex flex-col;
+    }
+    .settings-item-title {
+      @apply text-sm font-medium text-gray-800;
+    }
+    .settings-item-subtitle {
+      @apply text-xs text-gray-400;
+    }
+    .settings-item-right {
+      @apply flex items-center gap-2;
+    }
+    .settings-item-value {
+      @apply text-xs text-gray-500;
+    }
+    .settings-chevron {
+      @apply w-4 h-4 text-gray-300;
+    }
+    /* 开关 */
+    .toggle-switch {
+      @apply w-10 h-5 rounded-full transition-colors duration-200 ease-in-out relative;
+    }
+    .toggle-switch.active {
+      @apply bg-violet-600;
+    }
+    .toggle-switch.inactive {
+      @apply bg-gray-200;
+    }
+    .toggle-knob {
+      @apply w-4 h-4 bg-white rounded-full shadow absolute top-0.5 left-0.5 transition-transform duration-200 ease-in-out;
+    }
+    .toggle-switch.active .toggle-knob {
+      transform: translateX(20px);
+    }
+    /* 退出按钮 */
+    .logout-btn {
+      @apply w-full mt-6 py-4 bg-red-50 text-red-500 rounded-2xl font-medium hover:bg-red-100 transition btn-scale;
     }
   </style>
 </head>
@@ -415,93 +465,196 @@
       </div>
     </div>
 
-    <!-- ========= 设置内容 ========= -->
-    <div id="settingsContent" class="hidden mt-6 space-y-5">
-      <h2 class="text-xl font-bold text-gray-800">设置</h2>
-      
+    <!-- ========= 优化后的设置内容 ========= -->
+    <div id="settingsContent" class="hidden mt-6 space-y-6">
       <!-- 账户安全 -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">账户安全</h3>
-        <div class="setting-item" onclick="alert('修改密码')">
-          <span class="text-sm font-medium text-gray-700">修改密码</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+      <div class="settings-section">
+        <h3 class="settings-section-title">账户安全</h3>
+        <div class="settings-item" onclick="alert('修改密码')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="lock" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">修改密码</span>
+              <span class="settings-item-subtitle">定期更换密码更安全</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('备份助记词')">
-          <span class="text-sm font-medium text-gray-700">备份助记词</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        <div class="settings-item" onclick="alert('备份助记词')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="key" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">备份助记词</span>
+              <span class="settings-item-subtitle">未备份</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <span class="settings-item-value">立即备份</span>
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('私钥管理')">
-          <span class="text-sm font-medium text-gray-700">私钥管理</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        <div class="settings-item" onclick="alert('私钥管理')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="fingerprint" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">私钥管理</span>
+              <span class="settings-item-subtitle">导出/查看私钥</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
       </div>
 
       <!-- 网络与节点 -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">网络与节点</h3>
-        <div class="setting-item" onclick="alert('切换主网/测试网')">
-          <span class="text-sm font-medium text-gray-700">网络选择</span>
-          <span class="text-xs text-gray-400">X Layer 主网</span>
+      <div class="settings-section">
+        <h3 class="settings-section-title">网络与节点</h3>
+        <div class="settings-item" onclick="alert('切换网络')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="network" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">网络选择</span>
+              <span class="settings-item-subtitle">X Layer 主网</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('RPC 节点设置')">
-          <span class="text-sm font-medium text-gray-700">自定义 RPC</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        <div class="settings-item" onclick="alert('自定义RPC')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="git-branch" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">自定义 RPC</span>
+              <span class="settings-item-subtitle">添加/管理节点</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
       </div>
 
       <!-- 通用 -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">通用</h3>
-        <div class="setting-item" onclick="alert('语言设置')">
-          <span class="text-sm font-medium text-gray-700">语言</span>
-          <span class="text-xs text-gray-400">简体中文</span>
+      <div class="settings-section">
+        <h3 class="settings-section-title">通用</h3>
+        <div class="settings-item" onclick="alert('语言设置')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="globe" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">语言</span>
+              <span class="settings-item-subtitle">简体中文</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('货币单位')">
-          <span class="text-sm font-medium text-gray-700">货币单位</span>
-          <span class="text-xs text-gray-400">USD</span>
+        <div class="settings-item" onclick="alert('货币单位')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="dollar-sign" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">货币单位</span>
+              <span class="settings-item-subtitle">USD</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('交易滑点设置')">
-          <span class="text-sm font-medium text-gray-700">默认滑点</span>
-          <span class="text-xs text-gray-400">0.5%</span>
+        <div class="settings-item" onclick="alert('默认滑点')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="percent" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">默认滑点</span>
+              <span class="settings-item-subtitle">0.5%</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
       </div>
 
       <!-- 通知 -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">通知</h3>
-        <div class="setting-item" onclick="alert('推送通知设置')">
-          <span class="text-sm font-medium text-gray-700">推送通知</span>
-          <div class="w-10 h-5 bg-violet-200 rounded-full flex items-center p-0.5">
-            <div class="w-4 h-4 bg-white rounded-full shadow ml-auto"></div>
+      <div class="settings-section">
+        <h3 class="settings-section-title">通知</h3>
+        <div class="settings-item" onclick="toggleNotification('push')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="bell" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">推送通知</span>
+              <span class="settings-item-subtitle">交易动态、资产变动</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <div id="pushToggle" class="toggle-switch active" onclick="event.stopPropagation(); toggleNotification('push')">
+              <div class="toggle-knob"></div>
+            </div>
           </div>
         </div>
-        <div class="setting-item" onclick="alert('邮件通知')">
-          <span class="text-sm font-medium text-gray-700">邮件通知</span>
-          <div class="w-10 h-5 bg-gray-200 rounded-full flex items-center p-0.5">
-            <div class="w-4 h-4 bg-white rounded-full shadow"></div>
+        <div class="settings-item" onclick="toggleNotification('email')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="mail" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">邮件通知</span>
+              <span class="settings-item-subtitle">w**@example.com</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <div id="emailToggle" class="toggle-switch inactive" onclick="event.stopPropagation(); toggleNotification('email')">
+              <div class="toggle-knob"></div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- 关于 -->
-      <div class="space-y-2">
-        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">关于</h3>
-        <div class="setting-item" onclick="alert('版本信息')">
-          <span class="text-sm font-medium text-gray-700">版本</span>
-          <span class="text-xs text-gray-400">v2.0.1</span>
+      <div class="settings-section">
+        <h3 class="settings-section-title">关于</h3>
+        <div class="settings-item" onclick="alert('版本信息')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="info" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">版本</span>
+              <span class="settings-item-subtitle">v2.0.1</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('用户协议')">
-          <span class="text-sm font-medium text-gray-700">用户协议</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        <div class="settings-item" onclick="alert('用户协议')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="file-text" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">用户协议</span>
+              <span class="settings-item-subtitle">最后更新 2025.03</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
-        <div class="setting-item" onclick="alert('隐私政策')">
-          <span class="text-sm font-medium text-gray-700">隐私政策</span>
-          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        <div class="settings-item" onclick="alert('隐私政策')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="shield" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">隐私政策</span>
+              <span class="settings-item-subtitle">了解数据保护</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
         </div>
       </div>
 
       <!-- 退出登录 -->
-      <button onclick="alert('退出登录')" class="w-full mt-6 py-4 bg-red-50 text-red-500 rounded-2xl font-medium hover:bg-red-100 transition btn-scale">
+      <button onclick="alert('退出登录')" class="logout-btn">
         退出登录
       </button>
     </div>
@@ -830,7 +983,6 @@
         navItems[0].classList.add('nav-active');
         navItems[1].classList.add('text-gray-500');
         navItems[2].classList.add('text-gray-500');
-        // 确保代币列表激活
         document.getElementById('tokenTab').classList.add('tab-active');
         document.getElementById('defiTab').classList.remove('tab-active');
       } else if (tab === 'earn') {
@@ -962,6 +1114,19 @@
       content.classList.toggle('open');
       icon.setAttribute('data-lucide', content.classList.contains('open') ? 'chevron-up' : 'chevron-down');
       lucide.createIcons();
+    }
+
+    // 开关切换函数
+    function toggleNotification(type) {
+      const toggle = document.getElementById(type + 'Toggle');
+      if (toggle.classList.contains('active')) {
+        toggle.classList.remove('active');
+        toggle.classList.add('inactive');
+      } else {
+        toggle.classList.remove('inactive');
+        toggle.classList.add('active');
+      }
+      // 实际应用中可在此处调用API更新设置
     }
 
     window.onload = function() {
