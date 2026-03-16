@@ -1,377 +1,542 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Web3 Wallet - Ultimate Mobile</title>
-    
+    <title>幻紫钱包 · 多链自托管</title>
+    <!-- Font Awesome 6 (国内加速镜像) -->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Inter 字体, 支持中文回退 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', '-apple-system', 'sans-serif'], }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
-        /* ====== 核心设计系统 (Design System) ====== */
-        :root {
-            /* 主题色系 */
-            --primary: #8b5cf6;        /* 核心紫 */
-            --primary-active: #7c3aed; /* 按下深紫 */
-            --primary-light: #f5f3ff;  /* 极浅背景紫 */
-            
-            /* 背景与卡片 */
-            --bg-app: #f8fafc;         /* 全局浅灰白底色 */
-            --bg-card: #ffffff;        /* 纯白卡片 */
-            
-            /* 文字色系 */
-            --text-main: #0f172a;      /* 极深灰黑 */
-            --text-sub: #64748b;       /* 中灰 */
-            --text-muted: #94a3b8;     /* 浅灰 */
-            
-            /* 结构与阴影 */
-            --border-color: rgba(226, 232, 240, 0.8);
-            --radius-card: 1.5rem;
-            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.02);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        body { 
-            background-color: var(--bg-app); 
-            color: var(--text-main); 
-            -webkit-tap-highlight-color: transparent;
+        body {
+            background: linear-gradient(145deg, #f0eaff 0%, #f9f5ff 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
         }
 
-        /* ====== 全局组件类 ====== */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: var(--radius-card);
-            box-shadow: var(--shadow-card);
-            border: 1px solid var(--border-color);
-        }
-        
-        /* 统一主按钮 */
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-primary:active { background-color: var(--primary-active); transform: scale(0.97); }
-        
-        /* 统一返回/次级按钮 */
-        .btn-icon {
-            width: 2.5rem; height: 2.5rem;
-            border-radius: 9999px;
-            background-color: var(--bg-app);
-            color: var(--text-sub);
-            display: flex; align-items: center; justify-content: center;
-            transition: background-color 0.2s;
-        }
-        .btn-icon:active { background-color: #e2e8f0; }
-
-        /* 统一输入框规范 */
-        .input-box {
+        /* 主钱包卡片 — 白底 + 紫色细节 */
+        .wallet-card {
+            max-width: 440px;
             width: 100%;
-            background-color: var(--bg-app);
-            border: 1px solid transparent;
-            border-radius: 1.25rem;
-            padding: 1rem 1.25rem;
-            color: var(--text-main);
-            font-weight: 600;
-            outline: none;
-            transition: all 0.2s;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px -12px rgba(123, 76, 255, 0.25), 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+            padding: 26px 22px 30px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(180, 150, 255, 0.2);
+            transition: all 0.25s ease;
         }
-        .input-box:focus {
-            background-color: var(--bg-card);
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
-        }
-        .input-box::placeholder { color: var(--text-muted); font-weight: 500; }
 
-        /* ====== 页面切换架构 ====== */
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .safe-pb { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); }
-        
-        .page { display: none; min-height: 100vh; animation: pageEnter 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .page.active { display: flex; flex-direction: column; }
-        
-        @keyframes pageEnter {
-            from { opacity: 0; transform: translateY(10px) scale(0.99); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        /* 紫色主题变量 */
+        .theme-purple {
+            --primary: #7c4dff;
+            --primary-light: #b195ff;
+            --primary-bg: #f1ebff;
+            --primary-soft: #e0d5ff;
+        }
+
+        /* 总资产区域 */
+        .total-asset {
+            margin-bottom: 24px;
+        }
+        .asset-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6f658d;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .asset-label i {
+            color: #9d85ff;
+            font-size: 12px;
+        }
+        .asset-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1f1135;
+            line-height: 1.2;
+            margin-top: 4px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .asset-value small {
+            font-size: 16px;
+            font-weight: 500;
+            color: #8f84b3;
+            margin-left: 4px;
+        }
+        .asset-change {
+            font-size: 15px;
+            background: #e9e0ff;
+            color: #5e3c9e;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-weight: 600;
+            margin-left: 12px;
+        }
+
+        /* 快速操作栏 四个按钮 */
+        .quick-actions {
+            display: flex;
+            justify-content: space-around;
+            margin: 28px 0 30px;
+        }
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: default;
+            transition: transform 0.15s;
+        }
+        .action-item:hover {
+            transform: translateY(-3px);
+        }
+        .action-circle {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(145deg, #f6f2ff, #ece4ff);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b3fcf;
+            font-size: 24px;
+            box-shadow: 0 6px 14px rgba(156, 116, 255, 0.2);
+            transition: all 0.2s;
+            border: 1px solid white;
+        }
+        .action-item span {
+            font-size: 13px;
+            font-weight: 600;
+            color: #432e73;
+        }
+
+        /* 选项卡切换 (代币列表 / DeFi) */
+        .tab-section {
+            margin: 16px 0 20px;
+            background: #f7f2ff;
+            border-radius: 60px;
+            padding: 4px;
+            display: flex;
+            position: relative;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-weight: 600;
+            font-size: 16px;
+            color: #5c4b8a;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            z-index: 2;
+        }
+        .tab.active {
+            color: #4b27b8;
+            background: white;
+            box-shadow: 0 4px 12px rgba(152, 108, 255, 0.2);
+        }
+
+        /* 代币列表区域 (默认显示) */
+        .token-list, .defi-content {
+            transition: opacity 0.2s;
+        }
+        .defi-content {
+            display: none;
+            text-align: center;
+            padding: 30px 0;
+            color: #a594d4;
+            font-weight: 500;
+            background: #fbfaff;
+            border-radius: 32px;
+            border: 1px dashed #c9b9ff;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0eaff;
+        }
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 22px;
+            background: #f1eaff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: #5f33c9;
+            margin-right: 14px;
+            box-shadow: 0 2px 8px rgba(142, 97, 255, 0.15);
+        }
+        .token-info {
+            flex: 2;
+        }
+        .token-name {
+            font-weight: 700;
+            color: #1d0f38;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .token-name small {
+            font-weight: 500;
+            font-size: 12px;
+            color: #a48dcb;
+            background: #ede7ff;
+            padding: 2px 8px;
+            border-radius: 30px;
+        }
+        .token-balance {
+            font-weight: 600;
+            font-size: 15px;
+            color: #2e1b53;
+        }
+        .token-value {
+            font-weight: 500;
+            color: #8d7ab3;
+            font-size: 14px;
+        }
+        .token-extra {
+            text-align: right;
+        }
+
+        /* 币种管理按钮 */
+        .manage-tokens {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0 28px;
+            color: #7b4cff;
+            font-weight: 600;
+            font-size: 15px;
+            background: #f7f2ff;
+            padding: 14px 0;
+            border-radius: 60px;
+            cursor: default;
+            border: 1px solid #e5d9ff;
+            transition: background 0.2s;
+        }
+        .manage-tokens i {
+            font-size: 18px;
+        }
+        .manage-tokens:hover {
+            background: #ede4ff;
+        }
+
+        /* 行情小卡片 (USDT 数据) */
+        .market-row {
+            display: flex;
+            gap: 12px;
+            margin: 18px 0 22px;
+        }
+        .market-card {
+            flex: 1;
+            background: #fafaff;
+            border-radius: 24px;
+            padding: 14px 6px;
+            text-align: center;
+            border: 1px solid #eee5ff;
+            box-shadow: 0 5px 12px rgba(182, 153, 255, 0.08);
+        }
+        .market-card .pair {
+            font-weight: 600;
+            color: #3a2568;
+            margin-bottom: 6px;
+            font-size: 15px;
+        }
+        .market-card .price {
+            font-weight: 800;
+            font-size: 18px;
+            color: #2f1c5c;
+        }
+        .market-card .change {
+            font-size: 13px;
+            font-weight: 600;
+            color: #28a745;
+            background: #e0ffeb;
+            padding: 4px 8px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 6px;
+        }
+        .market-card .change.negative {
+            color: #dc3545;
+            background: #ffe0e3;
+        }
+
+        /* 公告栏 */
+        .announcement {
+            background: #f3edff;
+            border-radius: 20px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 6px solid #a183ff;
+            margin-top: 12px;
+        }
+        .announcement i {
+            color: #7b4cff;
+            font-size: 22px;
+        }
+        .announcement p {
+            color: #37255c;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .announcement small {
+            color: #8470b5;
+            font-size: 12px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        /* 链标识小圆点 */
+        .chain-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 8px;
+            margin-right: 6px;
+        }
+        .chain-x { background: #ac4eff; }
+        .chain-bnb { background: #f3ba2f; }
+        .chain-sol { background: #14b9e6; }
+
+        /* 脚注/水印 (自托管) */
+        .footnote {
+            text-align: center;
+            font-size: 12px;
+            color: #b7a8dd;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
     </style>
 </head>
-<body class="overflow-hidden">
+<body>
+    <div class="wallet-card">
+        <!-- 顶部总资产 -->
+        <div class="total-asset">
+            <div class="asset-label">
+                <i class="fa-solid fa-wallet"></i> 总资产 · 多链
+            </div>
+            <div class="asset-value">
+                $23,845.23
+                <small>≈ ¥172,300</small>
+                <span class="asset-change">+2.4%</span>
+            </div>
+        </div>
 
-    <div id="page-home" class="page active">
-        <header class="flex justify-between items-center px-5 pt-5 pb-2 sticky top-0 bg-[var(--bg-app)]/90 backdrop-blur-md z-10">
-            <div class="flex items-center space-x-2 bg-white px-3 py-1.5 rounded-full border border-[var(--border-color)] shadow-sm">
-                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                <select id="network-select" class="bg-transparent text-xs font-bold text-[var(--text-main)] outline-none appearance-none pr-2 cursor-pointer">
-                    <option value="all" selected>全部网络</option>
-                    <option value="x-layer">X Layer</option>
-                    <option value="bnb">BNB Chain</option>
-                </select>
-                <i class="fa-solid fa-angle-down text-[10px] text-[var(--text-muted)]"></i>
+        <!-- 充币 提币 交易 应用 -->
+        <div class="quick-actions">
+            <div class="action-item">
+                <div class="action-circle"><i class="fa-solid fa-arrow-down"></i></div>
+                <span>充币</span>
             </div>
-            <div class="btn-icon">
-                <i class="fa-solid fa-qrcode"></i>
+            <div class="action-item">
+                <div class="action-circle"><i class="fa-solid fa-arrow-up"></i></div>
+                <span>提币</span>
             </div>
-        </header>
+            <div class="action-item">
+                <div class="action-circle"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
+                <span>交易</span>
+            </div>
+            <div class="action-item">
+                <div class="action-circle"><i class="fa-solid fa-grid-2"></i></div>
+                <span>应用</span>
+            </div>
+        </div>
 
-        <main class="flex-1 overflow-y-auto px-5 pt-4 safe-pb hide-scrollbar">
-            <section class="text-center mb-8">
-                <p class="text-[var(--text-sub)] text-xs font-semibold mb-1">总资产 (USD)</p>
-                <h1 class="text-[2.5rem] leading-none font-extrabold tracking-tight text-[var(--text-main)]">$12,450.88</h1>
-                <div class="inline-flex items-center mt-3 px-2 py-0.5 bg-green-50 rounded text-green-600 text-[11px] font-bold">
-                    +2.45% (24h)
-                </div>
-            </section>
+        <!-- 可切换区域：代币列表 / DeFi (默认列表) -->
+        <div class="tab-section" id="tabContainer">
+            <div class="tab active" data-tab="tokens">代币列表</div>
+            <div class="tab" data-tab="defi">DeFi</div>
+        </div>
 
-            <nav class="grid grid-cols-4 gap-4 mb-8">
-                <div onclick="navTo('page-deposit')" class="flex flex-col items-center space-y-2 cursor-pointer transition-transform active:scale-95">
-                    <div class="w-12 h-12 bg-[var(--primary-light)] rounded-[1rem] flex items-center justify-center text-[var(--primary)] text-lg">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-[var(--text-sub)]">充币</span>
+        <!-- 代币列表内容 (默认显示) -->
+        <div id="tokensView" class="token-list">
+            <!-- X Layer 链资产 -->
+            <div class="list-item">
+                <div class="token-icon"><span class="chain-dot chain-x"></span>₿</div>
+                <div class="token-info">
+                    <div class="token-name">USDC (X Layer) <small>X Layer</small></div>
+                    <div class="token-balance">1,420.50 USDC</div>
                 </div>
-                <div onclick="navTo('page-withdraw')" class="flex flex-col items-center space-y-2 cursor-pointer transition-transform active:scale-95">
-                    <div class="w-12 h-12 bg-[var(--primary-light)] rounded-[1rem] flex items-center justify-center text-[var(--primary)] text-lg">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-[var(--text-sub)]">提币</span>
+                <div class="token-extra">
+                    <div class="token-value">$1,420.50</div>
                 </div>
-                <div onclick="navTo('page-swap')" class="flex flex-col items-center space-y-2 cursor-pointer transition-transform active:scale-95">
-                    <div class="w-12 h-12 bg-[var(--primary-light)] rounded-[1rem] flex items-center justify-center text-[var(--primary)] text-lg">
-                        <i class="fa-solid fa-repeat"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-[var(--text-sub)]">交易</span>
+            </div>
+            <div class="list-item">
+                <div class="token-icon"><span class="chain-dot chain-x"></span>X</div>
+                <div class="token-info">
+                    <div class="token-name">XLR <small>X Layer</small></div>
+                    <div class="token-balance">12.78 XLR</div>
                 </div>
-                <div class="flex flex-col items-center space-y-2 cursor-pointer transition-transform active:scale-95">
-                    <div class="w-12 h-12 bg-white border border-[var(--border-color)] rounded-[1rem] flex items-center justify-center text-[var(--text-sub)] text-lg shadow-sm">
-                        <i class="fa-solid fa-ellipsis"></i>
-                    </div>
-                    <span class="text-[11px] font-bold text-[var(--text-sub)]">更多</span>
+                <div class="token-extra">
+                    <div class="token-value">$51.12</div>
                 </div>
-            </nav>
-
-            <div class="flex space-x-6 border-b border-[var(--border-color)] mb-4">
-                <button class="pb-3 text-sm font-bold text-[var(--primary)] border-b-2 border-[var(--primary)]">代币列表</button>
-                <button class="pb-3 text-sm font-bold text-[var(--text-muted)]">NFTs</button>
             </div>
 
-            <div class="card p-2 mb-4">
-                <div class="flex justify-between items-center p-3 hover:bg-slate-50 rounded-xl transition-colors active:bg-slate-100">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-[#8b5cf6] rounded-full flex items-center justify-center text-white font-bold text-xs shadow-sm">OKB</div>
-                        <div>
-                            <p class="font-bold text-sm text-[var(--text-main)]">OKB</p>
-                            <p class="text-[10px] text-[var(--text-muted)] font-semibold">X Layer</p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-bold text-sm text-[var(--text-main)]">120.50</p>
-                        <p class="text-[10px] text-[var(--text-sub)] font-semibold">$5,240.20</p>
-                    </div>
+            <!-- BNB 链资产 -->
+            <div class="list-item">
+                <div class="token-icon"><span class="chain-dot chain-bnb"></span>₮</div>
+                <div class="token-info">
+                    <div class="token-name">USDT (BSC) <small>BNB Chain</small></div>
+                    <div class="token-balance">3,250.00 USDT</div>
                 </div>
-                <div class="flex justify-between items-center p-3 hover:bg-slate-50 rounded-xl transition-colors active:bg-slate-100">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-[#10b981] rounded-full flex items-center justify-center text-white font-bold italic text-xs shadow-sm">T</div>
-                        <div>
-                            <p class="font-bold text-sm text-[var(--text-main)]">USDT</p>
-                            <p class="text-[10px] text-[var(--text-muted)] font-semibold">Tether USD</p>
-                        </div>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-bold text-sm text-[var(--text-main)]">7,210.68</p>
-                        <p class="text-[10px] text-[var(--text-sub)] font-semibold">$7,210.68</p>
-                    </div>
+                <div class="token-extra">
+                    <div class="token-value">$3,250.00</div>
                 </div>
             </div>
-        </main>
+            <div class="list-item">
+                <div class="token-icon"><span class="chain-dot chain-bnb"></span>B</div>
+                <div class="token-info">
+                    <div class="token-name">BNB <small>BNB Chain</small></div>
+                    <div class="token-balance">5.42 BNB</div>
+                </div>
+                <div class="token-extra">
+                    <div class="token-value">$2,710.00</div>
+                </div>
+            </div>
 
-        <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-[var(--border-color)] px-6 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] flex justify-between items-center z-20">
-            <div class="flex flex-col items-center space-y-1 text-[var(--primary)]">
-                <i class="fa-solid fa-wallet text-xl"></i>
-                <span class="text-[10px] font-bold">钱包</span>
+            <!-- Solana 链资产 -->
+            <div class="list-item">
+                <div class="token-icon"><span class="chain-dot chain-sol"></span>₮</div>
+                <div class="token-info">
+                    <div class="token-name">USDT (Sol) <small>Solana</small></div>
+                    <div class="token-balance">1,850.75 USDT</div>
+                </div>
+                <div class="token-extra">
+                    <div class="token-value">$1,850.75</div>
+                </div>
             </div>
-            <div class="flex flex-col items-center space-y-1 text-[var(--text-muted)] hover:text-[var(--text-sub)]">
-                <i class="fa-solid fa-chart-line text-xl"></i>
-                <span class="text-[10px] font-bold">行情</span>
+            <div class="list-item">
+                <div class="token-icon"><span class="chain-dot chain-sol"></span>S</div>
+                <div class="token-info">
+                    <div class="token-name">SOL <small>Solana</small></div>
+                    <div class="token-balance">28.45 SOL</div>
+                </div>
+                <div class="token-extra">
+                    <div class="token-value">$3,562.86</div>
+                </div>
             </div>
-            <div class="flex flex-col items-center space-y-1 text-[var(--text-muted)] hover:text-[var(--text-sub)]">
-                <i class="fa-solid fa-compass text-xl"></i>
-                <span class="text-[10px] font-bold">发现</span>
+
+            <!-- 币种管理入口 -->
+            <div class="manage-tokens">
+                <i class="fa-regular fa-star"></i> 币种管理
+                <i class="fa-solid fa-chevron-right" style="font-size: 14px;"></i>
             </div>
-            <div class="flex flex-col items-center space-y-1 text-[var(--text-muted)] hover:text-[var(--text-sub)]">
-                <i class="fa-solid fa-gear text-xl"></i>
-                <span class="text-[10px] font-bold">设置</span>
+        </div>
+
+        <!-- DeFi 视图 (隐藏) 简单占位 -->
+        <div id="defiView" class="defi-content" style="display: none;">
+            <i class="fa-solid fa-chart-simple" style="font-size: 36px; color: #bba6ff; margin-bottom: 12px;"></i>
+            <p>质押 · 流动性 · 收益</p>
+            <p style="font-size: 13px; color: #bba2f0;">(Earn, Lend, Swap 聚合)</p>
+        </div>
+
+        <!-- 行情卡片 (几个USDT小卡片) -->
+        <div class="market-row">
+            <div class="market-card">
+                <div class="pair">USDT/XLR</div>
+                <div class="price">$1.0002</div>
+                <span class="change">+0.02%</span>
             </div>
-        </nav>
+            <div class="market-card">
+                <div class="pair">USDT/BNB</div>
+                <div class="price">$1.0001</div>
+                <span class="change">+0.01%</span>
+            </div>
+            <div class="market-card">
+                <div class="pair">USDT/SOL</div>
+                <div class="price">$1.0000</div>
+                <span class="change negative">-0.01%</span>
+            </div>
+        </div>
+
+        <!-- 公告区域 -->
+        <div class="announcement">
+            <i class="fa-regular fa-bell"></i>
+            <div>
+                <p>🔔 X Layer 主网升级已完成，充提正常。新整合 Solana 跨链桥。</p>
+                <small>2025-04-10 · 自托管安全提醒</small>
+            </div>
+        </div>
+
+        <!-- 自托管标识 -->
+        <div class="footnote">
+            <i class="fa-regular fa-circle-check" style="color: #8f6cff;"></i> 自托管 · 私钥本地
+            <i class="fa-regular fa-eye-slash" style="margin-left: 12px;"></i> 隐私保护
+        </div>
     </div>
 
-    <div id="page-deposit" class="page bg-[var(--bg-app)]">
-        <header class="flex items-center justify-between px-5 pt-5 pb-4">
-            <button onclick="navTo('page-home')" class="btn-icon"><i class="fa-solid fa-chevron-left"></i></button>
-            <h2 class="text-lg font-bold text-[var(--text-main)]">接收代币</h2>
-            <div class="w-10"></div> </header>
-        <main class="flex-1 px-5 pt-4">
-            <div class="card p-8 text-center mb-6">
-                <div class="inline-flex items-center space-x-2 bg-slate-50 px-3 py-1 rounded-full mb-6 border border-[var(--border-color)]">
-                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                    <span class="text-xs font-bold text-[var(--text-main)]">X Layer 网络</span>
-                </div>
-                
-                <div class="w-48 h-48 mx-auto bg-slate-100 rounded-2xl flex items-center justify-center border-4 border-white shadow-inner mb-6">
-                    <i class="fa-solid fa-qrcode text-7xl text-[var(--text-muted)]"></i>
-                </div>
-                
-                <p class="text-[10px] font-bold text-[var(--text-sub)] uppercase tracking-wider mb-2">您的充值地址</p>
-                <div class="flex items-center justify-between bg-[var(--bg-app)] p-3 rounded-xl">
-                    <span class="text-xs font-mono font-semibold text-[var(--text-main)] truncate mr-2">0x71C...8eA3f45</span>
-                    <button class="text-[var(--primary)] text-sm"><i class="fa-regular fa-copy"></i></button>
-                </div>
-            </div>
-            
-            <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
-                <p class="text-[11px] text-amber-700 font-medium leading-relaxed">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i>
-                    请仅向此地址充值 X Layer 网络支持的资产。充值其他资产将不可找回。
-                </p>
-            </div>
-        </main>
-    </div>
-
-    <div id="page-withdraw" class="page bg-[var(--bg-card)]">
-        <header class="flex items-center justify-between px-5 pt-5 pb-4">
-            <button onclick="navTo('page-home')" class="btn-icon bg-slate-50"><i class="fa-solid fa-chevron-left"></i></button>
-            <h2 class="text-lg font-bold text-[var(--text-main)]">发送代币</h2>
-            <div class="btn-icon bg-slate-50"><i class="fa-solid fa-qrcode"></i></div>
-        </header>
-        <main class="flex-1 px-5 pt-4 space-y-6">
-            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-[var(--border-color)]">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-[#8b5cf6] rounded-full flex items-center justify-center text-white font-bold text-[10px]">OKB</div>
-                    <span class="font-bold text-sm">OKB</span>
-                </div>
-                <div class="flex items-center space-x-2 text-[var(--text-sub)]">
-                    <span class="text-xs font-semibold">余额: 120.50</span>
-                    <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                </div>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="text-[11px] font-bold text-[var(--text-sub)] uppercase ml-1 block mb-2">接收地址</label>
-                    <div class="relative">
-                        <input type="text" placeholder="长按粘贴地址" class="input-box pr-12">
-                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--primary)] text-sm font-bold">粘贴</button>
-                    </div>
-                </div>
-                <div>
-                    <label class="text-[11px] font-bold text-[var(--text-sub)] uppercase ml-1 block mb-2">数量</label>
-                    <div class="relative">
-                        <input type="number" placeholder="0.00" class="input-box text-lg pr-16">
-                        <button class="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--primary)] text-[10px] font-bold bg-[var(--primary-light)] px-2 py-1 rounded">最大</button>
-                    </div>
-                </div>
-            </div>
-
-            <button class="w-full py-4 rounded-2xl font-bold text-base btn-primary mt-8">
-                下一步
-            </button>
-        </main>
-    </div>
-
-    <div id="page-swap" class="page bg-[var(--bg-card)]">
-        <header class="flex items-center justify-between px-5 pt-5 pb-4">
-            <button onclick="navTo('page-home')" class="btn-icon bg-slate-50"><i class="fa-solid fa-chevron-left"></i></button>
-            <h2 class="text-lg font-bold text-[var(--text-main)]">闪兑</h2>
-            <div class="btn-icon bg-slate-50"><i class="fa-solid fa-sliders"></i></div>
-        </header>
-        <main class="flex-1 px-5 pt-2">
-            <div class="relative space-y-1">
-                <div class="bg-[var(--bg-app)] p-5 rounded-[2rem] border border-[var(--border-color)] transition-colors focus-within:bg-white focus-within:border-[var(--primary)] focus-within:ring-4 focus-within:ring-purple-500/10">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-[11px] font-bold text-[var(--text-sub)]">你支付</span>
-                        <span class="text-[11px] font-semibold text-[var(--text-sub)]">余额: 120.50</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <input type="number" value="100" class="bg-transparent text-3xl font-bold outline-none w-[60%] text-[var(--text-main)] placeholder-[var(--text-muted)]">
-                        <button class="flex items-center bg-white px-3 py-2 rounded-full border border-[var(--border-color)] shadow-sm shrink-0 active:bg-slate-50">
-                            <span class="w-5 h-5 bg-[#8b5cf6] rounded-full flex items-center justify-center text-white text-[8px] font-bold mr-1.5">OKB</span>
-                            <span class="font-bold text-sm mr-1">OKB</span>
-                            <i class="fa-solid fa-angle-down text-[10px] text-[var(--text-muted)]"></i>
-                        </button>
-                    </div>
-                    <p class="text-[11px] text-[var(--text-muted)] font-medium mt-2">~$4,350.00</p>
-                </div>
-
-                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                    <button class="w-10 h-10 bg-[var(--bg-card)] border-4 border-[var(--bg-card)] shadow-sm rounded-xl flex items-center justify-center text-[var(--primary)] hover:bg-slate-50 transition-transform active:scale-90">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </button>
-                </div>
-
-                <div class="bg-[var(--bg-app)] p-5 rounded-[2rem] border border-[var(--border-color)] transition-colors focus-within:bg-white focus-within:border-[var(--primary)] focus-within:ring-4 focus-within:ring-purple-500/10">
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="text-[11px] font-bold text-[var(--text-sub)]">你接收</span>
-                        <span class="text-[11px] font-semibold text-[var(--text-sub)]">余额: 0.00</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <input type="number" placeholder="0" value="4345.50" readonly class="bg-transparent text-3xl font-bold outline-none w-[60%] text-[var(--text-main)]">
-                        <button class="flex items-center bg-[#10b981] text-white px-3 py-2 rounded-full shadow-sm shrink-0 active:opacity-90">
-                            <span class="font-bold text-sm mr-1">USDT</span>
-                            <i class="fa-solid fa-angle-down text-[10px]"></i>
-                        </button>
-                    </div>
-                    <p class="text-[11px] text-[var(--text-muted)] font-medium mt-2">~$4,345.50</p>
-                </div>
-            </div>
-
-            <div class="mt-6 px-4 py-3 bg-[var(--bg-app)] rounded-2xl border border-[var(--border-color)] space-y-2">
-                <div class="flex justify-between items-center text-[11px] font-semibold">
-                    <span class="text-[var(--text-sub)]">当前汇率</span>
-                    <span class="text-[var(--text-main)]">1 OKB ≈ 43.455 USDT</span>
-                </div>
-                <div class="flex justify-between items-center text-[11px] font-semibold">
-                    <span class="text-[var(--text-sub)]">预估网络费用</span>
-                    <span class="text-[var(--text-main)]">~$0.24 <span class="text-[var(--text-muted)]">(0.005 OKB)</span></span>
-                </div>
-            </div>
-
-            <button class="w-full py-4 rounded-2xl font-bold text-base btn-primary mt-6 shadow-lg shadow-purple-200/50">
-                确认兑换
-            </button>
-        </main>
-    </div>
-
+    <!-- 简单的选项卡切换交互 (保持预览效果) -->
     <script>
-        function navTo(targetId) {
-            // 隐藏所有页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            // 显示目标页面，触发进入动画
-            const targetPage = document.getElementById(targetId);
-            targetPage.classList.add('active');
-            
-            // 底部导航栏逻辑：只有首页显示
-            const bottomNav = document.getElementById('bottom-nav');
-            if (targetId === 'page-home') {
-                bottomNav.style.display = 'flex';
-            } else {
-                bottomNav.style.display = 'none';
+        (function() {
+            const tabTokens = document.querySelector('[data-tab="tokens"]');
+            const tabDefi = document.querySelector('[data-tab="defi"]');
+            const tokensView = document.getElementById('tokensView');
+            const defiView = document.getElementById('defiView');
+
+            function activateTab(active) {
+                // 移除所有active类
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                if (active === 'tokens') {
+                    tabTokens.classList.add('active');
+                    tokensView.style.display = 'block';
+                    defiView.style.display = 'none';
+                } else {
+                    tabDefi.classList.add('active');
+                    tokensView.style.display = 'none';
+                    defiView.style.display = 'block';
+                }
             }
-        }
+
+            tabTokens.addEventListener('click', () => activateTab('tokens'));
+            tabDefi.addEventListener('click', () => activateTab('defi'));
+
+            // 默认激活代币列表 (以防万一)
+            activateTab('tokens');
+        })();
     </script>
+
+    <!-- 附加一点hover动效 (纯交互锦上添花) -->
+    <style>
+        .action-circle, .manage-tokens, .tab, .market-card {
+            cursor: pointer;
+        }
+        .action-circle:active { transform: scale(0.95); }
+        .market-card:hover { background: #f3ecff; border-color: #c9b5ff; transition: 0.15s; }
+        .list-item:hover { background: #fbf9ff; border-radius: 18px; padding-left: 8px; transition: 0.2s; }
+    </style>
 </body>
 </html>
