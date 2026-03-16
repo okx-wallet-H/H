@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Web3 Alpha Wallet v4 - Pro</title>
+    <title>Web3 Alpha Wallet v4 · 极致进化</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -47,7 +47,6 @@
             border-radius: 99px;
         }
 
-        /* 极致丝滑的页面切换 */
         .page-transition {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -60,24 +59,67 @@
 
         .token-card:active { transform: scale(0.98); background-color: #f1f5f9; }
         
-        /* 隐藏滚动条但保留功能 */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* 自定义轻提示 */
+        .toast-message {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 14px;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            pointer-events: none;
+            box-shadow: 0 20px 30px -10px rgba(0,0,0,0.3);
+            max-width: 80vw;
+            white-space: nowrap;
+        }
+        .toast-message.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* 页面切换动画 */
+        .page-view {
+            transition: opacity 0.3s ease;
+        }
+        #page-swap {
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #page-swap:not(.hidden) {
+            transform: translateY(0);
+        }
+        #overlay {
+            transition: opacity 0.3s;
+        }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen bg-white shadow-2xl relative overflow-x-hidden">
 
+    <!-- 全局轻提示 -->
+    <div id="toast" class="toast-message"></div>
+
     <div id="main-scroller" class="pb-24">
 
+        <!-- 主页 -->
         <section id="page-home" class="page-view">
             <div class="main-gradient text-white pt-12 pb-14 px-8 rounded-b-[40px] shadow-2xl shadow-indigo-100 relative">
                 <div class="flex justify-between items-center mb-8">
                     <div class="flex items-center space-x-2 bg-white/10 p-1 rounded-2xl backdrop-blur-md border border-white/20">
-                        <button onclick="filterNet('all')" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow-sm transition-all">全部</button>
-                        <button onclick="filterNet('xlayer')" class="px-4 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all">X Layer</button>
+                        <button type="button" onclick="filterNet('all')" id="filter-all" class="px-4 py-1.5 rounded-xl text-xs font-bold bg-white text-indigo-600 shadow-sm transition-all">全部</button>
+                        <button type="button" onclick="filterNet('xlayer')" id="filter-xlayer" class="px-4 py-1.5 rounded-xl text-xs font-bold hover:bg-white/10 transition-all text-white">X Layer</button>
                     </div>
                     <div class="flex space-x-3">
-                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center border border-white/20 active:scale-90 transition-transform">
+                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center border border-white/20 active:scale-90 transition-transform" role="button" tabindex="0" onclick="showToast('🔔 通知中心开发中')">
                             <i data-lucide="bell" class="w-5 h-5"></i>
                         </div>
                     </div>
@@ -86,38 +128,40 @@
                 <div class="space-y-1">
                     <p class="text-indigo-100 text-xs font-semibold tracking-wider uppercase opacity-80">Total Balance</p>
                     <div class="flex items-baseline space-x-2">
-                        <h1 class="text-4xl font-800 tracking-tight">$ 10,390.50</h1>
-                        <i data-lucide="eye" class="w-4 h-4 text-white/60"></i>
+                        <h1 id="balance-amount" class="text-4xl font-800 tracking-tight">$ 10,390.50</h1>
+                        <button type="button" onclick="toggleBalanceVisibility()" class="focus:outline-none">
+                            <i id="balance-eye" data-lucide="eye" class="w-4 h-4 text-white/60"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="mt-6 flex items-center space-x-2 bg-black/10 w-fit px-3 py-2 rounded-2xl border border-white/5 backdrop-blur-sm cursor-pointer active:opacity-70 transition-opacity">
+                <div class="mt-6 flex items-center space-x-2 bg-black/10 w-fit px-3 py-2 rounded-2xl border border-white/5 backdrop-blur-sm cursor-pointer active:opacity-70 transition-opacity" onclick="copyAddress()" role="button" tabindex="0">
                     <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span class="text-xs font-mono font-medium tracking-tight">0x71C...a29E</span>
+                    <span id="wallet-address" class="text-xs font-mono font-medium tracking-tight">0x71C...a29E</span>
                     <i data-lucide="copy" class="w-3.5 h-3.5 opacity-60"></i>
                 </div>
             </div>
 
             <div class="px-6 -mt-8 grid grid-cols-4 gap-4 relative z-10">
-                <button onclick="openSheet('deposit')" class="flex flex-col items-center group">
+                <button type="button" onclick="openSheet('deposit')" class="flex flex-col items-center group">
                     <div class="w-15 h-15 bg-white shadow-xl rounded-[24px] flex items-center justify-center text-indigo-600 group-active:scale-90 transition-all">
                         <i data-lucide="arrow-down-left" class="w-7 h-7"></i>
                     </div>
                     <span class="text-[11px] mt-2.5 font-bold text-slate-600">充币</span>
                 </button>
-                <button onclick="openSheet('withdraw')" class="flex flex-col items-center group">
+                <button type="button" onclick="openSheet('withdraw')" class="flex flex-col items-center group">
                     <div class="w-15 h-15 bg-white shadow-xl rounded-[24px] flex items-center justify-center text-indigo-600 group-active:scale-90 transition-all">
                         <i data-lucide="arrow-up-right" class="w-7 h-7"></i>
                     </div>
                     <span class="text-[11px] mt-2.5 font-bold text-slate-600">提币</span>
                 </button>
-                <button onclick="showSubPage('page-swap')" class="flex flex-col items-center group">
+                <button type="button" onclick="showSubPage('page-swap')" class="flex flex-col items-center group">
                     <div class="w-15 h-15 bg-white shadow-xl rounded-[24px] flex items-center justify-center text-indigo-600 group-active:scale-90 transition-all">
                         <i data-lucide="refresh-cw" class="w-7 h-7"></i>
                     </div>
                     <span class="text-[11px] mt-2.5 font-bold text-slate-600">闪兑</span>
                 </button>
-                <button class="flex flex-col items-center group">
+                <button type="button" onclick="showToast('🚀 DApp 浏览器即将到来')" class="flex flex-col items-center group">
                     <div class="w-15 h-15 bg-white shadow-xl rounded-[24px] flex items-center justify-center text-indigo-600 group-active:scale-90 transition-all">
                         <i data-lucide="layout-grid" class="w-7 h-7"></i>
                     </div>
@@ -128,14 +172,15 @@
             <div class="mt-10 px-6">
                 <div class="flex items-center justify-between mb-6">
                     <div class="flex space-x-6">
-                        <button class="text-sm font-bold tab-active">代币列表</button>
-                        <button class="text-sm font-semibold text-slate-400">NFTs</button>
+                        <button type="button" class="text-sm font-bold tab-active" onclick="showToast('代币列表')">代币列表</button>
+                        <button type="button" class="text-sm font-semibold text-slate-400" onclick="showToast('🎨 NFT 收藏品')">NFTs</button>
                     </div>
-                    <i data-lucide="list-filter" class="w-4 h-4 text-slate-400"></i>
+                    <i data-lucide="list-filter" class="w-4 h-4 text-slate-400" onclick="showToast('筛选功能内测中')"></i>
                 </div>
 
-                <div class="space-y-4">
-                    <div class="token-card flex justify-between items-center p-3 -mx-3 rounded-2xl transition-all cursor-pointer">
+                <div id="token-list" class="space-y-4">
+                    <!-- 添加 data-net 属性用于过滤 -->
+                    <div class="token-card flex justify-between items-center p-3 -mx-3 rounded-2xl transition-all cursor-pointer" data-net="xlayer" onclick="showToast('OKB • X Layer')">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center shadow-lg">
                                 <span class="text-white font-black text-sm italic">X</span>
@@ -150,7 +195,7 @@
                             <p class="text-xs font-medium text-slate-400 mt-1">$7,230.00</p>
                         </div>
                     </div>
-                    <div class="token-card flex justify-between items-center p-3 -mx-3 rounded-2xl transition-all cursor-pointer">
+                    <div class="token-card flex justify-between items-center p-3 -mx-3 rounded-2xl transition-all cursor-pointer" data-net="all" onclick="showToast('USDT • Ethereum')">
                         <div class="flex items-center space-x-4">
                             <div class="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center shadow-lg shadow-emerald-100">
                                 <i data-lucide="circle-dollar-sign" class="text-white w-6 h-6"></i>
@@ -167,13 +212,14 @@
                     </div>
                 </div>
 
-                <button class="w-full mt-8 py-4 border-2 border-dashed border-slate-100 rounded-2xl text-slate-400 text-sm font-bold hover:border-indigo-100 hover:text-indigo-400 transition-all flex items-center justify-center space-x-2">
+                <button type="button" onclick="showToast('⚙️ 资产管理 (演示)')" class="w-full mt-8 py-4 border-2 border-dashed border-slate-100 rounded-2xl text-slate-400 text-sm font-bold hover:border-indigo-100 hover:text-indigo-400 transition-all flex items-center justify-center space-x-2">
                     <i data-lucide="plus" class="w-4 h-4"></i>
                     <span>管理资产列表</span>
                 </button>
             </div>
         </section>
 
+        <!-- 赚币中心 -->
         <section id="page-earn" class="page-view hidden px-6 pt-12 slide-up">
             <h2 class="text-2xl font-800 text-slate-900 mb-2">赚币中心</h2>
             <p class="text-sm text-slate-400 mb-8 font-medium">智能算法为您筛选全网最高收益</p>
@@ -207,7 +253,7 @@
                     <span>高收益推荐</span>
                 </h4>
                 
-                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between group active:bg-slate-50 transition-all">
+                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between group active:bg-slate-50 transition-all cursor-pointer" onclick="showToast('USDT 活期理财 · 10.5% APY')">
                     <div class="flex items-center space-x-4">
                         <div class="w-11 h-11 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600">
                             <i data-lucide="zap" class="w-6 h-6"></i>
@@ -223,7 +269,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between group active:bg-slate-50 transition-all">
+                <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center justify-between group active:bg-slate-50 transition-all cursor-pointer" onclick="showToast('OKB 质押 · 22.8% APY')">
                     <div class="flex items-center space-x-4">
                         <div class="w-11 h-11 bg-slate-900 rounded-2xl flex items-center justify-center text-white">
                             <span class="font-black italic text-xs">X</span>
@@ -241,6 +287,7 @@
             </div>
         </section>
 
+        <!-- 设置页面 -->
         <section id="page-settings" class="page-view hidden px-6 pt-12 slide-up">
             <h2 class="text-2xl font-800 text-slate-900 mb-8">系统设置</h2>
 
@@ -252,7 +299,7 @@
                     <h4 class="font-bold text-slate-900">Alpha Pro User</h4>
                     <p class="text-xs text-slate-500 mt-1 font-medium">已连接至 12 个网络</p>
                 </div>
-                <button class="bg-white p-2.5 rounded-2xl shadow-sm text-indigo-600 active:scale-90 transition-transform">
+                <button type="button" class="bg-white p-2.5 rounded-2xl shadow-sm text-indigo-600 active:scale-90 transition-transform" onclick="showToast('编辑资料')">
                     <i data-lucide="edit-3" class="w-4 h-4"></i>
                 </button>
             </div>
@@ -261,7 +308,7 @@
                 <div class="space-y-2">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">账户安全</p>
                     <div class="bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-sm">
-                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50 transition-colors">
+                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50 transition-colors" onclick="showToast('备份助记词 (未备份)')">
                             <div class="flex items-center space-x-3 text-slate-700">
                                 <div class="w-8 h-8 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500"><i data-lucide="shield-check" class="w-4 h-4"></i></div>
                                 <span class="text-sm font-bold">备份助记词</span>
@@ -271,12 +318,12 @@
                                 <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition-colors" id="biometric-toggle" onclick="toggleSwitch(this)">
                             <div class="flex items-center space-x-3 text-slate-700">
                                 <div class="w-8 h-8 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500"><i data-lucide="fingerprint" class="w-4 h-4"></i></div>
                                 <span class="text-sm font-bold">生物识别解锁</span>
                             </div>
-                            <div class="w-10 h-5 bg-indigo-600 rounded-full relative">
+                            <div class="w-10 h-5 bg-indigo-600 rounded-full relative pointer-events-none">
                                 <div class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>
                             </div>
                         </div>
@@ -286,48 +333,49 @@
                 <div class="space-y-2">
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-4">系统与显示</p>
                     <div class="bg-white rounded-[32px] border border-slate-100 overflow-hidden shadow-sm">
-                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50 transition-colors">
+                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer border-b border-slate-50 transition-colors" onclick="showToast('语言设置')">
                             <div class="flex items-center space-x-3 text-slate-700">
                                 <div class="w-8 h-8 bg-slate-50 rounded-xl flex items-center justify-center text-slate-500"><i data-lucide="globe" class="w-4 h-4"></i></div>
                                 <span class="text-sm font-bold">语言设置</span>
                             </div>
                             <span class="text-xs font-bold text-slate-400">简体中文</span>
                         </div>
-                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition-colors">
+                        <div class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition-colors" id="darkmode-toggle" onclick="toggleSwitch(this)">
                             <div class="flex items-center space-x-3 text-slate-700">
                                 <div class="w-8 h-8 bg-slate-50 rounded-xl flex items-center justify-center text-slate-500"><i data-lucide="moon" class="w-4 h-4"></i></div>
                                 <span class="text-sm font-bold">深色模式</span>
                             </div>
-                            <div class="w-10 h-5 bg-slate-200 rounded-full relative">
+                            <div class="w-10 h-5 bg-slate-200 rounded-full relative pointer-events-none">
                                 <div class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button class="w-full py-4 text-red-500 font-bold text-sm bg-red-50 rounded-[24px] active:scale-95 transition-transform mt-4">
+                <button type="button" onclick="if(confirm('确定退出当前钱包？')) showToast('已退出 (演示)')" class="w-full py-4 text-red-500 font-bold text-sm bg-red-50 rounded-[24px] active:scale-95 transition-transform mt-4">
                     退出当前钱包
                 </button>
             </div>
         </section>
 
-        <section id="page-swap" class="hidden fixed inset-0 z-[60] bg-[#f8fafc] overflow-y-auto page-transition">
+        <!-- 闪兑子页面 (全屏覆盖) -->
+        <section id="page-swap" class="hidden fixed inset-0 z-[60] bg-[#f8fafc] overflow-y-auto page-transition" style="transform: translateY(100%);">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8">
-                    <button onclick="hideSubPage('page-swap')" class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-900"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
+                    <button type="button" onclick="hideSubPage('page-swap')" class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-900"><i data-lucide="chevron-left" class="w-6 h-6"></i></button>
                     <h3 class="font-bold text-lg">智能闪兑</h3>
-                    <button class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-900"><i data-lucide="settings-2" class="w-5 h-5"></i></button>
+                    <button type="button" class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-900" onclick="showToast('滑点设置等')"><i data-lucide="settings-2" class="w-5 h-5"></i></button>
                 </div>
 
                 <div class="relative space-y-2">
                     <div class="bg-white p-6 rounded-[32px] border border-slate-100 shadow-sm">
                         <div class="flex justify-between items-center mb-4">
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">支付</span>
-                            <span class="text-xs font-bold text-indigo-600">最大</span>
+                            <button type="button" class="text-xs font-bold text-indigo-600" onclick="useMaxBalance()">最大</button>
                         </div>
                         <div class="flex justify-between items-center">
-                            <input type="number" placeholder="0.0" class="w-1/2 text-3xl font-800 outline-none text-slate-900 placeholder-slate-200">
-                            <div class="flex items-center space-x-2 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 cursor-pointer active:scale-95 transition-transform">
+                            <input id="swap-from-amount" type="number" placeholder="0.0" value="120.50" class="w-1/2 text-3xl font-800 outline-none text-slate-900 placeholder-slate-200">
+                            <div class="flex items-center space-x-2 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 cursor-pointer active:scale-95 transition-transform" onclick="showToast('选择支付币种')">
                                 <div class="w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">$</div>
                                 <span class="font-bold text-sm text-slate-900">USDT</span>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
@@ -337,7 +385,7 @@
                     </div>
 
                     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                        <div class="w-12 h-12 bg-indigo-600 rounded-2xl shadow-xl shadow-indigo-100 border-4 border-[#f8fafc] flex items-center justify-center text-white active:rotate-180 transition-all duration-500">
+                        <div class="w-12 h-12 bg-indigo-600 rounded-2xl shadow-xl shadow-indigo-100 border-4 border-[#f8fafc] flex items-center justify-center text-white active:rotate-180 transition-all duration-500" onclick="showToast('汇率翻转 (演示)')">
                             <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
                         </div>
                     </div>
@@ -347,8 +395,8 @@
                             <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">接收</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <input type="number" placeholder="0.0" readonly class="w-1/2 text-3xl font-800 outline-none text-slate-900 placeholder-slate-200">
-                            <div class="flex items-center space-x-2 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 cursor-pointer active:scale-95 transition-transform">
+                            <input id="swap-to-amount" type="number" placeholder="0.0" value="2.00" readonly class="w-1/2 text-3xl font-800 outline-none text-slate-900 placeholder-slate-200 bg-transparent">
+                            <div class="flex items-center space-x-2 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 cursor-pointer active:scale-95 transition-transform" onclick="showToast('选择接收币种')">
                                 <div class="w-6 h-6 bg-slate-900 rounded-full flex items-center justify-center text-white text-[10px] font-bold italic font-black">X</div>
                                 <span class="font-bold text-sm text-slate-900">OKB</span>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
@@ -365,41 +413,44 @@
                     </div>
                     <div class="flex justify-between text-xs font-bold">
                         <span class="text-slate-400 uppercase">最小接收数量</span>
-                        <span class="text-slate-600">0.00 OKB</span>
+                        <span class="text-slate-600">1.98 OKB</span>
                     </div>
                 </div>
 
-                <button class="w-full mt-10 py-5 bg-indigo-600 text-white font-800 rounded-[28px] shadow-2xl shadow-indigo-200 active:scale-95 transition-transform text-lg">
+                <button type="button" class="w-full mt-10 py-5 bg-indigo-600 text-white font-800 rounded-[28px] shadow-2xl shadow-indigo-200 active:scale-95 transition-transform text-lg" onclick="showToast('✅ 兑换模拟成功')">
                     确认兑换
                 </button>
             </div>
         </section>
 
-    </div>
+    </div> <!-- main-scroller -->
 
+    <!-- 底部导航栏 -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto glass border-t border-slate-100 px-10 py-4 flex justify-between items-center z-50 rounded-t-[32px]">
-        <button onclick="switchTabNav('page-home', this)" class="nav-btn flex flex-col items-center space-y-1 text-indigo-600">
+        <button type="button" onclick="switchTabNav('page-home', this)" class="nav-btn flex flex-col items-center space-y-1 text-indigo-600">
             <i data-lucide="wallet" class="w-6 h-6"></i>
             <span class="text-[10px] font-extrabold tracking-tighter">钱包</span>
         </button>
-        <button onclick="switchTabNav('page-earn', this)" class="nav-btn flex flex-col items-center space-y-1 text-slate-400">
+        <button type="button" onclick="switchTabNav('page-earn', this)" class="nav-btn flex flex-col items-center space-y-1 text-slate-400">
             <i data-lucide="badge-dollar-sign" class="w-6 h-6"></i>
             <span class="text-[10px] font-extrabold tracking-tighter">赚币</span>
         </button>
-        <button onclick="switchTabNav('page-settings', this)" class="nav-btn flex flex-col items-center space-y-1 text-slate-400">
+        <button type="button" onclick="switchTabNav('page-settings', this)" class="nav-btn flex flex-col items-center space-y-1 text-slate-400">
             <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
             <span class="text-[10px] font-extrabold tracking-tighter">设置</span>
         </button>
     </nav>
 
+    <!-- 遮罩层 (用于底部弹窗) -->
     <div id="overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[70] hidden opacity-0 transition-opacity duration-300" onclick="closeSheet()"></div>
     
+    <!-- 底部弹窗 (充/提网络选择) -->
     <div id="bottom-sheet" class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[40px] z-[80] p-8 translate-y-full transition-transform duration-400 cubic-bezier(0.4, 0, 0.2, 1)">
         <div class="w-12 h-1.5 bg-slate-100 rounded-full mx-auto mb-8"></div>
         <h3 id="sheet-title" class="text-xl font-800 text-center mb-8">选择网络进行充币</h3>
         
         <div class="space-y-4">
-            <div class="flex items-center p-5 bg-slate-50 rounded-3xl border border-transparent active:border-indigo-200 active:bg-indigo-50 transition-all cursor-pointer group">
+            <div class="flex items-center p-5 bg-slate-50 rounded-3xl border border-transparent active:border-indigo-200 active:bg-indigo-50 transition-all cursor-pointer group" onclick="showToast('X Layer 网络 (演示)'); closeSheet();">
                 <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-indigo-600 group-active:scale-90 transition-transform"><i data-lucide="activity" class="w-6 h-6"></i></div>
                 <div class="ml-4 flex-1">
                     <p class="font-bold text-slate-900">X Layer Network</p>
@@ -408,7 +459,7 @@
                 <i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i>
             </div>
             
-            <div class="flex items-center p-5 bg-slate-50 rounded-3xl border border-transparent active:border-indigo-200 active:bg-indigo-50 transition-all cursor-pointer group">
+            <div class="flex items-center p-5 bg-slate-50 rounded-3xl border border-transparent active:border-indigo-200 active:bg-indigo-50 transition-all cursor-pointer group" onclick="showToast('Ethereum Mainnet (演示)'); closeSheet();">
                 <div class="w-12 h-12 bg-white rounded-2xl shadow-sm flex items-center justify-center text-orange-500 group-active:scale-90 transition-transform"><i data-lucide="layers" class="w-6 h-6"></i></div>
                 <div class="ml-4 flex-1">
                     <p class="font-bold text-slate-900">Ethereum Mainnet</p>
@@ -418,77 +469,193 @@
             </div>
         </div>
 
-        <button onclick="closeSheet()" class="w-full mt-10 py-4 font-bold text-slate-400 text-sm">取消</button>
+        <button type="button" onclick="closeSheet()" class="w-full mt-10 py-4 font-bold text-slate-400 text-sm">取消</button>
     </div>
 
     <script>
-        // 初始化 Lucide 图标
-        lucide.createIcons();
+        (function() {
+            // 初始化所有图标
+            lucide.createIcons();
 
-        // 导航切换逻辑
-        function switchTabNav(targetId, btn) {
-            // 隐藏所有主页面
-            document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
-            // 显示目标页面
-            document.getElementById(targetId).classList.remove('hidden');
-            
-            // 更新导航按钮状态
-            document.querySelectorAll('.nav-btn').forEach(b => {
-                b.classList.remove('text-indigo-600');
-                b.classList.add('text-slate-400');
+            // 全局 toast 函数
+            window.showToast = function(msg, duration = 2000) {
+                let toast = document.getElementById('toast');
+                toast.textContent = msg;
+                toast.classList.add('show');
+                clearTimeout(window.toastTimer);
+                window.toastTimer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, duration);
+            };
+
+            // 切换页面
+            window.switchTabNav = function(targetId, btn) {
+                document.querySelectorAll('.page-view').forEach(p => p.classList.add('hidden'));
+                document.getElementById(targetId).classList.remove('hidden');
+                
+                document.querySelectorAll('.nav-btn').forEach(b => {
+                    b.classList.remove('text-indigo-600');
+                    b.classList.add('text-slate-400');
+                });
+                btn.classList.add('text-indigo-600');
+                btn.classList.remove('text-slate-400');
+            };
+
+            // 闪兑子页面
+            window.showSubPage = function(id) {
+                const page = document.getElementById(id);
+                page.classList.remove('hidden');
+                // 确保动画触发
+                setTimeout(() => {
+                    page.style.transform = 'translateY(0)';
+                }, 10);
+                // 锁定背景滚动 (body)
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.hideSubPage = function(id) {
+                const page = document.getElementById(id);
+                page.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    page.classList.add('hidden');
+                    document.body.style.overflow = ''; // 恢复滚动
+                }, 300);
+            };
+
+            // 底部弹窗
+            window.openSheet = function(action) {
+                const sheet = document.getElementById('bottom-sheet');
+                const overlay = document.getElementById('overlay');
+                const title = document.getElementById('sheet-title');
+
+                title.innerText = action === 'deposit' ? '选择网络进行充币' : '选择网络进行提币';
+                
+                overlay.classList.remove('hidden');
+                setTimeout(() => {
+                    overlay.style.opacity = '1';
+                    sheet.style.transform = 'translateY(0)';
+                }, 10);
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeSheet = function() {
+                const sheet = document.getElementById('bottom-sheet');
+                const overlay = document.getElementById('overlay');
+
+                sheet.style.transform = 'translateY(100%)';
+                overlay.style.opacity = '0';
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 300);
+            };
+
+            // 过滤代币 (全部 / X Layer)
+            window.filterNet = function(net) {
+                const tokens = document.querySelectorAll('#token-list .token-card');
+                tokens.forEach(t => {
+                    if (net === 'all') {
+                        t.style.display = 'flex';
+                    } else {
+                        if (t.dataset.net === 'xlayer') {
+                            t.style.display = 'flex';
+                        } else {
+                            t.style.display = 'none';
+                        }
+                    }
+                });
+                // 切换按钮样式
+                document.getElementById('filter-all').classList.toggle('bg-white', net === 'all');
+                document.getElementById('filter-all').classList.toggle('text-indigo-600', net === 'all');
+                document.getElementById('filter-all').classList.toggle('text-white', net !== 'all');
+                document.getElementById('filter-xlayer').classList.toggle('bg-white', net === 'xlayer');
+                document.getElementById('filter-xlayer').classList.toggle('text-indigo-600', net === 'xlayer');
+                document.getElementById('filter-xlayer').classList.toggle('text-white', net !== 'xlayer');
+                
+                showToast(net === 'all' ? '显示全部代币' : '仅显示 X Layer 代币');
+            };
+
+            // 切换余额可见性
+            let balanceVisible = true;
+            window.toggleBalanceVisibility = function() {
+                const balanceEl = document.getElementById('balance-amount');
+                const eyeIcon = document.getElementById('balance-eye');
+                if (balanceVisible) {
+                    balanceEl.textContent = '•••••••';
+                    eyeIcon.setAttribute('data-lucide', 'eye-off');
+                } else {
+                    balanceEl.textContent = '$ 10,390.50';
+                    eyeIcon.setAttribute('data-lucide', 'eye');
+                }
+                balanceVisible = !balanceVisible;
+                lucide.createIcons(); // 重新渲染图标
+            };
+
+            // 复制地址
+            window.copyAddress = function() {
+                const addr = document.getElementById('wallet-address').innerText;
+                navigator.clipboard?.writeText(addr).then(() => {
+                    showToast('✅ 地址已复制');
+                }).catch(() => {
+                    showToast('❌ 复制失败，请手动复制');
+                });
+            };
+
+            // 最大按钮 (闪兑)
+            window.useMaxBalance = function() {
+                document.getElementById('swap-from-amount').value = '3120.15';
+                showToast('已使用最大余额');
+            };
+
+            // 切换开关 (生物识别/深色模式)
+            window.toggleSwitch = function(parentDiv) {
+                const toggleDiv = parentDiv.querySelector('.w-10.h-5');
+                const isActive = toggleDiv.classList.contains('bg-indigo-600');
+                if (parentDiv.id === 'biometric-toggle') {
+                    if (isActive) {
+                        toggleDiv.classList.remove('bg-indigo-600');
+                        toggleDiv.classList.add('bg-slate-200');
+                        toggleDiv.innerHTML = '<div class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full"></div>';
+                        showToast('生物识别已关闭');
+                    } else {
+                        toggleDiv.classList.remove('bg-slate-200');
+                        toggleDiv.classList.add('bg-indigo-600');
+                        toggleDiv.innerHTML = '<div class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>';
+                        showToast('生物识别已开启');
+                    }
+                } else if (parentDiv.id === 'darkmode-toggle') {
+                    if (!isActive) { // 当前是slate-200(关)
+                        toggleDiv.classList.remove('bg-slate-200');
+                        toggleDiv.classList.add('bg-indigo-600');
+                        toggleDiv.innerHTML = '<div class="absolute right-1 top-1 w-3 h-3 bg-white rounded-full"></div>';
+                        showToast('深色模式已开启 (演示)');
+                    } else {
+                        toggleDiv.classList.remove('bg-indigo-600');
+                        toggleDiv.classList.add('bg-slate-200');
+                        toggleDiv.innerHTML = '<div class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full"></div>';
+                        showToast('深色模式已关闭');
+                    }
+                }
+            };
+
+            // 点击遮罩关闭弹窗已在 HTML 中定义
+
+            // 确保每次打开页面图标都正常 (切换tab时可能会丢失?)
+            // 可以监听DOM变化，但简单起见，在切换tab后重新创建图标
+            const originalSwitch = window.switchTabNav;
+            window.switchTabNav = function(targetId, btn) {
+                originalSwitch(targetId, btn);
+                lucide.createIcons();
+            };
+
+            // 闪兑页面关闭时恢复滚动，在 hideSubPage 已有
+
+            // 防止输入框影响
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('wheel', (e) => e.preventDefault()); // 防止滚轮改变数值
             });
-            btn.classList.add('text-indigo-600');
-            btn.classList.remove('text-slate-400');
-        }
 
-        // 显示/隐藏子页面 (Swap)
-        function showSubPage(id) {
-            const page = document.getElementById(id);
-            page.classList.remove('hidden');
-            setTimeout(() => {
-                page.style.transform = 'translateY(0)';
-            }, 10);
-        }
-
-        function hideSubPage(id) {
-            const page = document.getElementById(id);
-            page.style.transform = 'translateY(100%)';
-            setTimeout(() => {
-                page.classList.add('hidden');
-            }, 400);
-        }
-
-        // 半屏弹窗逻辑
-        function openSheet(action) {
-            const sheet = document.getElementById('bottom-sheet');
-            const overlay = document.getElementById('overlay');
-            const title = document.getElementById('sheet-title');
-
-            title.innerText = action === 'deposit' ? '选择网络进行充币' : '选择网络进行提币';
-            
-            overlay.classList.remove('hidden');
-            setTimeout(() => {
-                overlay.style.opacity = '1';
-                sheet.style.transform = 'translateY(0)';
-            }, 10);
-        }
-
-        function closeSheet() {
-            const sheet = document.getElementById('bottom-sheet');
-            const overlay = document.getElementById('overlay');
-
-            sheet.style.transform = 'translateY(100%)';
-            overlay.style.opacity = '0';
-            setTimeout(() => {
-                overlay.classList.add('hidden');
-            }, 300);
-        }
-
-        // 简单的网络过滤反馈
-        function filterNet(net) {
-            console.log('Filtering net:', net);
-            // 此处可添加实际的过滤动效
-        }
+        })();
     </script>
 </body>
 </html>
