@@ -1,49 +1,242 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Boost Wallet</title>
-
-<link rel="stylesheet" href="style.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
 
+<style>
+
+body{
+margin:0;
+font-family:Inter;
+background:#ffffff;
+}
+
+.header{
+height:60px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:'Space Grotesk';
+font-size:20px;
+color:#6C3BFF;
+border-bottom:1px solid #eee;
+}
+
+.container{
+padding:20px;
+padding-bottom:90px;
+}
+
+.card{
+background:#fff;
+border-radius:16px;
+padding:20px;
+margin-bottom:15px;
+box-shadow:0 8px 25px rgba(0,0,0,0.05);
+}
+
+.balance{
+font-size:32px;
+font-weight:600;
+}
+
+.small{
+font-size:14px;
+color:#666;
+}
+
+.token{
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+}
+
+.button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+color:white;
+font-size:16px;
+margin-top:12px;
+background:linear-gradient(90deg,#6C3BFF,#D4AF37);
+}
+
+.hidden{
+display:none;
+}
+
+.market{
+display:flex;
+justify-content:space-between;
+padding:10px 0;
+border-bottom:1px solid #eee;
+}
+
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+height:60px;
+background:#fff;
+border-top:1px solid #eee;
+display:flex;
+}
+
+.nav button{
+flex:1;
+border:none;
+background:none;
+font-size:13px;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="navbar">
-
-<div class="logo">Boost Wallet</div>
-
-<div class="menu">
-
-<a href="wallet.html">钱包</a>
-<a href="market.html">行情</a>
-<a href="earn.html">赚币</a>
-<a href="boost.html">Boost</a>
-
+<div class="header">
+Boost Wallet
 </div>
 
-</div>
+<div class="container">
 
+<div id="wallet">
 
-<div class="hero">
+<div class="card">
+<div class="balance">0.00</div>
+<div class="small">Total Balance</div>
 
-<h1>Ultimate Web3 Wallet</h1>
-
-<p>BNB Chain + X Layer</p>
-
-<button onclick="location.href='wallet.html'">
-
-进入钱包
-
+<button class="button" onclick="createWallet()">
+Create Wallet
 </button>
+</div>
+
+<div class="card">
+<div class="token">
+<span>BNB</span>
+<span>0</span>
+</div>
+
+<div class="token">
+<span>OKB</span>
+<span>0</span>
+</div>
+</div>
 
 </div>
+
+
+<div id="market" class="hidden">
+
+<div class="card">
+
+<h3>Market</h3>
+
+<div id="marketList">
+Loading...
+</div>
+
+</div>
+
+</div>
+
+
+<div id="earn" class="hidden">
+
+<div class="card">
+<h3>BNB Staking</h3>
+<div class="small">APR 12%</div>
+<button class="button">Stake</button>
+</div>
+
+<div class="card">
+<h3>OKB Pool</h3>
+<div class="small">APR 35%</div>
+<button class="button">Stake</button>
+</div>
+
+</div>
+
+
+<div id="boost" class="hidden">
+
+<div class="card">
+<h3>Boost Campaign</h3>
+<div class="small">Stake OKB</div>
+<div class="small">APR 35%</div>
+<button class="button">Join</button>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="nav">
+
+<button onclick="showPage('wallet')">Wallet</button>
+
+<button onclick="showPage('market')">Market</button>
+
+<button onclick="showPage('earn')">Earn</button>
+
+<button onclick="showPage('boost')">Boost</button>
+
+</div>
+
+
+<script>
+
+function showPage(page){
+
+document.getElementById("wallet").classList.add("hidden");
+document.getElementById("market").classList.add("hidden");
+document.getElementById("earn").classList.add("hidden");
+document.getElementById("boost").classList.add("hidden");
+
+document.getElementById(page).classList.remove("hidden");
+
+}
+
+function createWallet(){
+
+let address="0x"+Math.random().toString(16).substr(2,40);
+
+localStorage.setItem("wallet",address);
+
+alert("Wallet Created:\\n"+address);
+
+}
+
+fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd")
+
+.then(res=>res.json())
+
+.then(data=>{
+
+let html="";
+
+data.slice(0,10).forEach(c=>{
+
+html+=`
+<div class="market">
+<span>${c.name}</span>
+<span>$${c.current_price}</span>
+</div>
+`;
+
+});
+
+document.getElementById("marketList").innerHTML=html;
+
+});
+
+</script>
 
 </body>
-
 </html>
