@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>海豚 · Meme 潮流</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #13222e, #0b1219 90%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1rem 2rem;
+            color: #ffffff;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* 玻璃态卡片通用样式 */
+        .glass-card {
+            background: rgba(20, 30, 45, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(90, 160, 200, 0.15);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s ease, border-color 0.2s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(0, 191, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* 标题行 + 更多链接 */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            margin-top: 2rem;
+        }
+        .section-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff, #b0f0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .section-header h2 i {
+            background: rgba(0, 191, 255, 0.2);
+            padding: 0.4rem;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            color: #5fd9ff;
+        }
+        .more-link {
+            color: #8ab8ff;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: rgba(255,255,255,0.03);
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s;
+        }
+        .more-link i {
+            font-size: 0.8rem;
+        }
+        .more-link:hover {
+            background: rgba(90, 180, 255, 0.15);
+            border-color: #3a8bff;
+            color: white;
+        }
+
+        /* 头部区域 */
+        .hero {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.5rem 0 2rem 0;
+        }
+        .hero-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .hero-title .dolphin-icon {
+            font-size: 2.8rem;
+            color: #4ad0ff;
+            filter: drop-shadow(0 0 8px #0099ff);
+        }
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff, #a0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.01em;
+        }
+        .hero-tagline {
+            background: rgba(255,255,255,0.03);
+            padding: 0.6rem 1.4rem;
+            border-radius: 60px;
+            border: 1px solid rgba(0, 180, 255, 0.3);
+            font-size: 1rem;
+            font-weight: 400;
+            color: #bbf0ff;
+            box-shadow: 0 0 15px rgba(0,160,255,0.2);
+            backdrop-filter: blur(4px);
+        }
+        .hero-tagline i {
+            margin-right: 0.4rem;
+            color: #ffd966;
+        }
+
+        /* 数据卡片网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+        .stat-item {
+            background: rgba(12, 22, 32, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            padding: 1.2rem 1rem;
+            border: 1px solid rgba(70, 140, 200, 0.2);
+            transition: 0.15s;
+            box-shadow: 0 8px 20px -10px #00000080;
+        }
+        .stat-item:hover {
+            background: rgba(20, 35, 55, 0.8);
+            border-color: #2d9eff;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #a0bcdb;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .stat-label i {
+            font-size: 1rem;
+            color: #5fd0ff;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        .stat-change {
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.2rem 0.6rem;
+            border-radius: 40px;
+        }
+        .stat-change.positive {
+            color: #86ef9f;
+        }
+        .stat-change.positive i {
+            color: #6ae28b;
+        }
+
+        /* Meme 行情卡片 (代币列表) */
+        .meme-ticker {
+            background: rgba(15, 25, 38, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 36px;
+            padding: 1.5rem 1.2rem;
+            border: 1px solid rgba(0, 180, 255, 0.2);
+        }
+        .coin-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+        .coin-row:last-child {
+            border-bottom: none;
+        }
+        .coin-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .coin-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(145deg, #2d4b65, #192e40);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #aaf0ff;
+            border: 1px solid #3d8daf;
+        }
+        .coin-name {
+            font-weight: 600;
+        }
+        .coin-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+        }
+        .coin-change {
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            background: rgba(0,0,0,0.3);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .coin-change.positive {
+            color: #b1ffb1;
+            background: rgba(0, 200, 100, 0.15);
+        }
+        .coin-change.negative {
+            color: #ffa7a7;
+            background: rgba(255, 70, 70, 0.15);
+        }
+
+        /* 最新活动 + 常用工具 区域 */
+        .activity-tool-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        @media (max-width: 640px) {
+            .activity-tool-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .activity-card {
+            background: linear-gradient(145deg, #132a38, #0c1d28);
+            border-radius: 32px;
+            padding: 1.8rem 1.8rem;
+            border: 1px solid #2e6a8b40;
+            box-shadow: 0 20px 30px -20px #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .activity-badge {
+            background: #f0b90b20;
+            color: #ffd966;
+            border: 1px solid #f0b90b60;
+            padding: 0.2rem 1rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(5px);
+        }
+        .activity-card h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+        }
+        .activity-card p {
+            color: #bfd9f0;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        .airdrop-btn {
+            background: linear-gradient(95deg, #1f6e9f, #2b9ad6);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: fit-content;
+            box-shadow: 0 8px 20px #0066aa50;
+            transition: 0.2s;
+            border: 1px solid #8fd0ff;
+        }
+        .airdrop-btn:hover {
+            background: linear-gradient(95deg, #2b7eb3, #3bacf0);
+            transform: scale(1.02);
+            box-shadow: 0 12px 28px #0077cc70;
+        }
+
+        /* 常用工具网格 */
+        .tools-grid {
+            background: rgba(10, 22, 33, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 36px;
+            padding: 1.8rem 1.2rem;
+            border: 1px solid #306a8b40;
+        }
+        .tools-icons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .tool-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.4rem;
+            padding: 0.8rem 0.2rem;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.02);
+            transition: 0.1s;
+            cursor: default;
+        }
+        .tool-item i {
+            font-size: 1.8rem;
+            background: rgba(40, 100, 150, 0.3);
+            padding: 0.7rem;
+            border-radius: 30px;
+            color: #9edaff;
+            width: 3.4rem;
+            height: 3.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #3980aa50;
+        }
+        .tool-item span {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #c5e2ff;
+        }
+
+        /* Meme 榜区域 */
+        .meme-rank {
+            background: rgba(0, 20, 35, 0.5);
+            backdrop-filter: blur(16px);
+            border-radius: 36px;
+            padding: 1.6rem 1.5rem;
+            margin: 2rem 0 2.5rem;
+            border: 1px solid #27a0da30;
+        }
+        .rank-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.6rem 1rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 60px;
+        }
+        .rank-num {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #a0dcff;
+            width: 2rem;
+            text-align: center;
+        }
+        .rank-avatar {
+            width: 36px; height: 36px;
+            background: #20507a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .rank-name {
+            flex: 1;
+            font-weight: 600;
+        }
+        .rank-value {
+            font-family: monospace;
+            background: #1d3b50;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+        }
+
+        /* 底部导航 (类似app) */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(10, 25, 38, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 60px;
+            padding: 0.8rem 1rem;
+            margin-top: 2rem;
+            border: 1px solid #3f7a9a40;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8baac8;
+            font-size: 0.75rem;
+            transition: 0.1s;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            cursor: default;
+        }
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 0.2rem;
+        }
+        .nav-item.active {
+            background: #1d4f73;
+            color: white;
+            box-shadow: 0 0 10px #0077be;
+        }
+        .nav-item.active i {
+            color: #b3ecff;
+        }
+
+        /* 一些小点缀 */
+        .glow {
+            text-shadow: 0 0 10px #4ab0ff;
+        }
+        hr {
+            border: 0.5px solid #2f608030;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- 头部 海豚模式 -->
+    <div class="hero">
+        <div class="hero-title">
+            <i class="fas fa-dolphin dolphin-icon"></i>
+            <h1>Meme 行情</h1>
+        </div>
+        <div class="hero-tagline">
+            <i class="fas fa-wave-square"></i> 开启海豚模式 · 陪今天的你，走未来的路
+        </div>
+    </div>
+
+    <!-- 数据总览 + 更多 -->
+    <div class="section-header">
+        <h2><i class="fas fa-chart-pie"></i> 数据总览</h2>
+        <a href="#" class="more-link">更多 <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-label"><i class="fas fa-lock"></i> 质押H总量</div>
+            <div><span class="stat-number">2.45M</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>5.2%</span></div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label"><i class="fas fa-arrow-trend-up"></i> 总交易量</div>
+            <div><span class="stat-number">8.92M</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>12.3%</span></div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label"><i class="fas fa-landmark"></i> 国库累计</div>
+            <div><span class="stat-number">1.23M</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>2.7%</span></div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label"><i class="fas fa-users"></i> 活跃人数</div>
+            <div><span class="stat-number">12.3k</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>1.5%</span></div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label"><i class="fas fa-gift"></i> 发放奖励</div>
+            <div><span class="stat-number">56.8k</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>8.1%</span></div>
+        </div>
+    </div>
+
+    <!-- Meme 行情区域 + 更多 -->
+    <div class="section-header">
+        <h2><i class="fas fa-chart-line"></i> Meme 行情</h2>
+        <a href="#" class="more-link">更多 <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="meme-ticker">
+        <div class="coin-row">
+            <div class="coin-info"><span class="coin-icon">🐕</span><span class="coin-name">DOGE</span></div>
+            <span class="coin-price">$0.162</span>
+            <span class="coin-change positive"><i class="fas fa-arrow-up"></i> +3.2%</span>
+        </div>
+        <div class="coin-row">
+            <div class="coin-info"><span class="coin-icon">🦊</span><span class="coin-name">SHIB</span></div>
+            <span class="coin-price">$0.000024</span>
+            <span class="coin-change negative"><i class="fas fa-arrow-down"></i> -1.5%</span>
+        </div>
+        <div class="coin-row">
+            <div class="coin-info"><span class="coin-icon">🐸</span><span class="coin-name">PEPE</span></div>
+            <span class="coin-price">$0.0000015</span>
+            <span class="coin-change positive"><i class="fas fa-arrow-up"></i> +11.2%</span>
+        </div>
+        <div class="coin-row">
+            <div class="coin-info"><span class="coin-icon">🦍</span><span class="coin-name">FLOKI</span></div>
+            <span class="coin-price">$0.000038</span>
+            <span class="coin-change positive"><i class="fas fa-arrow-up"></i> +5.7%</span>
+        </div>
+        <div class="coin-row">
+            <div class="coin-info"><span class="coin-icon">🐶</span><span class="coin-name">BONK</span></div>
+            <span class="coin-price">$0.000023</span>
+            <span class="coin-change negative"><i class="fas fa-arrow-down"></i> -0.8%</span>
+        </div>
+    </div>
+
+    <!-- 最新活动 + 常用工具 两列布局 -->
+    <div class="activity-tool-grid">
+        <!-- 最新活动卡片 -->
+        <div class="activity-card">
+            <span class="activity-badge"><i class="fas fa-bolt"></i> 最新活动</span>
+            <h3>OKX Boost <br>最佳策略</h3>
+            <p>获得空投 · 海豚专属奖励</p>
+            <button class="airdrop-btn"><i class="fas fa-gift"></i> 立即参与</button>
+        </div>
+        <!-- 常用工具 -->
+        <div class="tools-grid">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <h3 style="font-size: 1.4rem; font-weight: 600;">⚙️ 常用工具</h3>
+                <span style="color:#73b3ff; font-size:0.85rem; background: #1c4058; padding:0.2rem 1rem; border-radius:30px;">8个入口</span>
+            </div>
+            <div class="tools-icons">
+                <div class="tool-item"><i class="fas fa-calendar-check"></i><span>签到</span></div>
+                <div class="tool-item"><i class="fas fa-dice"></i><span>抽奖</span></div>
+                <div class="tool-item"><i class="fas fa-star"></i><span>积分</span></div>
+                <div class="tool-item"><i class="fas fa-envelope"></i><span>红包</span></div>
+                <div class="tool-item"><i class="fas fa-magnifying-glass"></i><span>查询系统</span></div>
+                <div class="tool-item"><i class="fas fa-users-between-lines"></i><span>社区数据</span></div>
+                <div class="tool-item"><i class="fas fa-calculator"></i><span>计算器</span></div>
+                <div class="tool-item"><i class="fas fa-cloud-arrow-down"></i><span>下载中心</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Meme 榜区块 -->
+    <div class="section-header">
+        <h2><i class="fas fa-crown"></i> Meme 榜</h2>
+        <a href="#" class="more-link">全部榜单 <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="meme-rank">
+        <div class="rank-list">
+            <div class="rank-item">
+                <span class="rank-num">#1</span><span class="rank-avatar">🐕</span><span class="rank-name">Dogecoin</span><span class="rank-value">市值 23.4B</span>
+            </div>
+            <div class="rank-item">
+                <span class="rank-num">#2</span><span class="rank-avatar">🦊</span><span class="rank-name">Shiba Inu</span><span class="rank-value">市值 12.1B</span>
+            </div>
+            <div class="rank-item">
+                <span class="rank-num">#3</span><span class="rank-avatar">🐸</span><span class="rank-name">Pepe</span><span class="rank-value">市值 5.8B</span>
+            </div>
+            <div class="rank-item">
+                <span class="rank-num">#4</span><span class="rank-avatar">🦔</span><span class="rank-name">Bonk</span><span class="rank-value">市值 2.3B</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部导航 仿App -->
+    <div class="bottom-nav">
+        <div class="nav-item active"><i class="fas fa-water"></i><span>Meme榜</span></div>
+        <div class="nav-item"><i class="fas fa-chart-simple"></i><span>行情</span></div>
+        <div class="nav-item"><i class="fas fa-compass"></i><span>发现</span></div>
+        <div class="nav-item"><i class="fas fa-user"></i><span>我的</span></div>
+    </div>
+
+    <!-- 装饰脚注 (保留原风格) -->
+    <div style="text-align: center; margin-top: 2rem; color: #4d7795; font-size: 0.8rem;">
+        <i class="fas fa-dolphin" style="opacity:0.6;"></i> 海豚模式 · 与浪潮同行
+    </div>
+</div>
+<!-- 微交互：所有卡片已包含hover效果，无需额外脚本 -->
+</body>
+</html>
