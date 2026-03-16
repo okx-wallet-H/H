@@ -1,0 +1,93 @@
+body{
+
+font-family:'Inter',sans-serif;
+background:#ffffff;
+margin:0;
+
+}
+
+
+.navbar{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 60px;
+border-bottom:1px solid #eee;
+
+}
+
+
+.logo{
+
+font-family:'Space Grotesk';
+font-size:24px;
+font-weight:600;
+color:#6C3BFF;
+
+}
+
+
+.menu{
+
+display:flex;
+gap:40px;
+list-style:none;
+
+}
+
+
+.menu a{
+
+text-decoration:none;
+color:#222;
+font-weight:500;
+
+}
+
+
+.menu a:hover{
+
+color:#6C3BFF;
+
+}
+
+
+.connect{
+
+background:linear-gradient(90deg,#6C3BFF,#D4AF37);
+color:white;
+border:none;
+padding:10px 24px;
+border-radius:10px;
+cursor:pointer;
+
+}
+
+
+.hero{
+
+text-align:center;
+margin-top:120px;
+
+}
+
+
+.hero h1{
+
+font-size:48px;
+font-family:'Space Grotesk';
+
+}
+
+
+.start{
+
+margin-top:30px;
+padding:14px 32px;
+background:#6C3BFF;
+color:white;
+border:none;
+border-radius:12px;
+
+}
