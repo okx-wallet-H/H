@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web3 Alpha Wallet v3</title>
+    <title>Web3 Alpha Wallet v4</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -27,6 +27,10 @@
         .overlay { transition: opacity 0.3s ease; pointer-events: none; opacity: 0; }
         .overlay.active { pointer-events: auto; opacity: 1; }
         .network-pill.active { background: rgba(255, 255, 255, 0.25); border-color: rgba(255, 255, 255, 0.6); font-weight: 600; }
+        
+        /* 隐藏输入框的上下箭头 */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen bg-white shadow-2xl relative">
@@ -39,6 +43,7 @@
                     <div class="flex p-1 bg-black/10 rounded-full border border-white/10 backdrop-blur-sm">
                         <button onclick="selectNet('all')" id="net-all" class="network-pill active px-4 py-1.5 rounded-full text-xs border border-transparent transition-all">全部</button>
                         <button onclick="selectNet('xlayer')" id="net-xlayer" class="network-pill px-4 py-1.5 rounded-full text-xs border border-transparent transition-all">X Layer</button>
+                        <button onclick="selectNet('bnb')" id="net-bnb" class="network-pill px-4 py-1.5 rounded-full text-xs border border-transparent transition-all">BNB</button>
                     </div>
                     <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center cursor-pointer hover:bg-white/20 transition-colors">
                         <i data-lucide="scan" class="w-5 h-5 opacity-90"></i>
@@ -70,7 +75,7 @@
                     <button class="w-14 h-14 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)] rounded-[20px] flex items-center justify-center text-violet-600 group-hover:-translate-y-1 transition-transform">
                         <i data-lucide="arrow-left-right" class="w-6 h-6"></i>
                     </button>
-                    <span class="text-[11px] mt-2.5 font-semibold text-gray-600">交易</span>
+                    <span class="text-[11px] mt-2.5 font-semibold text-gray-600">闪兑</span>
                 </div>
                 <div class="flex flex-col items-center group cursor-pointer">
                     <button class="w-14 h-14 bg-white shadow-[0_8px_20px_rgba(0,0,0,0.08)] rounded-[20px] flex items-center justify-center text-violet-600 group-hover:-translate-y-1 transition-transform">
@@ -87,7 +92,7 @@
                 </div>
 
                 <div id="tokenContent" class="mt-5 space-y-5">
-                    <div class="flex justify-between items-center group cursor-pointer hover:bg-gray-50 p-2 -mx-2 rounded-xl transition-colors">
+                    <div class="token-item flex justify-between items-center group cursor-pointer hover:bg-gray-50 p-2 -mx-2 rounded-xl transition-colors" data-network="xlayer">
                         <div class="flex items-center space-x-3">
                             <div class="w-11 h-11 bg-black rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">X</div>
                             <div>
@@ -100,7 +105,24 @@
                             <div class="text-[11px] text-gray-500 mt-0.5">$7,230.00</div>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center group cursor-pointer hover:bg-gray-50 p-2 -mx-2 rounded-xl transition-colors border-t border-gray-50">
+
+                    <div class="token-item flex justify-between items-center group cursor-pointer hover:bg-gray-50 p-2 -mx-2 rounded-xl transition-colors border-t border-gray-50" data-network="bnb">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-11 h-11 bg-yellow-400 rounded-full flex items-center justify-center text-white shadow-md">
+                                <i data-lucide="coins" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <div class="font-bold text-gray-900">BNB</div>
+                                <div class="text-[11px] text-gray-500 mt-0.5">BNB Smart Chain</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-gray-900">5.24</div>
+                            <div class="text-[11px] text-gray-500 mt-0.5">$3,120.15</div>
+                        </div>
+                    </div>
+
+                    <div class="token-item flex justify-between items-center group cursor-pointer hover:bg-gray-50 p-2 -mx-2 rounded-xl transition-colors border-t border-gray-50" data-network="multi">
                         <div class="flex items-center space-x-3">
                             <div class="w-11 h-11 bg-teal-500 rounded-full flex items-center justify-center text-white shadow-md">
                                 <span class="font-bold text-base">$</span>
@@ -111,16 +133,17 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="font-bold text-gray-900">3,120.15</div>
-                            <div class="text-[11px] text-gray-500 mt-0.5">$3,120.15</div>
+                            <div class="font-bold text-gray-900">40.35</div>
+                            <div class="text-[11px] text-gray-500 mt-0.5">$40.35</div>
                         </div>
                     </div>
 
                     <button class="w-full py-3.5 mt-2 flex items-center justify-center space-x-2 text-violet-600 bg-violet-50/50 rounded-xl hover:bg-violet-100/80 transition-colors text-sm font-semibold border border-violet-100">
                         <i data-lucide="plus" class="w-4 h-4"></i>
-                        <span>管理代币</span>
+                        <span>币种管理</span>
                     </button>
                 </div>
+                
                 <div id="defiContent" class="hidden mt-4 py-12 text-center text-gray-400 text-sm">
                     <i data-lucide="ghost" class="w-12 h-12 mx-auto mb-3 opacity-20"></i>
                     暂无 DeFi 或 NFT 资产
@@ -130,12 +153,12 @@
         </div>
 
         <div id="view-earn" class="view-section hidden pt-8 px-6 bg-gray-50 min-h-screen">
-            <h2 class="text-2xl font-extrabold text-gray-900 mb-1">赚币 Earn</h2>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-1">赚币</h2>
             <p class="text-sm text-gray-500 mb-6">通过闲置资产获取稳健收益</p>
             
             <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-6 text-white mb-8 shadow-xl relative overflow-hidden">
                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-violet-500/20 rounded-full blur-2xl"></div>
-                <p class="text-xs text-gray-300 mb-1 opacity-80">我的总收益 (USD)</p>
+                <p class="text-xs text-gray-300 mb-1 opacity-80">我的总收益估值 (USD)</p>
                 <div class="text-3xl font-bold mb-4">$ 342.50</div>
                 <div class="flex space-x-6 text-sm">
                     <div>
@@ -160,13 +183,13 @@
                             <span class="font-bold">$</span>
                         </div>
                         <div>
-                            <div class="font-bold text-gray-900 text-sm">USDT 活期赚币</div>
+                            <div class="font-bold text-gray-900 text-sm">USDT 活期理财</div>
                             <div class="text-[11px] text-gray-500">随存随取</div>
                         </div>
                     </div>
                     <div class="text-right">
                         <div class="text-lg font-bold text-green-500">8.5%</div>
-                        <div class="text-[10px] text-gray-400">预估 APY</div>
+                        <div class="text-[10px] text-gray-400">预估年化</div>
                     </div>
                 </div>
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between">
@@ -179,7 +202,7 @@
                     </div>
                     <div class="text-right">
                         <div class="text-lg font-bold text-green-500">12.0%</div>
-                        <div class="text-[10px] text-gray-400">预估 APY</div>
+                        <div class="text-[10px] text-gray-400">预估年化</div>
                     </div>
                 </div>
             </div>
@@ -187,14 +210,14 @@
         </div>
 
         <div id="view-settings" class="view-section hidden pt-8 px-6 bg-gray-50 min-h-screen">
-            <h2 class="text-2xl font-extrabold text-gray-900 mb-6">设置 Settings</h2>
+            <h2 class="text-2xl font-extrabold text-gray-900 mb-6">设置</h2>
             
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center mb-8">
                 <div class="w-14 h-14 bg-gradient-to-tr from-violet-500 to-purple-400 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                     <i data-lucide="user" class="w-6 h-6 text-white"></i>
                 </div>
                 <div class="ml-4 flex-1">
-                    <div class="font-bold text-gray-900">Wallet-1</div>
+                    <div class="font-bold text-gray-900">我的钱包-1</div>
                     <div class="text-xs text-gray-500 mt-1 flex items-center">
                         0x71C...a29E <i data-lucide="copy" class="w-3 h-3 ml-1 cursor-pointer"></i>
                     </div>
@@ -236,7 +259,7 @@
                         <div class="flex items-center justify-between p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors">
                             <div class="flex items-center text-gray-700">
                                 <i data-lucide="globe" class="w-5 h-5 mr-3 text-gray-400"></i>
-                                <span class="text-sm font-medium">语言 Language</span>
+                                <span class="text-sm font-medium">语言设置</span>
                             </div>
                             <div class="flex items-center">
                                 <span class="text-xs text-gray-400 mr-2">简体中文</span>
@@ -263,7 +286,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-8 text-center text-xs text-gray-400">Alpha Wallet v3.0.1</div>
+            <div class="mt-8 text-center text-xs text-gray-400">Alpha Wallet v4.0.0</div>
             <div class="h-20"></div>
         </div>
 
@@ -272,8 +295,9 @@
                 <div class="w-10 h-10 flex items-center justify-start cursor-pointer" onclick="navigateBack()">
                     <i data-lucide="chevron-left" class="w-6 h-6 text-gray-800"></i>
                 </div>
-                <h2 class="text-lg font-bold text-gray-900">充币 Deposit</h2>
-                <div class="w-10"></div> </div>
+                <h2 class="text-lg font-bold text-gray-900">充币</h2>
+                <div class="w-10"></div>
+            </div>
             
             <div class="px-6 py-8 flex flex-col items-center">
                 <div class="text-center mb-6">
@@ -281,7 +305,7 @@
                     <div class="flex items-center justify-center space-x-2">
                         <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-xs">$</div>
                         <span class="font-bold text-xl text-gray-900">USDT</span>
-                        <span class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded font-medium">X Layer</span>
+                        <span id="deposit-network-tag" class="bg-gray-100 text-gray-600 text-[10px] px-2 py-0.5 rounded font-medium">X Layer</span>
                     </div>
                 </div>
 
@@ -307,7 +331,7 @@
                 
                 <div class="mt-8 bg-orange-50 text-orange-600 p-4 rounded-xl text-xs leading-relaxed flex items-start">
                     <i data-lucide="alert-circle" class="w-4 h-4 mr-2 mt-0.5 flex-shrink-0"></i>
-                    <p>请注意：该地址仅支持通过 <b>X Layer</b> 网络充值 USDT，充入其他资产将不可找回。</p>
+                    <p>请注意：该地址仅支持通过 <b id="deposit-notice-net">X Layer</b> 网络充值 USDT，充入其他资产将不可找回。</p>
                 </div>
             </div>
         </div>
@@ -317,19 +341,24 @@
                 <div class="w-10 h-10 flex items-center justify-start cursor-pointer" onclick="navigateBack()">
                     <i data-lucide="chevron-left" class="w-6 h-6 text-gray-800"></i>
                 </div>
-                <h2 class="text-lg font-bold text-gray-900">提币 Withdraw</h2>
+                <h2 class="text-lg font-bold text-gray-900">提币</h2>
                 <div class="w-10"></div>
             </div>
             
             <div class="p-6 space-y-6">
+                <div class="bg-violet-50 text-violet-600 px-4 py-3 rounded-xl text-xs font-medium flex items-center">
+                    <i data-lucide="network" class="w-4 h-4 mr-2"></i>
+                    当前提币网络：<span id="withdraw-network-tag" class="font-bold ml-1">X Layer</span>
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-2 ml-1">选择币种</label>
-                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between cursor-pointer">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold text-xs">$</div>
                             <div>
                                 <div class="font-bold text-sm text-gray-900">USDT</div>
-                                <div class="text-[10px] text-gray-400">可用: 3,120.15</div>
+                                <div class="text-[10px] text-gray-400">可用余额: 3,120.15</div>
                             </div>
                         </div>
                         <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400"></i>
@@ -338,9 +367,9 @@
 
                 <div>
                     <label class="block text-xs font-bold text-gray-500 mb-2 ml-1">提币地址</label>
-                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center">
-                        <input type="text" placeholder="输入或粘贴地址" class="w-full text-sm font-medium outline-none text-gray-900 placeholder-gray-300">
-                        <i data-lucide="scan-line" class="w-5 h-5 text-gray-400 ml-2 cursor-pointer"></i>
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center focus-within:ring-2 ring-violet-100 transition-all">
+                        <input type="text" placeholder="输入或长按粘贴地址" class="w-full text-sm font-medium outline-none text-gray-900 placeholder-gray-300">
+                        <i data-lucide="scan-line" class="w-5 h-5 text-gray-400 ml-2 cursor-pointer hover:text-violet-500"></i>
                     </div>
                 </div>
 
@@ -348,10 +377,10 @@
                     <div class="flex justify-between items-center mb-2 px-1">
                         <label class="text-xs font-bold text-gray-500">提币数量</label>
                     </div>
-                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm focus-within:ring-2 ring-violet-100 transition-all">
                         <div class="flex items-center justify-between border-b border-gray-50 pb-3 mb-3">
-                            <input type="number" placeholder="0.00" class="w-full text-2xl font-bold outline-none text-gray-900 placeholder-gray-200">
-                            <span class="text-violet-600 font-bold text-sm ml-4 cursor-pointer">最大</span>
+                            <input type="number" placeholder="0.00" class="w-full text-2xl font-bold outline-none text-gray-900 placeholder-gray-200 bg-transparent">
+                            <span class="text-violet-600 font-bold text-sm ml-4 cursor-pointer hover:text-violet-700">全部</span>
                         </div>
                         <div class="flex justify-between text-[11px] text-gray-400">
                             <span>网络费用 (预估)</span>
@@ -366,55 +395,57 @@
             </div>
         </div>
 
-        <div id="view-swap" class="view-section hidden fixed inset-0 z-50 bg-[#F5F3F9] overflow-y-auto">
-            <div class="sticky top-0 bg-[#F5F3F9]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between z-10">
+        <div id="view-swap" class="view-section hidden fixed inset-0 z-50 bg-[#F7F9FC] overflow-y-auto">
+            <div class="sticky top-0 bg-[#F7F9FC]/90 backdrop-blur-md px-6 py-4 flex items-center justify-between z-10 border-b border-gray-100/50">
                 <div class="w-10 h-10 flex items-center justify-start cursor-pointer" onclick="navigateBack()">
                     <i data-lucide="arrow-left" class="w-6 h-6 text-gray-800"></i>
                 </div>
-                <h2 class="text-lg font-bold text-gray-900">闪兑 Swap</h2>
+                <h2 class="text-lg font-bold text-gray-900">闪兑</h2>
                 <div class="w-10 flex justify-end">
-                    <i data-lucide="sliders-horizontal" class="w-5 h-5 text-gray-500"></i>
+                    <i data-lucide="sliders-horizontal" class="w-5 h-5 text-gray-500 cursor-pointer hover:text-gray-800"></i>
                 </div>
             </div>
 
-            <div class="px-5 pt-4">
-                <div class="relative bg-white p-2 rounded-[28px] shadow-sm border border-gray-100">
-                    <div class="bg-gray-50 p-5 rounded-[20px] hover:bg-gray-100/80 transition-colors">
-                        <div class="text-xs text-gray-500 font-medium mb-3">支付 (Pay)</div>
+            <div class="px-5 pt-6">
+                <div class="relative bg-white p-1.5 rounded-[28px] shadow-[0_8px_30px_rgba(0,0,0,0.04)] border border-gray-100">
+                    
+                    <div class="bg-gray-50 p-5 rounded-[24px] focus-within:bg-gray-100/50 transition-colors">
+                        <div class="text-xs text-gray-500 font-semibold mb-3">支付</div>
                         <div class="flex justify-between items-center">
-                            <input type="number" placeholder="0.0" class="w-1/2 text-3xl font-extrabold outline-none bg-transparent text-gray-900 placeholder-gray-300">
-                            <div class="flex items-center space-x-2 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100 cursor-pointer">
+                            <input type="number" placeholder="0.0" class="w-[60%] text-3xl font-extrabold outline-none bg-transparent text-gray-900 placeholder-gray-300">
+                            <div class="flex items-center space-x-2 bg-white px-3 py-1.5 rounded-full shadow-sm border border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors">
                                 <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">$</div>
                                 <span class="font-bold text-sm">USDT</span>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
                             </div>
                         </div>
-                        <div class="text-xs text-gray-400 mt-3 font-medium">余额: 3,120.15</div>
+                        <div class="text-[11px] text-gray-400 mt-3 font-medium">可用余额: 3,120.15</div>
                     </div>
 
                     <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                        <button class="w-12 h-12 bg-white border-4 border-white rounded-full shadow-md flex items-center justify-center text-violet-600 hover:rotate-180 transition-transform duration-300">
+                        <button class="w-12 h-12 bg-white border-4 border-white rounded-2xl shadow-md flex items-center justify-center text-violet-600 hover:rotate-180 hover:bg-violet-50 transition-all duration-300 cursor-pointer">
                             <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
                         </button>
                     </div>
 
-                    <div class="p-5 rounded-[20px] mt-1">
-                        <div class="text-xs text-gray-500 font-medium mb-3">接收 (Receive)</div>
+                    <div class="bg-white p-5 rounded-[24px] mt-1 border border-transparent">
+                        <div class="text-xs text-gray-500 font-semibold mb-3">接收</div>
                         <div class="flex justify-between items-center">
-                            <input type="number" placeholder="0.0" disabled class="w-1/2 text-3xl font-extrabold outline-none bg-transparent text-gray-400 placeholder-gray-200">
-                            <div class="flex items-center space-x-2 bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-full border border-gray-100 cursor-pointer transition-colors">
+                            <input type="number" placeholder="0.0" disabled class="w-[60%] text-3xl font-extrabold outline-none bg-transparent text-gray-400 placeholder-gray-200">
+                            <div class="flex items-center space-x-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100 cursor-pointer hover:bg-gray-100 transition-colors">
                                 <div class="w-6 h-6 bg-black rounded-full flex items-center justify-center text-white text-[10px] font-bold">X</div>
                                 <span class="font-bold text-sm">OKB</span>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400"></i>
                             </div>
                         </div>
+                        <div class="text-[11px] text-gray-400 mt-3 font-medium visibility-hidden opacity-0">占位</div>
                     </div>
                 </div>
 
-                <div class="mt-6 p-4 bg-white/60 rounded-2xl border border-gray-100/50 space-y-3">
+                <div class="mt-6 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm space-y-3">
                     <div class="flex justify-between text-xs font-medium">
                         <span class="text-gray-500">兑换比例</span>
-                        <span class="text-gray-900">1 OKB = 60.12 USDT</span>
+                        <span class="text-gray-900 font-bold">1 OKB = 60.12 USDT</span>
                     </div>
                     <div class="flex justify-between text-xs font-medium">
                         <span class="text-gray-500">滑点保护</span>
@@ -422,11 +453,11 @@
                     </div>
                     <div class="flex justify-between text-xs font-medium">
                         <span class="text-gray-500">网络费预估</span>
-                        <span class="text-gray-900">~$0.25</span>
+                        <span class="text-gray-900">~$0.25 <span class="text-gray-400 text-[10px]">(0.0004 OKB)</span></span>
                     </div>
                 </div>
 
-                <button class="w-full bg-violet-600 text-white font-bold py-4 rounded-2xl hover:bg-violet-700 transition-colors shadow-lg shadow-violet-200 mt-8 text-lg">
+                <button class="w-full bg-violet-600 text-white font-bold py-4 rounded-2xl hover:bg-violet-700 transition-colors shadow-lg shadow-violet-200 mt-8 text-base">
                     确认兑换
                 </button>
             </div>
@@ -456,18 +487,18 @@
         <h2 id="sheetTitle" class="text-xl font-bold mb-6 text-center text-gray-900">选择网络</h2>
         
         <div class="space-y-3">
-            <div onclick="proceedAction('xlayer')" class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 border border-transparent hover:border-violet-100 transition-all cursor-pointer group">
+            <div onclick="proceedAction('X Layer')" class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 border border-transparent hover:border-violet-100 transition-all cursor-pointer group">
                 <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 group-hover:bg-violet-600 group-hover:text-white transition-all">
                     <i data-lucide="activity" class="w-5 h-5"></i>
                 </div>
                 <div class="ml-4 flex-1">
                     <div class="font-bold text-sm text-gray-900">X Layer</div>
-                    <div class="text-[11px] text-gray-500 mt-0.5">极速到账，低 Gas 费</div>
+                    <div class="text-[11px] text-gray-500 mt-0.5">极速到账，低网络费</div>
                 </div>
                 <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300 group-hover:text-violet-400"></i>
             </div>
             
-            <div onclick="proceedAction('bnb')" class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 border border-transparent hover:border-violet-100 transition-all cursor-pointer group">
+            <div onclick="proceedAction('BNB Smart Chain')" class="flex items-center p-4 bg-gray-50 rounded-2xl hover:bg-violet-50 border border-transparent hover:border-violet-100 transition-all cursor-pointer group">
                 <div class="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-gray-400 group-hover:bg-violet-600 group-hover:text-white transition-all">
                     <i data-lucide="box" class="w-5 h-5"></i>
                 </div>
@@ -486,115 +517,25 @@
         // Initialize Icons
         lucide.createIcons();
 
-        // Safe Area padding for iOS
-        document.documentElement.style.setProperty('--sat', 'env(safe-area-inset-top)');
-        document.documentElement.style.setProperty('--sab', 'env(safe-area-inset-bottom)');
+        // 记录当前点击的是充币还是提币
+        let currentAction = ''; 
 
-        // --- Navigation Logic ---
-        let currentAction = ''; // Track if user is clicking deposit or withdraw
-
-        // Switch Main Tabs (Home, Earn, Settings)
-        function switchMainTab(viewId, element) {
-            // Hide all main views
-            ['view-home', 'view-earn', 'view-settings'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-                document.getElementById(id).classList.remove('page-enter');
-            });
-            
-            // Update Nav Styles
-            document.querySelectorAll('.nav-item').forEach(el => {
-                el.classList.remove('nav-active');
-                el.classList.add('text-gray-400');
-            });
-            element.classList.add('nav-active');
-            element.classList.remove('text-gray-400');
-
-            // Show target view
-            const targetView = document.getElementById(viewId);
-            targetView.classList.remove('hidden');
-            targetView.classList.add('page-enter');
-            
-            // Ensure bottom nav is visible
-            document.getElementById('bottom-nav').style.display = 'flex';
-        }
-
-        // Navigate to Sub Pages (Swap, Deposit, Withdraw)
-        function navigateTo(viewId) {
-            closeSheet();
-            const targetView = document.getElementById(viewId);
-            targetView.classList.remove('hidden');
-            targetView.classList.add('page-enter');
-            // Hide bottom nav for immersive sub-pages
-            document.getElementById('bottom-nav').style.display = 'none';
-        }
-
-        // Global Back Button Logic
-        function navigateBack() {
-            // Hide sub pages
-            ['view-deposit', 'view-withdraw', 'view-swap'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-                document.getElementById(id).classList.remove('page-enter');
-            });
-            // Show bottom nav again
-            document.getElementById('bottom-nav').style.display = 'flex';
-        }
-
-        // --- Assets Tab Logic (Home) ---
-        function switchTab(type) {
-            const tokenTab = document.getElementById('tokenTab');
-            const defiTab = document.getElementById('defiTab');
-            const tokenContent = document.getElementById('tokenContent');
-            const defiContent = document.getElementById('defiContent');
-
-            if (type === 'tokens') {
-                tokenTab.classList.add('tab-active');
-                tokenTab.classList.remove('text-gray-400', 'font-medium');
-                defiTab.classList.remove('tab-active');
-                defiTab.classList.add('text-gray-400', 'font-medium');
-                tokenContent.classList.remove('hidden');
-                defiContent.classList.add('hidden');
-            } else {
-                defiTab.classList.add('tab-active');
-                defiTab.classList.remove('text-gray-400', 'font-medium');
-                tokenTab.classList.remove('tab-active');
-                tokenTab.classList.add('text-gray-400', 'font-medium');
-                defiContent.classList.remove('hidden');
-                tokenContent.classList.add('hidden');
-            }
-        }
-
-        // --- Network Selection (Home Pill) ---
+        // === 原生网络过滤逻辑 (Network Filtering) ===
         function selectNet(net) {
+            // 1. 切换顶部胶囊按钮的样式
             document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
             document.getElementById('net-' + net).classList.add('active');
-        }
 
-        // --- Bottom Sheet Logic ---
-        function openActionSheet(action) {
-            currentAction = action;
-            const sheet = document.getElementById('bottomSheet');
-            const overlay = document.getElementById('overlay');
-            const sheetTitle = document.getElementById('sheetTitle');
-            
-            sheetTitle.innerText = action === 'deposit' ? '选择网络充币' : '选择网络提币';
-
-            sheet.classList.add('active');
-            overlay.classList.add('active');
-        }
-
-        function closeSheet() {
-            document.getElementById('bottomSheet').classList.remove('active');
-            document.getElementById('overlay').classList.remove('active');
-        }
-
-        function proceedAction(network) {
-            // Here you could pass the selected network to the sub-page
-            if(currentAction === 'deposit') {
-                navigateTo('view-deposit');
-            } else if (currentAction === 'withdraw') {
-                navigateTo('view-withdraw');
-            }
-        }
-    </script>
-</body>
-</html>
+            // 2. 遍历代币列表，根据 data-network 属性进行显示/隐藏
+            const tokens = document.querySelectorAll('.token-item');
+            tokens.forEach(token => {
+                const tokenNet = token.getAttribute('data-network');
+                if (net === 'all') {
+                    // 如果选择全部，则显示所有代币
+                    token.style.display = 'flex';
+                } else {
+                    // 如果选择特定网络，显示该网络代币，以及标记为多链(multi)的代币（如USDT）
+                    if (tokenNet === net || tokenNet === 'multi') {
+                        token.style.display = 'flex';
+                    } else {
+                        token.style.display =
