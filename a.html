@@ -40,7 +40,7 @@
 </head>
 <body class="max-w-md mx-auto min-h-screen border-x border-gray-100 shadow-2xl relative pb-20">
 
-    <!-- ========= 顶部紫色渐变区 ========= -->
+    <!-- ========= 顶部紫色渐变区 (新增账单图标) ========= -->
     <div class="purple-gradient text-white p-8 rounded-b-[32px] shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <div class="flex p-1 bg-black/10 rounded-full border border-white/10">
@@ -48,11 +48,18 @@
                 <button onclick="selectNet('xlayer')" id="net-xlayer" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">X Layer</button>
                 <button onclick="selectNet('bnb')" id="net-bnb" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">BNB</button>
             </div>
-            <i data-lucide="scan" class="w-6 h-6 opacity-80 cursor-pointer"></i>
+            <div class="flex items-center space-x-3">
+                <i data-lucide="receipt" class="w-6 h-6 opacity-80 cursor-pointer"></i>   <!-- 新增账单图标 -->
+                <i data-lucide="scan" class="w-6 h-6 opacity-80 cursor-pointer"></i>
+            </div>
         </div>
         
         <p class="text-sm opacity-80 mb-1">总资产估值 (USD)</p>
-        <h1 class="text-4xl font-bold tracking-tight mb-4">$ 10,390.50</h1>
+        <!-- 将资产数字和账单图标放在同一行 -->
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-4xl font-bold tracking-tight">$ 10,390.50</h1>
+            <!-- 账单图标已在上方添加，此处无需重复 -->
+        </div>
         <div class="flex items-center text-xs bg-black/10 w-fit px-2 py-1 rounded">
             <span class="opacity-70">0x71C...a29E</span>
             <i data-lucide="copy" class="w-3 h-3 ml-2 cursor-pointer" onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')"></i>
@@ -204,14 +211,14 @@
     <!-- ========= 遮罩层 ========= -->
     <div id="overlay" class="overlay fixed inset-0 bg-black/40 z-50" onclick="toggleSheet()"></div>
 
-    <!-- ========= 底部滑出面片 (包含所有功能面板) ========= -->
+    <!-- ========= 底部滑出面片 ========= -->
     <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[32px] z-[60] p-6 shadow-2xl">
         <!-- 顶部抓柄 -->
         <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4"></div>
         <!-- 动态标题 -->
         <h2 id="sheetTitle" class="text-xl font-bold mb-5 text-center text-gray-800">操作</h2>
         
-        <!-- ========= 充币面板 (增加预填充支持) ========= -->
+        <!-- ========= 充币面板 (已移除“查看充值记录”按钮) ========= -->
         <div id="panel-deposit" class="sheet-panel hidden space-y-4">
             <div class="flex flex-col items-center bg-gray-50 p-4 rounded-2xl">
                 <div class="w-36 h-36 bg-white p-2 rounded-xl shadow-inner flex items-center justify-center">
@@ -239,10 +246,10 @@
                 </div>
             </div>
             <div class="text-xs text-gray-400 flex items-center"><i data-lucide="info" class="w-3 h-3 mr-1"></i> 充值到账约需 3~30 秒，最低 0.001 对应币种</div>
-            <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">查看充值记录</button>
+            <!-- 原“查看充值记录”按钮已删除 -->
         </div>
 
-        <!-- ========= 提币面板 (新增可用余额 + 提币记录) ========= -->
+        <!-- ========= 提币面板 (已移除“提币记录”区块) ========= -->
         <div id="panel-withdraw" class="sheet-panel hidden space-y-4">
             <div>
                 <label class="text-xs text-gray-500 mb-1 block">提币地址</label>
@@ -291,28 +298,12 @@
                 <span class="text-gray-400">手续费</span>
                 <span class="font-medium">~0.0005 对应币种 ($0.03)</span>
             </div>
-
-            <!-- 提币记录 (模拟) -->
-            <div class="mt-2">
-                <h4 class="text-sm font-bold mb-2 flex items-center"><i data-lucide="history" class="w-4 h-4 mr-1"></i>提币记录</h4>
-                <div class="space-y-2">
-                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
-                        <div><span class="text-xs font-medium">-5 OKB</span><span class="text-[10px] text-gray-400 ml-2">X Layer</span></div>
-                        <span class="text-xs text-gray-400">2025-03-15</span>
-                    </div>
-                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
-                        <div><span class="text-xs font-medium">-20 USDT</span><span class="text-[10px] text-gray-400 ml-2">BNB Chain</span></div>
-                        <span class="text-xs text-gray-400">2025-03-14</span>
-                    </div>
-                </div>
-            </div>
-
+            <!-- 原“提币记录”区块已删除 -->
             <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">提交提币</button>
         </div>
 
         <!-- 交易面板 (保持不变) -->
         <div id="panel-swap" class="sheet-panel hidden space-y-4">
-            <!-- ... 交易内容不变 ... -->
             <div class="bg-gray-50 p-4 rounded-2xl relative">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-xs text-gray-400">卖出</span>
@@ -361,7 +352,6 @@
 
         <!-- 应用面板 (保持不变) -->
         <div id="panel-dapps" class="sheet-panel hidden space-y-4">
-            <!-- ... 应用内容 ... -->
             <div class="relative">
                 <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-300"></i>
                 <input type="text" placeholder="搜索 DApp 或输入网址" class="w-full bg-gray-50 rounded-2xl py-3 pl-10 pr-4 text-sm outline-none">
@@ -393,7 +383,7 @@
             <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2">查看更多应用</button>
         </div>
 
-        <!-- ========= 代币详情面板 (增强：接收/发送按钮带预填充) ========= -->
+        <!-- ========= 代币详情面板 (交易记录保留) ========= -->
         <div id="panel-token-detail" class="sheet-panel hidden space-y-4">
             <div class="flex items-center space-x-4">
                 <div id="detail-icon" class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-xl font-bold">X</div>
@@ -417,9 +407,7 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <!-- 接收按钮：打开充币面板，并预填网络为当前代币的网络 -->
                 <button id="detailReceiveBtn" onclick="goToDepositFromToken()" class="py-3 bg-violet-600 text-white rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-down-to-line" class="w-4 h-4 mr-2"></i>接收</button>
-                <!-- 发送按钮：打开提币面板，并预填币种和网络 -->
                 <button id="detailSendBtn" onclick="goToWithdrawFromToken()" class="py-3 border border-violet-600 text-violet-600 rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-up-from-line" class="w-4 h-4 mr-2"></i>发送</button>
             </div>
             <div class="pt-2">
@@ -522,16 +510,10 @@
 
         // ---------- 从代币详情跳转到充币 (预填网络) ----------
         function goToDepositFromToken() {
-            // 先关闭详情面板，然后打开充币面板，并预填网络
-            const sheet = document.getElementById('bottomSheet');
-            const overlay = document.getElementById('overlay');
-            // 隐藏所有面板
             document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
-            // 显示充币面板
             document.getElementById('panel-deposit').classList.remove('hidden');
             document.getElementById('sheetTitle').innerText = '充币';
             
-            // 预填网络下拉框 (根据currentToken.network)
             const networkSelect = document.getElementById('depositNetwork');
             const optionMap = {
                 'X Layer Network': 0,
@@ -541,14 +523,13 @@
             if (currentToken.network in optionMap) {
                 networkSelect.selectedIndex = optionMap[currentToken.network];
             } else if (currentToken.network === 'BNB Chain') {
-                networkSelect.selectedIndex = 1; // BNB Smart Chain
+                networkSelect.selectedIndex = 1;
             } else {
                 networkSelect.selectedIndex = 0;
             }
             
-            // 确保底部面板保持打开
-            sheet.classList.add('active');
-            overlay.classList.add('active');
+            document.getElementById('bottomSheet').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
         }
 
         // ---------- 从代币详情跳转到提币 (预填币种、网络、可用余额) ----------
@@ -557,19 +538,16 @@
             document.getElementById('panel-withdraw').classList.remove('hidden');
             document.getElementById('sheetTitle').innerText = '提币';
             
-            // 预填币种
             const coinSelect = document.getElementById('withdrawCoin');
             const coinOptions = ['OKB', 'BNB', 'USDT'];
             const coinIndex = coinOptions.indexOf(currentToken.symbol);
             if (coinIndex !== -1) coinSelect.selectedIndex = coinIndex;
             
-            // 预填网络
             const networkSelect = document.getElementById('withdrawNetwork');
             const networkOptions = ['X Layer', 'BNB Chain', 'Ethereum'];
             const netIndex = networkOptions.indexOf(currentToken.networkKey);
             if (netIndex !== -1) networkSelect.selectedIndex = netIndex;
             
-            // 更新可用余额显示
             document.getElementById('withdrawBalance').innerText = `${currentToken.balance.toFixed(2)} ${currentToken.symbol}`;
             
             document.getElementById('bottomSheet').classList.add('active');
@@ -594,15 +572,13 @@
                 sheetTitle.innerText = title;
                 if (title === '充币') {
                     document.getElementById('panel-deposit').classList.remove('hidden');
-                    // 重置网络为默认
                     document.getElementById('depositNetwork').selectedIndex = 0;
                 }
                 else if (title === '提币') {
                     document.getElementById('panel-withdraw').classList.remove('hidden');
-                    // 重置为默认币种/网络，余额显示可能需根据第一个币种
                     document.getElementById('withdrawCoin').selectedIndex = 0;
                     document.getElementById('withdrawNetwork').selectedIndex = 0;
-                    document.getElementById('withdrawBalance').innerText = '120.50 OKB'; // 默认OKB
+                    document.getElementById('withdrawBalance').innerText = '120.50 OKB';
                 }
                 else if (title === '交易') document.getElementById('panel-swap').classList.remove('hidden');
                 else if (title === '应用') document.getElementById('panel-dapps').classList.remove('hidden');
