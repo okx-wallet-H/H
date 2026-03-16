@@ -161,15 +161,15 @@
       max-height: 400px;
     }
 
-    /* ===== 优化后的设置项样式 ===== */
+    /* ===== 统一设置项样式（与主页面完全一致） ===== */
     .settings-section {
       @apply mb-6;
     }
     .settings-section-title {
-      @apply text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1;
+      @apply text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-1;
     }
     .settings-item {
-      @apply flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 mb-2 hover:border-violet-200 transition-all cursor-pointer shadow-sm hover:shadow;
+      @apply flex items-center justify-between p-4 bg-white rounded-2xl border border-gray-100 mb-2 hover:border-violet-200 transition-all cursor-pointer shadow-sm hover:shadow;
     }
     .settings-item-left {
       @apply flex items-center gap-3;
@@ -465,7 +465,7 @@
       </div>
     </div>
 
-    <!-- ========= 优化后的设置内容 ========= -->
+    <!-- ========= 设置内容（完全统一风格） ========= -->
     <div id="settingsContent" class="hidden mt-6 space-y-6">
       <!-- 账户安全 -->
       <div class="settings-section">
@@ -1116,7 +1116,6 @@
       lucide.createIcons();
     }
 
-    // 开关切换函数
     function toggleNotification(type) {
       const toggle = document.getElementById(type + 'Toggle');
       if (toggle.classList.contains('active')) {
@@ -1126,7 +1125,6 @@
         toggle.classList.remove('inactive');
         toggle.classList.add('active');
       }
-      // 实际应用中可在此处调用API更新设置
     }
 
     window.onload = function() {
