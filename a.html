@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <title>Web3 Alpha Wallet · 赚币旗舰版</title>
+  <title>Web3 Alpha Wallet · 最终版</title>
 
   <!-- 字体预连接 + 推荐的 Inter 字体加载方式 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -110,14 +110,13 @@
       margin: 16px auto 12px;
     }
 
-    /* 金色流动线条动画 - 高级版：从两边流向中间 */
+    /* 金色流动线条 - 左右各三条（上中下）流向中间 */
     .gold-flow-container {
       position: relative;
       display: inline-block;
     }
-    .gold-flow-line {
+    .gold-line {
       position: absolute;
-      top: 50%;
       width: 100px;
       height: 2px;
       background: linear-gradient(90deg, transparent, #fbbf24, #f59e0b, #fbbf24, transparent);
@@ -125,16 +124,20 @@
       animation: flow-to-center 2s ease-in-out infinite;
       opacity: 0.8;
     }
-    .left-line {
-      left: -120px;
-      transform: translateY(-50%);
-      animation: flow-left 2s ease-in-out infinite;
+    .gold-line-secondary {
+      height: 1px;
+      opacity: 0.4;
+      filter: blur(1px);
     }
-    .right-line {
-      right: -120px;
-      transform: translateY(-50%) rotate(180deg);
-      animation: flow-right 2s ease-in-out infinite;
-    }
+    /* 左侧三条 */
+    .left-top { top: 20%; left: -120px; animation: flow-left 2s ease-in-out infinite; }
+    .left-middle { top: 50%; left: -120px; transform: translateY(-50%); animation: flow-left 2.2s ease-in-out infinite; }
+    .left-bottom { bottom: 20%; left: -120px; animation: flow-left 1.8s ease-in-out infinite; }
+    /* 右侧三条 */
+    .right-top { top: 20%; right: -120px; animation: flow-right 2s ease-in-out infinite; }
+    .right-middle { top: 50%; right: -120px; transform: translateY(-50%); animation: flow-right 2.2s ease-in-out infinite; }
+    .right-bottom { bottom: 20%; right: -120px; animation: flow-right 1.8s ease-in-out infinite; }
+
     @keyframes flow-left {
       0% { left: -120px; opacity: 0; width: 40px; }
       30% { opacity: 1; width: 100px; }
@@ -147,18 +150,6 @@
       70% { opacity: 1; width: 100px; right: -30px; }
       100% { right: 20px; opacity: 0; width: 40px; }
     }
-    /* 为了更丰富，再加两条细线（副线） */
-    .gold-flow-line-secondary {
-      height: 1px;
-      opacity: 0.5;
-      filter: blur(1px);
-    }
-    .left-line-secondary {
-      animation: flow-left 2.5s ease-in-out infinite;
-    }
-    .right-line-secondary {
-      animation: flow-right 2.5s ease-in-out infinite;
-    }
 
     /* 手风琴 */
     .accordion-content {
@@ -167,7 +158,12 @@
       transition: max-height 0.3s ease-out;
     }
     .accordion-content.open {
-      max-height: 400px; /* 足够显示内容 */
+      max-height: 400px;
+    }
+
+    /* 设置项卡片 */
+    .setting-item {
+      @apply flex justify-between items-center p-4 bg-white rounded-xl border border-gray-100 hover:border-violet-200 transition cursor-pointer;
     }
   </style>
 </head>
@@ -226,9 +222,9 @@
     </div>
   </div>
 
-  <!-- ========= 主要切换区域：代币列表 / DeFi / 赚币 ========= -->
+  <!-- ========= 主要内容区域 ========= -->
   <div id="mainContent" class="mt-10 px-6">
-    <!-- 代币 / DeFi 切换标签（默认显示） -->
+    <!-- 代币 / DeFi 切换标签（仅钱包页面显示） -->
     <div id="tokenDefiTabs" class="flex gap-10 border-b border-gray-200">
       <button id="tokenTab" class="pb-4 text-base font-semibold tab-active" onclick="switchTab('tokens')">代币列表</button>
       <button id="defiTab" class="pb-4 text-base font-medium text-gray-500 hover:text-gray-700" onclick="switchTab('defi')">DeFi 资产</button>
@@ -294,25 +290,31 @@
       暂无 DeFi 持仓数据
     </div>
 
-    <!-- ========= 赚币内容（优化版：可用余额 + 收益规则注释） ========= -->
+    <!-- ========= 赚币内容 ========= -->
     <div id="earnContent" class="hidden mt-6 space-y-6">
-      <!-- 顶部标题：链上赚币 + 高级金色流动线条（左右各三条） -->
+      <!-- 顶部标题：链上赚币 + 左右各三条金色线条 -->
       <div class="flex justify-center items-center py-6">
         <div class="relative gold-flow-container">
-          <!-- 左侧流动线条（主线和两条副线） -->
-          <div class="gold-flow-line left-line"></div>
-          <div class="gold-flow-line gold-flow-line-secondary left-line left-line-secondary"></div>
-          <div class="gold-flow-line gold-flow-line-secondary left-line" style="animation-delay: -1s;"></div>
-          <!-- 右侧流动线条 -->
-          <div class="gold-flow-line right-line"></div>
-          <div class="gold-flow-line gold-flow-line-secondary right-line right-line-secondary"></div>
-          <div class="gold-flow-line gold-flow-line-secondary right-line" style="animation-delay: -1s;"></div>
+          <!-- 左侧三条线 -->
+          <div class="gold-line left-top"></div>
+          <div class="gold-line gold-line-secondary left-top" style="animation-delay: -1s;"></div>
+          <div class="gold-line left-middle"></div>
+          <div class="gold-line gold-line-secondary left-middle" style="animation-delay: -0.5s;"></div>
+          <div class="gold-line left-bottom"></div>
+          <div class="gold-line gold-line-secondary left-bottom" style="animation-delay: -1.2s;"></div>
+          <!-- 右侧三条线 -->
+          <div class="gold-line right-top"></div>
+          <div class="gold-line gold-line-secondary right-top" style="animation-delay: -1s;"></div>
+          <div class="gold-line right-middle"></div>
+          <div class="gold-line gold-line-secondary right-middle" style="animation-delay: -0.5s;"></div>
+          <div class="gold-line right-bottom"></div>
+          <div class="gold-line gold-line-secondary right-bottom" style="animation-delay: -1.2s;"></div>
           <!-- 标题 -->
           <h2 class="text-3xl font-bold text-[#fbbf24] drop-shadow-lg">链上赚币</h2>
         </div>
       </div>
 
-      <!-- 收益卡片：已领取 / 待领取 / 领取按钮 -->
+      <!-- 收益卡片 -->
       <div class="grid grid-cols-3 gap-3">
         <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
           <div class="text-xs text-gray-400 mb-1">已领取收益</div>
@@ -329,7 +331,7 @@
         </div>
       </div>
 
-      <!-- 新增：当前质押卡片 -->
+      <!-- 当前质押卡片 -->
       <div class="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-4 border border-violet-100 shadow-sm">
         <div class="flex justify-between items-center">
           <span class="text-sm text-gray-600">当前质押</span>
@@ -341,7 +343,7 @@
         </div>
       </div>
 
-      <!-- 平台信息面板（总质押量、预估年化） -->
+      <!-- 平台信息 -->
       <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-5 border border-yellow-200 shadow-md">
         <div class="flex justify-between items-center mb-3">
           <span class="text-sm text-gray-600">平台总质押量</span>
@@ -353,7 +355,7 @@
         </div>
       </div>
 
-      <!-- 输入框 + 智能质押按钮（增加可用余额显示） -->
+      <!-- 质押输入 -->
       <div class="space-y-3">
         <div class="flex justify-between items-center">
           <label class="text-sm font-medium text-gray-700">质押数量 (H)</label>
@@ -368,7 +370,7 @@
         <p class="text-xs text-gray-400">代表确认质押，实际合约交互未实现</p>
       </div>
 
-      <!-- 规则手风琴：链上赚币|智能质押 收益介绍（优化排版 + 新增注释） -->
+      <!-- 规则手风琴 -->
       <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white">
         <button id="accordionBtn" class="w-full flex justify-between items-center p-4 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleAccordion()">
           <span>📋 收益规则介绍</span>
@@ -378,32 +380,13 @@
           <div class="py-4 border-t border-gray-100">
             <p class="text-sm text-gray-600 mb-3">无锁仓限制，无周期限制，随存随取，智能阶梯收益：</p>
             <ul class="text-sm space-y-2 text-gray-600 mb-4">
-              <li class="flex items-start">
-                <span class="inline-block w-20 text-gray-400">1-7天</span>
-                <span class="font-medium text-gray-800">收益率 0.5%</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-20 text-gray-400">8-15天</span>
-                <span class="font-medium text-gray-800">收益率 0.6%</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-20 text-gray-400">16-30天</span>
-                <span class="font-medium text-gray-800">收益率 0.7%</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-20 text-gray-400">31-60天</span>
-                <span class="font-medium text-gray-800">收益率 0.8%</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-20 text-gray-400">61-90天</span>
-                <span class="font-medium text-gray-800">收益率 1.0%</span>
-              </li>
-              <li class="flex items-start">
-                <span class="inline-block w-20 text-gray-400">90天以上</span>
-                <span class="font-medium text-gray-800">收益率 1.2%</span>
-              </li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">1-7天</span><span class="font-medium text-gray-800">收益率 0.5%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">8-15天</span><span class="font-medium text-gray-800">收益率 0.6%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">16-30天</span><span class="font-medium text-gray-800">收益率 0.7%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">31-60天</span><span class="font-medium text-gray-800">收益率 0.8%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">61-90天</span><span class="font-medium text-gray-800">收益率 1.0%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">90天以上</span><span class="font-medium text-gray-800">收益率 1.2%</span></li>
             </ul>
-            <!-- 新增注释：每日20点发放收益 -->
             <div class="flex items-center gap-1.5 text-xs text-gray-400 border-t border-gray-100 pt-3 mt-1">
               <i data-lucide="clock" class="w-3.5 h-3.5"></i>
               <span>注：每日20:00发放质押收益</span>
@@ -430,6 +413,97 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- ========= 设置内容 ========= -->
+    <div id="settingsContent" class="hidden mt-6 space-y-5">
+      <h2 class="text-xl font-bold text-gray-800">设置</h2>
+      
+      <!-- 账户安全 -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">账户安全</h3>
+        <div class="setting-item" onclick="alert('修改密码')">
+          <span class="text-sm font-medium text-gray-700">修改密码</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <div class="setting-item" onclick="alert('备份助记词')">
+          <span class="text-sm font-medium text-gray-700">备份助记词</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <div class="setting-item" onclick="alert('私钥管理')">
+          <span class="text-sm font-medium text-gray-700">私钥管理</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- 网络与节点 -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">网络与节点</h3>
+        <div class="setting-item" onclick="alert('切换主网/测试网')">
+          <span class="text-sm font-medium text-gray-700">网络选择</span>
+          <span class="text-xs text-gray-400">X Layer 主网</span>
+        </div>
+        <div class="setting-item" onclick="alert('RPC 节点设置')">
+          <span class="text-sm font-medium text-gray-700">自定义 RPC</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- 通用 -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">通用</h3>
+        <div class="setting-item" onclick="alert('语言设置')">
+          <span class="text-sm font-medium text-gray-700">语言</span>
+          <span class="text-xs text-gray-400">简体中文</span>
+        </div>
+        <div class="setting-item" onclick="alert('货币单位')">
+          <span class="text-sm font-medium text-gray-700">货币单位</span>
+          <span class="text-xs text-gray-400">USD</span>
+        </div>
+        <div class="setting-item" onclick="alert('交易滑点设置')">
+          <span class="text-sm font-medium text-gray-700">默认滑点</span>
+          <span class="text-xs text-gray-400">0.5%</span>
+        </div>
+      </div>
+
+      <!-- 通知 -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">通知</h3>
+        <div class="setting-item" onclick="alert('推送通知设置')">
+          <span class="text-sm font-medium text-gray-700">推送通知</span>
+          <div class="w-10 h-5 bg-violet-200 rounded-full flex items-center p-0.5">
+            <div class="w-4 h-4 bg-white rounded-full shadow ml-auto"></div>
+          </div>
+        </div>
+        <div class="setting-item" onclick="alert('邮件通知')">
+          <span class="text-sm font-medium text-gray-700">邮件通知</span>
+          <div class="w-10 h-5 bg-gray-200 rounded-full flex items-center p-0.5">
+            <div class="w-4 h-4 bg-white rounded-full shadow"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 关于 -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-1">关于</h3>
+        <div class="setting-item" onclick="alert('版本信息')">
+          <span class="text-sm font-medium text-gray-700">版本</span>
+          <span class="text-xs text-gray-400">v2.0.1</span>
+        </div>
+        <div class="setting-item" onclick="alert('用户协议')">
+          <span class="text-sm font-medium text-gray-700">用户协议</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        </div>
+        <div class="setting-item" onclick="alert('隐私政策')">
+          <span class="text-sm font-medium text-gray-700">隐私政策</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- 退出登录 -->
+      <button onclick="alert('退出登录')" class="w-full mt-6 py-4 bg-red-50 text-red-500 rounded-2xl font-medium hover:bg-red-100 transition btn-scale">
+        退出登录
+      </button>
     </div>
   </div>
 
@@ -465,7 +539,7 @@
     </div>
   </div>
 
-  <!-- ========= 底部导航（发现改为赚币） ========= -->
+  <!-- ========= 底部导航（钱包/赚币/设置） ========= -->
   <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-gray-200 px-10 py-3 flex justify-between z-40">
     <div class="nav-active flex flex-col items-center cursor-pointer" onclick="switchMainTab('wallet')">
       <i data-lucide="wallet" class="w-6 h-6"></i>
@@ -701,7 +775,6 @@
   <script>
     lucide.createIcons();
 
-    // ---------- 当前选中的代币详情（用于接收/发送预填）----------
     let currentToken = {
       symbol: 'OKB',
       balance: 120.5,
@@ -709,13 +782,11 @@
       networkKey: 'X Layer'
     };
 
-    // ---------- 网络筛选 ----------
     function selectNet(net) {
       document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
       document.getElementById('net-' + net).classList.add('active');
     }
 
-    // ---------- 标签切换（代币/DeFi）----------
     function switchTab(type) {
       const tokenTab = document.getElementById('tokenTab');
       const defiTab = document.getElementById('defiTab');
@@ -724,7 +795,6 @@
       const earnContent = document.getElementById('earnContent');
       const tokenDefiTabs = document.getElementById('tokenDefiTabs');
 
-      // 确保显示代币/DeFi区域，隐藏赚币
       tokenDefiTabs.classList.remove('hidden');
       earnContent.classList.add('hidden');
 
@@ -741,189 +811,140 @@
       }
     }
 
-    // ---------- 主菜单切换（钱包/赚币/设置）----------
     function switchMainTab(tab) {
       const tokenDefiTabs = document.getElementById('tokenDefiTabs');
       const tokenContent = document.getElementById('tokenContent');
       const defiContent = document.getElementById('defiContent');
       const earnContent = document.getElementById('earnContent');
+      const settingsContent = document.getElementById('settingsContent');
       const navItems = document.querySelectorAll('nav.fixed div');
       
-      // 重置所有导航项样式
       navItems.forEach(item => item.classList.remove('nav-active', 'text-gray-500'));
       
       if (tab === 'wallet') {
-        // 显示钱包相关（代币列表/DeFi）
         tokenDefiTabs.classList.remove('hidden');
         tokenContent.classList.remove('hidden');
         defiContent.classList.add('hidden');
         earnContent.classList.add('hidden');
-        // 激活钱包
+        settingsContent.classList.add('hidden');
         navItems[0].classList.add('nav-active');
         navItems[1].classList.add('text-gray-500');
         navItems[2].classList.add('text-gray-500');
+        // 确保代币列表激活
+        document.getElementById('tokenTab').classList.add('tab-active');
+        document.getElementById('defiTab').classList.remove('tab-active');
       } else if (tab === 'earn') {
-        // 显示赚币
         tokenDefiTabs.classList.add('hidden');
         tokenContent.classList.add('hidden');
         defiContent.classList.add('hidden');
         earnContent.classList.remove('hidden');
-        // 激活赚币
+        settingsContent.classList.add('hidden');
         navItems[0].classList.remove('nav-active');
         navItems[1].classList.add('nav-active');
         navItems[2].classList.add('text-gray-500');
       } else if (tab === 'settings') {
-        // 设置页面暂未实现，可弹窗提示
-        alert('设置页面开发中');
+        tokenDefiTabs.classList.add('hidden');
+        tokenContent.classList.add('hidden');
+        defiContent.classList.add('hidden');
+        earnContent.classList.add('hidden');
+        settingsContent.classList.remove('hidden');
+        navItems[0].classList.remove('nav-active');
+        navItems[1].classList.add('text-gray-500');
+        navItems[2].classList.add('nav-active');
       }
     }
 
-    // ---------- 复制地址 ----------
     function copyAddress(address) {
-      navigator.clipboard.writeText(address).then(() => {
-        alert('地址已复制');
-      }).catch(() => {
-        alert('复制失败，请手动复制');
-      });
+      navigator.clipboard.writeText(address).then(() => alert('地址已复制')).catch(() => alert('复制失败'));
     }
 
-    // ---------- 打开代币详情 ----------
     function openTokenDetail(symbol, usd, balance, network, bgClass, iconChar, networkKey, balanceNum) {
-      currentToken = {
-        symbol: symbol,
-        balance: balanceNum,
-        network: network,
-        networkKey: networkKey
-      };
-
+      currentToken = { symbol, balance: balanceNum, network, networkKey };
       document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
       document.getElementById('panel-token-detail').classList.remove('hidden');
-      
       document.getElementById('detail-symbol').innerText = symbol;
       document.getElementById('detail-network').innerText = network;
       document.getElementById('detail-balance').innerText = balance;
       document.getElementById('detail-usd').innerText = usd;
-      
       const iconDiv = document.getElementById('detail-icon');
       iconDiv.className = `w-16 h-16 ${bgClass} rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md`;
-      if (iconChar.length === 1) {
-        iconDiv.innerText = iconChar;
-      } else {
-        iconDiv.innerHTML = '<i data-lucide="coins" class="w-8 h-8"></i>';
-        lucide.createIcons();
-      }
-      
+      iconDiv.innerHTML = iconChar.length === 1 ? iconChar : '<i data-lucide="coins" class="w-8 h-8"></i>';
+      lucide.createIcons();
       document.getElementById('sheetTitle').innerText = symbol + ' 详情';
-      
       document.getElementById('bottomSheet').classList.add('active');
       document.getElementById('overlay').classList.add('active');
     }
 
-    // ---------- 从代币详情跳转到充币 ----------
     function goToDepositFromToken() {
       document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
       document.getElementById('panel-deposit').classList.remove('hidden');
       document.getElementById('sheetTitle').innerText = '充币';
-      
       const networkSelect = document.getElementById('depositNetwork');
-      const optionMap = {
-        'X Layer Network': 0,
-        'BNB Smart Chain': 1,
-        'Ethereum': 2
-      };
-      if (currentToken.network in optionMap) {
-        networkSelect.selectedIndex = optionMap[currentToken.network];
-      } else if (currentToken.network === 'BNB Chain') {
-        networkSelect.selectedIndex = 1;
-      } else {
-        networkSelect.selectedIndex = 0;
-      }
-      
+      const map = { 'X Layer Network':0, 'BNB Smart Chain':1, 'Ethereum':2 };
+      networkSelect.selectedIndex = map[currentToken.network] ?? 0;
       document.getElementById('bottomSheet').classList.add('active');
       document.getElementById('overlay').classList.add('active');
     }
 
-    // ---------- 从代币详情跳转到提币 ----------
     function goToWithdrawFromToken() {
       document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
       document.getElementById('panel-withdraw').classList.remove('hidden');
       document.getElementById('sheetTitle').innerText = '提币';
-      
       const coinSelect = document.getElementById('withdrawCoin');
-      const coinOptions = ['OKB', 'BNB', 'USDT'];
-      const coinIndex = coinOptions.indexOf(currentToken.symbol);
-      if (coinIndex !== -1) coinSelect.selectedIndex = coinIndex;
-      
-      const networkSelect = document.getElementById('withdrawNetwork');
-      const networkOptions = ['X Layer', 'BNB Chain', 'Ethereum'];
-      const netIndex = networkOptions.indexOf(currentToken.networkKey);
-      if (netIndex !== -1) networkSelect.selectedIndex = netIndex;
-      
+      const coins = ['OKB','BNB','USDT'];
+      coinSelect.selectedIndex = coins.indexOf(currentToken.symbol);
+      const netSelect = document.getElementById('withdrawNetwork');
+      const nets = ['X Layer','BNB Chain','Ethereum'];
+      netSelect.selectedIndex = nets.indexOf(currentToken.networkKey);
       document.getElementById('withdrawBalance').innerText = `${currentToken.balance.toFixed(2)} ${currentToken.symbol}`;
-      
       document.getElementById('bottomSheet').classList.add('active');
       document.getElementById('overlay').classList.add('active');
     }
 
-    // ---------- 提币面板“全部”按钮 ----------
     function setMaxAmount() {
-      const amountInput = document.getElementById('withdrawAmount');
-      amountInput.value = currentToken.balance;
+      document.getElementById('withdrawAmount').value = currentToken.balance;
     }
 
-    // ---------- 交易面板交换币种 ----------
     document.addEventListener('DOMContentLoaded', function() {
       const swapBtn = document.getElementById('swapButton');
       if (swapBtn) {
         swapBtn.addEventListener('click', function() {
-          const fromAmount = document.getElementById('swapFromAmount');
-          const toAmount = document.getElementById('swapToAmount');
+          const fromAmt = document.getElementById('swapFromAmount');
+          const toAmt = document.getElementById('swapToAmount');
           const fromCoin = document.getElementById('swapFromCoin');
           const toCoin = document.getElementById('swapToCoin');
-          
-          [fromAmount.value, toAmount.value] = [toAmount.value, fromAmount.value];
+          [fromAmt.value, toAmt.value] = [toAmt.value, fromAmt.value];
           [fromCoin.value, toCoin.value] = [toCoin.value, fromCoin.value];
-          
-          const priceSpan = document.getElementById('swapPrice');
-          priceSpan.innerText = `价格: 1 ${fromCoin.value} ≈ ${(toAmount.value / fromAmount.value || 0).toFixed(2)} ${toCoin.value}`;
+          document.getElementById('swapPrice').innerText = `价格: 1 ${fromCoin.value} ≈ ${(toAmt.value / fromAmt.value || 0).toFixed(2)} ${toCoin.value}`;
         });
       }
     });
 
-    // ---------- 底部滑出面板控制 ----------
     function toggleSheet(title = '') {
       const sheet = document.getElementById('bottomSheet');
       const overlay = document.getElementById('overlay');
       const sheetTitle = document.getElementById('sheetTitle');
-      
-      // 所有面板先隐藏
-      document.querySelectorAll('.sheet-panel').forEach(panel => panel.classList.add('hidden'));
-
+      document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
       if (title) {
         sheetTitle.innerText = title;
         if (title === '充币') {
           document.getElementById('panel-deposit').classList.remove('hidden');
           document.getElementById('depositNetwork').selectedIndex = 0;
-        }
-        else if (title === '提币') {
+        } else if (title === '提币') {
           document.getElementById('panel-withdraw').classList.remove('hidden');
           document.getElementById('withdrawCoin').selectedIndex = 0;
           document.getElementById('withdrawNetwork').selectedIndex = 0;
           document.getElementById('withdrawBalance').innerText = '120.50 OKB';
-        }
-        else if (title === '交易') {
+        } else if (title === '交易') {
           document.getElementById('panel-swap').classList.remove('hidden');
-          // 重置默认值
           document.getElementById('swapFromAmount').value = '1.0';
           document.getElementById('swapToAmount').value = '15.23';
           document.getElementById('swapFromCoin').value = 'OKB';
           document.getElementById('swapToCoin').value = 'USDT';
           document.getElementById('swapPrice').innerText = '价格: 1 OKB ≈ 15.23 USDT';
-        }
-        else if (title === '应用') {
+        } else if (title === '应用') {
           document.getElementById('panel-dapps').classList.remove('hidden');
-        }
-        else {
+        } else {
           document.getElementById('panel-deposit').classList.remove('hidden');
           sheetTitle.innerText = '操作';
         }
@@ -931,28 +952,20 @@
         sheetTitle.innerText = '操作';
         document.getElementById('panel-deposit').classList.remove('hidden');
       }
-
       sheet.classList.toggle('active');
       overlay.classList.toggle('active');
     }
 
-    // ---------- 手风琴 ----------
     function toggleAccordion() {
       const content = document.getElementById('accordionContent');
       const icon = document.getElementById('accordionIcon');
       content.classList.toggle('open');
-      if (content.classList.contains('open')) {
-        icon.setAttribute('data-lucide', 'chevron-up');
-      } else {
-        icon.setAttribute('data-lucide', 'chevron-down');
-      }
-      lucide.createIcons(); // 重新渲染图标
+      icon.setAttribute('data-lucide', content.classList.contains('open') ? 'chevron-up' : 'chevron-down');
+      lucide.createIcons();
     }
 
-    // 初始化
     window.onload = function() {
       lucide.createIcons();
-      // 默认激活钱包
       switchMainTab('wallet');
     };
   </script>
