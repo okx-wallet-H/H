@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Web3 Alpha Wallet · 上线版</title>
-    <!-- Tailwind + Lucide + 字体 完全保留原有风格 -->
+    <!-- Tailwind + Lucide + 字体 (统一 Inter) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -14,7 +14,7 @@
         .tab-active { color: #7C3AED; border-bottom: 2px solid #7C3AED; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* 底部滑出动画 (原样保留) */
+        /* 底部滑出动画 */
         .bottom-sheet {
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateY(100%);
@@ -36,19 +36,11 @@
             border-color: rgba(255, 255, 255, 0.5);
             font-weight: 600;
         }
-        /* 自定义下拉菜单样式 (模拟) */
-        .select-option {
-            transition: all 0.2s;
-        }
-        .fake-qr {
-            background: repeating-linear-gradient(45deg, #000 0px, #000 4px, #fff 4px, #fff 8px);
-            mask: linear-gradient(135deg, transparent 30%, black 70%);
-        }
     </style>
 </head>
 <body class="max-w-md mx-auto min-h-screen border-x border-gray-100 shadow-2xl relative pb-20">
 
-    <!-- ========= 顶部紫色渐变区 (完全保留) ========= -->
+    <!-- ========= 顶部紫色渐变区 ========= -->
     <div class="purple-gradient text-white p-8 rounded-b-[32px] shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <div class="flex p-1 bg-black/10 rounded-full border border-white/10">
@@ -67,7 +59,7 @@
         </div>
     </div>
 
-    <!-- ========= 四大金刚按钮 (触发对应功能面板) ========= -->
+    <!-- ========= 四大金刚按钮 ========= -->
     <div class="grid grid-cols-4 gap-4 px-6 -mt-8">
         <div class="flex flex-col items-center">
             <button onclick="toggleSheet('充币')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
@@ -95,16 +87,16 @@
         </div>
     </div>
 
-    <!-- ========= 代币 / DeFi 切换标签 (保留) ========= -->
+    <!-- ========= 代币 / DeFi 切换标签 ========= -->
     <div class="mt-8 px-6">
         <div class="flex space-x-8 border-b border-gray-100">
             <button id="tokenTab" class="pb-3 text-sm font-bold tab-active transition-all" onclick="switchTab('tokens')">代币列表</button>
             <button id="defiTab" class="pb-3 text-sm font-medium text-gray-400 hover:text-gray-600 transition-all" onclick="switchTab('defi')">DeFi 资产</button>
         </div>
 
-        <!-- 代币列表内容 (为每个代币增加点击事件，打开详情面板) -->
+        <!-- 代币列表 (点击打开详情) -->
         <div id="tokenContent" class="mt-4 space-y-5">
-            <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('OKB', '7,230.00', '120.50', 'X Layer Network', '#000', 'X')">
+            <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('OKB', '7,230.00', '120.50', 'X Layer Network', '#000', 'X', 'X Layer', 120.5)">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">X</div>
                     <div>
@@ -117,7 +109,7 @@
                     <div class="text-xs text-gray-400">$7,230.00</div>
                 </div>
             </div>
-            <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('BNB', '3,120.15', '5.24', 'BNB Smart Chain', 'bg-yellow-400', 'coins')">
+            <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('BNB', '3,120.15', '5.24', 'BNB Smart Chain', 'bg-yellow-400', 'coins', 'BNB Chain', 5.24)">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white">
                         <i data-lucide="coins" class="w-5 h-5"></i>
@@ -132,7 +124,7 @@
                     <div class="text-xs text-gray-400">$3,120.15</div>
                 </div>
             </div>
-            <div class="flex justify-between items-center group cursor-pointer border-t border-gray-50 pt-4" onclick="openTokenDetail('USDT', '40.35', '40.35', '多链资产', 'bg-teal-500', '$')">
+            <div class="flex justify-between items-center group cursor-pointer border-t border-gray-50 pt-4" onclick="openTokenDetail('USDT', '40.35', '40.35', '多链资产', 'bg-teal-500', '$', 'Ethereum', 40.35)">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white">
                         <span class="font-bold text-sm">$</span>
@@ -154,13 +146,12 @@
             </button>
         </div>
 
-        <!-- DeFi 空状态 -->
         <div id="defiContent" class="hidden mt-4 py-10 text-center text-gray-400 text-sm italic">
             暂无 DeFi 持仓数据
         </div>
     </div>
 
-    <!-- ========= 行情卡片 (保留) ========= -->
+    <!-- ========= 行情卡片 ========= -->
     <div class="mt-10 px-6">
         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Market / 行情</h3>
         <div class="flex space-x-3 overflow-x-auto hide-scrollbar">
@@ -182,7 +173,7 @@
         </div>
     </div>
 
-    <!-- ========= 安全提示条 (保留) ========= -->
+    <!-- ========= 安全提示条 ========= -->
     <div class="mt-8 px-6 mb-12">
         <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center space-x-3">
             <div class="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center text-violet-600">
@@ -194,7 +185,7 @@
         </div>
     </div>
 
-    <!-- ========= 底部导航栏 (保留) ========= -->
+    <!-- ========= 底部导航栏 ========= -->
     <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 backdrop-blur-md border-t border-gray-50 px-10 py-3 flex justify-between items-center z-40">
         <div class="text-violet-600 flex flex-col items-center">
             <i data-lucide="wallet" class="w-5 h-5"></i>
@@ -213,19 +204,17 @@
     <!-- ========= 遮罩层 ========= -->
     <div id="overlay" class="overlay fixed inset-0 bg-black/40 z-50" onclick="toggleSheet()"></div>
 
-    <!-- ========= 底部滑出面片 (包含所有功能面板 + 代币详情面板) ========= -->
+    <!-- ========= 底部滑出面片 (包含所有功能面板) ========= -->
     <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[32px] z-[60] p-6 shadow-2xl">
         <!-- 顶部抓柄 -->
         <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4"></div>
         <!-- 动态标题 -->
         <h2 id="sheetTitle" class="text-xl font-bold mb-5 text-center text-gray-800">操作</h2>
         
-        <!-- 充币面板 (完善：二维码、地址、网络选择) -->
+        <!-- ========= 充币面板 (增加预填充支持) ========= -->
         <div id="panel-deposit" class="sheet-panel hidden space-y-4">
-            <!-- 二维码区域 + 地址 -->
             <div class="flex flex-col items-center bg-gray-50 p-4 rounded-2xl">
                 <div class="w-36 h-36 bg-white p-2 rounded-xl shadow-inner flex items-center justify-center">
-                    <!-- 模拟二维码：使用网格背景 + 中间logo -->
                     <div class="w-full h-full bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center text-white text-[8px] font-mono relative">
                         <div class="absolute inset-0" style="background: repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 6px);"></div>
                         <span class="relative z-10 bg-violet-600 px-1 rounded">⍟</span>
@@ -238,24 +227,22 @@
                     </button>
                 </div>
             </div>
-            <!-- 网络选择（可点击下拉） -->
             <div class="space-y-2">
                 <label class="text-xs text-gray-500">选择网络</label>
                 <div class="relative">
-                    <select class="w-full p-3 bg-gray-50 rounded-xl appearance-none text-sm font-medium outline-none border-0 focus:ring-2 focus:ring-violet-200">
-                        <option value="xlayer" selected>X Layer Network (推荐)</option>
-                        <option value="bnb">BNB Smart Chain</option>
-                        <option value="eth">Ethereum</option>
+                    <select id="depositNetwork" class="w-full p-3 bg-gray-50 rounded-xl appearance-none text-sm font-medium outline-none border-0 focus:ring-2 focus:ring-violet-200">
+                        <option value="X Layer Network">X Layer Network (推荐)</option>
+                        <option value="BNB Smart Chain">BNB Smart Chain</option>
+                        <option value="Ethereum">Ethereum</option>
                     </select>
                     <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none"></i>
                 </div>
             </div>
-            <!-- 充值提示 -->
-            <div class="text-xs text-gray-400 flex items-center"><i data-lucide="info" class="w-3 h-3 mr-1"></i> 充值到账约需 3~30 秒，最低 0.001 OKB</div>
+            <div class="text-xs text-gray-400 flex items-center"><i data-lucide="info" class="w-3 h-3 mr-1"></i> 充值到账约需 3~30 秒，最低 0.001 对应币种</div>
             <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">查看充值记录</button>
         </div>
 
-        <!-- 提币面板 (所有选项均可选) -->
+        <!-- ========= 提币面板 (新增可用余额 + 提币记录) ========= -->
         <div id="panel-withdraw" class="sheet-panel hidden space-y-4">
             <div>
                 <label class="text-xs text-gray-500 mb-1 block">提币地址</label>
@@ -268,10 +255,10 @@
                 <div>
                     <label class="text-xs text-gray-500 mb-1 block">币种</label>
                     <div class="relative">
-                        <select class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none appearance-none">
-                            <option selected>OKB</option>
-                            <option>BNB</option>
-                            <option>USDT</option>
+                        <select id="withdrawCoin" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none appearance-none">
+                            <option value="OKB">OKB</option>
+                            <option value="BNB">BNB</option>
+                            <option value="USDT">USDT</option>
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
@@ -279,31 +266,53 @@
                 <div>
                     <label class="text-xs text-gray-500 mb-1 block">网络</label>
                     <div class="relative">
-                        <select class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none appearance-none">
-                            <option selected>X Layer</option>
-                            <option>BNB Chain</option>
-                            <option>Ethereum</option>
+                        <select id="withdrawNetwork" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none appearance-none">
+                            <option value="X Layer">X Layer</option>
+                            <option value="BNB Chain">BNB Chain</option>
+                            <option value="Ethereum">Ethereum</option>
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
                 </div>
             </div>
+            <!-- 可用余额显示 -->
+            <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-500">可用余额</span>
+                <span id="withdrawBalance" class="font-medium text-gray-800">120.50 OKB</span>
+            </div>
             <div>
                 <label class="text-xs text-gray-500 mb-1 block">数量</label>
                 <div class="bg-gray-50 rounded-2xl px-4 py-2 flex items-center">
-                    <input type="text" placeholder="0.00" value="1.0" class="w-full bg-transparent outline-none text-lg font-medium">
-                    <span class="text-violet-600 text-sm font-bold cursor-pointer">全部</span>
+                    <input id="withdrawAmount" type="text" placeholder="0.00" value="1.0" class="w-full bg-transparent outline-none text-lg font-medium">
+                    <span class="text-violet-600 text-sm font-bold cursor-pointer" onclick="setMaxAmount()">全部</span>
                 </div>
             </div>
             <div class="flex justify-between text-sm">
                 <span class="text-gray-400">手续费</span>
-                <span class="font-medium">~0.0005 OKB ($0.03)</span>
+                <span class="font-medium">~0.0005 对应币种 ($0.03)</span>
             </div>
+
+            <!-- 提币记录 (模拟) -->
+            <div class="mt-2">
+                <h4 class="text-sm font-bold mb-2 flex items-center"><i data-lucide="history" class="w-4 h-4 mr-1"></i>提币记录</h4>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
+                        <div><span class="text-xs font-medium">-5 OKB</span><span class="text-[10px] text-gray-400 ml-2">X Layer</span></div>
+                        <span class="text-xs text-gray-400">2025-03-15</span>
+                    </div>
+                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
+                        <div><span class="text-xs font-medium">-20 USDT</span><span class="text-[10px] text-gray-400 ml-2">BNB Chain</span></div>
+                        <span class="text-xs text-gray-400">2025-03-14</span>
+                    </div>
+                </div>
+            </div>
+
             <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">提交提币</button>
         </div>
 
-        <!-- 交易面板 (保留，币种可选) -->
+        <!-- 交易面板 (保持不变) -->
         <div id="panel-swap" class="sheet-panel hidden space-y-4">
+            <!-- ... 交易内容不变 ... -->
             <div class="bg-gray-50 p-4 rounded-2xl relative">
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-xs text-gray-400">卖出</span>
@@ -350,8 +359,9 @@
             <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">兑换</button>
         </div>
 
-        <!-- 应用面板 (保留) -->
+        <!-- 应用面板 (保持不变) -->
         <div id="panel-dapps" class="sheet-panel hidden space-y-4">
+            <!-- ... 应用内容 ... -->
             <div class="relative">
                 <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-300"></i>
                 <input type="text" placeholder="搜索 DApp 或输入网址" class="w-full bg-gray-50 rounded-2xl py-3 pl-10 pr-4 text-sm outline-none">
@@ -383,7 +393,7 @@
             <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2">查看更多应用</button>
         </div>
 
-        <!-- 新增：代币详情面板 (点击代币列表项时显示) -->
+        <!-- ========= 代币详情面板 (增强：接收/发送按钮带预填充) ========= -->
         <div id="panel-token-detail" class="sheet-panel hidden space-y-4">
             <div class="flex items-center space-x-4">
                 <div id="detail-icon" class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-xl font-bold">X</div>
@@ -407,8 +417,10 @@
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <button onclick="toggleSheet('充币')" class="py-3 bg-violet-600 text-white rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-down-to-line" class="w-4 h-4 mr-2"></i>接收</button>
-                <button onclick="toggleSheet('提币')" class="py-3 border border-violet-600 text-violet-600 rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-up-from-line" class="w-4 h-4 mr-2"></i>发送</button>
+                <!-- 接收按钮：打开充币面板，并预填网络为当前代币的网络 -->
+                <button id="detailReceiveBtn" onclick="goToDepositFromToken()" class="py-3 bg-violet-600 text-white rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-down-to-line" class="w-4 h-4 mr-2"></i>接收</button>
+                <!-- 发送按钮：打开提币面板，并预填币种和网络 -->
+                <button id="detailSendBtn" onclick="goToWithdrawFromToken()" class="py-3 border border-violet-600 text-violet-600 rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-up-from-line" class="w-4 h-4 mr-2"></i>发送</button>
             </div>
             <div class="pt-2">
                 <h4 class="text-sm font-bold mb-2">交易记录</h4>
@@ -432,7 +444,15 @@
     <script>
         lucide.createIcons();
 
-        // ---------- 网络筛选 (仅UI) ----------
+        // 存储当前选中的代币详情（用于接收/发送预填）
+        let currentToken = {
+            symbol: 'OKB',
+            balance: 120.5,
+            network: 'X Layer Network',
+            networkKey: 'X Layer' // 用于匹配提币面板的网络选项
+        };
+
+        // ---------- 网络筛选 (UI) ----------
         function selectNet(net) {
             document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
             document.getElementById('net-' + net).classList.add('active');
@@ -458,7 +478,7 @@
             }
         }
 
-        // ---------- 复制地址 (真实复制) ----------
+        // ---------- 复制地址 ----------
         function copyAddress(address) {
             navigator.clipboard.writeText(address).then(() => {
                 alert('地址已复制到剪贴板');
@@ -467,52 +487,123 @@
             });
         }
 
-        // ---------- 打开代币详情面板 ----------
-        function openTokenDetail(symbol, usd, balance, network, bgClass, iconChar) {
-            // 隐藏所有面板
+        // ---------- 代币详情打开 ----------
+        function openTokenDetail(symbol, usd, balance, network, bgClass, iconChar, networkKey, balanceNum) {
+            currentToken = {
+                symbol: symbol,
+                balance: balanceNum,
+                network: network,
+                networkKey: networkKey
+            };
+
             document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
-            // 显示详情面板
             const panel = document.getElementById('panel-token-detail');
             panel.classList.remove('hidden');
             
-            // 更新面板内容
             document.getElementById('detail-symbol').innerText = symbol;
             document.getElementById('detail-network').innerText = network;
             document.getElementById('detail-balance').innerText = balance;
             document.getElementById('detail-usd').innerText = usd;
             
-            // 更新图标 (简化处理)
             const iconDiv = document.getElementById('detail-icon');
             iconDiv.className = `w-16 h-16 ${bgClass} rounded-2xl flex items-center justify-center text-white text-xl font-bold`;
             if (iconChar.length === 1) {
                 iconDiv.innerText = iconChar;
             } else {
-                iconDiv.innerHTML = ''; // 如果是图标，暂时忽略，实际项目中可嵌入lucide
                 iconDiv.innerHTML = '<i data-lucide="coins" class="w-8 h-8"></i>';
                 lucide.createIcons();
             }
             
-            // 设置标题
             document.getElementById('sheetTitle').innerText = symbol + ' 详情';
             
-            // 打开底部面板
             document.getElementById('bottomSheet').classList.add('active');
             document.getElementById('overlay').classList.add('active');
         }
 
-        // ---------- 底部滑出面板控制 (增强) ----------
+        // ---------- 从代币详情跳转到充币 (预填网络) ----------
+        function goToDepositFromToken() {
+            // 先关闭详情面板，然后打开充币面板，并预填网络
+            const sheet = document.getElementById('bottomSheet');
+            const overlay = document.getElementById('overlay');
+            // 隐藏所有面板
+            document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
+            // 显示充币面板
+            document.getElementById('panel-deposit').classList.remove('hidden');
+            document.getElementById('sheetTitle').innerText = '充币';
+            
+            // 预填网络下拉框 (根据currentToken.network)
+            const networkSelect = document.getElementById('depositNetwork');
+            const optionMap = {
+                'X Layer Network': 0,
+                'BNB Smart Chain': 1,
+                'Ethereum': 2
+            };
+            if (currentToken.network in optionMap) {
+                networkSelect.selectedIndex = optionMap[currentToken.network];
+            } else if (currentToken.network === 'BNB Chain') {
+                networkSelect.selectedIndex = 1; // BNB Smart Chain
+            } else {
+                networkSelect.selectedIndex = 0;
+            }
+            
+            // 确保底部面板保持打开
+            sheet.classList.add('active');
+            overlay.classList.add('active');
+        }
+
+        // ---------- 从代币详情跳转到提币 (预填币种、网络、可用余额) ----------
+        function goToWithdrawFromToken() {
+            document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('panel-withdraw').classList.remove('hidden');
+            document.getElementById('sheetTitle').innerText = '提币';
+            
+            // 预填币种
+            const coinSelect = document.getElementById('withdrawCoin');
+            const coinOptions = ['OKB', 'BNB', 'USDT'];
+            const coinIndex = coinOptions.indexOf(currentToken.symbol);
+            if (coinIndex !== -1) coinSelect.selectedIndex = coinIndex;
+            
+            // 预填网络
+            const networkSelect = document.getElementById('withdrawNetwork');
+            const networkOptions = ['X Layer', 'BNB Chain', 'Ethereum'];
+            const netIndex = networkOptions.indexOf(currentToken.networkKey);
+            if (netIndex !== -1) networkSelect.selectedIndex = netIndex;
+            
+            // 更新可用余额显示
+            document.getElementById('withdrawBalance').innerText = `${currentToken.balance.toFixed(2)} ${currentToken.symbol}`;
+            
+            document.getElementById('bottomSheet').classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        // ---------- 提币面板“全部”按钮功能 ----------
+        function setMaxAmount() {
+            const amountInput = document.getElementById('withdrawAmount');
+            amountInput.value = currentToken.balance;
+        }
+
+        // ---------- 底部滑出面板控制 (通用) ----------
         function toggleSheet(title = '') {
             const sheet = document.getElementById('bottomSheet');
             const overlay = document.getElementById('overlay');
             const sheetTitle = document.getElementById('sheetTitle');
             
-            // 所有面板先隐藏
             document.querySelectorAll('.sheet-panel').forEach(panel => panel.classList.add('hidden'));
 
             if (title) {
                 sheetTitle.innerText = title;
-                if (title === '充币') document.getElementById('panel-deposit').classList.remove('hidden');
-                else if (title === '提币') document.getElementById('panel-withdraw').classList.remove('hidden');
+                if (title === '充币') {
+                    document.getElementById('panel-deposit').classList.remove('hidden');
+                    // 重置网络为默认
+                    document.getElementById('depositNetwork').selectedIndex = 0;
+                }
+                else if (title === '提币') {
+                    document.getElementById('panel-withdraw').classList.remove('hidden');
+                    // 重置为默认币种/网络，余额显示可能需根据第一个币种
+                    document.getElementById('withdrawCoin').selectedIndex = 0;
+                    document.getElementById('withdrawNetwork').selectedIndex = 0;
+                    document.getElementById('withdrawBalance').innerText = '120.50 OKB'; // 默认OKB
+                }
                 else if (title === '交易') document.getElementById('panel-swap').classList.remove('hidden');
                 else if (title === '应用') document.getElementById('panel-dapps').classList.remove('hidden');
                 else {
@@ -520,7 +611,6 @@
                     sheetTitle.innerText = '操作';
                 }
             } else {
-                // 如果无title（关闭后重新打开），默认显示充币
                 sheetTitle.innerText = '操作';
                 document.getElementById('panel-deposit').classList.remove('hidden');
             }
@@ -529,7 +619,7 @@
             overlay.classList.toggle('active');
         }
 
-        // 初始化：确保所有图标加载
+        // 初始化所有图标
         window.onload = function() {
             lucide.createIcons();
         };
