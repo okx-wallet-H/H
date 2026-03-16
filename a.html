@@ -147,7 +147,7 @@
       70% { opacity: 1; width: 100px; right: -30px; }
       100% { right: 20px; opacity: 0; width: 40px; }
     }
-    /* 为了更丰富，再加两条细线 */
+    /* 为了更丰富，再加两条细线（副线） */
     .gold-flow-line-secondary {
       height: 1px;
       opacity: 0.5;
@@ -167,7 +167,7 @@
       transition: max-height 0.3s ease-out;
     }
     .accordion-content.open {
-      max-height: 300px;
+      max-height: 400px; /* 足够显示内容 */
     }
   </style>
 </head>
@@ -294,12 +294,12 @@
       暂无 DeFi 持仓数据
     </div>
 
-    <!-- ========= 赚币内容（全新升级版：金色流动线条 + 当前质押卡片） ========= -->
+    <!-- ========= 赚币内容（优化版：可用余额 + 收益规则注释） ========= -->
     <div id="earnContent" class="hidden mt-6 space-y-6">
-      <!-- 顶部标题：链上赚币 + 高级金色流动线条 -->
+      <!-- 顶部标题：链上赚币 + 高级金色流动线条（左右各三条） -->
       <div class="flex justify-center items-center py-6">
         <div class="relative gold-flow-container">
-          <!-- 左侧流动线条（主线和副线） -->
+          <!-- 左侧流动线条（主线和两条副线） -->
           <div class="gold-flow-line left-line"></div>
           <div class="gold-flow-line gold-flow-line-secondary left-line left-line-secondary"></div>
           <div class="gold-flow-line gold-flow-line-secondary left-line" style="animation-delay: -1s;"></div>
@@ -353,9 +353,12 @@
         </div>
       </div>
 
-      <!-- 输入框 + 智能质押按钮 -->
+      <!-- 输入框 + 智能质押按钮（增加可用余额显示） -->
       <div class="space-y-3">
-        <label class="text-sm font-medium text-gray-700">质押数量 (H)</label>
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-medium text-gray-700">质押数量 (H)</label>
+          <span class="text-xs text-gray-500">可用: <span class="font-semibold text-gray-800">2,500 H</span></span>
+        </div>
         <div class="flex items-center gap-3">
           <input type="number" placeholder="0.00" value="100" class="flex-1 p-4 bg-white border border-gray-200 rounded-xl text-lg font-medium focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 transition">
           <button onclick="alert('智能质押模拟：已质押 100 H')" class="px-6 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all btn-scale">
@@ -365,23 +368,46 @@
         <p class="text-xs text-gray-400">代表确认质押，实际合约交互未实现</p>
       </div>
 
-      <!-- 规则手风琴：链上赚币|智能质押 收益介绍 -->
+      <!-- 规则手风琴：链上赚币|智能质押 收益介绍（优化排版 + 新增注释） -->
       <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white">
         <button id="accordionBtn" class="w-full flex justify-between items-center p-4 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleAccordion()">
           <span>📋 收益规则介绍</span>
           <i id="accordionIcon" data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform"></i>
         </button>
         <div id="accordionContent" class="accordion-content px-4">
-          <div class="py-3 border-t border-gray-100">
-            <p class="text-sm text-gray-600 mb-2">无锁仓限制，无周期限制，随存随取，智能阶梯收益：</p>
-            <ul class="text-sm space-y-1 text-gray-600">
-              <li>质押 1-7 天 → 收益率 0.5%</li>
-              <li>质押 8-15 天 → 收益率 0.6%</li>
-              <li>质押 16-30 天 → 收益率 0.7%</li>
-              <li>质押 31-60 天 → 收益率 0.8%</li>
-              <li>质押 61-90 天 → 收益率 1.0%</li>
-              <li>质押 90 天以上 → 收益率 1.2%</li>
+          <div class="py-4 border-t border-gray-100">
+            <p class="text-sm text-gray-600 mb-3">无锁仓限制，无周期限制，随存随取，智能阶梯收益：</p>
+            <ul class="text-sm space-y-2 text-gray-600 mb-4">
+              <li class="flex items-start">
+                <span class="inline-block w-20 text-gray-400">1-7天</span>
+                <span class="font-medium text-gray-800">收益率 0.5%</span>
+              </li>
+              <li class="flex items-start">
+                <span class="inline-block w-20 text-gray-400">8-15天</span>
+                <span class="font-medium text-gray-800">收益率 0.6%</span>
+              </li>
+              <li class="flex items-start">
+                <span class="inline-block w-20 text-gray-400">16-30天</span>
+                <span class="font-medium text-gray-800">收益率 0.7%</span>
+              </li>
+              <li class="flex items-start">
+                <span class="inline-block w-20 text-gray-400">31-60天</span>
+                <span class="font-medium text-gray-800">收益率 0.8%</span>
+              </li>
+              <li class="flex items-start">
+                <span class="inline-block w-20 text-gray-400">61-90天</span>
+                <span class="font-medium text-gray-800">收益率 1.0%</span>
+              </li>
+              <li class="flex items-start">
+                <span class="inline-block w-20 text-gray-400">90天以上</span>
+                <span class="font-medium text-gray-800">收益率 1.2%</span>
+              </li>
             </ul>
+            <!-- 新增注释：每日20点发放收益 -->
+            <div class="flex items-center gap-1.5 text-xs text-gray-400 border-t border-gray-100 pt-3 mt-1">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>注：每日20:00发放质押收益</span>
+            </div>
           </div>
         </div>
       </div>
