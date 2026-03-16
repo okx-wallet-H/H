@@ -10,7 +10,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #fcfcfc; color: #1a1a1a; overflow-x: hidden; }
-        .purple-gradient { background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%); }
+        /* 顶部紫色渐变优化：增加底部阴影和轻微内发光 */
+        .purple-gradient { 
+            background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
+            box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.3), inset 0 -1px 0 rgba(255,255,255,0.2);
+        }
         .tab-active { color: #7C3AED; border-bottom: 2px solid #7C3AED; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
@@ -40,7 +44,7 @@
 </head>
 <body class="max-w-md mx-auto min-h-screen border-x border-gray-100 shadow-2xl relative pb-20">
 
-    <!-- ========= 顶部紫色渐变区 (新增账单图标) ========= -->
+    <!-- ========= 顶部紫色渐变区 (边框优化) ========= -->
     <div class="purple-gradient text-white p-8 rounded-b-[32px] shadow-lg">
         <div class="flex justify-between items-center mb-6">
             <div class="flex p-1 bg-black/10 rounded-full border border-white/10">
@@ -49,16 +53,14 @@
                 <button onclick="selectNet('bnb')" id="net-bnb" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">BNB</button>
             </div>
             <div class="flex items-center space-x-3">
-                <i data-lucide="receipt" class="w-6 h-6 opacity-80 cursor-pointer"></i>   <!-- 新增账单图标 -->
+                <i data-lucide="receipt" class="w-6 h-6 opacity-80 cursor-pointer"></i>
                 <i data-lucide="scan" class="w-6 h-6 opacity-80 cursor-pointer"></i>
             </div>
         </div>
         
         <p class="text-sm opacity-80 mb-1">总资产估值 (USD)</p>
-        <!-- 将资产数字和账单图标放在同一行 -->
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-4xl font-bold tracking-tight">$ 10,390.50</h1>
-            <!-- 账单图标已在上方添加，此处无需重复 -->
         </div>
         <div class="flex items-center text-xs bg-black/10 w-fit px-2 py-1 rounded">
             <span class="opacity-70">0x71C...a29E</span>
@@ -101,21 +103,28 @@
             <button id="defiTab" class="pb-3 text-sm font-medium text-gray-400 hover:text-gray-600 transition-all" onclick="switchTab('defi')">DeFi 资产</button>
         </div>
 
-        <!-- 代币列表 (点击打开详情) -->
+        <!-- 代币列表 (新布局：左侧图标+名称+数量，右侧单价+总价) -->
         <div id="tokenContent" class="mt-4 space-y-5">
+            <!-- OKB -->
             <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('OKB', '7,230.00', '120.50', 'X Layer Network', '#000', 'X', 'X Layer', 120.5)">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">X</div>
                     <div>
                         <div class="font-bold">OKB</div>
-                        <div class="text-xs text-gray-400">X Layer Network</div>
+                        <!-- 名称下方显示数量 -->
+                        <div class="text-xs text-gray-400">120.50 OKB</div>
+                        <!-- 网络用小字显示在数量右边或另起？这里保留网络在第二行小字 -->
+                        <div class="text-[10px] text-gray-300">X Layer Network</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="font-bold">120.50</div>
+                    <!-- 单价在上 -->
+                    <div class="text-sm font-semibold">$60.12</div>
+                    <!-- 总价在下 -->
                     <div class="text-xs text-gray-400">$7,230.00</div>
                 </div>
             </div>
+            <!-- BNB -->
             <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('BNB', '3,120.15', '5.24', 'BNB Smart Chain', 'bg-yellow-400', 'coins', 'BNB Chain', 5.24)">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white">
@@ -123,14 +132,16 @@
                     </div>
                     <div>
                         <div class="font-bold">BNB</div>
-                        <div class="text-xs text-gray-400">BNB Smart Chain</div>
+                        <div class="text-xs text-gray-400">5.24 BNB</div>
+                        <div class="text-[10px] text-gray-300">BNB Smart Chain</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="font-bold">5.24</div>
+                    <div class="text-sm font-semibold">$595.45</div>  <!-- 单价 ≈ 3120.15/5.24 -->
                     <div class="text-xs text-gray-400">$3,120.15</div>
                 </div>
             </div>
+            <!-- USDT -->
             <div class="flex justify-between items-center group cursor-pointer border-t border-gray-50 pt-4" onclick="openTokenDetail('USDT', '40.35', '40.35', '多链资产', 'bg-teal-500', '$', 'Ethereum', 40.35)">
                 <div class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white">
@@ -138,11 +149,12 @@
                     </div>
                     <div>
                         <div class="font-bold">USDT</div>
-                        <div class="text-xs text-gray-400">多链资产</div>
+                        <div class="text-xs text-gray-400">40.35 USDT</div>
+                        <div class="text-[10px] text-gray-300">多链资产</div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="font-bold">40.35</div>
+                    <div class="text-sm font-semibold">$1.00</div>
                     <div class="text-xs text-gray-400">$40.35</div>
                 </div>
             </div>
@@ -218,7 +230,7 @@
         <!-- 动态标题 -->
         <h2 id="sheetTitle" class="text-xl font-bold mb-5 text-center text-gray-800">操作</h2>
         
-        <!-- ========= 充币面板 (已移除“查看充值记录”按钮) ========= -->
+        <!-- ========= 充币面板 ========= -->
         <div id="panel-deposit" class="sheet-panel hidden space-y-4">
             <div class="flex flex-col items-center bg-gray-50 p-4 rounded-2xl">
                 <div class="w-36 h-36 bg-white p-2 rounded-xl shadow-inner flex items-center justify-center">
@@ -246,10 +258,9 @@
                 </div>
             </div>
             <div class="text-xs text-gray-400 flex items-center"><i data-lucide="info" class="w-3 h-3 mr-1"></i> 充值到账约需 3~30 秒，最低 0.001 对应币种</div>
-            <!-- 原“查看充值记录”按钮已删除 -->
         </div>
 
-        <!-- ========= 提币面板 (已移除“提币记录”区块) ========= -->
+        <!-- ========= 提币面板 ========= -->
         <div id="panel-withdraw" class="sheet-panel hidden space-y-4">
             <div>
                 <label class="text-xs text-gray-500 mb-1 block">提币地址</label>
@@ -282,7 +293,6 @@
                     </div>
                 </div>
             </div>
-            <!-- 可用余额显示 -->
             <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-500">可用余额</span>
                 <span id="withdrawBalance" class="font-medium text-gray-800">120.50 OKB</span>
@@ -298,11 +308,10 @@
                 <span class="text-gray-400">手续费</span>
                 <span class="font-medium">~0.0005 对应币种 ($0.03)</span>
             </div>
-            <!-- 原“提币记录”区块已删除 -->
             <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">提交提币</button>
         </div>
 
-        <!-- 交易面板 (保持不变) -->
+        <!-- ========= 交易面板 (新增交换功能) ========= -->
         <div id="panel-swap" class="sheet-panel hidden space-y-4">
             <div class="bg-gray-50 p-4 rounded-2xl relative">
                 <div class="flex justify-between items-center mb-2">
@@ -310,21 +319,22 @@
                     <span class="text-xs text-gray-400">余额: 120.5</span>
                 </div>
                 <div class="flex items-center">
-                    <input type="text" value="1.0" class="w-full bg-transparent text-2xl font-bold outline-none">
+                    <input id="swapFromAmount" type="text" value="1.0" class="w-full bg-transparent text-2xl font-bold outline-none">
                     <div class="relative">
-                        <select class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-bold appearance-none pr-8">
-                            <option selected>OKB</option>
-                            <option>BNB</option>
-                            <option>USDT</option>
+                        <select id="swapFromCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-bold appearance-none pr-8">
+                            <option value="OKB" selected>OKB</option>
+                            <option value="BNB">BNB</option>
+                            <option value="USDT">USDT</option>
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-2 top-2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
                 </div>
             </div>
+            <!-- 点击此图标交换币种和金额 -->
             <div class="flex justify-center -my-2 relative z-10">
-                <div class="bg-white border-4 border-gray-50 rounded-full p-2 text-violet-600">
+                <button id="swapButton" class="bg-white border-4 border-gray-50 rounded-full p-2 text-violet-600 hover:bg-violet-50 transition-colors">
                     <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
-                </div>
+                </button>
             </div>
             <div class="bg-gray-50 p-4 rounded-2xl">
                 <div class="flex justify-between items-center mb-2">
@@ -332,25 +342,25 @@
                     <span class="text-xs text-gray-400">余额: 40.35</span>
                 </div>
                 <div class="flex items-center">
-                    <input type="text" value="15.23" class="w-full bg-transparent text-2xl font-bold outline-none">
+                    <input id="swapToAmount" type="text" value="15.23" class="w-full bg-transparent text-2xl font-bold outline-none">
                     <div class="relative">
-                        <select class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-bold appearance-none pr-8">
-                            <option selected>USDT</option>
-                            <option>OKB</option>
-                            <option>BNB</option>
+                        <select id="swapToCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-bold appearance-none pr-8">
+                            <option value="USDT" selected>USDT</option>
+                            <option value="OKB">OKB</option>
+                            <option value="BNB">BNB</option>
                         </select>
                         <i data-lucide="chevron-down" class="absolute right-2 top-2 w-4 h-4 text-gray-400 pointer-events-none"></i>
                     </div>
                 </div>
             </div>
             <div class="flex justify-between text-xs text-gray-400">
-                <span>价格: 1 OKB ≈ 15.23 USDT</span>
+                <span id="swapPrice">价格: 1 OKB ≈ 15.23 USDT</span>
                 <span>滑点: 0.5%</span>
             </div>
             <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">兑换</button>
         </div>
 
-        <!-- 应用面板 (保持不变) -->
+        <!-- 应用面板 -->
         <div id="panel-dapps" class="sheet-panel hidden space-y-4">
             <div class="relative">
                 <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-300"></i>
@@ -383,7 +393,7 @@
             <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2">查看更多应用</button>
         </div>
 
-        <!-- ========= 代币详情面板 (交易记录保留) ========= -->
+        <!-- ========= 代币详情面板 ========= -->
         <div id="panel-token-detail" class="sheet-panel hidden space-y-4">
             <div class="flex items-center space-x-4">
                 <div id="detail-icon" class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-xl font-bold">X</div>
@@ -432,12 +442,12 @@
     <script>
         lucide.createIcons();
 
-        // 存储当前选中的代币详情（用于接收/发送预填）
+        // 存储当前选中的代币详情
         let currentToken = {
             symbol: 'OKB',
             balance: 120.5,
             network: 'X Layer Network',
-            networkKey: 'X Layer' // 用于匹配提币面板的网络选项
+            networkKey: 'X Layer'
         };
 
         // ---------- 网络筛选 (UI) ----------
@@ -508,7 +518,7 @@
             document.getElementById('overlay').classList.add('active');
         }
 
-        // ---------- 从代币详情跳转到充币 (预填网络) ----------
+        // ---------- 从代币详情跳转到充币 ----------
         function goToDepositFromToken() {
             document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('panel-deposit').classList.remove('hidden');
@@ -532,7 +542,7 @@
             document.getElementById('overlay').classList.add('active');
         }
 
-        // ---------- 从代币详情跳转到提币 (预填币种、网络、可用余额) ----------
+        // ---------- 从代币详情跳转到提币 ----------
         function goToWithdrawFromToken() {
             document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
             document.getElementById('panel-withdraw').classList.remove('hidden');
@@ -554,13 +564,40 @@
             document.getElementById('overlay').classList.add('active');
         }
 
-        // ---------- 提币面板“全部”按钮功能 ----------
+        // ---------- 提币面板“全部”按钮 ----------
         function setMaxAmount() {
             const amountInput = document.getElementById('withdrawAmount');
             amountInput.value = currentToken.balance;
         }
 
-        // ---------- 底部滑出面板控制 (通用) ----------
+        // ---------- 交易面板交换币种和金额 ----------
+        document.addEventListener('DOMContentLoaded', function() {
+            const swapBtn = document.getElementById('swapButton');
+            if (swapBtn) {
+                swapBtn.addEventListener('click', function() {
+                    const fromAmount = document.getElementById('swapFromAmount');
+                    const toAmount = document.getElementById('swapToAmount');
+                    const fromCoin = document.getElementById('swapFromCoin');
+                    const toCoin = document.getElementById('swapToCoin');
+                    
+                    // 交换金额
+                    const tempAmount = fromAmount.value;
+                    fromAmount.value = toAmount.value;
+                    toAmount.value = tempAmount;
+                    
+                    // 交换币种
+                    const tempCoin = fromCoin.value;
+                    fromCoin.value = toCoin.value;
+                    toCoin.value = tempCoin;
+                    
+                    // 更新价格显示（简单模拟）
+                    const priceSpan = document.getElementById('swapPrice');
+                    priceSpan.innerText = `价格: 1 ${fromCoin.value} ≈ ${(toAmount.value / fromAmount.value || 0).toFixed(2)} ${toCoin.value}`;
+                });
+            }
+        });
+
+        // ---------- 底部滑出面板控制 ----------
         function toggleSheet(title = '') {
             const sheet = document.getElementById('bottomSheet');
             const overlay = document.getElementById('overlay');
@@ -580,7 +617,15 @@
                     document.getElementById('withdrawNetwork').selectedIndex = 0;
                     document.getElementById('withdrawBalance').innerText = '120.50 OKB';
                 }
-                else if (title === '交易') document.getElementById('panel-swap').classList.remove('hidden');
+                else if (title === '交易') {
+                    document.getElementById('panel-swap').classList.remove('hidden');
+                    // 重置默认值
+                    document.getElementById('swapFromAmount').value = '1.0';
+                    document.getElementById('swapToAmount').value = '15.23';
+                    document.getElementById('swapFromCoin').value = 'OKB';
+                    document.getElementById('swapToCoin').value = 'USDT';
+                    document.getElementById('swapPrice').innerText = '价格: 1 OKB ≈ 15.23 USDT';
+                }
                 else if (title === '应用') document.getElementById('panel-dapps').classList.remove('hidden');
                 else {
                     document.getElementById('panel-deposit').classList.remove('hidden');
