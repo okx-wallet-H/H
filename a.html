@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Web3 Alpha Wallet · 上线版</title>
-    <!-- Tailwind + Lucide + 字体 (统一 Inter) -->
+    <title>Web3 Alpha Wallet · 精致版</title>
+    <!-- Tailwind + Lucide + 字体 Inter -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #fcfcfc; color: #1a1a1a; overflow-x: hidden; }
-        /* 顶部紫色渐变优化：增加底部阴影和轻微内发光 */
-        .purple-gradient { 
-            background: linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%);
-            box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.3), inset 0 -1px 0 rgba(255,255,255,0.2);
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap');
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            background-color: #f8fafc; /* 更柔和的背景色 */
+            color: #0f172a; 
+            overflow-x: hidden; 
         }
-        .tab-active { color: #7C3AED; border-bottom: 2px solid #7C3AED; }
+        /* 顶部渐变增强 */
+        .purple-gradient { 
+            background: linear-gradient(145deg, #8B5CF6 0%, #4C1D95 100%);
+            box-shadow: 0 20px 25px -8px rgba(124, 58, 237, 0.25), inset 0 -1px 0 rgba(255,255,255,0.2);
+        }
+        .tab-active { 
+            color: #7C3AED; 
+            border-bottom: 2px solid #7C3AED; 
+        }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* 底部滑出动画 */
+        /* 底部滑出动画优化 */
         .bottom-sheet {
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
             transform: translateY(100%);
         }
         .bottom-sheet.active {
@@ -36,130 +44,160 @@
             opacity: 1;
         }
         .network-pill.active {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
             font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+        /* 卡片悬停效果 */
+        .hover-card {
+            transition: all 0.2s ease;
+        }
+        .hover-card:hover {
+            background-color: #f1f5f9;
+            transform: translateY(-1px);
+        }
+        /* 按钮点击缩放 */
+        .btn-scale {
+            transition: transform 0.15s ease;
+        }
+        .btn-scale:active {
+            transform: scale(0.96);
+        }
+        /* 自定义数字字体稍微加粗 */
+        .amount-font {
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        /* 底部导航激活状态 */
+        .nav-active {
+            color: #7C3AED;
         }
     </style>
 </head>
-<body class="max-w-md mx-auto min-h-screen border-x border-gray-100 shadow-2xl relative pb-20">
+<body class="max-w-md mx-auto min-h-screen border-x border-gray-200/70 shadow-2xl relative pb-20 bg-[#f8fafc]">
 
-    <!-- ========= 顶部紫色渐变区 (边框优化) ========= -->
-    <div class="purple-gradient text-white p-8 rounded-b-[32px] shadow-lg">
+    <!-- ========= 顶部紫色渐变区 (优化边框与阴影) ========= -->
+    <div class="purple-gradient text-white p-8 rounded-b-[36px] shadow-xl">
         <div class="flex justify-between items-center mb-6">
-            <div class="flex p-1 bg-black/10 rounded-full border border-white/10">
+            <div class="flex p-1 bg-black/10 rounded-full border border-white/10 backdrop-blur-sm">
                 <button onclick="selectNet('all')" id="net-all" class="network-pill active px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">全部</button>
                 <button onclick="selectNet('xlayer')" id="net-xlayer" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">X Layer</button>
                 <button onclick="selectNet('bnb')" id="net-bnb" class="network-pill px-3 py-1 rounded-full text-[10px] border border-transparent transition-all">BNB</button>
             </div>
-            <div class="flex items-center space-x-3">
-                <i data-lucide="receipt" class="w-6 h-6 opacity-80 cursor-pointer"></i>
-                <i data-lucide="scan" class="w-6 h-6 opacity-80 cursor-pointer"></i>
+            <div class="flex items-center space-x-4">
+                <i data-lucide="receipt" class="w-5 h-5 opacity-80 cursor-pointer hover:opacity-100 transition-opacity"></i>
+                <i data-lucide="scan" class="w-5 h-5 opacity-80 cursor-pointer hover:opacity-100 transition-opacity"></i>
             </div>
         </div>
         
         <p class="text-sm opacity-80 mb-1">总资产估值 (USD)</p>
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="text-4xl font-bold tracking-tight">$ 10,390.50</h1>
+        <div class="flex justify-between items-end mb-4">
+            <h1 class="text-4xl font-bold tracking-tight amount-font">$ 10,390.50</h1>
         </div>
-        <div class="flex items-center text-xs bg-black/10 w-fit px-2 py-1 rounded">
-            <span class="opacity-70">0x71C...a29E</span>
-            <i data-lucide="copy" class="w-3 h-3 ml-2 cursor-pointer" onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')"></i>
+        <div class="flex items-center text-xs bg-black/10 w-fit px-3 py-1.5 rounded-full border border-white/5 backdrop-blur-sm">
+            <span class="opacity-80 font-mono">0x71C...a29E</span>
+            <i data-lucide="copy" class="w-3.5 h-3.5 ml-2 cursor-pointer hover:opacity-100 opacity-70 transition-opacity" onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')"></i>
         </div>
     </div>
 
-    <!-- ========= 四大金刚按钮 ========= -->
-    <div class="grid grid-cols-4 gap-4 px-6 -mt-8">
+    <!-- ========= 四大金刚按钮 (增加点击反馈) ========= -->
+    <div class="grid grid-cols-4 gap-5 px-5 -mt-7">
         <div class="flex flex-col items-center">
-            <button onclick="toggleSheet('充币')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
-                <i data-lucide="arrow-down-to-line"></i>
+            <button onclick="toggleSheet('充币')" class="w-14 h-14 bg-white shadow-lg rounded-2xl flex items-center justify-center text-violet-600 hover:shadow-xl transition-all btn-scale active:bg-violet-50">
+                <i data-lucide="arrow-down-to-line" class="w-5 h-5"></i>
             </button>
-            <span class="text-xs mt-2 font-medium text-gray-600">充币</span>
+            <span class="text-xs mt-2 font-medium text-gray-500">充币</span>
         </div>
         <div class="flex flex-col items-center">
-            <button onclick="toggleSheet('提币')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
-                <i data-lucide="arrow-up-from-line"></i>
+            <button onclick="toggleSheet('提币')" class="w-14 h-14 bg-white shadow-lg rounded-2xl flex items-center justify-center text-violet-600 hover:shadow-xl transition-all btn-scale active:bg-violet-50">
+                <i data-lucide="arrow-up-from-line" class="w-5 h-5"></i>
             </button>
-            <span class="text-xs mt-2 font-medium text-gray-600">提币</span>
+            <span class="text-xs mt-2 font-medium text-gray-500">提币</span>
         </div>
         <div class="flex flex-col items-center">
-            <button onclick="toggleSheet('交易')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
-                <i data-lucide="repeat"></i>
+            <button onclick="toggleSheet('交易')" class="w-14 h-14 bg-white shadow-lg rounded-2xl flex items-center justify-center text-violet-600 hover:shadow-xl transition-all btn-scale active:bg-violet-50">
+                <i data-lucide="repeat" class="w-5 h-5"></i>
             </button>
-            <span class="text-xs mt-2 font-medium text-gray-600">交易</span>
+            <span class="text-xs mt-2 font-medium text-gray-500">交易</span>
         </div>
         <div class="flex flex-col items-center">
-            <button onclick="toggleSheet('应用')" class="w-14 h-14 bg-white shadow-xl rounded-2xl flex items-center justify-center text-violet-600 hover:scale-105 transition-transform active:scale-95">
-                <i data-lucide="layout-grid"></i>
+            <button onclick="toggleSheet('应用')" class="w-14 h-14 bg-white shadow-lg rounded-2xl flex items-center justify-center text-violet-600 hover:shadow-xl transition-all btn-scale active:bg-violet-50">
+                <i data-lucide="layout-grid" class="w-5 h-5"></i>
             </button>
-            <span class="text-xs mt-2 font-medium text-gray-600">应用</span>
+            <span class="text-xs mt-2 font-medium text-gray-500">应用</span>
         </div>
     </div>
 
     <!-- ========= 代币 / DeFi 切换标签 ========= -->
-    <div class="mt-8 px-6">
-        <div class="flex space-x-8 border-b border-gray-100">
-            <button id="tokenTab" class="pb-3 text-sm font-bold tab-active transition-all" onclick="switchTab('tokens')">代币列表</button>
+    <div class="mt-8 px-5">
+        <div class="flex space-x-8 border-b border-gray-200/80">
+            <button id="tokenTab" class="pb-3 text-sm font-semibold tab-active transition-all" onclick="switchTab('tokens')">代币列表</button>
             <button id="defiTab" class="pb-3 text-sm font-medium text-gray-400 hover:text-gray-600 transition-all" onclick="switchTab('defi')">DeFi 资产</button>
         </div>
 
-        <!-- 代币列表 (新布局：左侧图标+名称+数量，右侧单价+总价) -->
-        <div id="tokenContent" class="mt-4 space-y-5">
+        <!-- 代币列表 (新布局，增加悬停效果) -->
+        <div id="tokenContent" class="mt-4 space-y-3">
             <!-- OKB -->
-            <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('OKB', '7,230.00', '120.50', 'X Layer Network', '#000', 'X', 'X Layer', 120.5)">
+            <div class="flex justify-between items-center p-3 rounded-2xl hover-card cursor-pointer" onclick="openTokenDetail('OKB', '7,230.00', '120.50', 'X Layer Network', '#000', 'X', 'X Layer', 120.5)">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">X</div>
+                    <div class="w-10 h-10 bg-black rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-sm">X</div>
                     <div>
-                        <div class="font-bold">OKB</div>
-                        <!-- 名称下方显示数量 -->
-                        <div class="text-xs text-gray-400">120.50 OKB</div>
-                        <!-- 网络用小字显示在数量右边或另起？这里保留网络在第二行小字 -->
-                        <div class="text-[10px] text-gray-300">X Layer Network</div>
+                        <div class="font-semibold text-gray-800">OKB</div>
+                        <div class="text-xs text-gray-400 flex items-center space-x-1">
+                            <span>120.50 OKB</span>
+                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span class="text-gray-300">X Layer</span>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <!-- 单价在上 -->
-                    <div class="text-sm font-semibold">$60.12</div>
-                    <!-- 总价在下 -->
+                    <div class="font-semibold text-gray-800">$60.12</div>
                     <div class="text-xs text-gray-400">$7,230.00</div>
                 </div>
             </div>
             <!-- BNB -->
-            <div class="flex justify-between items-center group cursor-pointer" onclick="openTokenDetail('BNB', '3,120.15', '5.24', 'BNB Smart Chain', 'bg-yellow-400', 'coins', 'BNB Chain', 5.24)">
+            <div class="flex justify-between items-center p-3 rounded-2xl hover-card cursor-pointer" onclick="openTokenDetail('BNB', '3,120.15', '5.24', 'BNB Smart Chain', 'bg-yellow-400', 'coins', 'BNB Chain', 5.24)">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center text-white">
+                    <div class="w-10 h-10 bg-yellow-400 rounded-xl flex items-center justify-center text-white shadow-sm">
                         <i data-lucide="coins" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <div class="font-bold">BNB</div>
-                        <div class="text-xs text-gray-400">5.24 BNB</div>
-                        <div class="text-[10px] text-gray-300">BNB Smart Chain</div>
+                        <div class="font-semibold text-gray-800">BNB</div>
+                        <div class="text-xs text-gray-400 flex items-center space-x-1">
+                            <span>5.24 BNB</span>
+                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span class="text-gray-300">BNB Chain</span>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-semibold">$595.45</div>  <!-- 单价 ≈ 3120.15/5.24 -->
+                    <div class="font-semibold text-gray-800">$595.45</div>
                     <div class="text-xs text-gray-400">$3,120.15</div>
                 </div>
             </div>
             <!-- USDT -->
-            <div class="flex justify-between items-center group cursor-pointer border-t border-gray-50 pt-4" onclick="openTokenDetail('USDT', '40.35', '40.35', '多链资产', 'bg-teal-500', '$', 'Ethereum', 40.35)">
+            <div class="flex justify-between items-center p-3 rounded-2xl hover-card cursor-pointer border-t border-gray-100 pt-4" onclick="openTokenDetail('USDT', '40.35', '40.35', '多链资产', 'bg-teal-500', '$', 'Ethereum', 40.35)">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white">
+                    <div class="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center text-white shadow-sm">
                         <span class="font-bold text-sm">$</span>
                     </div>
                     <div>
-                        <div class="font-bold">USDT</div>
-                        <div class="text-xs text-gray-400">40.35 USDT</div>
-                        <div class="text-[10px] text-gray-300">多链资产</div>
+                        <div class="font-semibold text-gray-800">USDT</div>
+                        <div class="text-xs text-gray-400 flex items-center space-x-1">
+                            <span>40.35 USDT</span>
+                            <span class="w-1 h-1 bg-gray-300 rounded-full"></span>
+                            <span class="text-gray-300">多链</span>
+                        </div>
                     </div>
                 </div>
                 <div class="text-right">
-                    <div class="text-sm font-semibold">$1.00</div>
+                    <div class="font-semibold text-gray-800">$1.00</div>
                     <div class="text-xs text-gray-400">$40.35</div>
                 </div>
             </div>
 
-            <button class="w-full py-3 mt-2 flex items-center justify-center space-x-2 text-violet-600 bg-violet-50 rounded-xl hover:bg-violet-100 transition-colors text-sm font-medium">
+            <button class="w-full py-3 mt-3 flex items-center justify-center space-x-2 text-violet-600 bg-violet-50/80 rounded-xl hover:bg-violet-100 transition-colors text-sm font-medium btn-scale">
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
                 <span>币种管理</span>
             </button>
@@ -170,31 +208,31 @@
         </div>
     </div>
 
-    <!-- ========= 行情卡片 ========= -->
-    <div class="mt-10 px-6">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Market / 行情</h3>
-        <div class="flex space-x-3 overflow-x-auto hide-scrollbar">
-            <div class="min-w-[120px] p-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
+    <!-- ========= 行情卡片 (优化卡片样式) ========= -->
+    <div class="mt-8 px-5">
+        <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Market / 行情</h3>
+        <div class="flex space-x-3 overflow-x-auto hide-scrollbar pb-1">
+            <div class="min-w-[120px] p-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-200/60 shadow-sm hover:shadow-md transition-shadow">
                 <div class="text-[10px] text-gray-400 mb-1">BTC/USDT</div>
-                <div class="font-bold text-sm">64,210</div>
-                <div class="text-[10px] text-green-500 font-bold">+1.2%</div>
+                <div class="font-semibold text-sm">64,210</div>
+                <div class="text-[10px] text-green-500 font-medium">+1.2%</div>
             </div>
-            <div class="min-w-[120px] p-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div class="min-w-[120px] p-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-200/60 shadow-sm hover:shadow-md transition-shadow">
                 <div class="text-[10px] text-gray-400 mb-1">ETH/USDT</div>
-                <div class="font-bold text-sm">3,452</div>
-                <div class="text-[10px] text-red-500 font-bold">-0.5%</div>
+                <div class="font-semibold text-sm">3,452</div>
+                <div class="text-[10px] text-red-500 font-medium">-0.5%</div>
             </div>
-            <div class="min-w-[120px] p-4 rounded-2xl bg-white border border-gray-100 shadow-sm">
+            <div class="min-w-[120px] p-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-200/60 shadow-sm hover:shadow-md transition-shadow">
                 <div class="text-[10px] text-gray-400 mb-1">OKB/USDT</div>
-                <div class="font-bold text-sm">60.12</div>
-                <div class="text-[10px] text-green-500 font-bold">+4.8%</div>
+                <div class="font-semibold text-sm">60.12</div>
+                <div class="text-[10px] text-green-500 font-medium">+4.8%</div>
             </div>
         </div>
     </div>
 
     <!-- ========= 安全提示条 ========= -->
-    <div class="mt-8 px-6 mb-12">
-        <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 flex items-center space-x-3">
+    <div class="mt-8 px-5 mb-12">
+        <div class="bg-gray-100/70 border border-gray-200/60 rounded-2xl p-4 flex items-center space-x-3 backdrop-blur-sm">
             <div class="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center text-violet-600">
                 <i data-lucide="bell" class="w-4 h-4"></i>
             </div>
@@ -204,76 +242,76 @@
         </div>
     </div>
 
-    <!-- ========= 底部导航栏 ========= -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/80 backdrop-blur-md border-t border-gray-50 px-10 py-3 flex justify-between items-center z-40">
-        <div class="text-violet-600 flex flex-col items-center">
+    <!-- ========= 底部导航栏 (激活状态优化) ========= -->
+    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-gray-200/60 px-10 py-2 flex justify-between items-center z-40">
+        <div class="nav-active flex flex-col items-center">
             <i data-lucide="wallet" class="w-5 h-5"></i>
-            <span class="text-[10px] mt-1 font-bold">钱包</span>
+            <span class="text-[10px] mt-1 font-medium">钱包</span>
         </div>
-        <div class="text-gray-300 flex flex-col items-center">
+        <div class="text-gray-300 flex flex-col items-center hover:text-gray-500 transition-colors">
             <i data-lucide="compass" class="w-5 h-5"></i>
             <span class="text-[10px] mt-1">发现</span>
         </div>
-        <div class="text-gray-300 flex flex-col items-center">
+        <div class="text-gray-300 flex flex-col items-center hover:text-gray-500 transition-colors">
             <i data-lucide="settings" class="w-5 h-5"></i>
             <span class="text-[10px] mt-1">设置</span>
         </div>
     </nav>
 
     <!-- ========= 遮罩层 ========= -->
-    <div id="overlay" class="overlay fixed inset-0 bg-black/40 z-50" onclick="toggleSheet()"></div>
+    <div id="overlay" class="overlay fixed inset-0 bg-black/30 backdrop-blur-sm z-50" onclick="toggleSheet()"></div>
 
-    <!-- ========= 底部滑出面片 ========= -->
-    <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[32px] z-[60] p-6 shadow-2xl">
-        <!-- 顶部抓柄 -->
-        <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-4"></div>
+    <!-- ========= 底部滑出面片 (整体圆角、阴影优化) ========= -->
+    <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white rounded-t-[36px] z-[60] p-6 shadow-2xl">
+        <!-- 顶部抓柄更精致 -->
+        <div class="w-12 h-1 bg-gray-200 rounded-full mx-auto mb-4"></div>
         <!-- 动态标题 -->
         <h2 id="sheetTitle" class="text-xl font-bold mb-5 text-center text-gray-800">操作</h2>
         
         <!-- ========= 充币面板 ========= -->
         <div id="panel-deposit" class="sheet-panel hidden space-y-4">
-            <div class="flex flex-col items-center bg-gray-50 p-4 rounded-2xl">
-                <div class="w-36 h-36 bg-white p-2 rounded-xl shadow-inner flex items-center justify-center">
-                    <div class="w-full h-full bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center text-white text-[8px] font-mono relative">
-                        <div class="absolute inset-0" style="background: repeating-linear-gradient(0deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 2px, transparent 2px, transparent 6px);"></div>
-                        <span class="relative z-10 bg-violet-600 px-1 rounded">⍟</span>
+            <div class="flex flex-col items-center bg-gray-50/80 p-5 rounded-2xl">
+                <div class="w-36 h-36 bg-white p-2 rounded-xl shadow-md flex items-center justify-center">
+                    <div class="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center text-white text-[8px] font-mono relative rounded-lg overflow-hidden">
+                        <div class="absolute inset-0 opacity-20" style="background: repeating-linear-gradient(0deg, #fff 0px, #fff 2px, transparent 2px, transparent 6px);"></div>
+                        <span class="relative z-10 bg-violet-600 px-1.5 py-0.5 rounded text-[10px]">⍟</span>
                     </div>
                 </div>
-                <div class="flex items-center mt-3 w-full bg-white p-2 rounded-xl border">
-                    <span class="text-xs font-mono truncate flex-1">0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n</span>
-                    <button onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')" class="text-violet-600 ml-2">
+                <div class="flex items-center mt-4 w-full bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
+                    <span class="text-xs font-mono truncate flex-1 text-gray-600">0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n</span>
+                    <button onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')" class="text-violet-600 ml-2 p-1 hover:bg-violet-50 rounded-lg transition-colors">
                         <i data-lucide="copy" class="w-4 h-4"></i>
                     </button>
                 </div>
             </div>
             <div class="space-y-2">
-                <label class="text-xs text-gray-500">选择网络</label>
+                <label class="text-xs text-gray-500 font-medium">选择网络</label>
                 <div class="relative">
-                    <select id="depositNetwork" class="w-full p-3 bg-gray-50 rounded-xl appearance-none text-sm font-medium outline-none border-0 focus:ring-2 focus:ring-violet-200">
+                    <select id="depositNetwork" class="w-full p-3.5 bg-gray-50 rounded-xl appearance-none text-sm font-medium outline-none border border-gray-200 focus:border-violet-300 focus:ring-1 focus:ring-violet-200 transition">
                         <option value="X Layer Network">X Layer Network (推荐)</option>
                         <option value="BNB Smart Chain">BNB Smart Chain</option>
                         <option value="Ethereum">Ethereum</option>
                     </select>
-                    <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none"></i>
+                    <i data-lucide="chevron-down" class="absolute right-3 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
                 </div>
             </div>
-            <div class="text-xs text-gray-400 flex items-center"><i data-lucide="info" class="w-3 h-3 mr-1"></i> 充值到账约需 3~30 秒，最低 0.001 对应币种</div>
+            <div class="text-xs text-gray-400 flex items-center bg-blue-50/50 p-2 rounded-lg"><i data-lucide="info" class="w-3 h-3 mr-1 text-blue-400"></i> 充值到账约需 3~30 秒，最低 0.001 对应币种</div>
         </div>
 
         <!-- ========= 提币面板 ========= -->
         <div id="panel-withdraw" class="sheet-panel hidden space-y-4">
             <div>
-                <label class="text-xs text-gray-500 mb-1 block">提币地址</label>
-                <div class="flex items-center bg-gray-50 rounded-2xl px-4 py-2">
+                <label class="text-xs text-gray-500 font-medium mb-1 block">提币地址</label>
+                <div class="flex items-center bg-gray-50 rounded-xl px-4 py-3 border border-gray-200 focus-within:border-violet-300 transition">
                     <input type="text" placeholder="0x 或 ENS 域名" class="w-full bg-transparent outline-none text-sm" value="0x71C...a29E">
                     <i data-lucide="contact" class="w-5 h-5 text-gray-300"></i>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="text-xs text-gray-500 mb-1 block">币种</label>
+                    <label class="text-xs text-gray-500 font-medium mb-1 block">币种</label>
                     <div class="relative">
-                        <select id="withdrawCoin" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none appearance-none">
+                        <select id="withdrawCoin" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none border border-gray-200 focus:border-violet-300 appearance-none">
                             <option value="OKB">OKB</option>
                             <option value="BNB">BNB</option>
                             <option value="USDT">USDT</option>
@@ -282,9 +320,9 @@
                     </div>
                 </div>
                 <div>
-                    <label class="text-xs text-gray-500 mb-1 block">网络</label>
+                    <label class="text-xs text-gray-500 font-medium mb-1 block">网络</label>
                     <div class="relative">
-                        <select id="withdrawNetwork" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none appearance-none">
+                        <select id="withdrawNetwork" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none border border-gray-200 focus:border-violet-300 appearance-none">
                             <option value="X Layer">X Layer</option>
                             <option value="BNB Chain">BNB Chain</option>
                             <option value="Ethereum">Ethereum</option>
@@ -293,35 +331,35 @@
                     </div>
                 </div>
             </div>
-            <div class="flex justify-between items-center text-sm">
+            <div class="flex justify-between items-center text-sm bg-gray-50 p-3 rounded-xl">
                 <span class="text-gray-500">可用余额</span>
-                <span id="withdrawBalance" class="font-medium text-gray-800">120.50 OKB</span>
+                <span id="withdrawBalance" class="font-semibold text-gray-800">120.50 OKB</span>
             </div>
             <div>
-                <label class="text-xs text-gray-500 mb-1 block">数量</label>
-                <div class="bg-gray-50 rounded-2xl px-4 py-2 flex items-center">
+                <label class="text-xs text-gray-500 font-medium mb-1 block">数量</label>
+                <div class="bg-gray-50 rounded-xl px-4 py-2 flex items-center border border-gray-200 focus-within:border-violet-300">
                     <input id="withdrawAmount" type="text" placeholder="0.00" value="1.0" class="w-full bg-transparent outline-none text-lg font-medium">
-                    <span class="text-violet-600 text-sm font-bold cursor-pointer" onclick="setMaxAmount()">全部</span>
+                    <span class="text-violet-600 text-sm font-bold cursor-pointer px-2 py-1 hover:bg-violet-50 rounded-lg transition-colors" onclick="setMaxAmount()">全部</span>
                 </div>
             </div>
-            <div class="flex justify-between text-sm">
+            <div class="flex justify-between text-sm bg-gray-50 p-3 rounded-xl">
                 <span class="text-gray-400">手续费</span>
                 <span class="font-medium">~0.0005 对应币种 ($0.03)</span>
             </div>
-            <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">提交提币</button>
+            <button class="w-full py-3.5 bg-violet-600 text-white rounded-xl font-semibold text-sm hover:bg-violet-700 transition-colors btn-scale shadow-md">提交提币</button>
         </div>
 
-        <!-- ========= 交易面板 (新增交换功能) ========= -->
+        <!-- ========= 交易面板 ========= -->
         <div id="panel-swap" class="sheet-panel hidden space-y-4">
-            <div class="bg-gray-50 p-4 rounded-2xl relative">
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs text-gray-400">卖出</span>
+                    <span class="text-xs text-gray-400 font-medium">卖出</span>
                     <span class="text-xs text-gray-400">余额: 120.5</span>
                 </div>
                 <div class="flex items-center">
-                    <input id="swapFromAmount" type="text" value="1.0" class="w-full bg-transparent text-2xl font-bold outline-none">
+                    <input id="swapFromAmount" type="text" value="1.0" class="w-full bg-transparent text-2xl font-bold outline-none amount-font">
                     <div class="relative">
-                        <select id="swapFromCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-bold appearance-none pr-8">
+                        <select id="swapFromCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-semibold appearance-none pr-8 border border-gray-200">
                             <option value="OKB" selected>OKB</option>
                             <option value="BNB">BNB</option>
                             <option value="USDT">USDT</option>
@@ -330,21 +368,20 @@
                     </div>
                 </div>
             </div>
-            <!-- 点击此图标交换币种和金额 -->
             <div class="flex justify-center -my-2 relative z-10">
-                <button id="swapButton" class="bg-white border-4 border-gray-50 rounded-full p-2 text-violet-600 hover:bg-violet-50 transition-colors">
+                <button id="swapButton" class="bg-white border-4 border-gray-50 rounded-full p-2 text-violet-600 hover:bg-violet-50 transition-all shadow-md btn-scale">
                     <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
                 </button>
             </div>
-            <div class="bg-gray-50 p-4 rounded-2xl">
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                 <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs text-gray-400">买入</span>
+                    <span class="text-xs text-gray-400 font-medium">买入</span>
                     <span class="text-xs text-gray-400">余额: 40.35</span>
                 </div>
                 <div class="flex items-center">
-                    <input id="swapToAmount" type="text" value="15.23" class="w-full bg-transparent text-2xl font-bold outline-none">
+                    <input id="swapToAmount" type="text" value="15.23" class="w-full bg-transparent text-2xl font-bold outline-none amount-font">
                     <div class="relative">
-                        <select id="swapToCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-bold appearance-none pr-8">
+                        <select id="swapToCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-semibold appearance-none pr-8 border border-gray-200">
                             <option value="USDT" selected>USDT</option>
                             <option value="OKB">OKB</option>
                             <option value="BNB">BNB</option>
@@ -353,82 +390,82 @@
                     </div>
                 </div>
             </div>
-            <div class="flex justify-between text-xs text-gray-400">
+            <div class="flex justify-between text-xs text-gray-400 bg-gray-50 p-3 rounded-lg">
                 <span id="swapPrice">价格: 1 OKB ≈ 15.23 USDT</span>
                 <span>滑点: 0.5%</span>
             </div>
-            <button class="w-full py-3 bg-violet-600 text-white rounded-2xl font-bold text-sm">兑换</button>
+            <button class="w-full py-3.5 bg-violet-600 text-white rounded-xl font-semibold text-sm hover:bg-violet-700 transition-colors btn-scale shadow-md">兑换</button>
         </div>
 
         <!-- 应用面板 -->
         <div id="panel-dapps" class="sheet-panel hidden space-y-4">
             <div class="relative">
                 <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-300"></i>
-                <input type="text" placeholder="搜索 DApp 或输入网址" class="w-full bg-gray-50 rounded-2xl py-3 pl-10 pr-4 text-sm outline-none">
+                <input type="text" placeholder="搜索 DApp 或输入网址" class="w-full bg-gray-50 rounded-xl py-3 pl-10 pr-4 text-sm outline-none border border-gray-200 focus:border-violet-300 transition">
             </div>
             <div class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1">
-                <span class="px-4 py-2 bg-violet-600 text-white rounded-full text-xs whitespace-nowrap">🔥 热门</span>
-                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap">跨链桥</span>
-                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap">借贷</span>
-                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap">NFT</span>
+                <span class="px-4 py-2 bg-violet-600 text-white rounded-full text-xs whitespace-nowrap font-medium shadow-sm">🔥 热门</span>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap hover:bg-gray-200 transition-colors cursor-default">跨链桥</span>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap hover:bg-gray-200 transition-colors cursor-default">借贷</span>
+                <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap hover:bg-gray-200 transition-colors cursor-default">NFT</span>
             </div>
             <div class="grid grid-cols-4 gap-3">
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white text-xs">U</div>
-                    <span class="text-[10px] mt-1">Uniswap</span>
+                <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-white text-xs shadow-sm">U</div>
+                    <span class="text-[10px] mt-1 font-medium text-gray-600">Uniswap</span>
                 </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center text-white text-xs">A</div>
-                    <span class="text-[10px] mt-1">Aave</span>
+                <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white text-xs shadow-sm">A</div>
+                    <span class="text-[10px] mt-1 font-medium text-gray-600">Aave</span>
                 </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-purple-500 rounded-2xl flex items-center justify-center text-white text-xs">O</div>
-                    <span class="text-[10px] mt-1">OpenSea</span>
+                <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center text-white text-xs shadow-sm">O</div>
+                    <span class="text-[10px] mt-1 font-medium text-gray-600">OpenSea</span>
                 </div>
-                <div class="flex flex-col items-center">
-                    <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center text-white text-xs">B</div>
-                    <span class="text-[10px] mt-1">Bridge</span>
+                <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-white text-xs shadow-sm">B</div>
+                    <span class="text-[10px] mt-1 font-medium text-gray-600">Bridge</span>
                 </div>
             </div>
-            <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2">查看更多应用</button>
+            <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2 hover:bg-gray-50 transition-colors btn-scale">查看更多应用</button>
         </div>
 
         <!-- ========= 代币详情面板 ========= -->
         <div id="panel-token-detail" class="sheet-panel hidden space-y-4">
             <div class="flex items-center space-x-4">
-                <div id="detail-icon" class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-xl font-bold">X</div>
+                <div id="detail-icon" class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md">X</div>
                 <div>
-                    <h3 id="detail-symbol" class="text-2xl font-bold">OKB</h3>
+                    <h3 id="detail-symbol" class="text-2xl font-bold text-gray-800">OKB</h3>
                     <p id="detail-network" class="text-sm text-gray-400">X Layer Network</p>
                 </div>
             </div>
-            <div class="bg-gray-50 p-4 rounded-2xl">
+            <div class="bg-gray-50 p-5 rounded-2xl border border-gray-200">
                 <div class="flex justify-between items-center">
                     <span class="text-gray-400">余额</span>
-                    <span class="text-xl font-bold" id="detail-balance">120.50</span>
+                    <span class="text-xl font-bold amount-font text-gray-800" id="detail-balance">120.50</span>
                 </div>
-                <div class="flex justify-between items-center mt-1">
+                <div class="flex justify-between items-center mt-2">
                     <span class="text-gray-400">约 $</span>
-                    <span class="text-lg font-semibold" id="detail-usd">7,230.00</span>
+                    <span class="text-lg font-semibold text-gray-800" id="detail-usd">7,230.00</span>
                 </div>
-                <div class="flex justify-between items-center mt-1 text-sm">
+                <div class="flex justify-between items-center mt-2 text-sm">
                     <span class="text-gray-400">单价</span>
-                    <span>$60.12 <span class="text-green-500 ml-2">+4.8%</span></span>
+                    <span class="font-medium">$60.12 <span class="text-green-500 ml-2 text-xs">+4.8%</span></span>
                 </div>
             </div>
             <div class="grid grid-cols-2 gap-3">
-                <button id="detailReceiveBtn" onclick="goToDepositFromToken()" class="py-3 bg-violet-600 text-white rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-down-to-line" class="w-4 h-4 mr-2"></i>接收</button>
-                <button id="detailSendBtn" onclick="goToWithdrawFromToken()" class="py-3 border border-violet-600 text-violet-600 rounded-xl font-medium text-sm flex items-center justify-center"><i data-lucide="arrow-up-from-line" class="w-4 h-4 mr-2"></i>发送</button>
+                <button id="detailReceiveBtn" onclick="goToDepositFromToken()" class="py-3.5 bg-violet-600 text-white rounded-xl font-medium text-sm flex items-center justify-center hover:bg-violet-700 transition-colors btn-scale shadow-sm"><i data-lucide="arrow-down-to-line" class="w-4 h-4 mr-2"></i>接收</button>
+                <button id="detailSendBtn" onclick="goToWithdrawFromToken()" class="py-3.5 border border-violet-600 text-violet-600 rounded-xl font-medium text-sm flex items-center justify-center hover:bg-violet-50 transition-colors btn-scale"><i data-lucide="arrow-up-from-line" class="w-4 h-4 mr-2"></i>发送</button>
             </div>
             <div class="pt-2">
-                <h4 class="text-sm font-bold mb-2">交易记录</h4>
+                <h4 class="text-sm font-semibold mb-3 text-gray-700">交易记录</h4>
                 <div class="space-y-2">
-                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
-                        <div class="flex items-center"><i data-lucide="arrow-down-left" class="w-4 h-4 text-green-500 mr-2"></i><span class="text-xs">+20 OKB</span></div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+                        <div class="flex items-center"><i data-lucide="arrow-down-left" class="w-4 h-4 text-green-500 mr-2"></i><span class="text-sm font-medium">+20 OKB</span></div>
                         <span class="text-xs text-gray-400">2025-03-15</span>
                     </div>
-                    <div class="flex justify-between items-center p-2 bg-gray-50 rounded-xl">
-                        <div class="flex items-center"><i data-lucide="arrow-up-right" class="w-4 h-4 text-red-500 mr-2"></i><span class="text-xs">-5 OKB</span></div>
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+                        <div class="flex items-center"><i data-lucide="arrow-up-right" class="w-4 h-4 text-red-500 mr-2"></i><span class="text-sm font-medium">-5 OKB</span></div>
                         <span class="text-xs text-gray-400">2025-03-14</span>
                     </div>
                 </div>
@@ -436,7 +473,7 @@
         </div>
 
         <!-- 通用取消按钮 -->
-        <button onclick="toggleSheet()" class="w-full mt-6 py-4 bg-gray-100 rounded-2xl font-bold text-gray-500 hover:bg-gray-200 transition-colors">取消</button>
+        <button onclick="toggleSheet()" class="w-full mt-6 py-3.5 bg-gray-100 rounded-xl font-semibold text-gray-500 hover:bg-gray-200 transition-colors btn-scale">取消</button>
     </div>
 
     <script>
@@ -450,7 +487,7 @@
             networkKey: 'X Layer'
         };
 
-        // ---------- 网络筛选 (UI) ----------
+        // ---------- 网络筛选 ----------
         function selectNet(net) {
             document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
             document.getElementById('net-' + net).classList.add('active');
@@ -479,7 +516,8 @@
         // ---------- 复制地址 ----------
         function copyAddress(address) {
             navigator.clipboard.writeText(address).then(() => {
-                alert('地址已复制到剪贴板');
+                // 可以替换为更优雅的提示，如toast
+                alert('地址已复制');
             }).catch(() => {
                 alert('复制失败，请手动复制');
             });
@@ -504,7 +542,7 @@
             document.getElementById('detail-usd').innerText = usd;
             
             const iconDiv = document.getElementById('detail-icon');
-            iconDiv.className = `w-16 h-16 ${bgClass} rounded-2xl flex items-center justify-center text-white text-xl font-bold`;
+            iconDiv.className = `w-16 h-16 ${bgClass} rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md`;
             if (iconChar.length === 1) {
                 iconDiv.innerText = iconChar;
             } else {
@@ -580,17 +618,14 @@
                     const fromCoin = document.getElementById('swapFromCoin');
                     const toCoin = document.getElementById('swapToCoin');
                     
-                    // 交换金额
                     const tempAmount = fromAmount.value;
                     fromAmount.value = toAmount.value;
                     toAmount.value = tempAmount;
                     
-                    // 交换币种
                     const tempCoin = fromCoin.value;
                     fromCoin.value = toCoin.value;
                     toCoin.value = tempCoin;
                     
-                    // 更新价格显示（简单模拟）
                     const priceSpan = document.getElementById('swapPrice');
                     priceSpan.innerText = `价格: 1 ${fromCoin.value} ≈ ${(toAmount.value / fromAmount.value || 0).toFixed(2)} ${toCoin.value}`;
                 });
@@ -619,7 +654,6 @@
                 }
                 else if (title === '交易') {
                     document.getElementById('panel-swap').classList.remove('hidden');
-                    // 重置默认值
                     document.getElementById('swapFromAmount').value = '1.0';
                     document.getElementById('swapToAmount').value = '15.23';
                     document.getElementById('swapFromCoin').value = 'OKB';
