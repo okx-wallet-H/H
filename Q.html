@@ -1,604 +1,1138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>海豚 · Meme 潮流</title>
-    <!-- Font Awesome 6 (free) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>Web3 Alpha Wallet · 最终版</title>
 
-        body {
-            background: radial-gradient(circle at 10% 20%, #13222e, #0b1219 90%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1rem 1rem 2rem;
-            color: #ffffff;
-        }
+  <!-- 字体预连接 + 推荐的 Inter 字体加载方式 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        .app-container {
-            max-width: 1200px;
-            width: 100%;
-        }
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-        /* 玻璃态卡片通用样式 */
-        .glass-card {
-            background: rgba(20, 30, 45, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(90, 160, 200, 0.15);
-            border-radius: 32px;
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.08);
-            transition: transform 0.2s ease, border-color 0.2s;
-        }
+  <style>
+    :root {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --gold: #fbbf24;
+      --gold-light: #fcd34d;
+      --bg: #f8fafc;
+    }
 
-        .glass-card:hover {
-            border-color: rgba(0, 191, 255, 0.4);
-            transform: translateY(-2px);
-        }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: #0f172a;
+      overflow-x: hidden;
+    }
 
-        /* 标题行 + 更多链接 */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.2rem;
-            margin-top: 2rem;
-        }
-        .section-header h2 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #ffffff, #b0f0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .section-header h2 i {
-            background: rgba(0, 191, 255, 0.2);
-            padding: 0.4rem;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            color: #5fd9ff;
-        }
-        .more-link {
-            color: #8ab8ff;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            background: rgba(255,255,255,0.03);
-            padding: 0.4rem 1rem;
-            border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.2s;
-        }
-        .more-link i {
-            font-size: 0.8rem;
-        }
-        .more-link:hover {
-            background: rgba(90, 180, 255, 0.15);
-            border-color: #3a8bff;
-            color: white;
-        }
+    .purple-gradient {
+      background: linear-gradient(145deg, #7c3aed 0%, #4c1d95 100%);
+      box-shadow: 0 20px 25px -8px rgba(124,58,237,0.3), inset 0 -1px 0 rgba(255,255,255,0.18);
+    }
 
-        /* 头部区域 */
-        .hero {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0.5rem 0 2rem 0;
-        }
-        .hero-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .hero-title .dolphin-icon {
-            font-size: 2.8rem;
-            color: #4ad0ff;
-            filter: drop-shadow(0 0 8px #0099ff);
-        }
-        .hero h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            background: linear-gradient(to right, #ffffff, #a0e0ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.01em;
-        }
-        .hero-tagline {
-            background: rgba(255,255,255,0.03);
-            padding: 0.6rem 1.4rem;
-            border-radius: 60px;
-            border: 1px solid rgba(0, 180, 255, 0.3);
-            font-size: 1rem;
-            font-weight: 400;
-            color: #bbf0ff;
-            box-shadow: 0 0 15px rgba(0,160,255,0.2);
-            backdrop-filter: blur(4px);
-        }
-        .hero-tagline i {
-            margin-right: 0.4rem;
-            color: #ffd966;
-        }
+    .tab-active {
+      color: var(--primary);
+      border-bottom: 3px solid var(--primary);
+      font-weight: 600;
+    }
 
-        /* 数据卡片网格 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0 0.5rem;
-        }
-        .stat-item {
-            background: rgba(12, 22, 32, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 24px;
-            padding: 1.2rem 1rem;
-            border: 1px solid rgba(70, 140, 200, 0.2);
-            transition: 0.15s;
-            box-shadow: 0 8px 20px -10px #00000080;
-        }
-        .stat-item:hover {
-            background: rgba(20, 35, 55, 0.8);
-            border-color: #2d9eff;
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #a0bcdb;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-        .stat-label i {
-            font-size: 1rem;
-            color: #5fd0ff;
-        }
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-        .stat-change {
-            font-size: 0.9rem;
-            margin-left: 0.5rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.2rem;
-            background: rgba(255,255,255,0.05);
-            padding: 0.2rem 0.6rem;
-            border-radius: 40px;
-        }
-        .stat-change.positive {
-            color: #86ef9f;
-        }
-        .stat-change.positive i {
-            color: #6ae28b;
-        }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
 
-        /* Meme 行情卡片 (代币列表) */
-        .meme-ticker {
-            background: rgba(15, 25, 38, 0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 36px;
-            padding: 1.5rem 1.2rem;
-            border: 1px solid rgba(0, 180, 255, 0.2);
-        }
-        .coin-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-        }
-        .coin-row:last-child {
-            border-bottom: none;
-        }
-        .coin-info {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .coin-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(145deg, #2d4b65, #192e40);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #aaf0ff;
-            border: 1px solid #3d8daf;
-        }
-        .coin-name {
-            font-weight: 600;
-        }
-        .coin-price {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 500;
-        }
-        .coin-change {
-            padding: 0.2rem 0.8rem;
-            border-radius: 40px;
-            background: rgba(0,0,0,0.3);
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .coin-change.positive {
-            color: #b1ffb1;
-            background: rgba(0, 200, 100, 0.15);
-        }
-        .coin-change.negative {
-            color: #ffa7a7;
-            background: rgba(255, 70, 70, 0.15);
-        }
+    .bottom-sheet {
+      transition: transform 0.42s cubic-bezier(0.23, 1, 0.32, 1);
+      transform: translateY(100%);
+      border-top-left-radius: 36px;
+      border-top-right-radius: 36px;
+    }
+    .bottom-sheet.active {
+      transform: translateY(0);
+    }
 
-        /* 最新活动 + 常用工具 区域 */
-        .activity-tool-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-        @media (max-width: 640px) {
-            .activity-tool-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .activity-card {
-            background: linear-gradient(145deg, #132a38, #0c1d28);
-            border-radius: 32px;
-            padding: 1.8rem 1.8rem;
-            border: 1px solid #2e6a8b40;
-            box-shadow: 0 20px 30px -20px #000;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .activity-badge {
-            background: #f0b90b20;
-            color: #ffd966;
-            border: 1px solid #f0b90b60;
-            padding: 0.2rem 1rem;
-            border-radius: 60px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            align-self: flex-start;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(5px);
-        }
-        .activity-card h3 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 0.5rem;
-        }
-        .activity-card p {
-            color: #bfd9f0;
-            margin-bottom: 2rem;
-            font-size: 1rem;
-        }
-        .airdrop-btn {
-            background: linear-gradient(95deg, #1f6e9f, #2b9ad6);
-            border: none;
-            color: white;
-            font-weight: 600;
-            padding: 1rem 2rem;
-            border-radius: 60px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: fit-content;
-            box-shadow: 0 8px 20px #0066aa50;
-            transition: 0.2s;
-            border: 1px solid #8fd0ff;
-        }
-        .airdrop-btn:hover {
-            background: linear-gradient(95deg, #2b7eb3, #3bacf0);
-            transform: scale(1.02);
-            box-shadow: 0 12px 28px #0077cc70;
-        }
+    .overlay {
+      transition: opacity 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+    }
+    .overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
 
-        /* 常用工具网格 */
-        .tools-grid {
-            background: rgba(10, 22, 33, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 36px;
-            padding: 1.8rem 1.2rem;
-            border: 1px solid #306a8b40;
-        }
-        .tools-icons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.2rem 0.5rem;
-            margin-top: 0.8rem;
-        }
-        .tool-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 0.4rem;
-            padding: 0.8rem 0.2rem;
-            border-radius: 24px;
-            background: rgba(255,255,255,0.02);
-            transition: 0.1s;
-            cursor: default;
-        }
-        .tool-item i {
-            font-size: 1.8rem;
-            background: rgba(40, 100, 150, 0.3);
-            padding: 0.7rem;
-            border-radius: 30px;
-            color: #9edaff;
-            width: 3.4rem;
-            height: 3.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #3980aa50;
-        }
-        .tool-item span {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #c5e2ff;
-        }
+    .network-pill.active {
+      background: rgba(255,255,255,0.3);
+      border-color: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      transform: scale(1.08);
+    }
 
-        /* Meme 榜区域 */
-        .meme-rank {
-            background: rgba(0, 20, 35, 0.5);
-            backdrop-filter: blur(16px);
-            border-radius: 36px;
-            padding: 1.6rem 1.5rem;
-            margin: 2rem 0 2.5rem;
-            border: 1px solid #27a0da30;
-        }
-        .rank-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .rank-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.6rem 1rem;
-            background: rgba(255,255,255,0.02);
-            border-radius: 60px;
-        }
-        .rank-num {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #a0dcff;
-            width: 2rem;
-            text-align: center;
-        }
-        .rank-avatar {
-            width: 36px; height: 36px;
-            background: #20507a;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-        .rank-name {
-            flex: 1;
-            font-weight: 600;
-        }
-        .rank-value {
-            font-family: monospace;
-            background: #1d3b50;
-            padding: 0.3rem 0.8rem;
-            border-radius: 40px;
-            font-size: 0.9rem;
-        }
+    .hover-card {
+      transition: all 0.2s ease;
+    }
+    .hover-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);
+      background: #f1f5f9;
+    }
 
-        /* 底部导航 (类似app) */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background: rgba(10, 25, 38, 0.8);
-            backdrop-filter: blur(20px);
-            border-radius: 60px;
-            padding: 0.8rem 1rem;
-            margin-top: 2rem;
-            border: 1px solid #3f7a9a40;
-        }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #8baac8;
-            font-size: 0.75rem;
-            transition: 0.1s;
-            padding: 0.3rem 0.8rem;
-            border-radius: 40px;
-            cursor: default;
-        }
-        .nav-item i {
-            font-size: 1.4rem;
-            margin-bottom: 0.2rem;
-        }
-        .nav-item.active {
-            background: #1d4f73;
-            color: white;
-            box-shadow: 0 0 10px #0077be;
-        }
-        .nav-item.active i {
-            color: #b3ecff;
-        }
+    .btn-scale {
+      transition: transform 0.14s ease;
+    }
+    .btn-scale:active {
+      transform: scale(0.94);
+    }
 
-        /* 一些小点缀 */
-        .glow {
-            text-shadow: 0 0 10px #4ab0ff;
-        }
-        hr {
-            border: 0.5px solid #2f608030;
-            margin: 1rem 0;
-        }
-    </style>
+    .amount-font {
+      font-weight: 600;
+      letter-spacing: -0.018em;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(124,58,237,0.15);
+    }
+
+    .nav-active {
+      color: var(--primary);
+    }
+
+    .sheet-handle {
+      width: 48px;
+      height: 5px;
+      background: #cbd5e1;
+      border-radius: 9999px;
+      margin: 16px auto 12px;
+    }
+
+    /* 金色流动线条 - 左右各三条（上中下）流向中间 */
+    .gold-flow-container {
+      position: relative;
+      display: inline-block;
+    }
+    .gold-line {
+      position: absolute;
+      width: 100px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #fbbf24, #f59e0b, #fbbf24, transparent);
+      background-size: 200% 100%;
+      animation: flow-to-center 2s ease-in-out infinite;
+      opacity: 0.8;
+    }
+    .gold-line-secondary {
+      height: 1px;
+      opacity: 0.4;
+      filter: blur(1px);
+    }
+    /* 左侧三条 */
+    .left-top { top: 20%; left: -120px; animation: flow-left 2s ease-in-out infinite; }
+    .left-middle { top: 50%; left: -120px; transform: translateY(-50%); animation: flow-left 2.2s ease-in-out infinite; }
+    .left-bottom { bottom: 20%; left: -120px; animation: flow-left 1.8s ease-in-out infinite; }
+    /* 右侧三条 */
+    .right-top { top: 20%; right: -120px; animation: flow-right 2s ease-in-out infinite; }
+    .right-middle { top: 50%; right: -120px; transform: translateY(-50%); animation: flow-right 2.2s ease-in-out infinite; }
+    .right-bottom { bottom: 20%; right: -120px; animation: flow-right 1.8s ease-in-out infinite; }
+
+    @keyframes flow-left {
+      0% { left: -120px; opacity: 0; width: 40px; }
+      30% { opacity: 1; width: 100px; }
+      70% { opacity: 1; width: 100px; left: -30px; }
+      100% { left: 20px; opacity: 0; width: 40px; }
+    }
+    @keyframes flow-right {
+      0% { right: -120px; opacity: 0; width: 40px; }
+      30% { opacity: 1; width: 100px; }
+      70% { opacity: 1; width: 100px; right: -30px; }
+      100% { right: 20px; opacity: 0; width: 40px; }
+    }
+
+    /* 手风琴 */
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    .accordion-content.open {
+      max-height: 400px;
+    }
+
+    /* ===== 优化后的设置项样式 ===== */
+    .settings-section {
+      @apply mb-6;
+    }
+    .settings-section-title {
+      @apply text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-1;
+    }
+    .settings-item {
+      @apply flex items-center justify-between p-4 bg-white rounded-xl border border-gray-100 mb-2 hover:border-violet-200 transition-all cursor-pointer shadow-sm hover:shadow;
+    }
+    .settings-item-left {
+      @apply flex items-center gap-3;
+    }
+    .settings-item-icon {
+      @apply w-8 h-8 bg-violet-50 rounded-lg flex items-center justify-center text-violet-600;
+    }
+    .settings-item-content {
+      @apply flex flex-col;
+    }
+    .settings-item-title {
+      @apply text-sm font-medium text-gray-800;
+    }
+    .settings-item-subtitle {
+      @apply text-xs text-gray-400;
+    }
+    .settings-item-right {
+      @apply flex items-center gap-2;
+    }
+    .settings-item-value {
+      @apply text-xs text-gray-500;
+    }
+    .settings-chevron {
+      @apply w-4 h-4 text-gray-300;
+    }
+    /* 开关 */
+    .toggle-switch {
+      @apply w-10 h-5 rounded-full transition-colors duration-200 ease-in-out relative;
+    }
+    .toggle-switch.active {
+      @apply bg-violet-600;
+    }
+    .toggle-switch.inactive {
+      @apply bg-gray-200;
+    }
+    .toggle-knob {
+      @apply w-4 h-4 bg-white rounded-full shadow absolute top-0.5 left-0.5 transition-transform duration-200 ease-in-out;
+    }
+    .toggle-switch.active .toggle-knob {
+      transform: translateX(20px);
+    }
+    /* 退出按钮 */
+    .logout-btn {
+      @apply w-full mt-6 py-4 bg-red-50 text-red-500 rounded-2xl font-medium hover:bg-red-100 transition btn-scale;
+    }
+  </style>
 </head>
-<body>
-<div class="app-container">
-    <!-- 头部 海豚模式 -->
-    <div class="hero">
-        <div class="hero-title">
-            <i class="fas fa-dolphin dolphin-icon"></i>
-            <h1>Meme 行情</h1>
-        </div>
-        <div class="hero-tagline">
-            <i class="fas fa-wave-square"></i> 开启海豚模式 · 陪今天的你，走未来的路
-        </div>
+<body class="max-w-md mx-auto min-h-screen border-x border-gray-200/60 shadow-2xl relative pb-24 bg-[#f8fafc]">
+
+  <!-- ========= 顶部紫色区域 ========= -->
+  <div class="purple-gradient text-white p-8 pb-10 rounded-b-[40px] shadow-2xl">
+    <div class="flex justify-between items-center mb-7">
+      <div class="flex bg-black/15 rounded-full border border-white/15 backdrop-blur-md p-1">
+        <button onclick="selectNet('all')" id="net-all" class="network-pill active px-4 py-1.5 rounded-full text-xs font-medium transition-all" aria-label="全部网络">全部</button>
+        <button onclick="selectNet('xlayer')" id="net-xlayer" class="network-pill px-4 py-1.5 rounded-full text-xs font-medium transition-all" aria-label="X Layer">X Layer</button>
+        <button onclick="selectNet('bnb')" id="net-bnb" class="network-pill px-4 py-1.5 rounded-full text-xs font-medium transition-all" aria-label="BNB Chain">BNB</button>
+      </div>
+      <div class="flex items-center gap-6">
+        <i data-lucide="receipt" class="w-6 h-6 opacity-90 cursor-pointer hover:opacity-100 transition" aria-hidden="true"></i>
+        <i data-lucide="scan" class="w-6 h-6 opacity-90 cursor-pointer hover:opacity-100 transition" aria-hidden="true"></i>
+      </div>
     </div>
 
-    <!-- 数据总览 + 更多 -->
-    <div class="section-header">
-        <h2><i class="fas fa-chart-pie"></i> 数据总览</h2>
-        <a href="#" class="more-link">更多 <i class="fas fa-arrow-right"></i></a>
+    <p class="text-sm opacity-85 mb-1.5">总资产估值 (USD)</p>
+    <h1 class="text-4xl font-bold tracking-tight amount-font mb-4">$10,390.50</h1>
+
+    <div class="inline-flex items-center gap-2.5 bg-black/15 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md text-sm font-mono">
+      <span>0x71C...a29E</span>
+      <button onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')" aria-label="复制地址">
+        <i data-lucide="copy" class="w-4 h-4 opacity-80 hover:opacity-100"></i>
+      </button>
     </div>
-    <div class="stats-grid">
-        <div class="stat-item">
-            <div class="stat-label"><i class="fas fa-lock"></i> 质押H总量</div>
-            <div><span class="stat-number">2.45M</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>5.2%</span></div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label"><i class="fas fa-arrow-trend-up"></i> 总交易量</div>
-            <div><span class="stat-number">8.92M</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>12.3%</span></div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label"><i class="fas fa-landmark"></i> 国库累计</div>
-            <div><span class="stat-number">1.23M</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>2.7%</span></div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label"><i class="fas fa-users"></i> 活跃人数</div>
-            <div><span class="stat-number">12.3k</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>1.5%</span></div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-label"><i class="fas fa-gift"></i> 发放奖励</div>
-            <div><span class="stat-number">56.8k</span><span class="stat-change positive"><i class="fas fa-arrow-up"></i>8.1%</span></div>
-        </div>
+  </div>
+
+  <!-- ========= 四大功能按钮 ========= -->
+  <div class="grid grid-cols-4 gap-6 px-6 -mt-10 relative z-10">
+    <div class="flex flex-col items-center">
+      <button onclick="toggleSheet('充币')" class="w-16 h-16 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[var(--primary)] hover:shadow-2xl transition-all btn-scale" aria-label="充币">
+        <i data-lucide="arrow-down-to-line" class="w-6 h-6"></i>
+      </button>
+      <span class="mt-3 text-sm font-medium text-gray-600">充币</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <button onclick="toggleSheet('提币')" class="w-16 h-16 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[var(--primary)] hover:shadow-2xl transition-all btn-scale" aria-label="提币">
+        <i data-lucide="arrow-up-from-line" class="w-6 h-6"></i>
+      </button>
+      <span class="mt-3 text-sm font-medium text-gray-600">提币</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <button onclick="toggleSheet('交易')" class="w-16 h-16 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[var(--primary)] hover:shadow-2xl transition-all btn-scale" aria-label="交易">
+        <i data-lucide="repeat" class="w-6 h-6"></i>
+      </button>
+      <span class="mt-3 text-sm font-medium text-gray-600">交易</span>
+    </div>
+    <div class="flex flex-col items-center">
+      <button onclick="toggleSheet('应用')" class="w-16 h-16 bg-white rounded-3xl shadow-xl flex items-center justify-center text-[var(--primary)] hover:shadow-2xl transition-all btn-scale" aria-label="应用">
+        <i data-lucide="layout-grid" class="w-6 h-6"></i>
+      </button>
+      <span class="mt-3 text-sm font-medium text-gray-600">应用</span>
+    </div>
+  </div>
+
+  <!-- ========= 主要内容区域 ========= -->
+  <div id="mainContent" class="mt-10 px-6">
+    <!-- 代币 / DeFi 切换标签（仅钱包页面显示） -->
+    <div id="tokenDefiTabs" class="flex gap-10 border-b border-gray-200">
+      <button id="tokenTab" class="pb-4 text-base font-semibold tab-active" onclick="switchTab('tokens')">代币列表</button>
+      <button id="defiTab" class="pb-4 text-base font-medium text-gray-500 hover:text-gray-700" onclick="switchTab('defi')">DeFi 资产</button>
     </div>
 
-    <!-- Meme 行情区域 + 更多 -->
-    <div class="section-header">
-        <h2><i class="fas fa-chart-line"></i> Meme 行情</h2>
-        <a href="#" class="more-link">更多 <i class="fas fa-arrow-right"></i></a>
-    </div>
-    <div class="meme-ticker">
-        <div class="coin-row">
-            <div class="coin-info"><span class="coin-icon">🐕</span><span class="coin-name">DOGE</span></div>
-            <span class="coin-price">$0.162</span>
-            <span class="coin-change positive"><i class="fas fa-arrow-up"></i> +3.2%</span>
+    <!-- 代币列表内容 -->
+    <div id="tokenContent" class="mt-6 space-y-4">
+      <!-- OKB -->
+      <div class="flex justify-between items-center p-4 rounded-2xl bg-white hover-card cursor-pointer shadow-sm" onclick="openTokenDetail('OKB','7,230.00','120.50','X Layer Network','#000','X','X Layer',120.5)">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-black rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow">X</div>
+          <div>
+            <div class="font-semibold">OKB</div>
+            <div class="text-sm text-gray-500">120.50 OKB · X Layer</div>
+          </div>
         </div>
-        <div class="coin-row">
-            <div class="coin-info"><span class="coin-icon">🦊</span><span class="coin-name">SHIB</span></div>
-            <span class="coin-price">$0.000024</span>
-            <span class="coin-change negative"><i class="fas fa-arrow-down"></i> -1.5%</span>
+        <div class="text-right">
+          <div class="font-semibold">$60.12</div>
+          <div class="text-sm text-gray-500">$7,230.00</div>
         </div>
-        <div class="coin-row">
-            <div class="coin-info"><span class="coin-icon">🐸</span><span class="coin-name">PEPE</span></div>
-            <span class="coin-price">$0.0000015</span>
-            <span class="coin-change positive"><i class="fas fa-arrow-up"></i> +11.2%</span>
+      </div>
+
+      <!-- BNB -->
+      <div class="flex justify-between items-center p-4 rounded-2xl bg-white hover-card cursor-pointer shadow-sm" onclick="openTokenDetail('BNB','3,120.15','5.24','BNB Smart Chain','bg-yellow-400','coins','BNB Chain',5.24)">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center text-white shadow">
+            <i data-lucide="coins" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="font-semibold">BNB</div>
+            <div class="text-sm text-gray-500">5.24 BNB · BNB Chain</div>
+          </div>
         </div>
-        <div class="coin-row">
-            <div class="coin-info"><span class="coin-icon">🦍</span><span class="coin-name">FLOKI</span></div>
-            <span class="coin-price">$0.000038</span>
-            <span class="coin-change positive"><i class="fas fa-arrow-up"></i> +5.7%</span>
+        <div class="text-right">
+          <div class="font-semibold">$595.45</div>
+          <div class="text-sm text-gray-500">$3,120.15</div>
         </div>
-        <div class="coin-row">
-            <div class="coin-info"><span class="coin-icon">🐶</span><span class="coin-name">BONK</span></div>
-            <span class="coin-price">$0.000023</span>
-            <span class="coin-change negative"><i class="fas fa-arrow-down"></i> -0.8%</span>
+      </div>
+
+      <!-- USDT -->
+      <div class="flex justify-between items-center p-4 rounded-2xl bg-white hover-card cursor-pointer shadow-sm" onclick="openTokenDetail('USDT','40.35','40.35','多链资产','bg-teal-500','$','Ethereum',40.35)">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-teal-500 rounded-2xl flex items-center justify-center text-white shadow text-xl font-bold">$</div>
+          <div>
+            <div class="font-semibold">USDT</div>
+            <div class="text-sm text-gray-500">40.35 USDT · 多链</div>
+          </div>
         </div>
+        <div class="text-right">
+          <div class="font-semibold">$40.35</div>
+          <div class="text-sm text-gray-500">$40.35</div>
+        </div>
+      </div>
+
+      <button class="w-full mt-4 py-4 bg-violet-50 text-[var(--primary)] rounded-2xl font-medium flex items-center justify-center gap-2 hover:bg-violet-100 transition">
+        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+        币种管理
+      </button>
     </div>
 
-    <!-- 最新活动 + 常用工具 两列布局 -->
-    <div class="activity-tool-grid">
-        <!-- 最新活动卡片 -->
-        <div class="activity-card">
-            <span class="activity-badge"><i class="fas fa-bolt"></i> 最新活动</span>
-            <h3>OKX Boost <br>最佳策略</h3>
-            <p>获得空投 · 海豚专属奖励</p>
-            <button class="airdrop-btn"><i class="fas fa-gift"></i> 立即参与</button>
-        </div>
-        <!-- 常用工具 -->
-        <div class="tools-grid">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                <h3 style="font-size: 1.4rem; font-weight: 600;">⚙️ 常用工具</h3>
-                <span style="color:#73b3ff; font-size:0.85rem; background: #1c4058; padding:0.2rem 1rem; border-radius:30px;">8个入口</span>
-            </div>
-            <div class="tools-icons">
-                <div class="tool-item"><i class="fas fa-calendar-check"></i><span>签到</span></div>
-                <div class="tool-item"><i class="fas fa-dice"></i><span>抽奖</span></div>
-                <div class="tool-item"><i class="fas fa-star"></i><span>积分</span></div>
-                <div class="tool-item"><i class="fas fa-envelope"></i><span>红包</span></div>
-                <div class="tool-item"><i class="fas fa-magnifying-glass"></i><span>查询系统</span></div>
-                <div class="tool-item"><i class="fas fa-users-between-lines"></i><span>社区数据</span></div>
-                <div class="tool-item"><i class="fas fa-calculator"></i><span>计算器</span></div>
-                <div class="tool-item"><i class="fas fa-cloud-arrow-down"></i><span>下载中心</span></div>
-            </div>
-        </div>
+    <!-- DeFi 资产内容（空状态） -->
+    <div id="defiContent" class="hidden mt-10 text-center text-gray-500 italic py-12">
+      暂无 DeFi 持仓数据
     </div>
 
-    <!-- Meme 榜区块 -->
-    <div class="section-header">
-        <h2><i class="fas fa-crown"></i> Meme 榜</h2>
-        <a href="#" class="more-link">全部榜单 <i class="fas fa-arrow-right"></i></a>
-    </div>
-    <div class="meme-rank">
-        <div class="rank-list">
-            <div class="rank-item">
-                <span class="rank-num">#1</span><span class="rank-avatar">🐕</span><span class="rank-name">Dogecoin</span><span class="rank-value">市值 23.4B</span>
-            </div>
-            <div class="rank-item">
-                <span class="rank-num">#2</span><span class="rank-avatar">🦊</span><span class="rank-name">Shiba Inu</span><span class="rank-value">市值 12.1B</span>
-            </div>
-            <div class="rank-item">
-                <span class="rank-num">#3</span><span class="rank-avatar">🐸</span><span class="rank-name">Pepe</span><span class="rank-value">市值 5.8B</span>
-            </div>
-            <div class="rank-item">
-                <span class="rank-num">#4</span><span class="rank-avatar">🦔</span><span class="rank-name">Bonk</span><span class="rank-value">市值 2.3B</span>
-            </div>
+    <!-- ========= 赚币内容 ========= -->
+    <div id="earnContent" class="hidden mt-6 space-y-6">
+      <!-- 顶部标题：链上赚币 + 左右各三条金色线条 -->
+      <div class="flex justify-center items-center py-6">
+        <div class="relative gold-flow-container">
+          <!-- 左侧三条线 -->
+          <div class="gold-line left-top"></div>
+          <div class="gold-line gold-line-secondary left-top" style="animation-delay: -1s;"></div>
+          <div class="gold-line left-middle"></div>
+          <div class="gold-line gold-line-secondary left-middle" style="animation-delay: -0.5s;"></div>
+          <div class="gold-line left-bottom"></div>
+          <div class="gold-line gold-line-secondary left-bottom" style="animation-delay: -1.2s;"></div>
+          <!-- 右侧三条线 -->
+          <div class="gold-line right-top"></div>
+          <div class="gold-line gold-line-secondary right-top" style="animation-delay: -1s;"></div>
+          <div class="gold-line right-middle"></div>
+          <div class="gold-line gold-line-secondary right-middle" style="animation-delay: -0.5s;"></div>
+          <div class="gold-line right-bottom"></div>
+          <div class="gold-line gold-line-secondary right-bottom" style="animation-delay: -1.2s;"></div>
+          <!-- 标题 -->
+          <h2 class="text-3xl font-bold text-[#fbbf24] drop-shadow-lg">链上赚币</h2>
         </div>
+      </div>
+
+      <!-- 收益卡片 -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+          <div class="text-xs text-gray-400 mb-1">已领取收益</div>
+          <div class="text-base font-semibold text-gray-800">245.50 H</div>
+        </div>
+        <div class="bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+          <div class="text-xs text-gray-400 mb-1">待领取收益</div>
+          <div class="text-base font-semibold text-gray-800">12.30 H</div>
+        </div>
+        <div class="flex items-center justify-center">
+          <button onclick="alert('模拟领取收益：12.30 H 已发放到钱包')" class="w-full py-3 bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all btn-scale text-sm">
+            领取收益
+          </button>
+        </div>
+      </div>
+
+      <!-- 当前质押卡片 -->
+      <div class="bg-gradient-to-r from-violet-50 to-indigo-50 rounded-xl p-4 border border-violet-100 shadow-sm">
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">当前质押</span>
+          <span class="text-lg font-bold text-gray-800">1,500 H</span>
+        </div>
+        <div class="flex justify-between items-center mt-1">
+          <span class="text-sm text-gray-600">≈ 美元价值</span>
+          <span class="text-base font-semibold text-gray-700">$450.00</span>
+        </div>
+      </div>
+
+      <!-- 平台信息 -->
+      <div class="bg-gradient-to-r from-yellow-50 to-amber-50 rounded-2xl p-5 border border-yellow-200 shadow-md">
+        <div class="flex justify-between items-center mb-3">
+          <span class="text-sm text-gray-600">平台总质押量</span>
+          <span class="text-xl font-bold text-gray-800">1,245,678 H</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-sm text-gray-600">预估年化</span>
+          <span class="text-xl font-bold text-[#f59e0b]">1.2% ~ 3.5%</span>
+        </div>
+      </div>
+
+      <!-- 质押输入 -->
+      <div class="space-y-3">
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-medium text-gray-700">质押数量 (H)</label>
+          <span class="text-xs text-gray-500">可用: <span class="font-semibold text-gray-800">2,500 H</span></span>
+        </div>
+        <div class="flex items-center gap-3">
+          <input type="number" placeholder="0.00" value="100" class="flex-1 p-4 bg-white border border-gray-200 rounded-xl text-lg font-medium focus:border-yellow-400 focus:ring-2 focus:ring-yellow-200 transition">
+          <button onclick="alert('智能质押模拟：已质押 100 H')" class="px-6 py-4 bg-gradient-to-r from-yellow-400 to-amber-500 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all btn-scale">
+            智能质押
+          </button>
+        </div>
+        <p class="text-xs text-gray-400">代表确认质押，实际合约交互未实现</p>
+      </div>
+
+      <!-- 规则手风琴 -->
+      <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white">
+        <button id="accordionBtn" class="w-full flex justify-between items-center p-4 text-left font-semibold text-gray-800 hover:bg-gray-50 transition" onclick="toggleAccordion()">
+          <span>📋 收益规则介绍</span>
+          <i id="accordionIcon" data-lucide="chevron-down" class="w-5 h-5 text-gray-400 transition-transform"></i>
+        </button>
+        <div id="accordionContent" class="accordion-content px-4">
+          <div class="py-4 border-t border-gray-100">
+            <p class="text-sm text-gray-600 mb-3">无锁仓限制，无周期限制，随存随取，智能阶梯收益：</p>
+            <ul class="text-sm space-y-2 text-gray-600 mb-4">
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">1-7天</span><span class="font-medium text-gray-800">收益率 0.5%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">8-15天</span><span class="font-medium text-gray-800">收益率 0.6%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">16-30天</span><span class="font-medium text-gray-800">收益率 0.7%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">31-60天</span><span class="font-medium text-gray-800">收益率 0.8%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">61-90天</span><span class="font-medium text-gray-800">收益率 1.0%</span></li>
+              <li class="flex items-start"><span class="inline-block w-20 text-gray-400">90天以上</span><span class="font-medium text-gray-800">收益率 1.2%</span></li>
+            </ul>
+            <div class="flex items-center gap-1.5 text-xs text-gray-400 border-t border-gray-100 pt-3 mt-1">
+              <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+              <span>注：每日20:00发放质押收益</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 账变记录 -->
+      <div>
+        <h4 class="text-sm font-semibold mb-3 text-gray-700 flex items-center"><i data-lucide="history" class="w-4 h-4 mr-1"></i>最近账变</h4>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center"><i data-lucide="arrow-down-left" class="w-4 h-4 text-green-500 mr-2"></i><span class="text-sm font-medium">+50 H (质押收益)</span></div>
+            <span class="text-xs text-gray-400">2025-03-15</span>
+          </div>
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center"><i data-lucide="arrow-up-right" class="w-4 h-4 text-red-500 mr-2"></i><span class="text-sm font-medium">-200 H (解除质押)</span></div>
+            <span class="text-xs text-gray-400">2025-03-14</span>
+          </div>
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center"><i data-lucide="arrow-down-left" class="w-4 h-4 text-green-500 mr-2"></i><span class="text-sm font-medium">+30 H (邀请奖励)</span></div>
+            <span class="text-xs text-gray-400">2025-03-12</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- 底部导航 仿App -->
-    <div class="bottom-nav">
-        <div class="nav-item active"><i class="fas fa-water"></i><span>Meme榜</span></div>
-        <div class="nav-item"><i class="fas fa-chart-simple"></i><span>行情</span></div>
-        <div class="nav-item"><i class="fas fa-compass"></i><span>发现</span></div>
-        <div class="nav-item"><i class="fas fa-user"></i><span>我的</span></div>
+    <!-- ========= 优化后的设置内容 ========= -->
+    <div id="settingsContent" class="hidden mt-6 space-y-6">
+      <!-- 账户安全 -->
+      <div class="settings-section">
+        <h3 class="settings-section-title">账户安全</h3>
+        <div class="settings-item" onclick="alert('修改密码')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="lock" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">修改密码</span>
+              <span class="settings-item-subtitle">定期更换密码更安全</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('备份助记词')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="key" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">备份助记词</span>
+              <span class="settings-item-subtitle">未备份</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <span class="settings-item-value">立即备份</span>
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('私钥管理')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="fingerprint" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">私钥管理</span>
+              <span class="settings-item-subtitle">导出/查看私钥</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 网络与节点 -->
+      <div class="settings-section">
+        <h3 class="settings-section-title">网络与节点</h3>
+        <div class="settings-item" onclick="alert('切换网络')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="network" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">网络选择</span>
+              <span class="settings-item-subtitle">X Layer 主网</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('自定义RPC')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="git-branch" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">自定义 RPC</span>
+              <span class="settings-item-subtitle">添加/管理节点</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 通用 -->
+      <div class="settings-section">
+        <h3 class="settings-section-title">通用</h3>
+        <div class="settings-item" onclick="alert('语言设置')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="globe" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">语言</span>
+              <span class="settings-item-subtitle">简体中文</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('货币单位')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="dollar-sign" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">货币单位</span>
+              <span class="settings-item-subtitle">USD</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('默认滑点')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="percent" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">默认滑点</span>
+              <span class="settings-item-subtitle">0.5%</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 通知 -->
+      <div class="settings-section">
+        <h3 class="settings-section-title">通知</h3>
+        <div class="settings-item" onclick="toggleNotification('push')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="bell" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">推送通知</span>
+              <span class="settings-item-subtitle">交易动态、资产变动</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <div id="pushToggle" class="toggle-switch active" onclick="event.stopPropagation(); toggleNotification('push')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+        <div class="settings-item" onclick="toggleNotification('email')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="mail" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">邮件通知</span>
+              <span class="settings-item-subtitle">w**@example.com</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <div id="emailToggle" class="toggle-switch inactive" onclick="event.stopPropagation(); toggleNotification('email')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 关于 -->
+      <div class="settings-section">
+        <h3 class="settings-section-title">关于</h3>
+        <div class="settings-item" onclick="alert('版本信息')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="info" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">版本</span>
+              <span class="settings-item-subtitle">v2.0.1</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('用户协议')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="file-text" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">用户协议</span>
+              <span class="settings-item-subtitle">最后更新 2025.03</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+        <div class="settings-item" onclick="alert('隐私政策')">
+          <div class="settings-item-left">
+            <div class="settings-item-icon"><i data-lucide="shield" class="w-4 h-4"></i></div>
+            <div class="settings-item-content">
+              <span class="settings-item-title">隐私政策</span>
+              <span class="settings-item-subtitle">了解数据保护</span>
+            </div>
+          </div>
+          <div class="settings-item-right">
+            <i data-lucide="chevron-right" class="settings-chevron"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- 退出登录 -->
+      <button onclick="alert('退出登录')" class="logout-btn">
+        退出登录
+      </button>
+    </div>
+  </div>
+
+  <!-- ========= 行情（在所有内容下方） ========= -->
+  <div class="mt-10 px-6">
+    <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Market / 行情</h3>
+    <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-3">
+      <div class="min-w-[130px] p-4 rounded-2xl bg-white/80 backdrop-blur border border-gray-200/70 shadow-sm">
+        <div class="text-xs text-gray-500">BTC/USDT</div>
+        <div class="text-lg font-semibold">64,210</div>
+        <div class="text-xs text-green-600">+1.2%</div>
+      </div>
+      <div class="min-w-[130px] p-4 rounded-2xl bg-white/80 backdrop-blur border border-gray-200/70 shadow-sm">
+        <div class="text-xs text-gray-500">ETH/USDT</div>
+        <div class="text-lg font-semibold">3,452</div>
+        <div class="text-xs text-red-500">-0.5%</div>
+      </div>
+      <div class="min-w-[130px] p-4 rounded-2xl bg-white/80 backdrop-blur border border-gray-200/70 shadow-sm">
+        <div class="text-xs text-gray-500">OKB/USDT</div>
+        <div class="text-lg font-semibold">60.12</div>
+        <div class="text-xs text-green-600">+4.8%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= 安全提示 ========= -->
+  <div class="mt-10 px-6 pb-24">
+    <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex items-center gap-4">
+      <div class="w-10 h-10 bg-violet-100 rounded-xl flex items-center justify-center text-[var(--primary)]">
+        <i data-lucide="bell" class="w-5 h-5"></i>
+      </div>
+      <p class="text-sm text-gray-600">安全提示：请务必妥善保管您的助记词，切勿泄露给任何人。</p>
+    </div>
+  </div>
+
+  <!-- ========= 底部导航（钱包/赚币/设置） ========= -->
+  <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-xl border-t border-gray-200 px-10 py-3 flex justify-between z-40">
+    <div class="nav-active flex flex-col items-center cursor-pointer" onclick="switchMainTab('wallet')">
+      <i data-lucide="wallet" class="w-6 h-6"></i>
+      <span class="text-xs mt-1">钱包</span>
+    </div>
+    <div class="flex flex-col items-center text-gray-500 hover:text-gray-700 transition cursor-pointer" onclick="switchMainTab('earn')">
+      <i data-lucide="badge-dollar-sign" class="w-6 h-6"></i>
+      <span class="text-xs mt-1">赚币</span>
+    </div>
+    <div class="flex flex-col items-center text-gray-500 hover:text-gray-700 transition cursor-pointer" onclick="switchMainTab('settings')">
+      <i data-lucide="settings" class="w-6 h-6"></i>
+      <span class="text-xs mt-1">设置</span>
+    </div>
+  </nav>
+
+  <!-- ========= 遮罩 & 底部抽屉（用于充币、提币等） ========= -->
+  <div id="overlay" class="overlay fixed inset-0 z-50" onclick="toggleSheet()"></div>
+
+  <div id="bottomSheet" class="bottom-sheet fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white z-[60] shadow-2xl p-5">
+    <div class="sheet-handle"></div>
+    <h2 id="sheetTitle" class="text-2xl font-bold text-center mb-5">操作</h2>
+
+    <!-- 充币面板 -->
+    <div id="panel-deposit" class="sheet-panel hidden space-y-4">
+      <div class="flex flex-col items-center bg-gray-50/80 p-5 rounded-2xl">
+        <div class="w-36 h-36 bg-white p-2 rounded-xl shadow-md flex items-center justify-center">
+          <div class="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center text-white text-[8px] font-mono relative rounded-lg overflow-hidden">
+            <div class="absolute inset-0 opacity-20" style="background: repeating-linear-gradient(0deg, #fff 0px, #fff 2px, transparent 2px, transparent 6px);"></div>
+            <span class="relative z-10 bg-violet-600 px-1.5 py-0.5 rounded text-[10px] shadow-md">⍟</span>
+          </div>
+        </div>
+        <div class="flex items-center mt-4 w-full bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+          <span class="text-xs font-mono truncate flex-1 text-gray-600">0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n</span>
+          <button onclick="copyAddress('0x71Cd4d9dA0f0b1a2a3b4c5d6e7f8g9h0i1j2k3l4m5n')" class="text-violet-600 ml-2 p-1.5 hover:bg-violet-50 rounded-lg transition-colors">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+      <div class="space-y-2">
+        <label class="text-xs text-gray-500 font-medium">选择网络</label>
+        <div class="relative">
+          <select id="depositNetwork" class="w-full p-3.5 bg-gray-50 rounded-xl appearance-none text-sm font-medium outline-none border border-gray-200 focus:border-violet-300 focus:ring-1 focus:ring-violet-200 transition shadow-inner">
+            <option value="X Layer Network">X Layer Network (推荐)</option>
+            <option value="BNB Smart Chain">BNB Smart Chain</option>
+            <option value="Ethereum">Ethereum</option>
+          </select>
+          <i data-lucide="chevron-down" class="absolute right-3 top-3.5 w-4 h-4 text-gray-400 pointer-events-none"></i>
+        </div>
+      </div>
+      <div class="text-xs text-gray-400 flex items-center bg-blue-50/50 p-2.5 rounded-lg"><i data-lucide="info" class="w-3 h-3 mr-1 text-blue-400"></i> 充值到账约需 3~30 秒，最低 0.001 对应币种</div>
     </div>
 
-    <!-- 装饰脚注 (保留原风格) -->
-    <div style="text-align: center; margin-top: 2rem; color: #4d7795; font-size: 0.8rem;">
-        <i class="fas fa-dolphin" style="opacity:0.6;"></i> 海豚模式 · 与浪潮同行
+    <!-- 提币面板 -->
+    <div id="panel-withdraw" class="sheet-panel hidden space-y-4">
+      <div>
+        <label class="text-xs text-gray-500 font-medium mb-1 block">提币地址</label>
+        <div class="flex items-center bg-gray-50 rounded-xl px-4 py-3 border border-gray-200 focus-within:border-violet-300 transition">
+          <input type="text" placeholder="0x 或 ENS 域名" class="w-full bg-transparent outline-none text-sm" value="0x71C...a29E">
+          <i data-lucide="contact" class="w-5 h-5 text-gray-300"></i>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs text-gray-500 font-medium mb-1 block">币种</label>
+          <div class="relative">
+            <select id="withdrawCoin" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none border border-gray-200 focus:border-violet-300 appearance-none">
+              <option value="OKB">OKB</option>
+              <option value="BNB">BNB</option>
+              <option value="USDT">USDT</option>
+            </select>
+            <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none"></i>
+          </div>
+        </div>
+        <div>
+          <label class="text-xs text-gray-500 font-medium mb-1 block">网络</label>
+          <div class="relative">
+            <select id="withdrawNetwork" class="w-full p-3 bg-gray-50 rounded-xl text-sm outline-none border border-gray-200 focus:border-violet-300 appearance-none">
+              <option value="X Layer">X Layer</option>
+              <option value="BNB Chain">BNB Chain</option>
+              <option value="Ethereum">Ethereum</option>
+            </select>
+            <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-gray-400 pointer-events-none"></i>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between items-center text-sm bg-gray-50 p-3 rounded-xl">
+        <span class="text-gray-500">可用余额</span>
+        <span id="withdrawBalance" class="font-semibold text-gray-800">120.50 OKB</span>
+      </div>
+      <div>
+        <label class="text-xs text-gray-500 font-medium mb-1 block">数量</label>
+        <div class="bg-gray-50 rounded-xl px-4 py-2 flex items-center border border-gray-200 focus-within:border-violet-300">
+          <input id="withdrawAmount" type="text" placeholder="0.00" value="1.0" class="w-full bg-transparent outline-none text-lg font-medium">
+          <span class="text-violet-600 text-sm font-bold cursor-pointer px-2 py-1 hover:bg-violet-50 rounded-lg transition-colors" onclick="setMaxAmount()">全部</span>
+        </div>
+      </div>
+      <div class="flex justify-between text-sm bg-gray-50 p-3 rounded-xl">
+        <span class="text-gray-400">手续费</span>
+        <span class="font-medium">~0.0005 对应币种 ($0.03)</span>
+      </div>
+      <button class="w-full py-3.5 bg-violet-600 text-white rounded-xl font-semibold text-sm hover:bg-violet-700 transition-colors btn-scale shadow-md">提交提币</button>
     </div>
-</div>
-<!-- 微交互：所有卡片已包含hover效果，无需额外脚本 -->
+
+    <!-- 交易面板 -->
+    <div id="panel-swap" class="sheet-panel hidden space-y-4">
+      <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs text-gray-400 font-medium">卖出</span>
+          <span class="text-xs text-gray-400">余额: 120.5</span>
+        </div>
+        <div class="flex items-center">
+          <input id="swapFromAmount" type="text" value="1.0" class="w-full bg-transparent text-2xl font-bold outline-none amount-font">
+          <div class="relative">
+            <select id="swapFromCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-semibold appearance-none pr-8 border border-gray-200">
+              <option value="OKB" selected>OKB</option>
+              <option value="BNB">BNB</option>
+              <option value="USDT">USDT</option>
+            </select>
+            <i data-lucide="chevron-down" class="absolute right-2 top-2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-center -my-2 relative z-10">
+        <button id="swapButton" class="bg-white border-4 border-gray-50 rounded-full p-2 text-violet-600 hover:bg-violet-50 transition-all shadow-md btn-scale">
+          <i data-lucide="arrow-down-up" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs text-gray-400 font-medium">买入</span>
+          <span class="text-xs text-gray-400">余额: 40.35</span>
+        </div>
+        <div class="flex items-center">
+          <input id="swapToAmount" type="text" value="15.23" class="w-full bg-transparent text-2xl font-bold outline-none amount-font">
+          <div class="relative">
+            <select id="swapToCoin" class="bg-white px-3 py-1.5 rounded-full shadow-sm text-sm font-semibold appearance-none pr-8 border border-gray-200">
+              <option value="USDT" selected>USDT</option>
+              <option value="OKB">OKB</option>
+              <option value="BNB">BNB</option>
+            </select>
+            <i data-lucide="chevron-down" class="absolute right-2 top-2 w-4 h-4 text-gray-400 pointer-events-none"></i>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between text-xs text-gray-400 bg-gray-50 p-3 rounded-lg">
+        <span id="swapPrice">价格: 1 OKB ≈ 15.23 USDT</span>
+        <span>滑点: 0.5%</span>
+      </div>
+      <button class="w-full py-3.5 bg-violet-600 text-white rounded-xl font-semibold text-sm hover:bg-violet-700 transition-colors btn-scale shadow-md">兑换</button>
+    </div>
+
+    <!-- 应用面板 -->
+    <div id="panel-dapps" class="sheet-panel hidden space-y-4">
+      <div class="relative">
+        <i data-lucide="search" class="absolute left-4 top-3.5 w-4 h-4 text-gray-300"></i>
+        <input type="text" placeholder="搜索 DApp 或输入网址" class="w-full bg-gray-50 rounded-xl py-3 pl-10 pr-4 text-sm outline-none border border-gray-200 focus:border-violet-300 transition">
+      </div>
+      <div class="flex space-x-2 overflow-x-auto hide-scrollbar pb-1">
+        <span class="px-4 py-2 bg-violet-600 text-white rounded-full text-xs whitespace-nowrap font-medium shadow-sm">🔥 热门</span>
+        <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap hover:bg-gray-200 transition-colors cursor-default">跨链桥</span>
+        <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap hover:bg-gray-200 transition-colors cursor-default">借贷</span>
+        <span class="px-4 py-2 bg-gray-100 text-gray-600 rounded-full text-xs whitespace-nowrap hover:bg-gray-200 transition-colors cursor-default">NFT</span>
+      </div>
+      <div class="grid grid-cols-4 gap-3">
+        <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+          <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center text-white text-xs shadow-sm">U</div>
+          <span class="text-[10px] mt-1 font-medium text-gray-600">Uniswap</span>
+        </div>
+        <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+          <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center text-white text-xs shadow-sm">A</div>
+          <span class="text-[10px] mt-1 font-medium text-gray-600">Aave</span>
+        </div>
+        <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+          <div class="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center text-white text-xs shadow-sm">O</div>
+          <span class="text-[10px] mt-1 font-medium text-gray-600">OpenSea</span>
+        </div>
+        <div class="flex flex-col items-center p-2 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer">
+          <div class="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center text-white text-xs shadow-sm">B</div>
+          <span class="text-[10px] mt-1 font-medium text-gray-600">Bridge</span>
+        </div>
+      </div>
+      <button class="w-full py-2 border border-gray-200 rounded-xl text-sm text-gray-500 mt-2 hover:bg-gray-50 transition-colors btn-scale">查看更多应用</button>
+    </div>
+
+    <!-- 代币详情面板 -->
+    <div id="panel-token-detail" class="sheet-panel hidden space-y-4">
+      <div class="flex items-center space-x-4">
+        <div id="detail-icon" class="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md">X</div>
+        <div>
+          <h3 id="detail-symbol" class="text-2xl font-bold text-gray-800">OKB</h3>
+          <p id="detail-network" class="text-sm text-gray-400">X Layer Network</p>
+        </div>
+      </div>
+      <div class="bg-gray-50 p-5 rounded-2xl border border-gray-200">
+        <div class="flex justify-between items-center">
+          <span class="text-gray-400">余额</span>
+          <span class="text-xl font-bold amount-font text-gray-800" id="detail-balance">120.50</span>
+        </div>
+        <div class="flex justify-between items-center mt-2">
+          <span class="text-gray-400">约 $</span>
+          <span class="text-lg font-semibold text-gray-800" id="detail-usd">7,230.00</span>
+        </div>
+        <div class="flex justify-between items-center mt-2 text-sm">
+          <span class="text-gray-400">单价</span>
+          <span class="font-medium">$60.12 <span class="text-green-500 ml-2 text-xs">+4.8%</span></span>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <button id="detailReceiveBtn" onclick="goToDepositFromToken()" class="py-3.5 bg-violet-600 text-white rounded-xl font-medium text-sm flex items-center justify-center hover:bg-violet-700 transition-colors btn-scale shadow-sm"><i data-lucide="arrow-down-to-line" class="w-4 h-4 mr-2"></i>接收</button>
+        <button id="detailSendBtn" onclick="goToWithdrawFromToken()" class="py-3.5 border border-violet-600 text-violet-600 rounded-xl font-medium text-sm flex items-center justify-center hover:bg-violet-50 transition-colors btn-scale"><i data-lucide="arrow-up-from-line" class="w-4 h-4 mr-2"></i>发送</button>
+      </div>
+      <div class="pt-2">
+        <h4 class="text-sm font-semibold mb-3 text-gray-700">交易记录</h4>
+        <div class="space-y-2">
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center"><i data-lucide="arrow-down-left" class="w-4 h-4 text-green-500 mr-2"></i><span class="text-sm font-medium">+20 OKB</span></div>
+            <span class="text-xs text-gray-400">2025-03-15</span>
+          </div>
+          <div class="flex justify-between items-center p-3 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex items-center"><i data-lucide="arrow-up-right" class="w-4 h-4 text-red-500 mr-2"></i><span class="text-sm font-medium">-5 OKB</span></div>
+            <span class="text-xs text-gray-400">2025-03-14</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 取消按钮 -->
+    <button onclick="toggleSheet()" class="w-full mt-6 py-4 bg-gray-100 rounded-2xl font-medium text-gray-700 hover:bg-gray-200 transition btn-scale">
+      取消
+    </button>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    let currentToken = {
+      symbol: 'OKB',
+      balance: 120.5,
+      network: 'X Layer Network',
+      networkKey: 'X Layer'
+    };
+
+    function selectNet(net) {
+      document.querySelectorAll('.network-pill').forEach(el => el.classList.remove('active'));
+      document.getElementById('net-' + net).classList.add('active');
+    }
+
+    function switchTab(type) {
+      const tokenTab = document.getElementById('tokenTab');
+      const defiTab = document.getElementById('defiTab');
+      const tokenContent = document.getElementById('tokenContent');
+      const defiContent = document.getElementById('defiContent');
+      const earnContent = document.getElementById('earnContent');
+      const tokenDefiTabs = document.getElementById('tokenDefiTabs');
+
+      tokenDefiTabs.classList.remove('hidden');
+      earnContent.classList.add('hidden');
+
+      if (type === 'tokens') {
+        tokenTab.classList.add('tab-active');
+        defiTab.classList.remove('tab-active');
+        tokenContent.classList.remove('hidden');
+        defiContent.classList.add('hidden');
+      } else {
+        defiTab.classList.add('tab-active');
+        tokenTab.classList.remove('tab-active');
+        defiContent.classList.remove('hidden');
+        tokenContent.classList.add('hidden');
+      }
+    }
+
+    function switchMainTab(tab) {
+      const tokenDefiTabs = document.getElementById('tokenDefiTabs');
+      const tokenContent = document.getElementById('tokenContent');
+      const defiContent = document.getElementById('defiContent');
+      const earnContent = document.getElementById('earnContent');
+      const settingsContent = document.getElementById('settingsContent');
+      const navItems = document.querySelectorAll('nav.fixed div');
+      
+      navItems.forEach(item => item.classList.remove('nav-active', 'text-gray-500'));
+      
+      if (tab === 'wallet') {
+        tokenDefiTabs.classList.remove('hidden');
+        tokenContent.classList.remove('hidden');
+        defiContent.classList.add('hidden');
+        earnContent.classList.add('hidden');
+        settingsContent.classList.add('hidden');
+        navItems[0].classList.add('nav-active');
+        navItems[1].classList.add('text-gray-500');
+        navItems[2].classList.add('text-gray-500');
+        document.getElementById('tokenTab').classList.add('tab-active');
+        document.getElementById('defiTab').classList.remove('tab-active');
+      } else if (tab === 'earn') {
+        tokenDefiTabs.classList.add('hidden');
+        tokenContent.classList.add('hidden');
+        defiContent.classList.add('hidden');
+        earnContent.classList.remove('hidden');
+        settingsContent.classList.add('hidden');
+        navItems[0].classList.remove('nav-active');
+        navItems[1].classList.add('nav-active');
+        navItems[2].classList.add('text-gray-500');
+      } else if (tab === 'settings') {
+        tokenDefiTabs.classList.add('hidden');
+        tokenContent.classList.add('hidden');
+        defiContent.classList.add('hidden');
+        earnContent.classList.add('hidden');
+        settingsContent.classList.remove('hidden');
+        navItems[0].classList.remove('nav-active');
+        navItems[1].classList.add('text-gray-500');
+        navItems[2].classList.add('nav-active');
+      }
+    }
+
+    function copyAddress(address) {
+      navigator.clipboard.writeText(address).then(() => alert('地址已复制')).catch(() => alert('复制失败'));
+    }
+
+    function openTokenDetail(symbol, usd, balance, network, bgClass, iconChar, networkKey, balanceNum) {
+      currentToken = { symbol, balance: balanceNum, network, networkKey };
+      document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel-token-detail').classList.remove('hidden');
+      document.getElementById('detail-symbol').innerText = symbol;
+      document.getElementById('detail-network').innerText = network;
+      document.getElementById('detail-balance').innerText = balance;
+      document.getElementById('detail-usd').innerText = usd;
+      const iconDiv = document.getElementById('detail-icon');
+      iconDiv.className = `w-16 h-16 ${bgClass} rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-md`;
+      iconDiv.innerHTML = iconChar.length === 1 ? iconChar : '<i data-lucide="coins" class="w-8 h-8"></i>';
+      lucide.createIcons();
+      document.getElementById('sheetTitle').innerText = symbol + ' 详情';
+      document.getElementById('bottomSheet').classList.add('active');
+      document.getElementById('overlay').classList.add('active');
+    }
+
+    function goToDepositFromToken() {
+      document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel-deposit').classList.remove('hidden');
+      document.getElementById('sheetTitle').innerText = '充币';
+      const networkSelect = document.getElementById('depositNetwork');
+      const map = { 'X Layer Network':0, 'BNB Smart Chain':1, 'Ethereum':2 };
+      networkSelect.selectedIndex = map[currentToken.network] ?? 0;
+      document.getElementById('bottomSheet').classList.add('active');
+      document.getElementById('overlay').classList.add('active');
+    }
+
+    function goToWithdrawFromToken() {
+      document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
+      document.getElementById('panel-withdraw').classList.remove('hidden');
+      document.getElementById('sheetTitle').innerText = '提币';
+      const coinSelect = document.getElementById('withdrawCoin');
+      const coins = ['OKB','BNB','USDT'];
+      coinSelect.selectedIndex = coins.indexOf(currentToken.symbol);
+      const netSelect = document.getElementById('withdrawNetwork');
+      const nets = ['X Layer','BNB Chain','Ethereum'];
+      netSelect.selectedIndex = nets.indexOf(currentToken.networkKey);
+      document.getElementById('withdrawBalance').innerText = `${currentToken.balance.toFixed(2)} ${currentToken.symbol}`;
+      document.getElementById('bottomSheet').classList.add('active');
+      document.getElementById('overlay').classList.add('active');
+    }
+
+    function setMaxAmount() {
+      document.getElementById('withdrawAmount').value = currentToken.balance;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const swapBtn = document.getElementById('swapButton');
+      if (swapBtn) {
+        swapBtn.addEventListener('click', function() {
+          const fromAmt = document.getElementById('swapFromAmount');
+          const toAmt = document.getElementById('swapToAmount');
+          const fromCoin = document.getElementById('swapFromCoin');
+          const toCoin = document.getElementById('swapToCoin');
+          [fromAmt.value, toAmt.value] = [toAmt.value, fromAmt.value];
+          [fromCoin.value, toCoin.value] = [toCoin.value, fromCoin.value];
+          document.getElementById('swapPrice').innerText = `价格: 1 ${fromCoin.value} ≈ ${(toAmt.value / fromAmt.value || 0).toFixed(2)} ${toCoin.value}`;
+        });
+      }
+    });
+
+    function toggleSheet(title = '') {
+      const sheet = document.getElementById('bottomSheet');
+      const overlay = document.getElementById('overlay');
+      const sheetTitle = document.getElementById('sheetTitle');
+      document.querySelectorAll('.sheet-panel').forEach(p => p.classList.add('hidden'));
+      if (title) {
+        sheetTitle.innerText = title;
+        if (title === '充币') {
+          document.getElementById('panel-deposit').classList.remove('hidden');
+          document.getElementById('depositNetwork').selectedIndex = 0;
+        } else if (title === '提币') {
+          document.getElementById('panel-withdraw').classList.remove('hidden');
+          document.getElementById('withdrawCoin').selectedIndex = 0;
+          document.getElementById('withdrawNetwork').selectedIndex = 0;
+          document.getElementById('withdrawBalance').innerText = '120.50 OKB';
+        } else if (title === '交易') {
+          document.getElementById('panel-swap').classList.remove('hidden');
+          document.getElementById('swapFromAmount').value = '1.0';
+          document.getElementById('swapToAmount').value = '15.23';
+          document.getElementById('swapFromCoin').value = 'OKB';
+          document.getElementById('swapToCoin').value = 'USDT';
+          document.getElementById('swapPrice').innerText = '价格: 1 OKB ≈ 15.23 USDT';
+        } else if (title === '应用') {
+          document.getElementById('panel-dapps').classList.remove('hidden');
+        } else {
+          document.getElementById('panel-deposit').classList.remove('hidden');
+          sheetTitle.innerText = '操作';
+        }
+      } else {
+        sheetTitle.innerText = '操作';
+        document.getElementById('panel-deposit').classList.remove('hidden');
+      }
+      sheet.classList.toggle('active');
+      overlay.classList.toggle('active');
+    }
+
+    function toggleAccordion() {
+      const content = document.getElementById('accordionContent');
+      const icon = document.getElementById('accordionIcon');
+      content.classList.toggle('open');
+      icon.setAttribute('data-lucide', content.classList.contains('open') ? 'chevron-up' : 'chevron-down');
+      lucide.createIcons();
+    }
+
+    // 开关切换函数
+    function toggleNotification(type) {
+      const toggle = document.getElementById(type + 'Toggle');
+      if (toggle.classList.contains('active')) {
+        toggle.classList.remove('active');
+        toggle.classList.add('inactive');
+      } else {
+        toggle.classList.remove('inactive');
+        toggle.classList.add('active');
+      }
+      // 实际应用中可在此处调用API更新设置
+    }
+
+    window.onload = function() {
+      lucide.createIcons();
+      switchMainTab('wallet');
+    };
+  </script>
 </body>
 </html>
