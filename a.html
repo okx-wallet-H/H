@@ -1,299 +1,557 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>Web3 Wallet Pro</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
+    <title>社区DAO驾驶舱 · 代币经济 & 支出监控</title>
+    <!-- Font Awesome 6 (免费) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        body {
+            background: #eef2f6;
+            padding: 24px 20px;
+            color: #1e293b;
+        }
+        .dashboard {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+        /* 头部 */
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .title-section h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #1e3a5f, #2b4c7c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+        .title-section .badge {
+            background: #d9eafb;
+            color: #1e4a7a;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .date-avatar {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: white;
+            padding: 8px 20px 8px 24px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+        .date-avatar .date {
+            font-weight: 500;
+            color: #2c3e50;
+            background: #f1f5f9;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+        }
+        .date i, .avatar i { margin-right: 6px; color: #3b6ea5; }
+        .avatar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f5f9;
+            padding: 4px 18px 4px 10px;
+            border-radius: 40px;
+        }
+        .avatar span { font-weight: 600; font-size: 0.95rem; }
+        .avatar i { font-size: 1.6rem; color: #2563eb; }
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+        /* 卡片通用 */
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 22px 24px;
+            box-shadow: 0 20px 30px -10px rgba(0,30,60,0.1);
+            border: 1px solid #e9edf2;
+            margin-bottom: 24px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .card-header h3 {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #0f2b40;
+        }
+        .card-header span {
+            color: #5f7d9c;
+            font-size: 0.85rem;
+            background: #f0f6fd;
+            padding: 4px 14px;
+            border-radius: 30px;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bip39@3.0.4/dist/index.browser.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+        /* 代币概览网格 */
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 10px;
+        }
+        .stat-item {
+            background: #f8fbfe;
+            border-radius: 20px;
+            padding: 18px 16px;
+            border: 1px solid #dde7f0;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #4f6b8a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .stat-value {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #0c202f;
+            line-height: 1.2;
+        }
+        .stat-sub {
+            font-size: 0.8rem;
+            color: #6582a0;
+            margin-top: 6px;
+        }
 
-<script src="https://cdn.tailwindcss.com"></script>
+        /* 金库资产卡片 */
+        .treasury-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+        .asset-item {
+            background: linear-gradient(145deg, #ffffff, #f5f9ff);
+            border-radius: 24px;
+            padding: 18px;
+            border: 1px solid #cbd6e4;
+            box-shadow: 0 6px 12px -6px rgba(0,40,80,0.08);
+        }
+        .asset-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f3a57;
+            margin-bottom: 12px;
+        }
+        .asset-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0a2942;
+        }
+        .asset-usd {
+            font-size: 0.9rem;
+            color: #3f6280;
+            margin-top: 6px;
+        }
 
-<style>
+        /* 支出表格 */
+        .expense-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+        .expense-table th {
+            text-align: left;
+            padding: 14px 8px 10px 8px;
+            font-weight: 500;
+            color: #516e8a;
+            font-size: 0.8rem;
+            border-bottom: 1.5px solid #dae2ec;
+        }
+        .expense-table td {
+            padding: 14px 8px;
+            border-bottom: 1px solid #eaeef4;
+            color: #1f2f40;
+        }
+        .expense-table td:last-child { text-align: right; }
+        .status-badge {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .token-badge {
+            background: #e9eef3;
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
 
-body{
-background:#0f172a;
-color:white;
-font-family:Arial;
-}
+        /* 双栏图表 */
+        .chart-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 10px;
+        }
+        .chart-box {
+            background: #ffffff;
+            border-radius: 26px;
+            padding: 18px;
+            border: 1px solid #e2eaf2;
+        }
+        .chart-wrapper {
+            height: 220px;
+            margin-top: 10px;
+        }
 
-.card{
-background:#1e293b;
-border-radius:16px;
-padding:20px;
-margin-bottom:16px;
-}
-
-.btn{
-background:#7c3aed;
-padding:12px;
-border-radius:10px;
-width:100%;
-margin-top:10px;
-}
-
-input{
-background:#020617;
-padding:10px;
-border-radius:10px;
-width:100%;
-margin-top:8px;
-}
-
-</style>
-
+        /* 开发提示 */
+        .guide-note {
+            background: #f0f7ff;
+            border-radius: 26px;
+            padding: 22px 28px;
+            border: 1px dashed #2d6b9f;
+            margin-top: 10px;
+            color: #13344f;
+        }
+        .guide-note h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .guide-note ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 40px;
+            list-style: none;
+        }
+        .guide-note li {
+            flex: 1 1 240px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .guide-note i { color: #1f5e9e; width: 22px; }
+        .footer-meta {
+            text-align: right;
+            font-size: 0.7rem;
+            color: #a3b6cc;
+            margin-top: 20px;
+        }
+        @media (max-width: 1000px) {
+            .token-grid { grid-template-columns: repeat(3,1fr); }
+            .treasury-grid { grid-template-columns: repeat(2,1fr); }
+            .chart-row { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .token-grid { grid-template-columns: 1fr; }
+            .treasury-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
+<body>
+<div class="dashboard">
+    <!-- 头部 -->
+    <div class="header">
+        <div class="title-section">
+            <h1>🏛️ 社区DAO驾驶舱 · 代币经济 & 支出</h1>
+            <div class="badge">
+                <i class="fa-regular fa-hand-peace"></i> 治理数据 · 公开透明
+            </div>
+        </div>
+        <div class="date-avatar">
+            <div class="date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="currentDate"></span>
+            </div>
+            <div class="avatar">
+                <i class="fa-regular fa-circle-user"></i>
+                <span>多签管理员</span>
+            </div>
+        </div>
+    </div>
 
-<body class="max-w-md mx-auto p-4">
+    <!-- 代币经济核心指标 -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fa-solid fa-chart-pie" style="margin-right: 8px; color:#2563eb;"></i> 代币经济模型概览</h3>
+            <span>社区代币 $TRIBE</span>
+        </div>
+        <div class="token-grid">
+            <div class="stat-item"><div class="stat-label"><i class="fa-solid fa-coins"></i> 代币名称</div><div class="stat-value">TRIBE</div><div class="stat-sub">ERC-20</div></div>
+            <div class="stat-item"><div class="stat-label"><i class="fa-solid fa-total"></i> 总供应量</div><div class="stat-value">100M</div><div class="stat-sub">固定</div></div>
+            <div class="stat-item"><div class="stat-label"><i class="fa-solid fa-chart-line"></i> 流通量</div><div class="stat-value">72.4M</div><div class="stat-sub">72.4% 已解锁</div></div>
+            <div class="stat-item"><div class="stat-label"><i class="fa-solid fa-users"></i> 持币地址</div><div class="stat-value">8,245</div><div class="stat-sub">+124 本周</div></div>
+            <div class="stat-item"><div class="stat-label"><i class="fa-solid fa-dollar-sign"></i> 当前价格</div><div class="stat-value">$0.42</div><div class="stat-sub">市值 $30.4M</div></div>
+        </div>
+    </div>
 
-<h1 class="text-2xl mb-6 font-bold">Web3 Wallet</h1>
+    <!-- 社区金库资产 (多签地址持有的主要资产) -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fa-solid fa-landmark" style="margin-right: 8px; color:#0f9488;"></i> 社区金库资产</h3>
+            <span>多签地址: 0x8f3C...a1b2</span>
+        </div>
+        <div class="treasury-grid">
+            <div class="asset-item">
+                <div class="asset-name"><i class="fa-brands fa-usdt" style="color:#26A17B;"></i> USDT</div>
+                <div class="asset-amount">428,500</div>
+                <div class="asset-usd">≈ $428.5k</div>
+            </div>
+            <div class="asset-item">
+                <div class="asset-name"><i class="fa-brands fa-ethereum" style="color:#627EEA;"></i> ETH</div>
+                <div class="asset-amount">1,245.6</div>
+                <div class="asset-usd">≈ $3.12M</div>
+            </div>
+            <div class="asset-item">
+                <div class="asset-name"><i class="fa-solid fa-coins" style="color:#f59e0b;"></i> TRIBE</div>
+                <div class="asset-amount">2,850,000</div>
+                <div class="asset-usd">≈ $1.20M</div>
+            </div>
+            <div class="asset-item">
+                <div class="asset-name"><i class="fa-solid fa-sack-dollar" style="color:#10b981;"></i> 总价值 USD</div>
+                <div class="asset-amount">$4.75M</div>
+                <div class="asset-usd">较昨日 +2.3%</div>
+            </div>
+        </div>
+    </div>
 
-<div class="card">
+    <!-- 近期社区支出明细 (类似于之前的X Layer监控) -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fa-regular fa-clock" style="margin-right: 8px; color:#d97706;"></i> 近期多签支出明细</h3>
+            <span>实时模拟数据 · 点击刷新</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div><span class="token-badge">今日总支出的 USDT: $28,420</span> <span class="token-badge" style="margin-left: 8px;">TRIBE 支出: 125,000</span></div>
+            <button class="refresh-btn" id="refreshExpenseBtn" style="background: #2563eb; color:white; border:none; padding:8px 18px; border-radius:40px; cursor:pointer;"><i class="fa-solid fa-rotate"></i> 刷新</button>
+        </div>
+        <table class="expense-table">
+            <thead>
+                <tr><th>时间</th><th>交易哈希</th><th>支出类型</th><th>代币</th><th>金额</th><th>状态</th></tr>
+            </thead>
+            <tbody id="expenseTableBody">
+                <!-- 动态生成 -->
+            </tbody>
+        </table>
+    </div>
 
-<div>Address</div>
-<div id="address">Not connected</div>
+    <!-- 图表区：支出趋势 + 持币分布 -->
+    <div class="chart-row">
+        <div class="chart-box">
+            <h4 style="margin-bottom: 10px;"><i class="fa-regular fa-chart-line" style="margin-right:6px;"></i> 近7日支出趋势 (USDT)</h4>
+            <div class="chart-wrapper">
+                <canvas id="expenseTrendChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-box">
+            <h4 style="margin-bottom: 10px;"><i class="fa-regular fa-chart-pie" style="margin-right:6px;"></i> 代币持有分布 (前10大地址)</h4>
+            <div class="chart-wrapper">
+                <canvas id="holderChart"></canvas>
+            </div>
+        </div>
+    </div>
 
-<div class="mt-3">Balance</div>
-<div id="balance">0</div>
-
-<canvas id="qrcode"></canvas>
-
+    <!-- 新手开发指引 (如何接入真实链上数据) -->
+    <div class="guide-note">
+        <h4><i class="fa-regular fa-lightbulb"></i> 开发指引 · 从模拟到生产</h4>
+        <ul>
+            <li><i class="fa-regular fa-circle-check"></i> 代币数据：通过节点调用ERC20合约 `totalSupply()`, 持币数用 `eth_getLogs` 或子图查询。</li>
+            <li><i class="fa-regular fa-circle-check"></i> 价格信息：接入 Coingecko API `/simple/price` 获取TRIBE/USD。</li>
+            <li><i class="fa-regular fa-circle-check"></i> 金库余额：使用 `eth_call` 多签地址的ERC20余额（USDT, TRIBE）和 ETH余额。</li>
+            <li><i class="fa-regular fa-circle-check"></i> 支出明细：监听多签地址的 `Transfer` 事件（USDT, TRIBE等）并解析。</li>
+            <li><i class="fa-regular fa-circle-check"></i> 图表数据：聚合近7日支出，可通过每日汇总表生成。</li>
+            <li><i class="fa-regular fa-circle-check"></i> 注意跨域：在生产环境中建议使用后端代理调用RPC。</li>
+        </ul>
+        <div style="margin-top: 18px; border-top: 1px solid #bdd3eb; padding-top: 16px;">
+            <i class="fa-regular fa-file-code"></i> 本页面使用模拟静态数据。替换为真实API后，只需更新对应DOM元素。
+        </div>
+    </div>
+    <div class="footer-meta">
+        <i class="fa-regular fa-eye"></i> 社区看板演示版 · 数据更新于 2026-03-18 16:20 UTC+8
+    </div>
 </div>
 
-<div class="card">
-
-Network
-
-<select id="network" class="text-black w-full p-2 mt-2 rounded">
-
-<option value="bnb">BNB Chain</option>
-<option value="xlayer">X Layer</option>
-
-</select>
-
-</div>
-
-<div class="card">
-
-<h2>Create Wallet</h2>
-
-<button class="btn" onclick="createWallet()">Create</button>
-
-<div id="mnemonic"></div>
-
-</div>
-
-<div class="card">
-
-<h2>Import Wallet</h2>
-
-<input id="privateKeyInput" placeholder="Private Key">
-
-<button class="btn" onclick="importWallet()">Import</button>
-
-</div>
-
-<div class="card">
-
-<h2>Send</h2>
-
-<input id="to" placeholder="To address">
-
-<input id="amount" placeholder="Amount">
-
-<button class="btn" onclick="send()">Send</button>
-
-</div>
-
-<div class="card">
-
-<h2>Token Balance</h2>
-
-<input id="tokenAddress" placeholder="Token Contract">
-
-<button class="btn" onclick="getTokenBalance()">Check</button>
-
-<div id="tokenBalance"></div>
-
-</div>
-
-<div class="card">
-
-<h2>NFT Balance</h2>
-
-<input id="nftAddress" placeholder="ERC721 Contract">
-
-<button class="btn" onclick="getNFT()">Check NFT</button>
-
-<div id="nftBalance"></div>
-
-</div>
-
-<div class="card">
-
-<h2>Swap UI</h2>
-
-<input id="swapFrom" placeholder="Token A">
-
-<input id="swapTo" placeholder="Token B">
-
-<input id="swapAmount" placeholder="Amount">
-
-<button class="btn">Swap (UI Demo)</button>
-
-</div>
-
-<div class="card">
-
-<h2>DApp Browser</h2>
-
-<input id="dappUrl" placeholder="https://">
-
-<button class="btn" onclick="openDapp()">Open</button>
-
-</div>
+<!-- 引入 ethers (用于真实开发，此处未启用) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 
 <script>
-
-let wallet
-let provider
-
-const RPC={
-
-bnb:"https://bsc-dataseed.binance.org",
-
-xlayer:"https://rpc.xlayer.tech"
-
-}
-
-function connectProvider(){
-
-let net=document.getElementById("network").value
-
-provider=new ethers.providers.JsonRpcProvider(RPC[net])
-
-}
-
-async function createWallet(){
-
-connectProvider()
-
-let mnemonic=bip39.generateMnemonic()
-
-let walletMnemonic=ethers.Wallet.fromMnemonic(mnemonic)
-
-wallet=walletMnemonic.connect(provider)
-
-document.getElementById("address").innerText=wallet.address
-
-document.getElementById("mnemonic").innerText=mnemonic
-
-QRCode.toCanvas(document.getElementById("qrcode"),wallet.address)
-
-updateBalance()
-
-}
-
-async function importWallet(){
-
-connectProvider()
-
-let pk=document.getElementById("privateKeyInput").value
-
-wallet=new ethers.Wallet(pk,provider)
-
-document.getElementById("address").innerText=wallet.address
-
-QRCode.toCanvas(document.getElementById("qrcode"),wallet.address)
-
-updateBalance()
-
-}
-
-async function updateBalance(){
-
-let bal=await provider.getBalance(wallet.address)
-
-bal=ethers.utils.formatEther(bal)
-
-document.getElementById("balance").innerText=bal
-
-}
-
-async function send(){
-
-let to=document.getElementById("to").value
-
-let amt=document.getElementById("amount").value
-
-let tx=await wallet.sendTransaction({
-
-to:to,
-
-value:ethers.utils.parseEther(amt)
-
-})
-
-alert("TX:"+tx.hash)
-
-}
-
-async function getTokenBalance(){
-
-let addr=document.getElementById("tokenAddress").value
-
-let abi=[
-
-"function balanceOf(address) view returns (uint256)",
-
-"function decimals() view returns (uint8)"
-
-]
-
-let contract=new ethers.Contract(addr,abi,provider)
-
-let dec=await contract.decimals()
-
-let bal=await contract.balanceOf(wallet.address)
-
-bal=bal/10**dec
-
-document.getElementById("tokenBalance").innerText=bal
-
-}
-
-async function getNFT(){
-
-let addr=document.getElementById("nftAddress").value
-
-let abi=[
-
-"function balanceOf(address) view returns(uint256)"
-
-]
-
-let contract=new ethers.Contract(addr,abi,provider)
-
-let bal=await contract.balanceOf(wallet.address)
-
-document.getElementById("nftBalance").innerText=bal
-
-}
-
-function openDapp(){
-
-let url=document.getElementById("dappUrl").value
-
-window.open(url)
-
-}
-
+    (function() {
+        // 设置日期为 2026年3月18日 (周三)
+        const dateSpan = document.getElementById('currentDate');
+        if (dateSpan) {
+            const demoDate = new Date(2026, 2, 18);
+            dateSpan.textContent = demoDate.toLocaleDateString('zh-CN', { year:'numeric', month:'long', day:'numeric', weekday:'short' });
+        }
+
+        // ---------- 模拟支出数据 ----------
+        function generateMockExpenses(count = 5) {
+            const times = ['09:23:17', '10:45:02', '11:12:33', '13:42:33', '14:18:21', '15:04:56', '16:30:12'];
+            const hashes = [
+                '0x8f3c...a1b2', '0x1a4d...c8e9', '0x3b7e...f5a6', '0x9c2d...b4e8', '0x7a1f...d3c5',
+                '0x4e8b...f2a7', '0x6c9d...e1b4'
+            ];
+            const types = ['开发赏金', '社区活动', '节点运维', '市场 Grant', '安全审计', '流动性激励'];
+            const tokens = ['USDT', 'TRIBE', 'ETH'];
+            // 生成随机组合
+            let expenses = [];
+            for (let i = 0; i < count; i++) {
+                const token = tokens[Math.floor(Math.random() * tokens.length)];
+                let amount;
+                if (token === 'USDT') amount = (Math.random() * 15000 + 2000).toFixed(2);
+                else if (token === 'TRIBE') amount = (Math.random() * 80000 + 10000).toFixed(0);
+                else amount = (Math.random() * 30 + 2).toFixed(2);
+                expenses.push({
+                    time: times[i % times.length],
+                    hash: hashes[i % hashes.length],
+                    type: types[Math.floor(Math.random() * types.length)],
+                    token: token,
+                    amount: amount,
+                    status: '已确认'
+                });
+            }
+            // 按时间倒序
+            return expenses.sort((a,b) => b.time.localeCompare(a.time));
+        }
+
+        function renderExpenseTable(expenses) {
+            const tbody = document.getElementById('expenseTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = expenses.map(e => {
+                let amountDisplay = e.amount;
+                if (e.token === 'ETH') amountDisplay = e.amount + ' ETH';
+                else if (e.token === 'TRIBE') amountDisplay = e.amount + ' TRIBE';
+                else amountDisplay = '$' + e.amount;
+                return `<tr>
+                    <td>${e.time}</td>
+                    <td>${e.hash}</td>
+                    <td>${e.type}</td>
+                    <td><span class="token-badge">${e.token}</span></td>
+                    <td style="color: #b45309;">-${amountDisplay}</td>
+                    <td><span class="status-badge">${e.status}</span></td>
+                </tr>`;
+            }).join('');
+        }
+
+        let mockExpenses = generateMockExpenses(6);
+        renderExpenseTable(mockExpenses);
+
+        document.getElementById('refreshExpenseBtn')?.addEventListener('click', function() {
+            mockExpenses = generateMockExpenses(Math.floor(Math.random() * 3) + 4);
+            renderExpenseTable(mockExpenses);
+            this.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i> 已刷新';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fa-solid fa-rotate"></i> 刷新';
+            }, 1000);
+        });
+
+        // ---------- 图表初始化 ----------
+        // 支出趋势 (近7日)
+        const ctxTrend = document.getElementById('expenseTrendChart')?.getContext('2d');
+        if (ctxTrend) {
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: ['03-12', '03-13', '03-14', '03-15', '03-16', '03-17', '03-18'],
+                    datasets: [{
+                        label: '支出 (USDT)',
+                        data: [12300, 18500, 16200, 21000, 24800, 26700, 28420],
+                        borderColor: '#d97706',
+                        backgroundColor: 'rgba(217,119,6,0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // 持币分布饼图 (前10大 + 其他)
+        const ctxHolders = document.getElementById('holderChart')?.getContext('2d');
+        if (ctxHolders) {
+            new Chart(ctxHolders, {
+                type: 'pie',
+                data: {
+                    labels: ['金库 (27.2%)', '团队 (15.3%)', '社区激励 (12.8%)', '早期投资者 (10.1%)', '其他地址 (34.6%)'],
+                    datasets: [{
+                        data: [27.2, 15.3, 12.8, 10.1, 34.6],
+                        backgroundColor: ['#2563eb', '#f97316', '#10b981', '#8b5cf6', '#94a3b8'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // ---------- 真实数据接入示例 (注释) ----------
+        /*
+        // 示例：使用 ethers 获取 TRIBE 代币总供应量 (需合约地址和ABI)
+        const provider = new ethers.JsonRpcProvider('https://rpc.xlayer.tech');
+        const tokenAddress = '0x...'; // TRIBE合约地址
+        const abi = ['function totalSupply() view returns (uint256)'];
+        const tokenContract = new ethers.Contract(tokenAddress, abi, provider);
+        tokenContract.totalSupply().then(supply => {
+            const formatted = ethers.formatUnits(supply, 18);
+            document.querySelector('.stat-item:nth-child(2) .stat-value').innerText = (parseInt(formatted)/1e6).toFixed(0) + 'M';
+        });
+
+        // 获取金库USDT余额
+        const usdtContract = '0x...'; // USDT合约
+        const treasury = '0x8f3C...a1b2';
+        const erc20Abi = ['function balanceOf(address) view returns (uint256)'];
+        const usdt = new ethers.Contract(usdtContract, erc20Abi, provider);
+        usdt.balanceOf(treasury).then(bal => {
+            const usdtBalance = ethers.formatUnits(bal, 6);
+            document.querySelector('.asset-item:nth-child(1) .asset-amount').innerText = Number(usdtBalance).toFixed(0);
+        });
+
+        // 获取价格 (需后端代理或CORS-friendly API)
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=tribe&vs_currencies=usd')
+            .then(r => r.json())
+            .then(d => { if (d.tribe) document.querySelector('.stat-item:nth-child(5) .stat-value').innerText = '$' + d.tribe.usd; });
+        */
+    })();
 </script>
-
+<!-- 模拟的额外样式 -->
+<style>
+    .refresh-btn { transition: 0.2s; }
+    .refresh-btn:hover { background: #1d4ed8 !important; }
+    .token-badge { background: #e6edf6; }
+</style>
 </body>
-
 </html>
