@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>社区 OKX Boost 排行榜 · 紫韵版</title>
+  <title>OKX Boost · 日历填报</title>
   <style>
-    /* 全局重置 & 白色清爽基底 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: #FFFFFF;      /* 纯白背景 */
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #1E293B;                 /* 深灰蓝文字，舒适阅读 */
-      line-height: 1.5;
+      background: #ffffff;
+      color: #1e293b;
       padding: 20px 16px 40px;
       min-height: 100vh;
       display: flex;
@@ -25,290 +23,334 @@
     }
 
     .container {
-      max-width: 720px;
+      max-width: 780px;
       width: 100%;
     }
 
-    /* 标题区 — 紫色渐变 */
+    /* 紫色主题标题 */
     .hero {
       margin-bottom: 24px;
-      text-align: left;
     }
 
     .hero h1 {
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
       background: linear-gradient(135deg, #8B5CF6, #6D28D9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 8px;
       line-height: 1.2;
+      margin-bottom: 8px;
     }
 
-    .hero .date-badge {
+    .date-badge {
       display: inline-block;
-      background: #EDE9FE;            /* 浅紫底 */
-      color: #5B21B6;                 /* 深紫 */
+      background: #ede9fe;
+      color: #5b21b6;
       font-weight: 500;
-      font-size: 0.9rem;
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 40px;
-      border: 1px solid #C4B5FD;
-      box-shadow: 0 2px 6px rgba(124, 58, 237, 0.05);
-      margin-top: 6px;
+      border: 1px solid #c4b5fd;
+      font-size: 0.95rem;
     }
 
-    /* 卡片 — 纯白+极浅阴影 */
+    /* 卡片设计 */
     .card {
-      background: #FFFFFF;
-      border-radius: 26px;
-      padding: 22px 20px;
-      margin-bottom: 20px;
-      border: 1px solid #F1F0F6;      /* 几乎不可见的边界 */
-      box-shadow: 0 10px 25px -8px rgba(124, 58, 237, 0.1);
-      transition: transform 0.1s ease;
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 24px 22px;
+      margin-bottom: 22px;
+      border: 1px solid #f0ebff;
+      box-shadow: 0 10px 28px -12px rgba(124, 58, 237, 0.15);
     }
 
     .card-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 18px;
-      border-bottom: 1px dashed #E0E7FF;  /* 淡紫虚线 */
-      padding-bottom: 12px;
+      border-bottom: 1.5px dashed #ddd6fe;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
     }
 
     .card-header h2 {
-      font-size: 1.35rem;
+      font-size: 1.4rem;
       font-weight: 600;
-      color: #1F2937;                 /* 深色标题 */
-      letter-spacing: -0.3px;
+      color: #1f2937;
     }
 
-    .card-header .emoji {
-      font-size: 1.6rem;
+    .emoji {
+      font-size: 1.7rem;
     }
 
-    /* 规则列表 */
-    .rule-list {
-      list-style: none;
+    /* 规则区域 */
+    .rule-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
-
-    .rule-list li {
+    .rule-item {
       display: flex;
       gap: 12px;
-      margin-bottom: 14px;
-      font-size: 0.98rem;
-      color: #334155;                 /* 深灰 */
       align-items: flex-start;
     }
-
-    .rule-list li .rule-marker {
-      background: #7C3AED;            /* 紫色主色 */
+    .rule-num {
+      background: #7c3aed;
+      color: white;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      min-width: 22px;
-      height: 22px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
-      color: #FFFFFF;
+      font-size: 0.85rem;
       font-weight: 600;
+      flex-shrink: 0;
       margin-top: 2px;
     }
-
-    .rule-list li strong {
-      color: #6D28D9;                 /* 强调深紫 */
-      font-weight: 600;
+    .rule-text {
+      color: #334155;
+      font-size: 0.98rem;
     }
-
-    /* 紫色提示块 (替代原来的红色警告) */
-    .highlight-warning {
-      background: #F5F3FF;             /* 极浅紫 */
-      border-left: 4px solid #7C3AED;
-      padding: 14px 18px;
-      border-radius: 16px;
+    .rule-text strong {
+      color: #6d28d9;
+    }
+    .purple-message {
+      background: #f5f3ff;
+      border-left: 4px solid #7c3aed;
+      padding: 16px 18px;
+      border-radius: 18px;
       margin-top: 16px;
-      font-size: 0.95rem;
-      color: #2C3E50;                  /* 深蓝灰 */
-      border-top-right-radius: 16px;
-      border-bottom-right-radius: 16px;
+      font-size: 0.96rem;
+      color: #1e293b;
     }
 
-    /* 表格区域 */
-    .table-wrapper {
-      overflow-x: auto;
-      border-radius: 20px;
-      background: #FFFFFF;
-      border: 1px solid #E9E6F5;
-      margin-top: 8px;
+    /* 日历表格区域 */
+    .calendar-wrapper {
+      border: 1px solid #e4dcf5;
+      border-radius: 24px;
+      overflow: hidden;
+      background: white;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.95rem;
-      min-width: 480px;
-    }
-
-    th {
-      text-align: left;
-      padding: 16px 14px 12px;
-      background: #F8F4FF;             /* 浅紫表头 */
-      color: #4B5563;
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      background: #f8f4ff;
+      padding: 12px 0;
+      text-align: center;
       font-weight: 600;
-      font-size: 0.85rem;
-      letter-spacing: 0.3px;
-      border-bottom: 1px solid #D8D0F0;
+      color: #5b21b6;
+      border-bottom: 1px solid #dcd4f0;
+      font-size: 0.9rem;
     }
 
-    td {
-      padding: 14px 14px;
-      border-bottom: 1px solid #F0ECF9;
-      color: #1F2937;
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      background: white;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    .cal-cell {
+      min-height: 100px;
+      padding: 10px 6px;
+      border-right: 1px solid #f0e9ff;
+      border-bottom: 1px solid #f0e9ff;
+      background: white;
+      transition: background 0.1s;
     }
 
-    .rank-col {
-      font-weight: 700;
-      color: #7C3AED;                  /* 紫色排名数字 */
-      width: 60px;
+    .cal-cell:nth-child(7n) {
+      border-right: none;
     }
 
-    .trader-col {
-      font-weight: 500;
+    .cal-cell.empty {
+      background: #fbfaff;
+      border-bottom: 1px solid #ede7fc;
     }
 
-    .volume-col {
+    .day-number {
       font-weight: 600;
-      font-family: 'Inter Mono', monospace;
-      color: #111827;
+      color: #4b5563;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
     }
 
-    .time-col {
-      color: #6B7280;                   /* 灰色时间 */
-      font-size: 0.85rem;
-    }
-
-    /* 刷新区域 */
-    .update-note {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 12px 4px 12px;
-      color: #5B5F6B;
-      font-size: 0.85rem;
-    }
-
-    .fake-refresh {
-      background: #FFFFFF;
-      border: 1px solid #CBB9FC;
-      color: #5B21B6;
-      padding: 6px 16px;
-      border-radius: 40px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.15s;
-    }
-
-    .fake-refresh:hover {
-      background: #F0E9FF;
-      border-color: #7C3AED;
-    }
-
-    /* 提交区域 */
-    .submit-area {
+    .input-group {
       display: flex;
       flex-direction: column;
-      gap: 18px;
-    }
-
-    .submit-info {
-      background: #FAF8FF;              /* 柔和紫白 */
-      border-radius: 18px;
-      padding: 18px;
-      border: 1px solid #E0D9F5;
-    }
-
-    .submit-info p {
-      margin-bottom: 12px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      color: #2D3A4A;
-    }
-
-    .btn-submit {
-      background: #7C3AED;               /* 纯紫主按钮 */
-      border: none;
-      color: #FFFFFF;
-      font-weight: 700;
-      font-size: 1.2rem;
-      padding: 18px 0;
-      border-radius: 60px;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-      box-shadow: 0 8px 18px -6px rgba(124, 58, 237, 0.4);
-      border: 1px solid #9B7AF0;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-submit:hover {
-      background: #6D28D9;
-    }
-
-    .btn-submit:active {
-      transform: scale(0.98);
-    }
-
-    .hint {
-      color: #64748B;
-      font-size: 0.85rem;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
       gap: 6px;
     }
 
-    .hint .icon {
-      font-size: 1.2rem;
+    .volume-input {
+      width: 100%;
+      padding: 6px 6px;
+      border: 1px solid #d8d0f0;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      background: white;
+      color: #1f2937;
+      text-align: right;
     }
 
-    /* 折叠区块 — 干净简洁 */
-    details {
-      background: #FFFFFF;
+    .volume-input:focus {
+      outline: 2px solid #b79cf9;
+      border-color: #7c3aed;
+    }
+
+    .small-badge {
+      background: #ede9fe;
+      color: #5b21b6;
+      font-size: 0.7rem;
+      padding: 3px 6px;
       border-radius: 20px;
-      padding: 6px 18px 10px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+      transition: 0.1s;
+    }
+
+    .small-badge:hover {
+      background: #d9cefd;
+    }
+
+    /* 操作行：每个日期下的按钮组 */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      gap: 4px;
+    }
+
+    .save-btn {
+      background: #7c3aed;
+      border: none;
+      color: white;
+      font-size: 0.7rem;
+      padding: 4px 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    .save-btn:hover {
+      background: #6d28d9;
+    }
+
+    .reset-btn {
+      background: transparent;
+      border: 1px solid #b89ef7;
+      color: #5b21b6;
+      font-size: 0.7rem;
+      padding: 4px 6px;
+      border-radius: 20px;
+      cursor: pointer;
+      width: 28px;
+    }
+
+    .reset-btn:hover {
+      background: #f0e9ff;
+    }
+
+    /* 提交总览卡片 */
+    .summary-box {
+      background: #faf8ff;
+      border-radius: 24px;
+      padding: 18px 20px;
+      border: 1px solid #ddd0f5;
+      margin-top: 10px;
+    }
+
+    .flex-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .address-input {
+      flex: 2;
+      min-width: 220px;
+      padding: 14px 18px;
+      border: 1px solid #d8cdf0;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      background: white;
+    }
+
+    .address-input:focus {
+      outline: 2px solid #b79cf9;
+    }
+
+    .btn-primary {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 18px -6px rgba(124, 58, 237, 0.4);
+      transition: 0.1s;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 1.5px solid #b094f0;
+      color: #5b21b6;
+      padding: 12px 24px;
+      border-radius: 60px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .hint-text {
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-top: 12px;
+    }
+
+    .admin-contact {
+      background: #ede9fe;
+      padding: 8px 18px;
+      border-radius: 40px;
+      color: #5b21b6;
+      font-weight: 500;
+      border: 1px solid #b79cf9;
+      display: inline-block;
+    }
+
+    /* 折叠区 */
+    details {
+      background: #ffffff;
+      border: 1px solid #e4dcf5;
+      border-radius: 24px;
+      padding: 8px 20px 12px;
       margin-top: 18px;
-      border: 1px solid #E5DEFF;
     }
 
     summary {
-      font-weight: 500;
-      color: #1F2937;
-      padding: 12px 0 8px;
+      font-weight: 600;
+      color: #1f2937;
+      padding: 12px 0;
       cursor: pointer;
-      list-style: none;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    summary::-webkit-details-marker {
-      display: none;
     }
 
     summary::after {
-      content: '▶';
-      font-size: 0.8rem;
+      content: "▶";
       margin-left: auto;
-      color: #7C3AED;
+      color: #7c3aed;
+      font-size: 0.9rem;
       transition: transform 0.2s;
     }
 
@@ -316,200 +358,244 @@
       transform: rotate(90deg);
     }
 
-    .detail-content {
-      padding: 10px 0 16px;
-      border-top: 1px solid #E0DAF0;
-      color: #3C4A5B;
-    }
-
-    .step-list {
-      margin-left: 22px;
-      padding: 4px 0;
-    }
-
-    .step-list li {
-      margin-bottom: 10px;
-    }
-
-    /* 页脚淡灰 */
     .footer-note {
-      text-align: center;
-      margin-top: 30px;
-      color: #94A3B8;
+      margin-top: 32px;
+      color: #94a3b8;
       font-size: 0.8rem;
-      border-top: 1px solid #E2E8F0;
-      padding-top: 20px;
-    }
-
-    .flex-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    /* 小标签 + 管理员联系方式 */
-    .admin-contact {
-      background: #F1EEFA;
-      padding: 4px 12px;
-      border-radius: 40px;
-      color: #5B21B6;
-      font-weight: 500;
-      font-size: 0.9rem;
-      border: 1px solid #CBB9FC;
+      text-align: center;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 22px;
     }
   </style>
 </head>
 <body>
 <div class="container">
-  <!-- 头部 紫色主题 -->
   <div class="hero">
-    <h1>⚡️ OKX BOOST<br>社区交易量挑战赛</h1>
-    <div class="date-badge">📅 2026.03.20 – 2026.04.03</div>
+    <h1>⚡️ OKX BOOST · 逐日填报</h1>
+    <div class="date-badge">📆 活动周期 2026.03.20 – 2026.04.03</div>
   </div>
 
-  <!-- 规则卡片 (紫白风格) -->
+  <!-- 规则卡片 -->
   <div class="card">
     <div class="card-header">
-      <span class="emoji">📋</span>
-      <h2>活动规则 · 必读</h2>
+      <span class="emoji">📌</span>
+      <h2>参与规则</h2>
     </div>
-    <ul class="rule-list">
-      <li><span class="rule-marker">1</span><span><strong>Boost交易量</strong> = OKX App内显示的数值（过去10-15日均值，非实际交易额）</span></li>
-      <li><span class="rule-marker">2</span><span><strong>⚠️ 不计入：</strong> 稳定币对（USDT/USDC等）、部分低流动性币种，倍率可能为0</span></li>
-      <li><span class="rule-marker">3</span><span><strong>数据延迟：</strong> 每日交易量次日 <strong>UTC 8:00 + 1~2h</strong> 更新（建议每天10:00后查看）</span></li>
-      <li><span class="rule-marker">4</span><span><strong>反作弊：</strong> 严禁P图、刷量，OKX官方会复核，违规取消资格并公示</span></li>
-    </ul>
-    <div class="highlight-warning">
-      💡 排行榜数据由管理员人工同步，每2小时更新一次。最终排名以活动截止日官方审核为准。
+    <div class="rule-grid">
+      <div class="rule-item"><span class="rule-num">1</span><span class="rule-text"><strong>手动输入</strong> 每日 Boost 交易量（根据 OKX App 显示数值）</span></div>
+      <div class="rule-item"><span class="rule-num">2</span><span class="rule-text">每个日期可独立填写、修改；<strong>提交错误可随时修改</strong>，最终以客服核对为准。</span></div>
+      <div class="rule-item"><span class="rule-num">3</span><span class="rule-text">客服会根据您提供的 <strong>OKX 地址/UID</strong> 核对实际 Boost 交易量（注意稳定币对可能不计入）。</span></div>
+      <div class="rule-item"><span class="rule-num">4</span><span class="rule-text">数据延迟提醒：OKX Boost 交易量次日 UTC 8:00 后更新，建议每天10:00后填报前一日数据。</span></div>
     </div>
-  </div>
-
-  <!-- 排行榜卡片 -->
-  <div class="card">
-    <div class="card-header">
-      <span class="emoji">🏆</span>
-      <h2>当前排名 · 人工同步</h2>
-    </div>
-    <div class="update-note">
-      <span>⏱️ 最后更新：2026-03-19 14:30</span>
-      <button class="fake-refresh" id="refreshToastBtn">⟳ 模拟刷新</button>
-    </div>
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>排名</th>
-            <th>参与者</th>
-            <th>Boost 交易量 (USDT)</th>
-            <th>提交时间</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="rank-col">🥇 1</td>
-            <td class="trader-col">CryptoKing</td>
-            <td class="volume-col">1,250,000</td>
-            <td class="time-col">03-19 10:23</td>
-          </tr>
-          <tr>
-            <td class="rank-col">🥈 2</td>
-            <td class="trader-col">MoonWalker</td>
-            <td class="volume-col">980,500</td>
-            <td class="time-col">03-19 09:15</td>
-          </tr>
-          <tr>
-            <td class="rank-col">🥉 3</td>
-            <td class="trader-col">BlockchainBob</td>
-            <td class="volume-col">752,200</td>
-            <td class="time-col">03-19 08:30</td>
-          </tr>
-          <tr>
-            <td class="rank-col">4</td>
-            <td class="trader-col">Alice0x</td>
-            <td class="volume-col">621,800</td>
-            <td class="time-col">03-18 22:12</td>
-          </tr>
-          <tr>
-            <td class="rank-col">5</td>
-            <td class="trader-col">Satoshii_77</td>
-            <td class="volume-col">504,200</td>
-            <td class="time-col">03-18 19:40</td>
-          </tr>
-          <tr>
-            <td class="rank-col">6</td>
-            <td class="trader-col">ETHMaxi</td>
-            <td class="volume-col">412,000</td>
-            <td class="time-col">03-18 15:33</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div style="margin-top: 14px; color: #64748B; font-size: 0.85rem; display: flex; gap: 14px; flex-wrap: wrap;">
-      <span>🟢 数据由会员提交截图 + 人工审核</span>
-      <span>🔞 严禁伪造，违者永久拉黑</span>
+    <div class="purple-message">
+      💬 <strong>修改 & 核对：</strong> 日历中任何填错都可以重新输入并保存。活动结束后客服将使用链上地址/UID复核，请保证地址正确。
     </div>
   </div>
 
-  <!-- 提交交易量卡片 -->
+  <!-- 日历填报卡片 (3月示例：2026.03.20 - 04.03) -->
   <div class="card">
     <div class="card-header">
-      <span class="emoji">📸</span>
-      <h2>提交你的 Boost 交易量</h2>
+      <span class="emoji">📅</span>
+      <h2>每日交易量填报</h2>
     </div>
-    <div class="submit-area">
-      <div class="submit-info">
-        <p>📱 <strong>如何提交：</strong></p>
-        <p>1. 打开 OKX App → 进入【Boost】页面</p>
-        <p>2. 截图<strong>完整页面</strong>（必须包含当前Boost数值 + 时间）</p>
-        <p>3. 发送截图至社区管理员微信：<span class="admin-contact">okx_boost_admin</span></p>
-        <p class="hint" style="margin-top: 12px;">⏳ 管理员每日22:00前统一录入排行榜，早提交早更新</p>
+    <p style="margin-bottom: 16px; color: #475569;">点击输入框填写 Boost 交易量（USDT），支持随时修改</p>
+
+    <div class="calendar-wrapper">
+      <div class="weekdays">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
       </div>
-
-      <button class="btn-submit" id="submitGuidBtn">📤 我已截图，立即提交</button>
-      <div class="hint">
-        <span class="icon">⚠️</span> 请勿重复提交，截图必须包含Boost页面和系统时间栏（或状态栏）
+      <div class="calendar-grid" id="calendarGrid">
+        <!-- 由JS动态生成 2026年3月20日~4月3日 共15天，适配星期 -->
       </div>
     </div>
 
-    <!-- 折叠：截图示例 & 常见问题 (紫色简洁版) -->
-    <details>
-      <summary>📌 点击查看截图示例 & 常见问题</summary>
-      <div class="detail-content">
-        <ul class="step-list" style="list-style-type: disc;">
-          <li><strong>✅ 有效截图：</strong> 清晰显示Boost交易量（如“1.25M”）、Boost图标、手机状态栏（显示时间）或带时间的锁屏界面。</li>
-          <li><strong>❌ 无效截图：</strong> 只拍数字、无时间、模糊、使用相册编辑拼贴。</li>
-          <li><strong>⏰ 为什么我的交易量没变？</strong> OKX Boost交易量每日更新一次，若你今天交易，请于次日UTC 8:00后（北京下午4点）再查看，通常1-2小时后显示增加。</li>
-          <li><strong>🔄 倍率问题：</strong> 不同币种倍率不同，稳定币对倍率极低甚至为0，这是官方规则，请以App为准。</li>
-        </ul>
-      </div>
-    </details>
+    <!-- 简单说明：每个格子都有保存按钮，单独修改 -->
+    <div style="margin-top: 18px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center;">
+      <span style="background: #ede9fe; padding: 6px 14px; border-radius: 30px; color:#5b21b6;">✏️ 点击格子内输入框修改</span>
+      <span style="background: #f1f0f6; padding: 6px 14px; border-radius: 30px;">💾 每个日期独立保存</span>
+    </div>
   </div>
 
-  <!-- 页脚 -->
+  <!-- 地址提交 & 客服核对卡片 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="emoji">🛡️</span>
+      <h2>核对信息 & 总提交</h2>
+    </div>
+    <div class="summary-box">
+      <div style="font-weight: 600; margin-bottom: 20px;">📮 1. 填写您的OKX地址/UID (用于客服核对)</div>
+      <div class="flex-row">
+        <input type="text" class="address-input" id="userAddress" placeholder="例：0x... 或 UID: 123456789" value="0x3A4b8c9dEf4F56E7">
+        <button class="btn-secondary" id="mockCheckBtn">🔍 模拟核对</button>
+      </div>
+      <div style="margin-top: 24px; font-weight: 600;">📤 2. 确认日历数据无误后，点击下方提交</div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-top: 18px;">
+        <button class="btn-primary" id="submitAllBtn">✅ 提交所有交易量记录</button>
+        <span class="admin-contact">客服微信: boost_audit</span>
+      </div>
+      <p class="hint-text">* 提交后仍可修改日历数据，客服将以最终链上核对为准。若地址填错可随时修改。</p>
+    </div>
+  </div>
+
+  <!-- 常见问题折叠 -->
+  <details>
+    <summary>📎 常见问题 & 修改指引</summary>
+    <div style="padding: 16px 4px 8px; color: #2d3a4a;">
+      <ul style="margin-left: 20px; display: flex; flex-direction: column; gap: 12px;">
+        <li><strong>如何修改填错的数据？</strong> 直接在对应日期输入框修改数字，点击右侧💾按钮即可保存。不需要联系管理员。</li>
+        <li><strong>客服怎么核对？</strong> 活动结束后，客服将根据你提供的地址/UID，在OKX后台查询Boost日均值，偏差过大者可能被调整排名。</li>
+        <li><strong>需要每天填报吗？</strong> 建议活动期间逐日填写，以便积累完整数据。可以一次性补填之前日期。</li>
+        <li><strong>为什么要有日历方式？</strong> 方便你回溯、修改，也方便客服交叉验证每天的变化。</li>
+      </ul>
+    </div>
+  </details>
+
   <div class="footer-note">
-    <p>© 社区Boost活动组 · 本排行榜基于人工录入，仅供参考<br>活动最终解释权归社区所有，OKX平台仅提供技术支持</p>
+    <p>© 社区Boost活动 · 人工复核机制 · 最终解释权归社区所有</p>
   </div>
 </div>
 
-<!-- 轻交互 (与之前相同，保留模拟刷新和提交提醒) -->
 <script>
   (function() {
-    const refreshBtn = document.getElementById('refreshToastBtn');
-    if (refreshBtn) {
-      refreshBtn.addEventListener('click', function() {
-        alert('🔄 排行榜数据由管理员人工同步，最新更新时间：2026-03-19 14:30。如需强制更新，请联系管理员。');
+    // 生成从2026-03-20 到 2026-04-03 的日历网格 (共15天)
+    const startDate = new Date(2026, 2, 20); // 注意 month 0~11, 2 表示 3月
+    const endDate = new Date(2026, 3, 3);    // 4月3日
+    const dayArray = [];
+
+    for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+      dayArray.push({
+        date: new Date(d),
+        day: d.getDate(),
+        month: d.getMonth() + 1,
+        year: d.getFullYear(),
+        weekday: d.getDay() === 0 ? 7 : d.getDay() // 周一=1, 周日=7，便于网格
       });
     }
 
-    const submitBtn = document.getElementById('submitGuidBtn');
-    if (submitBtn) {
-      submitBtn.addEventListener('click', function() {
-        alert('📸 请按照卡片指引截图，并发送至管理员微信 okx_boost_admin 。\n\n我们会在每日22:00前统一录入排行榜。');
-      });
+    // 找到第一天是周几 (周一=1, 周日=7)  2026-03-20 是周五？我们验证一下：2026-03-01 是周日，所以20号是周五(5)。手动确认。
+    // 为了稳妥，直接计算第一天星期几
+    const firstWeekday = dayArray[0].weekday;  // 周五应为5
+
+    // 准备挂载点
+    const grid = document.getElementById('calendarGrid');
+    if (!grid) return;
+
+    // 清空
+    grid.innerHTML = '';
+
+    // 计算前置空格 (如果第一天不是周一，前面填充empty单元格)
+    const emptyBefore = firstWeekday - 1;  // 周五 weekday=5 => 需要4个空白(周一至周四)
+
+    for (let i = 0; i < emptyBefore; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.className = 'cal-cell empty';
+      emptyCell.innerText = ''; // 完全空白
+      grid.appendChild(emptyCell);
     }
+
+    // 为每一天生成单元格
+    dayArray.forEach((item, index) => {
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell';
+      const dateStr = `${item.month}.${item.day}`;
+
+      // 构建内部结构
+      cell.innerHTML = `
+        <div class="day-number">${dateStr}</div>
+        <div class="input-group">
+          <input type="text" class="volume-input" id="input_${index}" placeholder="输入量" value="">
+          <div class="action-row">
+            <button class="save-btn" data-idx="${index}">💾 保存</button>
+            <button class="reset-btn" data-idx="${index}">↺</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(cell);
+
+      // 尝试加载localStorage中保存的值
+      const savedKey = `boost_${item.year}_${item.month}_${item.day}`;
+      const savedVal = localStorage.getItem(savedKey);
+      const inputField = document.getElementById(`input_${index}`);
+      if (inputField && savedVal !== null) {
+        inputField.value = savedVal;
+      }
+
+      // 为保存按钮绑定事件
+      const saveBtn = cell.querySelector('.save-btn');
+      saveBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const idx = this.dataset.idx;
+        const input = document.getElementById(`input_${idx}`);
+        const value = input.value.trim();
+        // 保存到localStorage
+        const targetDate = dayArray[idx];
+        const key = `boost_${targetDate.year}_${targetDate.month}_${targetDate.day}`;
+        localStorage.setItem(key, value);
+        alert(`✅ ${targetDate.month}.${targetDate.day} 交易量已保存: ${value || '空'}`);
+      });
+
+      // 重置按钮：清空输入并移除存储
+      const resetBtn = cell.querySelector('.reset-btn');
+      resetBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const idx = this.dataset.idx;
+        const input = document.getElementById(`input_${idx}`);
+        input.value = '';
+        const targetDate = dayArray[idx];
+        const key = `boost_${targetDate.year}_${targetDate.month}_${targetDate.day}`;
+        localStorage.removeItem(key);
+        alert(`🔄 ${targetDate.month}.${targetDate.day} 已清空`);
+      });
+    });
+
+    // 填充尾部空格（保持网格完整，一共7列，总单元格最好是7的倍数）
+    const totalCells = emptyBefore + dayArray.length;
+    const remainder = totalCells % 7;
+    if (remainder !== 0) {
+      for (let i = 0; i < 7 - remainder; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'cal-cell empty';
+        grid.appendChild(emptyCell);
+      }
+    }
+
+    // 模拟核对按钮
+    document.getElementById('mockCheckBtn')?.addEventListener('click', function() {
+      const addr = document.getElementById('userAddress').value.trim();
+      if (!addr) {
+        alert('请输入地址/UID');
+        return;
+      }
+      alert(`🔎 模拟核对: 客服会根据地址 ${addr} 在OKX后台查询实际Boost量。\n（日历数据仅作参考，最终以链上/后台为准）`);
+    });
+
+    // 总提交按钮
+    document.getElementById('submitAllBtn')?.addEventListener('click', function() {
+      const addr = document.getElementById('userAddress').value.trim();
+      if (!addr) {
+        alert('❌ 请填写您的OKX地址/UID，便于客服核对');
+        return;
+      }
+
+      // 收集所有已保存的日历数据
+      let filled = [];
+      for (let i = 0; i < dayArray.length; i++) {
+        const d = dayArray[i];
+        const key = `boost_${d.year}_${d.month}_${d.day}`;
+        const val = localStorage.getItem(key);
+        if (val) filled.push(`${d.month}.${d.day}: ${val}`);
+      }
+
+      let msg = `地址/UID: ${addr}\n已提交的日历记录：\n`;
+      if (filled.length === 0) msg += ' 暂无任何保存的交易量（可直接保存日历数据）';
+      else msg += filled.join('； ');
+
+      msg += '\n\n客服将在核对后根据实际Boost量调整排名。可继续修改日历。';
+      alert(msg);
+    });
+
   })();
 </script>
-
+<!-- 说明：日历仅生成15天，如需更多日期可调整数组。所有输入都保存在浏览器本地 -->
 </body>
 </html>
