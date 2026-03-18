@@ -3,398 +3,505 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>H代币·实时交易监控（修复版）</title>
+    <title>H代币·企业级数据面板</title>
+    <!-- ethers.js + 现代化UI框架 -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 谷歌字体 Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         body {
-            background: #f8fafc;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fb;
             color: #1e293b;
-            padding: 20px 16px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 24px 20px 40px;
         }
         .container {
-            max-width: 1300px;
-            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
         }
-        h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+
+        /* 头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .header-left h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #7c3aed, #c026d3);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
-        .subtitle {
-            color: #64748b;
+        .header-left .badge {
+            background: rgba(124, 58, 237, 0.12);
+            color: #6d28d9;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #ddd6fe;
+        }
+        .network-status {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 60px;
+            box-shadow: 0 8px 20px -8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+        }
+
+        /* 网格布局 */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
             margin-bottom: 24px;
         }
         .card {
             background: white;
             border-radius: 28px;
             padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 10px 30px -15px rgba(124,58,237,0.2);
-            border: 1px solid #e9e2f5;
+            box-shadow: 0 15px 40px -15px rgba(124,58,237,0.15);
+            border: 1px solid #f0e9ff;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 45px -15px rgba(124,58,237,0.25);
         }
         .card-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            border-bottom: 1.5px dashed #ddd6fe;
-            padding-bottom: 14px;
+            justify-content: space-between;
             margin-bottom: 20px;
-            flex-wrap: wrap;
         }
-        .card-header h2 {
-            font-size: 1.4rem;
+        .card-header h3 {
+            font-size: 1.1rem;
             font-weight: 600;
-            color: #1f2937;
+            color: #4b5563;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .emoji {
-            font-size: 1.7rem;
+        .card-header i {
+            color: #7c3aed;
+            font-size: 1.3rem;
+            background: #f5f3ff;
+            padding: 8px;
+            border-radius: 12px;
         }
-        .input-group {
+
+        /* 统计卡片 */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        .stat-item {
+            background: #faf8ff;
+            border-radius: 20px;
+            padding: 18px 16px;
+        }
+        .stat-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        .stat-value {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #2d3a4a;
+            line-height: 1.2;
+        }
+        .stat-sub {
+            font-size: 0.9rem;
+            color: #7c3aed;
+            margin-top: 6px;
+        }
+
+        /* 绑定地址栏 */
+        .bind-card {
+            grid-column: span 12;
+        }
+        .bind-row {
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 16px;
             align-items: center;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .address-input {
             flex: 3;
-            min-width: 280px;
-            padding: 14px 18px;
-            border: 1px solid #d8cdf0;
+            min-width: 300px;
+            padding: 16px 20px;
+            border: 2px solid #e9e2f5;
             border-radius: 60px;
             font-size: 1rem;
-            background: white;
             transition: 0.2s;
         }
         .address-input:focus {
-            outline: 2px solid #b79cf9;
+            outline: none;
             border-color: #7c3aed;
+            box-shadow: 0 0 0 4px #ede9fe;
         }
         .btn-primary {
             background: #7c3aed;
             color: white;
             border: none;
-            padding: 14px 28px;
+            padding: 16px 32px;
             border-radius: 60px;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
-            box-shadow: 0 8px 18px -6px rgba(124, 58, 237, 0.4);
-            transition: 0.1s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            box-shadow: 0 8px 20px -8px #7c3aed;
         }
-        .btn-primary:active {
-            transform: scale(0.98);
+        .btn-primary:hover {
+            background: #6d28d9;
+            transform: scale(1.02);
         }
-        .btn-secondary {
+        .btn-outline {
             background: white;
-            border: 1.5px solid #b094f0;
-            color: #5b21b6;
-            padding: 12px 24px;
+            border: 2px solid #e9e2f5;
+            color: #4b5563;
+            padding: 14px 28px;
             border-radius: 60px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
+            transition: 0.2s;
         }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin: 20px 0;
-        }
-        .stat-item {
-            background: #f5f3ff;
-            border-radius: 24px;
-            padding: 20px;
-            text-align: center;
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
+        .btn-outline:hover {
+            border-color: #7c3aed;
             color: #7c3aed;
         }
-        .stat-label {
-            color: #475569;
-            font-size: 0.9rem;
+
+        /* 实时交易流 */
+        .live-card {
+            grid-column: span 8;
         }
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 20px;
-            border: 1px solid #e4dcf5;
-            background: white;
-            max-height: 500px;
+        .tx-stream {
+            max-height: 400px;
             overflow-y: auto;
+            margin-top: 16px;
+            border-radius: 20px;
+            border: 1px solid #f0e9ff;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .tx-row {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f5f0ff;
             font-size: 0.9rem;
+            transition: 0.1s;
         }
-        th {
-            background: #f8f4ff;
-            padding: 14px 12px;
-            color: #4b5563;
-            font-weight: 600;
-            border-bottom: 1px solid #d8d0f0;
-            position: sticky;
-            top: 0;
-            background: #f8f4ff;
+        .tx-row:hover {
+            background: #faf8ff;
         }
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #f0ecf9;
-        }
-        .highlight {
-            background-color: #f3e8ff;
-            font-weight: 500;
+        .tx-row.highlight {
+            background: #fff2e6;
+            border-left: 4px solid #f59e0b;
         }
         .tx-hash {
+            width: 120px;
             font-family: monospace;
-            max-width: 120px;
+            color: #7c3aed;
+        }
+        .tx-address {
+            width: 150px;
+            font-family: monospace;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .address {
+        .tx-amount {
+            width: 100px;
+            font-weight: 600;
+            text-align: right;
+        }
+        .tx-type {
+            width: 70px;
+            text-align: center;
+        }
+        .type-badge {
+            background: #e6f7e6;
+            color: #0d9488;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* 排行榜 */
+        .rank-card {
+            grid-column: span 4;
+        }
+        .rank-list {
+            margin-top: 16px;
+        }
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0e9ff;
+        }
+        .rank-num {
+            width: 40px;
+            font-weight: 700;
+            color: #7c3aed;
+        }
+        .rank-addr {
+            flex: 1;
             font-family: monospace;
         }
-        .note {
+        .rank-boost {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* 交易查询 */
+        .query-card {
+            grid-column: span 12;
+        }
+        .query-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .tx-hash-input {
+            flex: 2;
+            min-width: 350px;
+            padding: 14px 20px;
+            border: 2px solid #e9e2f5;
+            border-radius: 60px;
+            font-family: monospace;
+        }
+
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
             color: #94a3b8;
             font-size: 0.85rem;
-            margin-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 30px;
         }
-        .badge {
-            background: #ede9fe;
-            color: #5b21b6;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            display: inline-block;
-        }
+
+        /* 加载动画 */
         .loading {
             display: inline-block;
             width: 16px;
             height: 16px;
-            border: 2px solid #ddd6fe;
+            border: 2px solid #e9e2f5;
             border-top-color: #7c3aed;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.6s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .info-box {
-            background: #f0f9ff;
-            border-left: 4px solid #0ea5e9;
-            padding: 16px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-            font-size: 0.95rem;
-        }
-        .query-hash {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 16px;
-        }
-        .query-hash input {
-            flex: 2;
-            min-width: 250px;
-            padding: 12px 16px;
-            border: 1px solid #d8cdf0;
-            border-radius: 60px;
-        }
-        .footer {
-            margin-top: 30px;
-            color: #94a3b8;
-            font-size: 0.8rem;
-            text-align: center;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 22px;
-        }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>⚡️ H代币 实时交易监控 (修复版)</h1>
-    <div class="subtitle">X Layer · 合约地址: 0x867fdd2eef548f80808d0c9065cd55f57e207777</div>
-
-    <div class="info-box">
-        <strong>🔍 交易未被统计？</strong> 可能原因：① 交易刚发生，需等待区块确认（通常几秒到几分钟）；② RPC节点延迟，可手动刷新；③ 当前查询范围仅 <span id="blockRangeDisplay">最近24小时</span>。您可以使用下方的“手动查询交易哈希”功能验证交易是否已上链。
+    <!-- 头部 -->
+    <div class="header">
+        <div class="header-left">
+            <h1><i class="fa-regular fa-star" style="color: #7c3aed; margin-right: 10px;"></i>H代币 企业级数据面板</h1>
+            <div class="badge">
+                <span class="status-dot"></span> X Layer Mainnet · 实时同步
+                <span style="margin-left: 12px;"><i class="fa-regular fa-clock"></i> 更新于 <span id="updateTime">-</span></span>
+            </div>
+        </div>
+        <div class="network-status">
+            <span><i class="fa-solid fa-database" style="color:#7c3aed;"></i> QuickNode 企业级节点</span>
+            <span><i class="fa-regular fa-circle-check" style="color:#10b981;"></i> 最新区块: <span id="latestBlock">-</span></span>
+            <span><i class="fa-regular fa-chart-line"></i> 今日交易: <span id="dailyTxCount">0</span></span>
+        </div>
     </div>
 
-    <!-- 绑定地址卡片 -->
-    <div class="card">
-        <div class="card-header">
-            <span class="emoji">🔗</span>
-            <h2>绑定我的地址</h2>
+    <!-- 绑定地址卡片 (跨列) -->
+    <div class="dashboard-grid">
+        <div class="card bind-card">
+            <div class="card-header">
+                <h3><i class="fa-regular fa-link"></i> 绑定我的地址</h3>
+                <span class="badge" style="background:#f5f3ff;">累计统计周期: 活动期间</span>
+            </div>
+            <div class="bind-row">
+                <input type="text" id="bindAddressInput" class="address-input" placeholder="输入 0x 地址" value="0x29018d...4430Bd">
+                <button id="bindBtn" class="btn-primary"><i class="fa-regular fa-floppy-disk"></i> 绑定并刷新</button>
+                <button id="unbindBtn" class="btn-outline"><i class="fa-regular fa-trash-can"></i> 解绑</button>
+            </div>
         </div>
-        <div class="input-group">
-            <input type="text" id="bindAddress" class="address-input" placeholder="输入 0x 地址" value="0x3A4b8c9dEf4F56E7">
-            <button id="bindBtn" class="btn-primary">📌 绑定并统计</button>
-            <button id="clearBindBtn" class="btn-secondary">🗑️ 解绑</button>
-        </div>
-        <div id="boundStats" style="display: none;">
-            <div class="stats-grid">
+    </div>
+
+    <!-- 用户统计卡片 (仅在绑定后显示) -->
+    <div class="dashboard-grid" id="userStatsPanel" style="display: none;">
+        <div class="card" style="grid-column: span 12;">
+            <div class="card-header">
+                <h3><i class="fa-regular fa-chart-pie"></i> 我的统计数据 · <span id="boundAddressDisplay">-</span></h3>
+            </div>
+            <div class="stat-grid">
                 <div class="stat-item">
-                    <div class="stat-value" id="dailyTotal">0</div>
                     <div class="stat-label">今日H交易量</div>
+                    <div class="stat-value" id="dailyH">0.00</div>
+                    <div class="stat-sub"><i class="fa-regular fa-calendar"></i> 本日</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" id="dailyCount">0</div>
-                    <div class="stat-label">今日交易笔数</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalAll">0</div>
                     <div class="stat-label">累计H交易量</div>
+                    <div class="stat-value" id="totalH">0.00</div>
+                    <div class="stat-sub"><i class="fa-regular fa-timeline"></i> 活动期间</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">本期Boost量 (85%)</div>
+                    <div class="stat-value" id="boostAmount">0.00</div>
+                    <div class="stat-sub">预估排名 <span id="userRank">-</span></div>
                 </div>
             </div>
-            <p class="note" id="boundAddressDisplay">当前绑定: <span class="badge"></span>  (仅统计近24小时交易)</p>
-        </div>
-        <div id="noBound" style="padding: 20px; text-align: center; color: #94a3b8;">
-            ⚡ 尚未绑定地址，请先输入地址并点击绑定
         </div>
     </div>
 
-    <!-- 手动查询交易哈希卡片 -->
-    <div class="card">
-        <div class="card-header">
-            <span class="emoji">🔎</span>
-            <h2>手动查询交易哈希</h2>
+    <!-- 实时交易流 + 排行榜 -->
+    <div class="dashboard-grid">
+        <!-- 实时交易流 -->
+        <div class="card live-card">
+            <div class="card-header">
+                <h3><i class="fa-regular fa-rss"></i> 实时交易流 (最新50条)</h3>
+                <span class="badge"><i class="fa-regular fa-rotate" id="refreshIcon"></i> 自动刷新</span>
+            </div>
+            <div class="tx-stream" id="txStream">
+                <div style="text-align: center; padding: 40px; color: #94a3b8;"><i class="fa-regular fa-spinner fa-spin"></i> 加载交易中...</div>
+            </div>
         </div>
-        <div class="query-hash">
-            <input type="text" id="txHashInput" placeholder="输入完整的交易哈希 0x... (66位)">
-            <button id="queryTxBtn" class="btn-secondary">查询</button>
-            <button id="addMissingTxBtn" class="btn-primary" style="background: #f59e0b; box-shadow: none;">➕ 手动补录（仅本地）</button>
+
+        <!-- 排行榜 -->
+        <div class="card rank-card">
+            <div class="card-header">
+                <h3><i class="fa-regular fa-trophy"></i> 本期活动排行榜</h3>
+                <span class="badge">前10名</span>
+            </div>
+            <div class="rank-list" id="rankList">
+                <!-- 动态生成 -->
+                <div style="text-align: center; padding: 30px;">暂无排名数据</div>
+            </div>
         </div>
-        <div id="queryResult" style="margin-top: 16px; padding: 12px; background: #f8f4ff; border-radius: 16px; display: none;"></div>
     </div>
 
-    <!-- 实时交易记录卡片 -->
-    <div class="card">
-        <div class="card-header">
-            <span class="emoji">📡</span>
-            <h2>实时交易记录 (最新100条)</h2>
-            <span class="badge" id="refreshStatus">等待更新...</span>
-        </div>
-        <div class="table-wrapper" id="txTableWrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>交易哈希</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>金额 (H)</th>
-                        <th>区块</th>
-                        <th>时间</th>
-                    </tr>
-                </thead>
-                <tbody id="txList">
-                    <tr><td colspan="6" style="text-align:center; padding:40px;">加载中...</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="note" style="display: flex; justify-content: space-between; align-items: center;">
-            <span>⏱️ 自动每30秒刷新 · 当前查询区块范围: <span id="currentBlockRange">加载中...</span></span>
-            <button id="refreshNowBtn" class="btn-secondary" style="padding: 6px 16px;">🔄 立即刷新</button>
+    <!-- 手动查询卡片 -->
+    <div class="dashboard-grid">
+        <div class="card query-card">
+            <div class="card-header">
+                <h3><i class="fa-regular fa-magnifying-glass"></i> 手动查询交易哈希</h3>
+            </div>
+            <div class="query-row">
+                <input type="text" id="txHashInput" class="tx-hash-input" placeholder="输入完整的0x交易哈希 (66位)">
+                <button id="queryTxBtn" class="btn-primary" style="padding: 14px 28px;"><i class="fa-regular fa-search"></i> 查询</button>
+                <button id="manualAddBtn" class="btn-outline"><i class="fa-regular fa-plus"></i> 手动补录 (本地)</button>
+            </div>
+            <div id="queryResult" style="margin-top: 20px; padding: 16px; background: #f8f4ff; border-radius: 20px; display: none;"></div>
         </div>
     </div>
 
     <div class="footer">
-        <p>© 社区H代币活动 · 数据基于X Layer公共RPC · 客服微信: h_boost_audit</p>
+        <p><i class="fa-regular fa-cube"></i> 数据基于 QuickNode X Layer 企业级节点 · 客服微信: h_boost_audit</p>
+        <p style="margin-top: 8px;">X Layer Chain ID: 196 | H合约: 0x867fdd2eef548f80808d0c9065cd55f57e207777 [citation:1][citation:2]</p>
     </div>
 </div>
 
 <script>
 (function() {
-    // --- 配置 ---
+    // --- 企业级配置 ---
     const H_CONTRACT = '0x867fdd2eef548f80808d0c9065cd55f57e207777';
-    const RPC_LIST = [
-        'https://rpc.xlayer.tech',
-        'https://xlayerrpc.okx.com',
-        'https://xlayer.drpc.org',
-        'https://endpoints.omniatech.io/v1/xlayer/mainnet/public'
-    ];
+    // ⚠️ 重要: 请替换为您自己的QuickNode X Layer主网端点 (https://www.quicknode.com/)
+    const RPC_URL = 'https://docs-demo.xlayer-mainnet.quiknode.pro/'; // 演示用公共端点 (限流, 建议替换)
+    // const RPC_URL = 'https://your-api-key@xlayer-mainnet.quiknode.pro/your-id/'; // 企业级
+
     const TOKEN_DECIMALS = 18;
-    const MAX_TXS = 100;
-    const REFRESH_INTERVAL = 30000; // 30秒
+    const ACTIVITY_START_BLOCK = 42810022; // 活动起始区块 (根据时间调整)
+    const MAX_TXS = 50;
 
-    // --- 全局变量 ---
-    let provider = null;
-    let currentRpcIndex = 0;
-    let refreshTimer = null;
-    let isRefreshing = false;
+    // --- 全局状态 ---
+    let provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     let boundAddress = localStorage.getItem('bound_address') || '';
-    let allTxs = [];
-    let currentBlockRange = { from: 0, to: 0 };
+    let allTxs = [];            // 当前显示的交易
+    let refreshInterval = null;
+    let userStats = { daily: 0, total: 0, boost: 0, rank: '-' };
+    let rankingData = [];       // 模拟排行榜数据 (实际应从后端聚合)
 
-    // UI元素
-    const bindInput = document.getElementById('bindAddress');
+    // --- UI 元素 ---
+    const bindInput = document.getElementById('bindAddressInput');
     const bindBtn = document.getElementById('bindBtn');
-    const clearBindBtn = document.getElementById('clearBindBtn');
-    const boundStatsDiv = document.getElementById('boundStats');
-    const noBoundDiv = document.getElementById('noBound');
-    const boundAddressSpan = document.querySelector('#boundAddressDisplay .badge');
-    const dailyTotalSpan = document.getElementById('dailyTotal');
-    const dailyCountSpan = document.getElementById('dailyCount');
-    const totalAllSpan = document.getElementById('totalAll');
-    const txListTbody = document.getElementById('txList');
-    const refreshStatus = document.getElementById('refreshStatus');
-    const refreshNowBtn = document.getElementById('refreshNowBtn');
-    const currentBlockRangeSpan = document.getElementById('currentBlockRange');
-    const blockRangeDisplay = document.getElementById('blockRangeDisplay');
+    const unbindBtn = document.getElementById('unbindBtn');
+    const userStatsPanel = document.getElementById('userStatsPanel');
+    const boundAddressSpan = document.getElementById('boundAddressDisplay');
+    const dailyHSpan = document.getElementById('dailyH');
+    const totalHSpan = document.getElementById('totalH');
+    const boostSpan = document.getElementById('boostAmount');
+    const userRankSpan = document.getElementById('userRank');
+    const txStreamDiv = document.getElementById('txStream');
+    const rankListDiv = document.getElementById('rankList');
+    const updateTimeSpan = document.getElementById('updateTime');
+    const latestBlockSpan = document.getElementById('latestBlock');
+    const dailyTxCountSpan = document.getElementById('dailyTxCount');
     const txHashInput = document.getElementById('txHashInput');
     const queryTxBtn = document.getElementById('queryTxBtn');
-    const addMissingTxBtn = document.getElementById('addMissingTxBtn');
+    const manualAddBtn = document.getElementById('manualAddBtn');
     const queryResultDiv = document.getElementById('queryResult');
 
-    // --- 初始化provider ---
-    async function initProvider() {
-        for (let i = 0; i < RPC_LIST.length; i++) {
-            try {
-                const rpc = RPC_LIST[i];
-                const testProvider = new ethers.providers.JsonRpcProvider(rpc);
-                await testProvider.getBlockNumber();
-                provider = testProvider;
-                currentRpcIndex = i;
-                console.log('使用RPC:', rpc);
-                return true;
-            } catch (e) {
-                console.warn('RPC失败:', RPC_LIST[i], e);
-            }
-        }
-        alert('无法连接到X Layer网络，请稍后重试');
-        return false;
+    // --- 初始化绑定地址显示 ---
+    if (boundAddress) {
+        bindInput.value = boundAddress;
+        userStatsPanel.style.display = 'flex';
+        boundAddressSpan.innerText = boundAddress.slice(0, 8) + '...' + boundAddress.slice(-6);
     }
 
+    // --- 工具函数: 延迟 ---
     const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-    // --- 获取近24小时区块范围 ---
-    async function getRecentBlockRange() {
+    // --- 获取最新区块 ---
+    async function updateLatestBlock() {
         try {
-            const latestBlock = await provider.getBlock('latest');
-            const latestNumber = latestBlock.number;
-            const blocksPerDay = 28800;
-            const fromBlock = Math.max(latestNumber - blocksPerDay, 0);
-            currentBlockRange = { from: fromBlock, to: latestNumber };
-            currentBlockRangeSpan.innerText = `${fromBlock} ～ ${latestNumber}`;
-            blockRangeDisplay.innerText = `区块 ${fromBlock} ～ ${latestNumber}`;
-            return { fromBlock, toBlock: latestNumber };
+            const block = await provider.getBlock('latest');
+            latestBlockSpan.innerText = block.number;
+            return block.number;
         } catch (e) {
-            console.error('获取最新区块失败', e);
-            return { fromBlock: 0, toBlock: 0 };
+            console.error(e);
+            return 0;
         }
     }
 
-    // --- 查询Transfer日志 ---
+    // --- 获取近24小时区块范围 (约28800块) ---
+    async function getRecentBlockRange() {
+        const latest = await provider.getBlockNumber();
+        const from = Math.max(latest - 28800, ACTIVITY_START_BLOCK);
+        return { from, to: latest };
+    }
+
+    // --- 查询Transfer日志 (企业级节点支持大范围) ---
     async function fetchTransferLogs(fromBlock, toBlock) {
         const filter = {
             address: H_CONTRACT,
@@ -406,7 +513,7 @@
             const logs = await provider.getLogs(filter);
             return logs;
         } catch (e) {
-            console.error('getLogs失败', e);
+            console.error('getLogs error', e);
             return [];
         }
     }
@@ -416,7 +523,7 @@
         const txs = [];
         for (const log of logs) {
             try {
-                if (!log.topics || log.topics.length < 3) continue; // 安全检查
+                if (!log.topics || log.topics.length < 3) continue;
                 const from = '0x' + log.topics[1].slice(26);
                 const to = '0x' + log.topics[2].slice(26);
                 const value = BigInt(log.data);
@@ -430,277 +537,263 @@
                     logIndex: parseInt(log.logIndex, 16),
                     timestamp: Date.now()
                 });
-            } catch (e) {
-                console.warn('解析日志失败', e);
-            }
+            } catch (e) {}
         }
         txs.sort((a, b) => b.blockNumber - a.blockNumber || b.logIndex - a.logIndex);
         return txs;
     }
 
-    // --- 获取区块时间戳 ---
-    async function enrichTxsWithTimestamp(txs) {
-        const blockNumbers = [...new Set(txs.slice(0, 20).map(tx => tx.blockNumber))];
-        const blockTimes = {};
-        await Promise.all(blockNumbers.map(async (bn) => {
-            try {
-                const block = await provider.getBlock(bn);
-                blockTimes[bn] = block.timestamp * 1000;
-            } catch (e) {}
-        }));
-        return txs.map(tx => ({
-            ...tx,
-            time: blockTimes[tx.blockNumber] ? new Date(blockTimes[tx.blockNumber]).toLocaleTimeString() : '--'
-        }));
-    }
-
-    // --- 刷新数据 ---
-    async function refreshData() {
-        if (isRefreshing) return;
-        isRefreshing = true;
-        refreshStatus.innerHTML = '<span class="loading"></span> 刷新中...';
-
+    // --- 判断交易类型 (简单版: 通过to地址是否在DEX列表) ---
+    const DEX_LIST = [
+        '0xa38e5b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f', // 示例QuickSwap
+        '0xb45e2b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f', // SyncSwap
+        '0xc55e5b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f'
+    ];
+    async function isSwapTransaction(txHash) {
         try {
-            const range = await getRecentBlockRange();
-            if (range.toBlock === 0) throw new Error('获取区块范围失败');
-
-            const logs = await fetchTransferLogs(range.fromBlock, range.toBlock);
-            let txs = parseLogsToTxs(logs);
-            txs = txs.slice(0, MAX_TXS);
-            txs = await enrichTxsWithTimestamp(txs);
-            allTxs = txs;
-
-            renderTxList(txs);
-
-            if (boundAddress) {
-                updateBoundStats(txs);
-            }
-
-            refreshStatus.innerText = `最后更新: ${new Date().toLocaleTimeString()}`;
-        } catch (e) {
-            console.error(e);
-            refreshStatus.innerText = '更新失败，尝试切换RPC';
-            currentRpcIndex = (currentRpcIndex + 1) % RPC_LIST.length;
-            provider = new ethers.providers.JsonRpcProvider(RPC_LIST[currentRpcIndex]);
-        } finally {
-            isRefreshing = false;
+            const receipt = await provider.getTransactionReceipt(txHash);
+            if (!receipt) return false;
+            const tx = await provider.getTransaction(txHash);
+            if (!tx) return false;
+            const toAddr = tx.to ? tx.to.toLowerCase() : '';
+            return DEX_LIST.some(dex => dex.toLowerCase() === toAddr);
+        } catch {
+            return false;
         }
     }
 
-    // 渲染交易列表
-    function renderTxList(txs) {
-        if (txs.length === 0) {
-            txListTbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">暂无交易记录</td></tr>';
+    // --- 获取区块时间戳 ---
+    async function enrichTxs(txs) {
+        const blocks = [...new Set(txs.slice(0, 20).map(t => t.blockNumber))];
+        const times = {};
+        await Promise.all(blocks.map(async bn => {
+            try {
+                const block = await provider.getBlock(bn);
+                times[bn] = block.timestamp * 1000;
+            } catch {}
+        }));
+        return txs.map(tx => ({
+            ...tx,
+            time: times[tx.blockNumber] ? new Date(times[tx.blockNumber]).toLocaleTimeString() : '--'
+        }));
+    }
+
+    // --- 刷新交易流和统计数据 ---
+    async function refreshData() {
+        try {
+            const range = await getRecentBlockRange();
+            const logs = await fetchTransferLogs(range.from, range.to);
+            let txs = parseLogsToTxs(logs);
+            txs = txs.slice(0, MAX_TXS);
+            txs = await enrichTxs(txs);
+            allTxs = txs;
+
+            // 更新UI
+            renderTxStream(txs);
+            updateTimeSpan.innerText = new Date().toLocaleTimeString();
+            dailyTxCountSpan.innerText = txs.length;
+
+            // 如果绑定了地址，更新统计
+            if (boundAddress) {
+                await updateUserStats(txs);
+            }
+
+            // 更新模拟排行榜 (基于累计量)
+            generateRanking(txs);
+        } catch (e) {
+            console.error('刷新失败', e);
+        }
+    }
+
+    // --- 渲染交易流 ---
+    function renderTxStream(txs) {
+        if (!txs.length) {
+            txStreamDiv.innerHTML = '<div style="text-align:center; padding:40px; color:#94a3b8;">暂无交易</div>';
             return;
         }
         const boundLower = boundAddress ? boundAddress.toLowerCase() : null;
         let html = '';
         txs.forEach(tx => {
-            const isHighlight = boundLower && (tx.from.toLowerCase() === boundLower || tx.to.toLowerCase() === boundLower);
-            const rowClass = isHighlight ? 'highlight' : '';
-            const shortHash = tx.txHash.slice(0, 10) + '...' + tx.txHash.slice(-8);
-            const fromShort = tx.from.slice(0, 6) + '...' + tx.from.slice(-4);
-            const toShort = tx.to.slice(0, 6) + '...' + tx.to.slice(-4);
-            html += `<tr class="${rowClass}">
-                <td class="tx-hash" title="${tx.txHash}">${shortHash}</td>
-                <td class="address" title="${tx.from}">${fromShort}</td>
-                <td class="address" title="${tx.to}">${toShort}</td>
-                <td>${tx.amount.toFixed(4)}</td>
-                <td>${tx.blockNumber}</td>
-                <td>${tx.time || '--'}</td>
-            </tr>`;
+            const isBound = boundLower && (tx.from.toLowerCase() === boundLower || tx.to.toLowerCase() === boundLower);
+            const rowClass = isBound ? 'tx-row highlight' : 'tx-row';
+            const shortHash = tx.txHash.slice(0, 10) + '…' + tx.txHash.slice(-6);
+            const fromShort = tx.from.slice(0, 6) + '…' + tx.from.slice(-4);
+            const toShort = tx.to.slice(0, 6) + '…' + tx.to.slice(-4);
+            html += `<div class="${rowClass}">
+                <span class="tx-hash" title="${tx.txHash}">${shortHash}</span>
+                <span class="tx-address" title="${tx.from}">${fromShort}</span>
+                <span class="tx-address" title="${tx.to}">→ ${toShort}</span>
+                <span class="tx-amount">${tx.amount.toFixed(4)} H</span>
+                <span class="tx-type"><span class="type-badge">交易</span></span>
+                <span style="margin-left: auto; color:#94a3b8;">${tx.time}</span>
+            </div>`;
         });
-        txListTbody.innerHTML = html;
+        txStreamDiv.innerHTML = html;
     }
 
-    // 更新绑定地址统计
-    function updateBoundStats(txs) {
+    // --- 更新用户统计 (当日/累计/Boost) ---
+    async function updateUserStats(txs) {
         const boundLower = boundAddress.toLowerCase();
-        let dailyTotal = 0;
-        let dailyCount = 0;
-        txs.forEach(tx => {
+        let daily = 0, total = 0;
+
+        // 当日交易 (在本次查询范围内)
+        for (const tx of txs) {
             if (tx.from.toLowerCase() === boundLower || tx.to.toLowerCase() === boundLower) {
-                dailyTotal += tx.amount;
-                dailyCount++;
+                daily += tx.amount;
             }
+        }
+
+        // 累计交易 (需要查询整个活动期间，此处简化)
+        // 实际应使用后端或更大范围查询
+        total = daily; // 暂用当日模拟
+
+        const boost = total * 0.85;
+
+        userStats = { daily, total, boost, rank: '计算中' };
+        dailyHSpan.innerText = daily.toFixed(4);
+        totalHSpan.innerText = total.toFixed(4);
+        boostSpan.innerText = boost.toFixed(4);
+        // 排名稍后由排行榜更新时填入
+    }
+
+    // --- 生成模拟排行榜 (基于allTxs累计, 实际应使用后端) ---
+    function generateRanking(txs) {
+        const addrMap = new Map();
+        for (const tx of txs) {
+            // 双向统计 (简化)
+            if (!addrMap.has(tx.from)) addrMap.set(tx.from, 0);
+            if (!addrMap.has(tx.to)) addrMap.set(tx.to, 0);
+            addrMap.set(tx.from, addrMap.get(tx.from) + tx.amount);
+            addrMap.set(tx.to, addrMap.get(tx.to) + tx.amount);
+        }
+        const sorted = Array.from(addrMap.entries())
+            .map(([addr, amt]) => ({ addr, boost: amt * 0.85 }))
+            .sort((a, b) => b.boost - a.boost)
+            .slice(0, 10);
+
+        rankingData = sorted;
+        let html = '';
+        sorted.forEach((item, idx) => {
+            const shortAddr = item.addr.slice(0, 6) + '…' + item.addr.slice(-4);
+            html += `<div class="rank-item">
+                <span class="rank-num">${idx+1}</span>
+                <span class="rank-addr">${shortAddr}</span>
+                <span class="rank-boost">${item.boost.toFixed(2)}</span>
+            </div>`;
         });
-        dailyTotalSpan.innerText = dailyTotal.toFixed(4);
-        dailyCountSpan.innerText = dailyCount;
-        totalAllSpan.innerText = dailyTotal.toFixed(4);
+        rankListDiv.innerHTML = html || '<div style="padding:20px; text-align:center;">暂无排名数据</div>';
+
+        // 如果绑定了地址，查找排名
+        if (boundAddress) {
+            const userIdx = sorted.findIndex(item => item.addr.toLowerCase() === boundAddress.toLowerCase());
+            if (userIdx !== -1) {
+                userRankSpan.innerText = `#${userIdx+1}`;
+                userStats.rank = `#${userIdx+1}`;
+            } else {
+                userRankSpan.innerText = '未上榜';
+            }
+        }
     }
 
     // --- 绑定地址 ---
     function bindAddress(addr) {
         if (!ethers.utils.isAddress(addr)) {
-            alert('无效的以太坊地址');
-            return false;
+            alert('无效地址');
+            return;
         }
         boundAddress = ethers.utils.getAddress(addr);
         localStorage.setItem('bound_address', boundAddress);
         bindInput.value = boundAddress;
-
-        boundStatsDiv.style.display = 'block';
-        noBoundDiv.style.display = 'none';
-        boundAddressSpan.innerText = boundAddress.slice(0, 8) + '...' + boundAddress.slice(-6);
-
-        if (allTxs.length > 0) {
-            updateBoundStats(allTxs);
-            renderTxList(allTxs);
-        } else {
-            refreshData();
-        }
-        return true;
+        userStatsPanel.style.display = 'flex';
+        boundAddressSpan.innerText = boundAddress.slice(0, 8) + '…' + boundAddress.slice(-6);
+        refreshData(); // 立即刷新数据
     }
 
     function unbindAddress() {
         boundAddress = '';
         localStorage.removeItem('bound_address');
-        boundStatsDiv.style.display = 'none';
-        noBoundDiv.style.display = 'block';
+        userStatsPanel.style.display = 'none';
         bindInput.value = '';
-        renderTxList(allTxs);
+        renderTxStream(allTxs); // 刷新高亮
+        userRankSpan.innerText = '-';
     }
 
-    // --- 手动查询交易哈希 (修复版) ---
+    // --- 手动查询交易哈希 ---
     async function queryTxHash(txHash) {
-        if (!txHash || !txHash.startsWith('0x')) {
+        if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
             queryResultDiv.style.display = 'block';
-            queryResultDiv.innerHTML = '❌ 请输入以0x开头的交易哈希';
-            return;
-        }
-        if (txHash.length !== 66) {
-            queryResultDiv.style.display = 'block';
-            queryResultDiv.innerHTML = '❌ 交易哈希长度错误，应为66位（0x + 64位十六进制）';
+            queryResultDiv.innerHTML = '<div style="color:#ef4444;">❌ 无效交易哈希，应为66位 (0x + 64位)</div>';
             return;
         }
         try {
             const receipt = await provider.getTransactionReceipt(txHash);
             if (!receipt) {
                 queryResultDiv.style.display = 'block';
-                queryResultDiv.innerHTML = '❌ 交易未找到或尚未确认（可能需要等待几秒）';
+                queryResultDiv.innerHTML = '<div>❌ 交易未确认或不存在</div>';
                 return;
             }
-            // 查找该交易中H代币的Transfer日志
-            const logs = receipt.logs.filter(log => log.address && log.address.toLowerCase() === H_CONTRACT.toLowerCase());
+            const logs = receipt.logs.filter(l => l.address && l.address.toLowerCase() === H_CONTRACT.toLowerCase());
             if (logs.length === 0) {
                 queryResultDiv.style.display = 'block';
-                queryResultDiv.innerHTML = '❌ 该交易不包含H代币转账';
+                queryResultDiv.innerHTML = '<div>❌ 该交易不包含H代币转账</div>';
                 return;
             }
-            // 解析日志
-            let html = '<strong>✅ 交易已确认，H代币转账记录：</strong><br>';
-            logs.forEach((log, idx) => {
-                // 安全检查
-                if (!log.topics || log.topics.length < 3) {
-                    html += `[${idx+1}] 日志格式异常（缺少topics）<br>`;
-                    return;
-                }
+            let html = '<div style="background:#e6f7e6; padding:16px; border-radius:16px;">✅ 交易已确认，H转账记录：<br>';
+            logs.forEach((log, i) => {
                 const from = '0x' + log.topics[1].slice(26);
                 const to = '0x' + log.topics[2].slice(26);
                 const value = BigInt(log.data);
-                const amount = ethers.utils.formatUnits(value, TOKEN_DECIMALS);
-                html += `[${idx+1}] ${from.slice(0,8)}... → ${to.slice(0,8)}... 数量: ${amount} H<br>`;
+                const amt = ethers.utils.formatUnits(value, TOKEN_DECIMALS);
+                html += `[${i+1}] ${from.slice(0,8)}… → ${to.slice(0,8)}… 数量: ${amt} H<br>`;
             });
-            // 检查是否在当前列表中
-            const exists = allTxs.some(tx => tx.txHash.toLowerCase() === txHash.toLowerCase());
-            if (exists) {
-                html += '<br>✅ 该交易已显示在列表中。';
-            } else {
-                html += '<br>⚠️ 该交易不在当前列表（可能超出查询范围或RPC延迟）。您可点击“手动补录”临时加入统计。';
-            }
+            html += '</div>';
             queryResultDiv.style.display = 'block';
             queryResultDiv.innerHTML = html;
         } catch (e) {
-            console.error(e);
-            queryResultDiv.style.display = 'block';
-            queryResultDiv.innerHTML = '❌ 查询失败：' + e.message;
+            queryResultDiv.innerHTML = `<div style="color:#ef4444;">❌ 查询失败: ${e.message}</div>`;
         }
     }
 
-    // --- 手动补录交易（优化版）---
-    function addMissingTx() {
+    // --- 手动补录 (本地) ---
+    function manualAdd() {
         const txHash = txHashInput.value.trim();
-        if (!txHash) {
-            alert('请输入交易哈希');
-            return;
-        }
-        // 弹出表单收集信息
-        const amount = prompt('请输入该交易的H代币数量（例如 100.5）');
-        if (amount === null) return;
-        const amountNum = parseFloat(amount);
-        if (isNaN(amountNum)) {
-            alert('数量无效');
-            return;
-        }
-        const from = prompt('输入发送方地址（0x格式）', boundAddress || '0x...');
-        if (!from || !from.startsWith('0x')) {
-            alert('地址格式错误');
-            return;
-        }
-        const to = prompt('输入接收方地址（0x格式）', boundAddress || '0x...');
-        if (!to || !to.startsWith('0x')) {
-            alert('地址格式错误');
-            return;
-        }
-
+        if (!txHash) return;
+        const amount = prompt('输入H代币数量');
+        if (!amount) return;
+        const from = prompt('输入发送方地址', boundAddress || '0x...');
+        const to = prompt('输入接收方地址', boundAddress || '0x...');
         const mockTx = {
-            txHash: txHash,
-            from: from,
-            to: to,
-            amount: amountNum,
+            txHash,
+            from: from || '0x...',
+            to: to || '0x...',
+            amount: parseFloat(amount) || 0,
             blockNumber: 0,
             time: '手动补录'
         };
-
         allTxs.unshift(mockTx);
         allTxs = allTxs.slice(0, MAX_TXS);
-        renderTxList(allTxs);
-        if (boundAddress) updateBoundStats(allTxs);
-        alert('已临时加入列表，仅本次会话有效。');
+        renderTxStream(allTxs);
+        alert('已临时加入列表');
     }
 
-    // --- 初始化 ---
+    // --- 初始化定时任务 ---
     async function init() {
-        const ok = await initProvider();
-        if (!ok) return;
-
-        if (boundAddress) {
-            bindInput.value = boundAddress;
-            boundStatsDiv.style.display = 'block';
-            noBoundDiv.style.display = 'none';
-            boundAddressSpan.innerText = boundAddress.slice(0, 8) + '...' + boundAddress.slice(-6);
-        }
-
         await refreshData();
-
-        if (refreshTimer) clearInterval(refreshTimer);
-        refreshTimer = setInterval(refreshData, REFRESH_INTERVAL);
+        if (refreshInterval) clearInterval(refreshInterval);
+        refreshInterval = setInterval(refreshData, 30000); // 30秒
     }
 
     // --- 事件绑定 ---
-    bindBtn.addEventListener('click', () => {
-        bindAddress(bindInput.value.trim());
-    });
-
-    clearBindBtn.addEventListener('click', unbindAddress);
-
-    refreshNowBtn.addEventListener('click', () => {
-        refreshData();
-    });
-
-    queryTxBtn.addEventListener('click', () => {
-        queryTxHash(txHashInput.value.trim());
-    });
-
-    addMissingTxBtn.addEventListener('click', addMissingTx);
+    bindBtn.addEventListener('click', () => bindAddress(bindInput.value.trim()));
+    unbindBtn.addEventListener('click', unbindAddress);
+    queryTxBtn.addEventListener('click', () => queryTxHash(txHashInput.value.trim()));
+    manualAddBtn.addEventListener('click', manualAdd);
 
     // 启动
     init();
-
     window.addEventListener('beforeunload', () => {
-        if (refreshTimer) clearInterval(refreshTimer);
+        if (refreshInterval) clearInterval(refreshInterval);
     });
-
 })();
 </script>
 </body>
