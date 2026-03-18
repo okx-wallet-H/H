@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>海豚社区 · H代币交易挑战赛</title>
-    <!-- ethers.js -->
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <!-- Font Awesome -->
+    <!-- Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 谷歌字体 Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <!-- 占位 ethers.js (用于后续对接) -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
         body {
-            background: #f5f7fb;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
             color: #1e293b;
             padding: 24px 20px 40px;
         }
@@ -64,6 +66,15 @@
             gap: 20px;
             flex-wrap: wrap;
         }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+        }
 
         /* 卡片通用 */
         .card {
@@ -73,6 +84,11 @@
             margin-bottom: 24px;
             box-shadow: 0 15px 40px -15px rgba(124,58,237,0.15);
             border: 1px solid #f0e9ff;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 45px -15px rgba(124,58,237,0.25);
         }
         .card-header {
             display: flex;
@@ -95,7 +111,7 @@
             border-radius: 12px;
         }
 
-        /* 赛制卡片 */
+        /* 赛制网格 */
         .rules-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -128,7 +144,7 @@
             font-size: 1.3rem;
         }
 
-        /* 立即参与 */
+        /* 立即参与卡片 */
         .join-card {
             background: linear-gradient(135deg, #f5f0ff, #ffffff);
             border: 2px solid #e0d2ff;
@@ -226,14 +242,45 @@
             padding: 14px 16px;
             border-bottom: 1px solid #f5f0ff;
             font-size: 0.9rem;
+            transition: 0.1s;
+        }
+        .tx-row:hover {
+            background: #faf8ff;
         }
         .tx-row.highlight {
             background: #fef3c7;
             border-left: 4px solid #f59e0b;
         }
-        .tx-hash { width: 120px; font-family: monospace; color: #7c3aed; }
-        .tx-address { width: 150px; font-family: monospace; overflow: hidden; text-overflow: ellipsis; }
-        .tx-amount { width: 100px; font-weight: 600; text-align: right; }
+        .tx-hash {
+            width: 120px;
+            font-family: monospace;
+            color: #7c3aed;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .tx-address {
+            width: 150px;
+            font-family: monospace;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .tx-amount {
+            width: 100px;
+            font-weight: 600;
+            text-align: right;
+        }
+        .tx-type {
+            width: 70px;
+            text-align: center;
+        }
+        .type-badge {
+            background: #e6f7e6;
+            color: #0d9488;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
 
         /* 排行榜 */
         .rank-list {
@@ -245,10 +292,21 @@
             padding: 12px 0;
             border-bottom: 1px solid #f0e9ff;
         }
-        .rank-num { width: 40px; font-weight: 700; color: #7c3aed; }
-        .rank-addr { flex: 1; font-family: monospace; }
-        .rank-boost { font-weight: 700; }
+        .rank-num {
+            width: 40px;
+            font-weight: 700;
+            color: #7c3aed;
+        }
+        .rank-addr {
+            flex: 1;
+            font-family: monospace;
+        }
+        .rank-vol {
+            font-weight: 700;
+            color: #1e293b;
+        }
 
+        /* 页脚 */
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -263,6 +321,15 @@
             padding: 4px 12px;
             border-radius: 30px;
             font-size: 0.8rem;
+            display: inline-block;
+        }
+        .api-key-note {
+            background: #f1f5f9;
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            border-left: 4px solid #7c3aed;
         }
     </style>
 </head>
@@ -273,12 +340,13 @@
         <div class="header-left">
             <h1>🐬 海豚社区 · H代币交易挑战赛</h1>
             <div class="badge">
-                <i class="fa-regular fa-calendar"></i> 赛季制 · 周/月/年度排名
+                <span class="status-dot"></span> 直接统计H交易量 · 周/月/年度排名
             </div>
         </div>
         <div class="network-status">
-            <span><i class="fa-regular fa-circle-check" style="color:#10b981;"></i> X Layer 实时同步</span>
-            <span><i class="fa-regular fa-clock"></i> 最新区块: <span id="latestBlock">-</span></span>
+            <span><i class="fa-regular fa-database" style="color:#7c3aed;"></i> 欧易API <span style="font-family:monospace; background:#f1f5f9; padding:4px 8px; border-radius:30px;">API Key 占位</span></span>
+            <span><i class="fa-regular fa-circle-check" style="color:#10b981;"></i> 最新区块: <span id="latestBlock">45,123,456</span></span>
+            <span><i class="fa-regular fa-chart-line"></i> 今日交易: <span id="dailyTxCount">1,234</span></span>
         </div>
     </div>
 
@@ -286,13 +354,13 @@
     <div class="card">
         <div class="card-header">
             <h3><i class="fa-regular fa-trophy"></i> 赛制与奖励</h3>
-            <span class="badge">统计规则：买入/卖出 H 代币交易量 × 85% = Boost 量</span>
+            <span class="badge">统计规则：买入/卖出 H 代币交易量（不含转账）</span>
         </div>
         <div class="rules-grid">
             <div class="rule-item">
                 <div class="rank-icon">🥇</div>
                 <h4>周排名</h4>
-                <p>每周一00:00重置，当周Boost量前10名</p>
+                <p>每周一00:00重置，当周H交易量前10名</p>
                 <div class="prize">第1名: 500 USDT</div>
                 <div>2-3名: 200 USDT</div>
                 <div>4-10名: 50 USDT</div>
@@ -300,7 +368,7 @@
             <div class="rule-item">
                 <div class="rank-icon">🏆</div>
                 <h4>月排名</h4>
-                <p>自然月累计Boost量前10名</p>
+                <p>自然月累计H交易量前10名</p>
                 <div class="prize">第1名: 2000 USDT</div>
                 <div>2-3名: 800 USDT</div>
                 <div>4-10名: 200 USDT</div>
@@ -308,7 +376,7 @@
             <div class="rule-item">
                 <div class="rank-icon">👑</div>
                 <h4>年度排名</h4>
-                <p>全年累计Boost量冠军</p>
+                <p>全年累计H交易量冠军</p>
                 <div class="prize">冠军: 10000 USDT</div>
                 <div>亚军: 5000 USDT</div>
                 <div>季军: 2000 USDT</div>
@@ -328,54 +396,154 @@
             <input type="text" id="joinAddressInput" class="address-input" placeholder="输入您的X Layer地址 (0x...)">
             <button id="joinBtn" class="btn-primary"><i class="fa-regular fa-paper-plane"></i> 提交参与</button>
         </div>
+        <div class="api-key-note">
+            <i class="fa-regular fa-key"></i> 欧易API Key 占位：<code style="background:#e9e2f5; padding:4px 8px; border-radius:20px;">OK-ACCESS-KEY: xxxxx... (正式上线替换)</code>
+        </div>
         <p style="margin-top: 16px; color:#64748b;">
             <i class="fa-regular fa-shield"></i> 提交后请联系助理客服审核，审核通过后交易量自动计入排名。
             <span style="margin-left: 16px; background:#ede9fe; padding:4px 12px; border-radius:30px;">客服微信: dolphin_boost</span>
         </p>
     </div>
 
-    <!-- 已绑定用户统计 (仅当用户绑定后显示) -->
+    <!-- 已绑定用户统计 (审核通过后显示) -->
     <div class="card" id="userStatsCard" style="display: none;">
         <div class="card-header">
-            <h3><i class="fa-regular fa-chart-pie"></i> 我的统计数据 · <span id="boundAddressDisplay">-</span></h3>
+            <h3><i class="fa-regular fa-chart-pie"></i> 我的交易统计 · <span id="boundAddressDisplay">-</span></h3>
         </div>
         <div class="stat-grid">
             <div class="stat-item">
-                <div class="stat-label">今日Boost量</div>
-                <div class="stat-value" id="dailyBoost">0.00</div>
+                <div class="stat-label">今日H交易量</div>
+                <div class="stat-value" id="dailyVol">0.00</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">周累计Boost</div>
-                <div class="stat-value" id="weeklyBoost">0.00</div>
+                <div class="stat-label">本周累计</div>
+                <div class="stat-value" id="weeklyVol">0.00</div>
             </div>
             <div class="stat-item">
-                <div class="stat-label">月累计Boost</div>
-                <div class="stat-value" id="monthlyBoost">0.00</div>
+                <div class="stat-label">本月累计</div>
+                <div class="stat-value" id="monthlyVol">0.00</div>
             </div>
         </div>
     </div>
 
     <!-- 实时交易流 + 排行榜 -->
     <div class="dashboard-grid">
-        <!-- 实时交易流 -->
+        <!-- 实时交易流 (占位数据) -->
         <div class="card col-8">
             <div class="card-header">
                 <h3><i class="fa-regular fa-rss"></i> 实时交易流 (最新50笔H转账)</h3>
-                <span class="badge"><i class="fa-regular fa-rotate"></i> 自动刷新</span>
+                <span class="badge"><i class="fa-regular fa-rotate"></i> 30秒自动刷新</span>
             </div>
             <div class="tx-stream" id="txStream">
-                <div style="text-align:center; padding:40px;">加载中...</div>
+                <!-- 模拟交易行 -->
+                <div class="tx-row highlight">
+                    <span class="tx-hash">0x7f919a…e62c9</span>
+                    <span class="tx-address">0x29018d…30Bd</span>
+                    <span class="tx-address">→ 0x8a4b7c…12f8</span>
+                    <span class="tx-amount">1,250.45 H</span>
+                    <span class="tx-type"><span class="type-badge">交易</span></span>
+                    <span style="margin-left: auto; color:#94a3b8;">14:32</span>
+                </div>
+                <div class="tx-row">
+                    <span class="tx-hash">0x3a4b8c…9ef4</span>
+                    <span class="tx-address">0x5c6d8e…77a2</span>
+                    <span class="tx-address">→ 0x1a2b3c…d4e5</span>
+                    <span class="tx-amount">856.23 H</span>
+                    <span class="tx-type"><span class="type-badge">交易</span></span>
+                    <span style="margin-left: auto; color:#94a3b8;">14:28</span>
+                </div>
+                <div class="tx-row">
+                    <span class="tx-hash">0xb8a7c6…d3f1</span>
+                    <span class="tx-address">0x9e8d7c…6b5a</span>
+                    <span class="tx-address">→ 0x2f3e4d…5c6b</span>
+                    <span class="tx-amount">2,340.00 H</span>
+                    <span class="tx-type"><span class="type-badge">交易</span></span>
+                    <span style="margin-left: auto; color:#94a3b8;">14:21</span>
+                </div>
+                <div class="tx-row">
+                    <span class="tx-hash">0xcd4e5f…a6b7</span>
+                    <span class="tx-address">0x7b6a5c…4d3e</span>
+                    <span class="tx-address">→ 0x3c2d1e…5f6g</span>
+                    <span class="tx-amount">125.78 H</span>
+                    <span class="tx-type"><span class="type-badge">交易</span></span>
+                    <span style="margin-left: auto; color:#94a3b8;">14:15</span>
+                </div>
+                <div class="tx-row">
+                    <span class="tx-hash">0xe1f2a3…b4c5</span>
+                    <span class="tx-address">0x4d5e6f…7g8h</span>
+                    <span class="tx-address">→ 0x8h9i0j…1k2l</span>
+                    <span class="tx-amount">3,450.67 H</span>
+                    <span class="tx-type"><span class="type-badge">交易</span></span>
+                    <span style="margin-left: auto; color:#94a3b8;">14:08</span>
+                </div>
+                <div class="tx-row">
+                    <span class="tx-hash">0xf9e8d7…c6b5</span>
+                    <span class="tx-address">0xa4b3c2…d1e0</span>
+                    <span class="tx-address">→ 0x1f2e3d…4c5b</span>
+                    <span class="tx-amount">672.89 H</span>
+                    <span class="tx-type"><span class="type-badge">交易</span></span>
+                    <span style="margin-left: auto; color:#94a3b8;">14:02</span>
+                </div>
             </div>
         </div>
 
         <!-- 排行榜 (周榜) -->
         <div class="card col-4">
             <div class="card-header">
-                <h3><i class="fa-regular fa-ranking-star"></i> 本周Boost排行榜</h3>
+                <h3><i class="fa-regular fa-ranking-star"></i> 本周H交易量排行榜</h3>
                 <span class="badge">前10名</span>
             </div>
             <div class="rank-list" id="rankList">
-                <div style="text-align:center; padding:20px;">暂无数据</div>
+                <div class="rank-item">
+                    <span class="rank-num">1</span>
+                    <span class="rank-addr">0x29018d…30Bd</span>
+                    <span class="rank-vol">12,345 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">2</span>
+                    <span class="rank-addr">0x5c6d8e…77a2</span>
+                    <span class="rank-vol">8,765 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">3</span>
+                    <span class="rank-addr">0x9e8d7c…6b5a</span>
+                    <span class="rank-vol">6,543 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">4</span>
+                    <span class="rank-addr">0x7b6a5c…4d3e</span>
+                    <span class="rank-vol">5,432 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">5</span>
+                    <span class="rank-addr">0x4d5e6f…7g8h</span>
+                    <span class="rank-vol">4,321 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">6</span>
+                    <span class="rank-addr">0xa4b3c2…d1e0</span>
+                    <span class="rank-vol">3,210 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">7</span>
+                    <span class="rank-addr">0x1f2e3d…4c5b</span>
+                    <span class="rank-vol">2,109 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">8</span>
+                    <span class="rank-addr">0x8h9i0j…1k2l</span>
+                    <span class="rank-vol">1,987 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">9</span>
+                    <span class="rank-addr">0x2f3e4d…5c6b</span>
+                    <span class="rank-vol">1,234 H</span>
+                </div>
+                <div class="rank-item">
+                    <span class="rank-num">10</span>
+                    <span class="rank-addr">0x3c2d1e…5f6g</span>
+                    <span class="rank-vol">1,000 H</span>
+                </div>
             </div>
         </div>
     </div>
@@ -386,262 +554,105 @@
             <h3><i class="fa-regular fa-magnifying-glass"></i> 交易哈希查询</h3>
         </div>
         <div style="display: flex; gap: 16px; align-items: center;">
-            <input type="text" id="txHashInput" class="address-input" placeholder="输入0x交易哈希" style="flex:2;">
-            <button id="queryTxBtn" class="btn-outline">查询</button>
+            <input type="text" id="txHashInput" class="address-input" placeholder="输入0x交易哈希 (66位)" style="flex:2;">
+            <button id="queryTxBtn" class="btn-outline"><i class="fa-regular fa-search"></i> 查询</button>
         </div>
-        <div id="queryResult" style="margin-top: 16px; padding: 16px; background:#f8f4ff; border-radius:16px; display:none;"></div>
+        <div id="queryResult" style="margin-top: 16px; padding: 16px; background:#f8f4ff; border-radius:16px; display:none;">
+            <!-- 查询结果示例 -->
+        </div>
     </div>
 
+    <!-- 页脚 -->
     <div class="footer">
-        <p>© 海豚社区 · 数据基于X Layer公共节点实时查询 · 客服微信: dolphin_boost</p>
+        <p>© 海豚社区 · 数据基于欧易X Layer API (API Key占位) · 客服微信: dolphin_boost</p>
         <p>H合约: 0x867fdd2eef548f80808d0c9065cd55f57e207777</p>
     </div>
 </div>
 
 <script>
-(function() {
-    // --- 配置 ---
-    const H_CONTRACT = '0x867fdd2eef548f80808d0c9065cd55f57e207777';
-    const RPC_URL = 'https://rpc.xlayer.tech';  // 公共RPC (可替换为QuickNode等)
-    const TOKEN_DECIMALS = 18;
-    const MAX_TXS = 50;
+    // 纯UI演示脚本，包含模拟审核和查询功能，API占位
+    (function() {
+        // 模拟已审核地址 (实际应从后端获取)
+        let boundAddress = localStorage.getItem('dolphin_bound') || '';
+        const joinAddressInput = document.getElementById('joinAddressInput');
+        const joinBtn = document.getElementById('joinBtn');
+        const userStatsCard = document.getElementById('userStatsCard');
+        const boundAddressSpan = document.getElementById('boundAddressDisplay');
+        const dailyVolSpan = document.getElementById('dailyVol');
+        const weeklyVolSpan = document.getElementById('weeklyVol');
+        const monthlyVolSpan = document.getElementById('monthlyVol');
+        const txHashInput = document.getElementById('txHashInput');
+        const queryTxBtn = document.getElementById('queryTxBtn');
+        const queryResultDiv = document.getElementById('queryResult');
 
-    // --- 全局 ---
-    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-    let boundAddress = localStorage.getItem('dolphin_bound') || ''; // 已审核通过的地址
-    let allTxs = [];
-
-    // --- UI 元素 ---
-    const joinAddressInput = document.getElementById('joinAddressInput');
-    const joinBtn = document.getElementById('joinBtn');
-    const userStatsCard = document.getElementById('userStatsCard');
-    const boundAddressSpan = document.getElementById('boundAddressDisplay');
-    const dailyBoostSpan = document.getElementById('dailyBoost');
-    const weeklyBoostSpan = document.getElementById('weeklyBoost');
-    const monthlyBoostSpan = document.getElementById('monthlyBoost');
-    const txStreamDiv = document.getElementById('txStream');
-    const rankListDiv = document.getElementById('rankList');
-    const latestBlockSpan = document.getElementById('latestBlock');
-    const txHashInput = document.getElementById('txHashInput');
-    const queryTxBtn = document.getElementById('queryTxBtn');
-    const queryResultDiv = document.getElementById('queryResult');
-
-    // --- 初始化已绑定地址 (如果之前审核通过) ---
-    if (boundAddress) {
-        joinAddressInput.value = boundAddress;
-        userStatsCard.style.display = 'block';
-        boundAddressSpan.innerText = boundAddress.slice(0,8) + '...' + boundAddress.slice(-6);
-    }
-
-    // --- 立即参与 ---
-    joinBtn.addEventListener('click', () => {
-        const addr = joinAddressInput.value.trim();
-        if (!ethers.utils.isAddress(addr)) {
-            alert('请输入有效的X Layer地址 (0x...)');
-            return;
-        }
-        // 模拟提交，提示联系客服
-        alert('✅ 地址已提交！请立即联系助理客服微信: dolphin_boost 进行审核。审核通过后即可开始统计交易量。');
-        // 可选：将地址暂存到localStorage，但审核前不激活统计
-        // 这里我们简化，不自动激活，等待客服手动标记（需要后端）
-        // 为了演示，我们暂时不清空输入，但也不计入统计
-    });
-
-    // --- 辅助函数: 获取最新区块 ---
-    async function updateLatestBlock() {
-        try {
-            const block = await provider.getBlockNumber();
-            latestBlockSpan.innerText = block;
-        } catch (e) {}
-    }
-
-    // --- 获取近24小时日志 (简化) ---
-    async function fetchLogs() {
-        try {
-            const latest = await provider.getBlockNumber();
-            const from = Math.max(latest - 28800, 0);
-            const filter = {
-                address: H_CONTRACT,
-                topics: [ethers.utils.id('Transfer(address,address,uint256)')],
-                fromBlock: ethers.utils.hexValue(from),
-                toBlock: ethers.utils.hexValue(latest)
-            };
-            const logs = await provider.getLogs(filter);
-            return logs;
-        } catch (e) {
-            console.error(e);
-            return [];
-        }
-    }
-
-    // --- 解析日志 ---
-    function parseLogs(logs) {
-        const txs = [];
-        for (const log of logs) {
-            try {
-                if (!log.topics || log.topics.length < 3) continue;
-                const from = '0x' + log.topics[1].slice(26);
-                const to = '0x' + log.topics[2].slice(26);
-                const value = BigInt(log.data);
-                const amount = Number(ethers.utils.formatUnits(value, TOKEN_DECIMALS));
-                txs.push({
-                    txHash: log.transactionHash,
-                    from, to, amount,
-                    blockNumber: parseInt(log.blockNumber, 16),
-                    time: '--'
-                });
-            } catch (e) {}
-        }
-        txs.sort((a,b) => b.blockNumber - a.blockNumber);
-        return txs.slice(0, MAX_TXS);
-    }
-
-    // --- 渲染交易流 ---
-    function renderTxStream(txs) {
-        if (!txs.length) {
-            txStreamDiv.innerHTML = '<div style="text-align:center; padding:40px;">暂无交易</div>';
-            return;
-        }
-        const boundLower = boundAddress ? boundAddress.toLowerCase() : null;
-        let html = '';
-        txs.forEach(tx => {
-            const isBound = boundLower && (tx.from.toLowerCase() === boundLower || tx.to.toLowerCase() === boundLower);
-            const rowClass = isBound ? 'tx-row highlight' : 'tx-row';
-            const shortHash = tx.txHash.slice(0,10) + '…' + tx.txHash.slice(-6);
-            const fromShort = tx.from.slice(0,6) + '…' + tx.from.slice(-4);
-            const toShort = tx.to.slice(0,6) + '…' + tx.to.slice(-4);
-            html += `<div class="${rowClass}">
-                <span class="tx-hash" title="${tx.txHash}">${shortHash}</span>
-                <span class="tx-address" title="${tx.from}">${fromShort}</span>
-                <span class="tx-address" title="${tx.to}">→ ${toShort}</span>
-                <span class="tx-amount">${tx.amount.toFixed(4)} H</span>
-                <span style="margin-left: auto; color:#94a3b8;">${tx.time}</span>
-            </div>`;
-        });
-        txStreamDiv.innerHTML = html;
-    }
-
-    // --- 更新用户统计 (仅当有boundAddress) ---
-    async function updateUserStats(txs) {
-        if (!boundAddress) return;
-        const boundLower = boundAddress.toLowerCase();
-        let daily = 0, weekly = 0, monthly = 0;
-        const now = Date.now();
-        const oneDay = 86400000;
-        const oneWeek = 604800000;
-        // 简单模拟：根据当前时间判断是否在当日/当周/当月 (实际应根据区块时间)
-        txs.forEach(tx => {
-            if (tx.from.toLowerCase() === boundLower || tx.to.toLowerCase() === boundLower) {
-                // 因为没有真实时间，我们假设所有交易都在当日/当周/当月内
-                daily += tx.amount;
-                weekly += tx.amount;
-                monthly += tx.amount;
-            }
-        });
-        const boostDaily = daily * 0.85;
-        const boostWeekly = weekly * 0.85;
-        const boostMonthly = monthly * 0.85;
-        dailyBoostSpan.innerText = boostDaily.toFixed(4);
-        weeklyBoostSpan.innerText = boostWeekly.toFixed(4);
-        monthlyBoostSpan.innerText = boostMonthly.toFixed(4);
-    }
-
-    // --- 生成模拟周榜 (基于所有交易统计) ---
-    function generateRanking(txs) {
-        const addrMap = new Map();
-        txs.forEach(tx => {
-            if (!addrMap.has(tx.from)) addrMap.set(tx.from, 0);
-            if (!addrMap.has(tx.to)) addrMap.set(tx.to, 0);
-            addrMap.set(tx.from, addrMap.get(tx.from) + tx.amount);
-            addrMap.set(tx.to, addrMap.get(tx.to) + tx.amount);
-        });
-        const sorted = Array.from(addrMap.entries())
-            .map(([addr, amt]) => ({ addr, boost: amt * 0.85 }))
-            .sort((a,b) => b.boost - a.boost)
-            .slice(0, 10);
-        let html = '';
-        sorted.forEach((item, idx) => {
-            const short = item.addr.slice(0,6) + '…' + item.addr.slice(-4);
-            html += `<div class="rank-item">
-                <span class="rank-num">${idx+1}</span>
-                <span class="rank-addr">${short}</span>
-                <span class="rank-boost">${item.boost.toFixed(2)}</span>
-            </div>`;
-        });
-        rankListDiv.innerHTML = html || '<div style="padding:20px; text-align:center;">暂无数据</div>';
-    }
-
-    // --- 刷新所有数据 ---
-    async function refreshAll() {
-        await updateLatestBlock();
-        const logs = await fetchLogs();
-        const txs = parseLogs(logs);
-        allTxs = txs;
-        renderTxStream(txs);
-        generateRanking(txs);
+        // 如果已有审核地址，显示统计卡片
         if (boundAddress) {
-            await updateUserStats(txs);
-        }
-    }
-
-    // --- 查询交易哈希 ---
-    async function queryTxHash(txHash) {
-        if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
-            queryResultDiv.style.display = 'block';
-            queryResultDiv.innerHTML = '<div style="color:#ef4444;">❌ 无效的交易哈希</div>';
-            return;
-        }
-        try {
-            const receipt = await provider.getTransactionReceipt(txHash);
-            if (!receipt) {
-                queryResultDiv.style.display = 'block';
-                queryResultDiv.innerHTML = '<div>❌ 交易未确认或不存在</div>';
-                return;
-            }
-            const logs = receipt.logs.filter(l => l.address && l.address.toLowerCase() === H_CONTRACT.toLowerCase());
-            if (logs.length === 0) {
-                queryResultDiv.style.display = 'block';
-                queryResultDiv.innerHTML = '<div>❌ 该交易不包含H代币转账</div>';
-                return;
-            }
-            let html = '<div style="background:#e6f7e6; padding:16px; border-radius:16px;">✅ 交易已确认，H转账记录：<br>';
-            logs.forEach((log, i) => {
-                const from = '0x' + log.topics[1].slice(26);
-                const to = '0x' + log.topics[2].slice(26);
-                const value = BigInt(log.data);
-                const amt = ethers.utils.formatUnits(value, TOKEN_DECIMALS);
-                html += `[${i+1}] ${from.slice(0,8)}… → ${to.slice(0,8)}… 数量: ${amt} H<br>`;
-            });
-            html += '</div>';
-            queryResultDiv.style.display = 'block';
-            queryResultDiv.innerHTML = html;
-        } catch (e) {
-            queryResultDiv.innerHTML = `<div style="color:#ef4444;">❌ 查询失败: ${e.message}</div>`;
-        }
-    }
-
-    // --- 事件绑定 ---
-    queryTxBtn.addEventListener('click', () => queryTxHash(txHashInput.value.trim()));
-
-    // 定时刷新
-    refreshAll();
-    setInterval(refreshAll, 30000); // 30秒
-
-    // 如果希望已审核地址自动统计，但需要后端配合。这里我们保留localStorage模拟审核通过
-    // 用户可通过控制台手动设置审核: localStorage.setItem('dolphin_bound', '地址')
-    // 为演示方便，我们添加一个简单的管理员模拟 (双击页面顶部激活)
-    document.addEventListener('dblclick', () => {
-        const addr = prompt('模拟客服审核通过地址:');
-        if (addr && ethers.utils.isAddress(addr)) {
-            boundAddress = ethers.utils.getAddress(addr);
-            localStorage.setItem('dolphin_bound', boundAddress);
             joinAddressInput.value = boundAddress;
             userStatsCard.style.display = 'block';
-            boundAddressSpan.innerText = boundAddress.slice(0,8) + '…' + boundAddress.slice(-6);
-            refreshAll();
+            boundAddressSpan.innerText = boundAddress.slice(0,8) + '...' + boundAddress.slice(-6);
+            // 模拟数据
+            dailyVolSpan.innerText = '1,250.45';
+            weeklyVolSpan.innerText = '8,765.32';
+            monthlyVolSpan.innerText = '24,567.89';
         }
-    });
-})();
+
+        // 立即参与按钮
+        joinBtn.addEventListener('click', () => {
+            const addr = joinAddressInput.value.trim();
+            if (!addr.startsWith('0x') || addr.length !== 42) {
+                alert('请输入有效的X Layer地址 (0x开头的42位地址)');
+                return;
+            }
+            alert('✅ 地址已提交！请立即联系助理客服微信: dolphin_boost 进行审核。审核通过后交易量自动计入排名。');
+            // 此处不自动激活，等待客服审核（模拟审核可通过双击页面触发）
+        });
+
+        // 模拟客服审核通过 (双击页面顶部任意位置)
+        document.addEventListener('dblclick', () => {
+            const addr = prompt('模拟客服审核：输入要激活的地址 (0x...)');
+            if (addr && addr.startsWith('0x') && addr.length === 42) {
+                boundAddress = addr;
+                localStorage.setItem('dolphin_bound', boundAddress);
+                joinAddressInput.value = boundAddress;
+                userStatsCard.style.display = 'block';
+                boundAddressSpan.innerText = boundAddress.slice(0,8) + '...' + boundAddress.slice(-6);
+                // 模拟统计数据
+                dailyVolSpan.innerText = '1,250.45';
+                weeklyVolSpan.innerText = '8,765.32';
+                monthlyVolSpan.innerText = '24,567.89';
+                alert('地址已激活，交易量开始统计（模拟数据）');
+            }
+        });
+
+        // 手动查询交易哈希 (模拟)
+        queryTxBtn.addEventListener('click', () => {
+            const txHash = txHashInput.value.trim();
+            if (!txHash.startsWith('0x') || txHash.length !== 66) {
+                queryResultDiv.style.display = 'block';
+                queryResultDiv.innerHTML = '<div style="color:#ef4444;">❌ 无效的交易哈希，应为66位 (0x + 64位)</div>';
+                return;
+            }
+            // 模拟查询结果
+            queryResultDiv.style.display = 'block';
+            queryResultDiv.innerHTML = `
+                <div style="background:#e6f7e6; padding:16px; border-radius:16px;">
+                    <strong>✅ 交易已确认 (模拟数据)</strong><br>
+                    交易哈希: ${txHash.slice(0,10)}...${txHash.slice(-8)}<br>
+                    发送方: 0x29018d...30Bd<br>
+                    接收方: 0x8a4b7c...12f8<br>
+                    金额: 1,250.45 H<br>
+                    区块: 45,123,789<br>
+                    时间: 2026-03-19 14:32:45
+                </div>
+            `;
+        });
+
+        // 模拟更新区块和交易数 (静态演示)
+        setInterval(() => {
+            document.getElementById('latestBlock').innerText = '45,123,' + (Math.floor(Math.random()*900+100));
+            document.getElementById('dailyTxCount').innerText = Math.floor(Math.random()*500+1000);
+        }, 10000);
+    })();
 </script>
 </body>
 </html>
