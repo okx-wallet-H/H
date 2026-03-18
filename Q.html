@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0">
-    <title>老板驾驶舱 · 运营财务日报</title>
+    <title>老板驾驶舱 · 运营财务日报 + X Layer 链上支出</title>
     <!-- Font Awesome 6 (免费) 用于图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Chart.js 轻量图表库 -->
@@ -191,7 +191,7 @@
         .chart-wrapper {
             position: relative;
             width: 100%;
-            height: 220px; /* 固定高度用于canvas自适应 */
+            height: 220px;
         }
 
         /* 交易表格 */
@@ -251,73 +251,78 @@
             color: #856404;
         }
 
-        /* 开发思路/备忘录 (满足“怎么开发”的说明) */
-        .dev-memo {
-            background: #f8fbfe;
-            border-radius: 26px;
-            padding: 22px 28px;
-            border: 1px dashed #a3c4e2;
-            margin-top: 10px;
-            color: #1c3f5c;
+        /* X Layer 特有样式 */
+        .xlayer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 20px 0;
         }
-        .dev-memo h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
-            color: #26577c;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .xlayer-stat {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
         }
-        .dev-memo ul {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px 40px;
-            list-style: none;
-        }
-        .dev-memo li {
-            flex: 1 1 220px;
+        .xlayer-stat .label {
+            color: #4b5563;
             font-size: 0.9rem;
-            color: #1e405e;
-            display: flex;
+            margin-bottom: 6px;
+        }
+        .xlayer-stat .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0f2b4b;
+        }
+        .xlayer-stat .sub {
+            font-size: 0.8rem;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+        .address-chip {
+            background: #e9eef3;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #2d3748;
+        }
+        .refresh-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            transition: 0.2s;
         }
-        .dev-memo i {
-            color: #2a6b9e;
-            width: 22px;
-            font-size: 1.1rem;
+        .refresh-btn:hover {
+            background: #1d4ed8;
         }
-
-        /* 响应式 */
-        @media (max-width: 1000px) {
-            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-            .chart-row { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 600px) {
-            .kpi-grid { grid-template-columns: 1fr; }
-            .header { flex-direction: column; align-items: start; gap: 15px; }
-            .date-avatar { width: 100%; justify-content: space-between; }
-        }
-        .small-note {
-            color: #8b9bb0;
-            font-size: 0.7rem;
-            margin-left: 5px;
-        }
-        .avatar i.fa-circle-user { color: #2d4f7c; }
         .footer-meta {
             text-align: right;
             font-size: 0.7rem;
             color: #acbacb;
             margin-top: 12px;
         }
+        /* 新手提示 */
+        .note-box {
+            background: #fff8e7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 18px;
+            border-radius: 16px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 <div class="dashboard">
-    <!-- 头部区域 -->
+    <!-- 头部区域 (保持不变) -->
     <div class="header">
         <div class="title-section">
             <h1>⛵ 老板驾驶舱 · 运营财务日报</h1>
@@ -389,9 +394,8 @@
         </div>
     </div>
 
-    <!-- 图表区域：左边运营混合图(订单&访客) / 右边财务收支趋势 -->
+    <!-- 图表区域：左边运营混合图 / 右边财务收支趋势 -->
     <div class="chart-row">
-        <!-- 运营图表 (混合) -->
         <div class="chart-container">
             <div class="chart-header">
                 <h3><i class="fa-solid fa-chart-simple" style="margin-right: 6px; color:#2563eb;"></i> 运营趋势 · 近7日</h3>
@@ -401,7 +405,6 @@
                 <canvas id="operationalChart" style="width:100%; height:220px; display: block;"></canvas>
             </div>
         </div>
-        <!-- 财务图表 (收支) -->
         <div class="chart-container">
             <div class="chart-header">
                 <h3><i class="fa-solid fa-chart-line" style="margin-right: 6px; color:#0d9488;"></i> 财务收支 · 近7日</h3>
@@ -413,7 +416,7 @@
         </div>
     </div>
 
-    <!-- 详细交易列表 (展示运营/财务混合明细) -->
+    <!-- 原有交易明细 -->
     <div class="table-section">
         <div class="table-header">
             <h3><i class="fa-regular fa-rectangle-list" style="margin-right: 10px;"></i> 今日交易明细（最近5笔）</h3>
@@ -433,58 +436,114 @@
                 <tr><td>15:40</td><td>#PO-241220-17</td><td>¥21,430.00</td><td><span class="status-badge warn">审核中</span></td></tr>
             </tbody>
         </table>
-        <div style="margin-top: 14px; font-size:0.8rem; color:#788b9e; background: #f4f9ff; padding: 8px 15px; border-radius: 30px;">
-            <i class="fa-regular fa-clock"></i> 今日累计交易额: ¥51,909.50 | 财务流水同步于 16:00
+    </div>
+
+    <!-- ========= 新增 X Layer USDT 支出监控模块 ========= -->
+    <div class="card" style="margin-top: 24px;">
+        <div class="chart-header" style="margin-bottom: 8px;">
+            <h3><i class="fa-brands fa-usdt" style="color:#26A17B;"></i> X Layer USDT 支出监控（实时模拟数据）</h3>
+            <span>监控地址: 0x742d...f44e 等</span>
+        </div>
+
+        <!-- 汇总卡片 -->
+        <div class="xlayer-grid">
+            <div class="xlayer-stat">
+                <div class="label"><i class="fa-regular fa-clock"></i> 今日总支出 (USDT)</div>
+                <div class="value" id="totalUSDT">$42,850.00</div>
+                <div class="sub">≈ ¥308,520.00</div>
+            </div>
+            <div class="xlayer-stat">
+                <div class="label"><i class="fa-regular fa-repeat"></i> 交易笔数</div>
+                <div class="value" id="txCount">12</div>
+                <div class="sub">较昨日 +2</div>
+            </div>
+            <div class="xlayer-stat">
+                <div class="label"><i class="fa-regular fa-arrow-up-wide-short"></i> 最大单笔支出</div>
+                <div class="value" id="maxUSDT">$12,500.00</div>
+                <div class="sub">13:42:33</div>
+            </div>
+        </div>
+
+        <!-- 地址标签说明 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 16px 0 12px;">
+            <div>
+                <span class="address-chip">0x742d35Cc6634C0532925a3b844Bc454e4438f44e</span> 主支出钱包
+                <span class="address-chip" style="margin-left: 10px;">0x1234567890123456789012345678901234567890</span> 备用
+            </div>
+            <button class="refresh-btn" id="refreshXLayerBtn"><i class="fa-solid fa-rotate"></i> 刷新数据</button>
+        </div>
+
+        <!-- 支出明细表格 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>交易哈希</th>
+                    <th>收款地址</th>
+                    <th>金额 (USDT)</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody id="xlayerTableBody">
+                <!-- 动态填充，初始由JS生成模拟数据 -->
+            </tbody>
+        </table>
+
+        <!-- 新手提示：如何连接真实链上数据 -->
+        <div class="note-box">
+            <i class="fa-regular fa-lightbulb" style="color:#f59e0b; margin-right: 8px;"></i>
+            <strong>新手开发者：</strong> 这是一个使用模拟数据的演示页面。要连接真实的X Layer链上数据，请参考以下步骤：
+            <ul style="margin-top: 8px; margin-left: 24px;">
+                <li>在HTML中引入 <code>ethers.js</code> 库 (已通过CDN添加)。</li>
+                <li>使用公共RPC节点 <code>https://rpc.xlayer.tech</code> 创建 <code>JsonRpcProvider</code>。</li>
+                <li>查询USDT合约的Transfer事件，过滤公司地址的支出交易。</li>
+                <li>注意：浏览器跨域限制可能需要CORS代理，或在后端实现。</li>
+                <li>下面的JavaScript中提供了<strong>真实代码示例</strong>（注释部分），取消注释并填入公司地址即可测试。</li>
+            </ul>
         </div>
     </div>
 
-    <!-- 开发方案思路 (满足“帮我想想怎么开发”) -->
-    <div class="dev-memo">
-        <h4><i class="fa-regular fa-lightbulb"></i> 开发备忘录 · 从原型到上线</h4>
-        <ul>
-            <li><i class="fa-solid fa-database"></i> 后端聚合: 每日凌晨ETL汇总订单/财务库，生成运营日报表 (Python/Node.js + SQL)</li>
-            <li><i class="fa-solid fa-cloud-arrow-up"></i> API设计: RESTful 接口 /api/daily/dashboard 返回KPI、趋势、流水 (JWT 鉴权)</li>
-            <li><i class="fa-solid fa-window-maximize"></i> 前端架构: 可选用 Vue3 或 React 重构当前原型，封装图表组件 (Chart.js 或 ECharts)</li>
-            <li><i class="fa-solid fa-lock"></i> 权限与审计: 老板只读账号，敏感财务字段脱敏? 实际生产环境可记录访问日志</li>
-            <li><i class="fa-solid fa-chart-pie"></i> 增强指标: 后续可加环比/同比、成本构成、现金流预测，支持日期切换</li>
-            <li><i class="fa-regular fa-bell"></i> 告警订阅: 当净利润或现金流波动超阈值时，自动发送企业微信提醒</li>
-            <li><i class="fa-solid fa-mobile-screen"></i> 响应式优化: 目前适配Pad/桌面，移动端进一步调整字体与布局</li>
+    <!-- 开发备忘录 (不变) -->
+    <div class="dev-memo" style="background: #f8fbfe; border-radius: 26px; padding: 22px 28px; border: 1px dashed #a3c4e2; margin-top: 24px;">
+        <h4 style="font-size: 1rem; font-weight: 600; color: #26577c; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-regular fa-lightbulb"></i> 开发备忘录 · 从原型到上线
+        </h4>
+        <ul style="display: flex; flex-wrap: wrap; gap: 24px 40px; list-style: none;">
+            <li style="flex: 1 1 220px;"><i class="fa-solid fa-database"></i> 后端聚合: 每日凌晨ETL汇总订单/财务库</li>
+            <li style="flex: 1 1 220px;"><i class="fa-solid fa-cloud-arrow-up"></i> API设计: RESTful 接口 /api/daily/dashboard</li>
+            <li style="flex: 1 1 220px;"><i class="fa-solid fa-window-maximize"></i> 前端架构: Vue3 或 React 重构</li>
+            <li style="flex: 1 1 220px;"><i class="fa-solid fa-lock"></i> 权限与审计: 老板只读账号</li>
+            <li style="flex: 1 1 220px;"><i class="fa-solid fa-chart-pie"></i> 增强指标: 环比、成本构成</li>
+            <li style="flex: 1 1 220px;"><i class="fa-regular fa-bell"></i> 告警订阅: 大额支出即时通知</li>
         </ul>
-        <div style="margin-top:18px; border-top: 1px solid #bfdbf5; padding-top: 15px; color: #2b4d6a; font-size:0.9rem; display: flex; gap: 20px; flex-wrap: wrap;">
-            <span><i class="fa-regular fa-circle-check" style="color:#1f7b4d;"></i> 当前静态原型演示数据 (硬编码) — 实际接入API后动态渲染</span>
-            <span><i class="fa-regular fa-calendar-check"></i> 每日数据刷新: 后端缓存至Redis，减少数据库压力</span>
-        </div>
     </div>
     <div class="footer-meta">
-        <i class="fa-regular fa-hard-drive"></i> 演示版本 v0.9 · 仅用于需求沟通  (真实开发需替换为API数据)
+        <i class="fa-regular fa-hard-drive"></i> 演示版本 v1.0 · X Layer模块使用模拟数据
     </div>
 </div>
 
+<!-- 引入 ethers.js (用于真实链上调用，当前未启用) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+
 <script>
     (function() {
-        // 1. 设置当前日期 (显示为: 2026年3月18日 周三)
+        // 1. 设置当前日期为 2026年3月18日 (周三) 符合题目
         const dateElem = document.getElementById('currentDate');
         if (dateElem) {
-            const now = new Date();
-            // 注意演示年份符合2026, 但为了动态也可以手动指定，这里取实际，但可微调为2026年
-            // 为了符合“2026年3月18日”的场景，我们强制设定一下 (因为当前实际日期不是2026-03-18)
-            // 方案：检测并覆盖，让展示更符合题目情境
             const demoDate = new Date(2026, 2, 18); // 月份0索引, 2表示3月
             const formatter = new Intl.DateTimeFormat('zh-CN', { 
                 year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' 
             });
-            dateElem.textContent = formatter.format(demoDate);  // "2026年3月18日周三"
+            dateElem.textContent = formatter.format(demoDate);
         }
 
-        // 2. 初始化图表 (等待canvas就绪)
-        // 运营混合图: 柱状(订单量) + 折线(访客数)
+        // 2. 初始化原有图表 (保持不变)
         const ctx1 = document.getElementById('operationalChart')?.getContext('2d');
-        // 财务折线图: 收入&支出
         const ctx2 = document.getElementById('financialChart')?.getContext('2d');
 
         if (ctx1) {
             new Chart(ctx1, {
-                type: 'bar', // 默认bar, 第二个数据集覆盖为line
+                type: 'bar',
                 data: {
                     labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
                     datasets: [
@@ -494,16 +553,16 @@
                             backgroundColor: 'rgba(54, 162, 235, 0.7)',
                             borderColor: 'rgba(54, 162, 235, 1)',
                             borderWidth: 1,
-                            yAxisID: 'y',        // 左轴
-                            type: 'bar'           // 柱状
+                            yAxisID: 'y',
+                            type: 'bar'
                         },
                         {
                             label: '访客数 (百)',
-                            data: [8.23, 9.12, 10.5, 12.0, 11.5, 13.0, 14.5], // 实际是*100 但表示百人，适配右侧轴
+                            data: [8.23, 9.12, 10.5, 12.0, 11.5, 13.0, 14.5],
                             borderColor: '#f97316',
                             backgroundColor: 'rgba(249, 115, 22, 0.1)',
                             type: 'line',
-                            yAxisID: 'y1',        // 右轴
+                            yAxisID: 'y1',
                             tension: 0.3,
                             borderWidth: 3,
                             pointBackgroundColor: '#f97316',
@@ -514,26 +573,10 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
-                        tooltip: { mode: 'index' }
-                    },
+                    plugins: { legend: { display: true, position: 'top' } },
                     scales: {
-                        y: {
-                            type: 'linear',
-                            position: 'left',
-                            title: { display: true, text: '订单量', color: '#3b82f6' },
-                            grid: { color: '#e9eef3' },
-                            beginAtZero: true
-                        },
-                        y1: {
-                            type: 'linear',
-                            position: 'right',
-                            title: { display: true, text: '访客数 (百人)', color: '#f97316' },
-                            grid: { drawOnChartArea: false }, // 不覆盖左边网格
-                            beginAtZero: true,
-                            suggestedMax: 20
-                        }
+                        y: { type: 'linear', position: 'left', beginAtZero: true },
+                        y1: { type: 'linear', position: 'right', grid: { drawOnChartArea: false }, beginAtZero: true }
                     }
                 }
             });
@@ -569,20 +612,141 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', labels: { boxWidth: 12 } },
-                        tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ¥${ctx.raw.toLocaleString()}` } }
-                    },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { callback: (val) => '¥' + (val/1000) + 'k' } }
-                    }
+                    plugins: { legend: { position: 'top' } },
+                    scales: { y: { beginAtZero: true, ticks: { callback: (val) => '¥' + (val/1000) + 'k' } } }
                 }
             });
         }
 
-        // 如果有其他动态行为可以添加，目前仅图表
+        // ========= X Layer 模拟数据模块 =========
+        // 生成随机USDT支出数据
+        function generateMockExpenses(count = 5) {
+            const times = ['09:23:17', '10:45:02', '11:12:33', '13:42:33', '14:18:21', '15:04:56', '16:30:12'];
+            const hashes = [
+                '0x8f3c...a1b2', '0x1a4d...c8e9', '0x3b7e...f5a6', '0x9c2d...b4e8', '0x7a1f...d3c5',
+                '0x4e8b...f2a7', '0x6c9d...e1b4'
+            ];
+            const recipients = [
+                '0x742d...f44e (供应商A)', '0x1234...ab56 (供应商B)', '0x5678...cd90 (供应商C)',
+                '0x90ab...ef12 (市场费用)', '0x3456...gh78 (技术外包)'
+            ];
+            const amounts = [12500.00, 5230.50, 8750.00, 3200.00, 15420.00, 6780.00, 4320.00];
+            
+            const selected = [];
+            for (let i = 0; i < count; i++) {
+                selected.push({
+                    time: times[i % times.length],
+                    hash: hashes[i % hashes.length],
+                    to: recipients[i % recipients.length],
+                    amount: amounts[i % amounts.length],
+                    status: '已确认'
+                });
+            }
+            // 按时间排序（越晚越靠上）
+            return selected.sort((a, b) => b.time.localeCompare(a.time));
+        }
+
+        // 更新UI
+        function updateXLayerUI(expenses) {
+            // 计算汇总
+            const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+            const maxAmount = Math.max(...expenses.map(e => e.amount));
+            const maxTime = expenses.find(e => e.amount === maxAmount)?.time || '';
+            
+            document.getElementById('totalUSDT').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('txCount').textContent = expenses.length;
+            document.getElementById('maxUSDT').textContent = `$${maxAmount.toFixed(2)}`;
+            // 更新最大单笔时间显示（简单取第一个出现的时间，但这里我们用找到的时间）
+            const subElement = document.querySelector('#maxUSDT').parentElement.querySelector('.sub');
+            if (subElement) subElement.textContent = maxTime;
+            
+            // 更新表格
+            const tbody = document.getElementById('xlayerTableBody');
+            tbody.innerHTML = expenses.map(e => `
+                <tr>
+                    <td>${e.time}</td>
+                    <td>${e.hash}</td>
+                    <td>${e.to}</td>
+                    <td style="color: #ef4444;">-$${e.amount.toFixed(2)}</td>
+                    <td><span class="status-badge">${e.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // 初始模拟数据
+        let mockExpenses = generateMockExpenses(5);
+        updateXLayerUI(mockExpenses);
+
+        // 刷新按钮：随机生成新数据（模拟实时更新）
+        document.getElementById('refreshXLayerBtn').addEventListener('click', function() {
+            mockExpenses = generateMockExpenses(Math.floor(Math.random() * 3) + 4); // 4-6条
+            updateXLayerUI(mockExpenses);
+            // 添加微小动画反馈
+            this.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i> 刷新成功';
+            setTimeout(() => {
+                this.innerHTML = '<i class="fa-solid fa-rotate"></i> 刷新数据';
+            }, 1000);
+        });
+
+        // ========= 真实链上调用示例 (注释掉，因为需要处理CORS) =========
+        /*
+        async function fetchRealXLayerExpenses() {
+            // 公司地址列表
+            const companyAddresses = [
+                '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
+                '0x1234567890123456789012345678901234567890'
+            ];
+            // USDT合约地址 (请替换为X Layer真实地址)
+            const USDT_CONTRACT = '0x...'; 
+            const provider = new ethers.JsonRpcProvider('https://rpc.xlayer.tech');
+            
+            // 获取当前区块
+            const latestBlock = await provider.getBlockNumber();
+            // 估算24小时前的区块（假设3秒/块）
+            const fromBlock = latestBlock - 28800; 
+            
+            const iface = new ethers.Interface(['event Transfer(address indexed from, address indexed to, uint256 value)']);
+            
+            let allExpenses = [];
+            for (const addr of companyAddresses) {
+                const filter = {
+                    address: USDT_CONTRACT,
+                    topics: [
+                        ethers.id('Transfer(address,address,uint256)'),
+                        ethers.zeroPadValue(addr.toLowerCase(), 32) // from地址填充为32字节
+                    ],
+                    fromBlock: fromBlock,
+                    toBlock: 'latest'
+                };
+                
+                try {
+                    const logs = await provider.getLogs(filter);
+                    for (const log of logs) {
+                        const parsed = iface.parseLog(log);
+                        const block = await provider.getBlock(log.blockNumber);
+                        allExpenses.push({
+                            time: new Date(block.timestamp * 1000).toLocaleTimeString(),
+                            hash: log.transactionHash.slice(0,6)+'...'+log.transactionHash.slice(-4),
+                            to: parsed.args.to.slice(0,6)+'...'+parsed.args.to.slice(-4),
+                            amount: parseFloat(ethers.formatUnits(parsed.args.value, 6)),
+                            status: '已确认'
+                        });
+                    }
+                } catch (e) {
+                    console.error('查询地址出错', addr, e);
+                }
+            }
+            // 按时间排序
+            allExpenses.sort((a,b) => b.time.localeCompare(a.time));
+            return allExpenses;
+        }
+        
+        // 调用示例 (但需要解决CORS)
+        // fetchRealXLayerExpenses().then(expenses => {
+        //     if (expenses.length) updateXLayerUI(expenses);
+        // }).catch(console.error);
+        */
     })();
 </script>
-<!-- 说明：图表使用静态演示数据，实际开发时替换为从API获取的数据即可 -->
 </body>
 </html>
