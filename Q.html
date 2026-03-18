@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>海豚社区 × OKX Boost 助力活动</title>
+    <title>海豚社区 × OKX Boost · 自动奖励计划</title>
     <!-- Font Awesome 5 (免费) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Google Font: Inter 现代无衬线 -->
+    <!-- Google Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -26,7 +26,7 @@
             overflow-x: hidden;
         }
 
-        /* 高级动态背景 */
+        /* 高级动态头部 */
         .hero {
             position: relative;
             background: radial-gradient(ellipse at 30% 40%, #132b44 0%, #030b14 100%);
@@ -149,7 +149,7 @@
             margin-top: 5px;
         }
 
-        /* 个人数据特殊卡片 (合并三排名) */
+        /* 个人排名卡片 */
         .personal-row {
             display: flex;
             justify-content: space-around;
@@ -228,16 +228,107 @@
             font-size: 0.75rem;
         }
 
-        /* 底部折叠规则与奖励 */
-        .details-section {
-            margin: 2rem 0 1rem;
+        /* 容器 */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
+        /* 奖励自动发放流程设计 */
+        .auto-reward-section {
+            background: linear-gradient(145deg, #0a2540, #031a2f);
+            border-radius: 40px;
+            padding: 1.8rem 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid #0088ff;
+            box-shadow: 0 15px 25px #00000060;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #b7ecff;
+        }
+
+        .flow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin: 1.8rem 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+        }
+
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: #00497e;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: #b2f0ff;
+            border: 2px solid #4dc3ff;
+            box-shadow: 0 0 15px #0099ff;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            color: #ffecaa;
+        }
+
+        .step-desc {
+            color: #cce5ff;
+            font-size: 0.95rem;
+        }
+
+        .step-desc i {
+            color: #6affa0;
+            margin-right: 5px;
+        }
+
+        .reward-badge {
+            background: #004d80;
+            border-radius: 30px;
+            padding: 1.2rem;
+            text-align: center;
+            border: 2px dashed #2db6ff;
+        }
+
+        .reward-badge p {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .reward-amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffd966;
+        }
+
+        /* 折叠规则 */
         details {
             background: #0f253a;
             border-radius: 40px;
             padding: 0.5rem 1.5rem;
             border: 1px solid #3a7bb5;
+            margin: 2rem 0;
         }
 
         summary {
@@ -281,14 +372,6 @@
             margin-bottom: 0.5rem;
         }
 
-        .rule-block ul {
-            padding-left: 1.2rem;
-        }
-
-        .rule-block li {
-            margin-bottom: 0.3rem;
-        }
-
         .reward-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -303,14 +386,6 @@
             text-align: center;
         }
 
-        .footer-note {
-            text-align: center;
-            color: #6c8db0;
-            font-size: 0.8rem;
-            margin: 2rem 0 1rem;
-        }
-
-        /* 按钮样式 */
         .btn {
             background: linear-gradient(145deg, #006bb3, #003f77);
             border: none;
@@ -323,12 +398,14 @@
             border: 1px solid #6ec3ff;
             box-shadow: 0 8px 20px #001a33;
             margin: 0.5rem 0;
+            cursor: pointer;
         }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
+        .footer-note {
+            text-align: center;
+            color: #6c8db0;
+            font-size: 0.8rem;
+            margin: 2rem 0 1rem;
         }
     </style>
 </head>
@@ -339,15 +416,15 @@
             <div class="co-brand">
                 <i class="fas fa-dolphin" style="color: #00c8ff;"></i>
                 <span>🐬 海豚社区  ✕  OKX Boost</span>
-                <i class="fab fa-opera" style="color: #0cf;"></i> <!-- 用opera图标暂代OKX -->
+                <i class="fab fa-opera" style="color: #0cf;"></i>
             </div>
             <!-- 主标题 -->
             <div class="title-main">
                 <h1>Boost 助力计划</h1>
-                <p><i class="fas fa-bolt"></i> 交易H代币，双倍激励 <i class="fas fa-bolt"></i></p>
+                <p><i class="fas fa-bolt"></i> 交易即挖矿 · 奖励自动到账 <i class="fas fa-bolt"></i></p>
             </div>
 
-            <!-- 全局交易量卡片 -->
+            <!-- 全局交易量 -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label"><i class="fas fa-chart-line"></i> 今日总交易量</div>
@@ -361,7 +438,7 @@
                 </div>
             </div>
 
-            <!-- 个人数据卡片 -->
+            <!-- 个人交易数据 -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label"><i class="fas fa-user"></i> 我的今日交易</div>
@@ -375,7 +452,7 @@
                 </div>
             </div>
 
-            <!-- 排名三件套 -->
+            <!-- 个人排名 -->
             <div class="personal-row">
                 <div class="rank-item">
                     <div class="rank-label">本期排名</div>
@@ -416,73 +493,94 @@
                     <span class="feed-volume">+5,220 USDC</span>
                     <span class="feed-time">5分钟前</span>
                 </li>
-                <li class="feed-item">
-                    <span class="feed-address">0xb77...F2c</span>
-                    <span class="feed-volume">+4,130 USDC</span>
-                    <span class="feed-time">8分钟前</span>
-                </li>
-                <li class="feed-item">
-                    <span class="feed-address">0xe29...8a1</span>
-                    <span class="feed-volume">+3,890 USDC</span>
-                    <span class="feed-time">12分钟前</span>
-                </li>
             </ul>
         </div>
 
-        <!-- 底部折叠规则与奖励 -->
-        <div class="details-section">
-            <details>
-                <summary>📋 活动规则与奖励</summary>
-                <div class="rules-content">
-                    <div class="rule-block">
-                        <h4>📌 参与方式</h4>
-                        <ul>
-                            <li>1. 在社区App内关联您的OKX钱包（仅需一次授权）。</li>
-                            <li>2. 使用OKX DEX交易H代币（任意链，推荐低费链）。</li>
-                            <li>3. 交易量自动累计，无需手动提交。</li>
-                        </ul>
-                    </div>
-                    <div class="rule-block">
-                        <h4>🎁 补贴规则</h4>
-                        <ul>
-                            <li>按活动期间累计交易量发放H代币，阶梯如下：</li>
-                        </ul>
-                        <div class="reward-grid">
-                            <div class="reward-item">≥500 USDC<br><strong>10 H</strong></div>
-                            <div class="reward-item">≥1,000 USDC<br><strong>25 H</strong></div>
-                            <div class="reward-item">≥2,500 USDC<br><strong>60 H</strong></div>
-                            <div class="reward-item">≥5,000 USDC<br><strong>130 H</strong></div>
-                            <div class="reward-item">≥10,000 USDC<br><strong>300 H</strong></div>
-                            <div class="reward-item">≥25,000 USDC<br><strong>800 H + NFT</strong></div>
-                        </div>
-                    </div>
-                    <div class="rule-block">
-                        <h4>⏳ 活动时间</h4>
-                        <p>2025.04.01 08:00 — 2025.04.15 08:00 (UTC+8)</p>
-                    </div>
-                    <div class="rule-block">
-                        <h4>🤝 特别说明</h4>
-                        <p>社区与OKX深度合作，您交易产生的部分返佣将转化为H代币回馈用户。奖励将于结束后7日内发放至您的OKX钱包。</p>
+        <!-- 🌟 新增：自动奖励发放流程展示 -->
+        <div class="auto-reward-section">
+            <div class="section-title">
+                <i class="fas fa-robot" style="color: #6affa0;"></i> 奖励自动发放 · 无需领取
+            </div>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="step-icon">①</div>
+                    <div class="step-content">
+                        <div class="step-title">链上快照</div>
+                        <div class="step-desc"><i class="fas fa-check-circle"></i> 活动结束后，系统自动对已绑定钱包进行交易量快照，所有数据上链存证[citation:4]。</div>
                     </div>
                 </div>
-            </details>
+                <div class="flow-step">
+                    <div class="step-icon">②</div>
+                    <div class="step-content">
+                        <div class="step-title">智能合约自动计算</div>
+                        <div class="step-desc"><i class="fas fa-check-circle"></i> 根据预设的补贴阶梯，智能合约自动计算每个地址应得的H代币数量[citation:2][citation:3]。</div>
+                    </div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon">③</div>
+                    <div class="step-content">
+                        <div class="step-title">自动发放至钱包</div>
+                        <div class="step-desc"><i class="fas fa-check-circle"></i> 奖励H代币将在快照后7日内自动转入您的OKX钱包，无需任何手动操作[citation:5][citation:7]。</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 预估奖励卡片（根据当前累计交易量动态展示） -->
+            <div class="reward-badge">
+                <p>🔮 根据您当前累计交易量 <strong>8,450 USDC</strong></p>
+                <div class="reward-amount">130 H</div>
+                <p style="font-size:0.85rem;">已达到 5,000 USDC 档位 · 再交易 1,550 USDC 可升至 300 H</p>
+            </div>
+            <p style="font-size:0.8rem; text-align:center; margin-top:10px; color:#b0d4ff;">
+                <i class="fas fa-shield-alt"></i> 奖励发放全程智能合约自动执行，公开透明
+            </p>
         </div>
 
-        <!-- 行动按钮 (模拟) -->
+        <!-- 底部折叠规则与奖励 -->
+        <details>
+            <summary>📋 活动规则与奖励详情</summary>
+            <div class="rules-content">
+                <div class="rule-block">
+                    <h4>📌 参与方式</h4>
+                    <ul>
+                        <li>1. 在社区App内关联您的OKX钱包（仅需一次授权）。</li>
+                        <li>2. 使用OKX DEX交易H代币（任意链，推荐低费链）。</li>
+                        <li>3. 交易量自动累计，无需手动提交。</li>
+                    </ul>
+                </div>
+                <div class="rule-block">
+                    <h4>🎁 补贴阶梯（自动发放）</h4>
+                    <div class="reward-grid">
+                        <div class="reward-item">≥500 USDC<br><strong>10 H</strong></div>
+                        <div class="reward-item">≥1,000 USDC<br><strong>25 H</strong></div>
+                        <div class="reward-item">≥2,500 USDC<br><strong>60 H</strong></div>
+                        <div class="reward-item">≥5,000 USDC<br><strong>130 H</strong></div>
+                        <div class="reward-item">≥10,000 USDC<br><strong>300 H</strong></div>
+                        <div class="reward-item">≥25,000 USDC<br><strong>800 H + NFT</strong></div>
+                    </div>
+                </div>
+                <div class="rule-block">
+                    <h4>🤖 自动发放机制说明</h4>
+                    <p>• 活动结束后24小时内完成链上快照[citation:4]。</p>
+                    <p>• 智能合约根据快照数据自动计算奖励，杜绝人工干预[citation:2]。</p>
+                    <p>• 奖励将直接发送至您绑定的OKX钱包，无需手动领取[citation:5][citation:7]。</p>
+                    <p>• 所有发放记录可在区块浏览器中公开查询。</p>
+                </div>
+                <div class="rule-block">
+                    <h4>⏳ 活动时间</h4>
+                    <p>2025.04.01 08:00 — 2025.04.15 08:00 (UTC+8)</p>
+                </div>
+            </div>
+        </details>
+
+        <!-- 行动按钮 -->
         <button class="btn" onclick="alert('唤起OKX DEX (演示)')"><i class="fas fa-exchange-alt"></i> 前往OKX DEX交易H</button>
         <button class="btn" style="background: #1f3a5f;" onclick="alert('刷新数据')"><i class="fas fa-sync-alt"></i> 刷新我的进度</button>
 
-        <!-- 底部合作信息 -->
         <div class="footer-note">
-            <i class="fas fa-dolphin"></i> 海豚社区  ·  与OKX联合呈现<br>
-            <span style="font-size:0.7rem;">所有链上交易均公开可查，奖励公平发放</span>
+            <i class="fas fa-dolphin"></i> 海豚社区 · 与OKX联合呈现 · 奖励智能合约自动执行<br>
+            <span style="font-size:0.7rem;">所有链上交易及奖励发放均可公开查询</span>
         </div>
     </div>
-
-    <!-- 模拟动态数据 (静态演示) -->
-    <script>
-        // 这里可以后续对接App原生数据更新
-        console.log('页面加载完成，等待App注入真实数据');
-    </script>
 </body>
 </html>
