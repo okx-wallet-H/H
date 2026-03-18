@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>社区 OKX Boost 交易量排行榜</title>
+  <title>社区 OKX Boost 排行榜 · 紫韵版</title>
   <style>
+    /* 全局重置 & 白色清爽基底 */
     * {
       margin: 0;
       padding: 0;
@@ -12,11 +13,11 @@
     }
 
     body {
-      background-color: #0c0c0e;
+      background-color: #FFFFFF;      /* 纯白背景 */
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      color: #e4e4e7;
+      color: #1E293B;                 /* 深灰蓝文字，舒适阅读 */
       line-height: 1.5;
-      padding: 16px 12px 40px;
+      padding: 20px 16px 40px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -28,7 +29,7 @@
       width: 100%;
     }
 
-    /* 标题区 */
+    /* 标题区 — 紫色渐变 */
     .hero {
       margin-bottom: 24px;
       text-align: left;
@@ -36,37 +37,37 @@
 
     .hero h1 {
       font-size: 2rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #f9d77e 0%, #f5a623 80%);
+      background: linear-gradient(135deg, #8B5CF6, #6D28D9);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       line-height: 1.2;
     }
 
     .hero .date-badge {
       display: inline-block;
-      background: rgba(245, 166, 35, 0.15);
-      color: #f5a623;
+      background: #EDE9FE;            /* 浅紫底 */
+      color: #5B21B6;                 /* 深紫 */
       font-weight: 500;
       font-size: 0.9rem;
-      padding: 4px 14px;
-      border-radius: 30px;
-      border: 1px solid rgba(245, 166, 35, 0.3);
-      backdrop-filter: blur(4px);
+      padding: 6px 16px;
+      border-radius: 40px;
+      border: 1px solid #C4B5FD;
+      box-shadow: 0 2px 6px rgba(124, 58, 237, 0.05);
       margin-top: 6px;
     }
 
-    /* 卡片通用 */
+    /* 卡片 — 纯白+极浅阴影 */
     .card {
-      background: #18181b;
+      background: #FFFFFF;
       border-radius: 26px;
       padding: 22px 20px;
       margin-bottom: 20px;
-      border: 1px solid #2c2c30;
-      box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.8);
+      border: 1px solid #F1F0F6;      /* 几乎不可见的边界 */
+      box-shadow: 0 10px 25px -8px rgba(124, 58, 237, 0.1);
       transition: transform 0.1s ease;
     }
 
@@ -75,14 +76,14 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 18px;
-      border-bottom: 1px dashed #333;
+      border-bottom: 1px dashed #E0E7FF;  /* 淡紫虚线 */
       padding-bottom: 12px;
     }
 
     .card-header h2 {
       font-size: 1.35rem;
       font-weight: 600;
-      color: #fff;
+      color: #1F2937;                 /* 深色标题 */
       letter-spacing: -0.3px;
     }
 
@@ -100,12 +101,12 @@
       gap: 12px;
       margin-bottom: 14px;
       font-size: 0.98rem;
-      color: #c8c8cf;
+      color: #334155;                 /* 深灰 */
       align-items: flex-start;
     }
 
     .rule-list li .rule-marker {
-      background: #2a2a30;
+      background: #7C3AED;            /* 紫色主色 */
       border-radius: 50%;
       min-width: 22px;
       height: 22px;
@@ -113,31 +114,35 @@
       align-items: center;
       justify-content: center;
       font-size: 0.8rem;
-      color: #f5a623;
+      color: #FFFFFF;
       font-weight: 600;
       margin-top: 2px;
     }
 
     .rule-list li strong {
-      color: #f5b344;
-      font-weight: 500;
+      color: #6D28D9;                 /* 强调深紫 */
+      font-weight: 600;
     }
 
+    /* 紫色提示块 (替代原来的红色警告) */
     .highlight-warning {
-      background: rgba(245, 90, 70, 0.1);
-      border-left: 4px solid #f55a46;
-      padding: 14px 16px;
+      background: #F5F3FF;             /* 极浅紫 */
+      border-left: 4px solid #7C3AED;
+      padding: 14px 18px;
       border-radius: 16px;
       margin-top: 16px;
       font-size: 0.95rem;
-      color: #f0a8a0;
+      color: #2C3E50;                  /* 深蓝灰 */
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
     }
 
     /* 表格区域 */
     .table-wrapper {
       overflow-x: auto;
       border-radius: 20px;
-      background: #202024;
+      background: #FFFFFF;
+      border: 1px solid #E9E6F5;
       margin-top: 8px;
     }
 
@@ -151,17 +156,18 @@
     th {
       text-align: left;
       padding: 16px 14px 12px;
-      background: #26262b;
-      color: #a1a1ab;
-      font-weight: 500;
+      background: #F8F4FF;             /* 浅紫表头 */
+      color: #4B5563;
+      font-weight: 600;
       font-size: 0.85rem;
       letter-spacing: 0.3px;
+      border-bottom: 1px solid #D8D0F0;
     }
 
     td {
       padding: 14px 14px;
-      border-bottom: 1px solid #2e2e35;
-      color: #efeff5;
+      border-bottom: 1px solid #F0ECF9;
+      color: #1F2937;
     }
 
     tr:last-child td {
@@ -169,8 +175,8 @@
     }
 
     .rank-col {
-      font-weight: 600;
-      color: #f5a623;
+      font-weight: 700;
+      color: #7C3AED;                  /* 紫色排名数字 */
       width: 60px;
     }
 
@@ -181,42 +187,42 @@
     .volume-col {
       font-weight: 600;
       font-family: 'Inter Mono', monospace;
+      color: #111827;
     }
 
     .time-col {
-      color: #88889a;
+      color: #6B7280;                   /* 灰色时间 */
       font-size: 0.85rem;
     }
 
-    /* 刷新提示 */
+    /* 刷新区域 */
     .update-note {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 12px 4px 4px;
-      color: #9b9baf;
+      margin: 12px 4px 12px;
+      color: #5B5F6B;
       font-size: 0.85rem;
     }
 
     .fake-refresh {
-      background: #2b2b31;
-      border: none;
-      color: #c9c9df;
-      padding: 6px 14px;
-      border-radius: 30px;
+      background: #FFFFFF;
+      border: 1px solid #CBB9FC;
+      color: #5B21B6;
+      padding: 6px 16px;
+      border-radius: 40px;
       font-size: 0.75rem;
       font-weight: 500;
       cursor: pointer;
-      transition: 0.2s;
-      border: 1px solid #3d3d45;
+      transition: 0.15s;
     }
 
     .fake-refresh:hover {
-      background: #35353d;
-      color: #f5a623;
+      background: #F0E9FF;
+      border-color: #7C3AED;
     }
 
-    /* 提交卡片 */
+    /* 提交区域 */
     .submit-area {
       display: flex;
       flex-direction: column;
@@ -224,10 +230,10 @@
     }
 
     .submit-info {
-      background: #25252b;
+      background: #FAF8FF;              /* 柔和紫白 */
       border-radius: 18px;
       padding: 18px;
-      border: 1px solid #34343c;
+      border: 1px solid #E0D9F5;
     }
 
     .submit-info p {
@@ -235,30 +241,34 @@
       display: flex;
       gap: 10px;
       align-items: center;
+      color: #2D3A4A;
     }
 
     .btn-submit {
-      background: #f5a623;
+      background: #7C3AED;               /* 纯紫主按钮 */
       border: none;
-      color: #0c0c0e;
+      color: #FFFFFF;
       font-weight: 700;
       font-size: 1.2rem;
       padding: 18px 0;
       border-radius: 60px;
       cursor: pointer;
-      transition: 0.15s;
-      box-shadow: 0 10px 20px -5px rgba(245, 166, 35, 0.25);
-      border: 1px solid rgba(255, 215, 120, 0.5);
+      transition: background 0.15s, transform 0.1s;
+      box-shadow: 0 8px 18px -6px rgba(124, 58, 237, 0.4);
+      border: 1px solid #9B7AF0;
       letter-spacing: 0.5px;
+    }
+
+    .btn-submit:hover {
+      background: #6D28D9;
     }
 
     .btn-submit:active {
       transform: scale(0.98);
-      background: #e09115;
     }
 
     .hint {
-      color: #aaa;
+      color: #64748B;
       font-size: 0.85rem;
       margin-top: 10px;
       display: flex;
@@ -270,18 +280,19 @@
       font-size: 1.2rem;
     }
 
-    /* 折叠区块 */
+    /* 折叠区块 — 干净简洁 */
     details {
-      background: #202024;
+      background: #FFFFFF;
       border-radius: 20px;
-      padding: 8px 16px;
-      margin-top: 16px;
+      padding: 6px 18px 10px;
+      margin-top: 18px;
+      border: 1px solid #E5DEFF;
     }
 
     summary {
       font-weight: 500;
-      color: #ddd;
-      padding: 10px 0;
+      color: #1F2937;
+      padding: 12px 0 8px;
       cursor: pointer;
       list-style: none;
       display: flex;
@@ -297,7 +308,7 @@
       content: '▶';
       font-size: 0.8rem;
       margin-left: auto;
-      color: #f5a623;
+      color: #7C3AED;
       transition: transform 0.2s;
     }
 
@@ -306,26 +317,27 @@
     }
 
     .detail-content {
-      padding: 8px 0 16px;
-      border-top: 1px solid #333;
-      color: #b0b0c0;
+      padding: 10px 0 16px;
+      border-top: 1px solid #E0DAF0;
+      color: #3C4A5B;
     }
 
     .step-list {
-      margin-left: 18px;
-      padding: 8px 0;
+      margin-left: 22px;
+      padding: 4px 0;
     }
 
     .step-list li {
       margin-bottom: 10px;
     }
 
+    /* 页脚淡灰 */
     .footer-note {
       text-align: center;
       margin-top: 30px;
-      color: #6c6c7a;
+      color: #94A3B8;
       font-size: 0.8rem;
-      border-top: 1px solid #242428;
+      border-top: 1px solid #E2E8F0;
       padding-top: 20px;
     }
 
@@ -335,17 +347,28 @@
       gap: 8px;
       flex-wrap: wrap;
     }
+
+    /* 小标签 + 管理员联系方式 */
+    .admin-contact {
+      background: #F1EEFA;
+      padding: 4px 12px;
+      border-radius: 40px;
+      color: #5B21B6;
+      font-weight: 500;
+      font-size: 0.9rem;
+      border: 1px solid #CBB9FC;
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <!-- 头部 -->
+  <!-- 头部 紫色主题 -->
   <div class="hero">
     <h1>⚡️ OKX BOOST<br>社区交易量挑战赛</h1>
     <div class="date-badge">📅 2026.03.20 – 2026.04.03</div>
   </div>
 
-  <!-- 规则卡片 -->
+  <!-- 规则卡片 (紫白风格) -->
   <div class="card">
     <div class="card-header">
       <span class="emoji">📋</span>
@@ -422,14 +445,14 @@
         </tbody>
       </table>
     </div>
-    <div style="margin-top: 14px; color: #aaa; font-size: 0.85rem; display: flex; gap: 14px; flex-wrap: wrap;">
+    <div style="margin-top: 14px; color: #64748B; font-size: 0.85rem; display: flex; gap: 14px; flex-wrap: wrap;">
       <span>🟢 数据由会员提交截图 + 人工审核</span>
       <span>🔞 严禁伪造，违者永久拉黑</span>
     </div>
   </div>
 
   <!-- 提交交易量卡片 -->
-  <div class="card" style="padding-bottom: 20px;">
+  <div class="card">
     <div class="card-header">
       <span class="emoji">📸</span>
       <h2>提交你的 Boost 交易量</h2>
@@ -439,18 +462,17 @@
         <p>📱 <strong>如何提交：</strong></p>
         <p>1. 打开 OKX App → 进入【Boost】页面</p>
         <p>2. 截图<strong>完整页面</strong>（必须包含当前Boost数值 + 时间）</p>
-        <p>3. 发送截图至社区管理员微信：<span style="background: #2d2d35; padding: 4px 10px; border-radius: 40px; color:#f5a623;">okx_boost_admin</span></p>
+        <p>3. 发送截图至社区管理员微信：<span class="admin-contact">okx_boost_admin</span></p>
         <p class="hint" style="margin-top: 12px;">⏳ 管理员每日22:00前统一录入排行榜，早提交早更新</p>
       </div>
 
-      <!-- 按钮仅作为引导，点击弹出提示 -->
       <button class="btn-submit" id="submitGuidBtn">📤 我已截图，立即提交</button>
       <div class="hint">
         <span class="icon">⚠️</span> 请勿重复提交，截图必须包含Boost页面和系统时间栏（或状态栏）
       </div>
     </div>
 
-    <!-- 折叠：查看截图示例 & 注意延迟 -->
+    <!-- 折叠：截图示例 & 常见问题 (紫色简洁版) -->
     <details>
       <summary>📌 点击查看截图示例 & 常见问题</summary>
       <div class="detail-content">
@@ -464,36 +486,30 @@
     </details>
   </div>
 
-  <!-- 页脚免责 -->
+  <!-- 页脚 -->
   <div class="footer-note">
     <p>© 社区Boost活动组 · 本排行榜基于人工录入，仅供参考<br>活动最终解释权归社区所有，OKX平台仅提供技术支持</p>
   </div>
 </div>
 
-<!-- 简单交互：模拟刷新toast + 提交按钮引导 -->
+<!-- 轻交互 (与之前相同，保留模拟刷新和提交提醒) -->
 <script>
   (function() {
-    // 模拟刷新按钮
     const refreshBtn = document.getElementById('refreshToastBtn');
     if (refreshBtn) {
       refreshBtn.addEventListener('click', function() {
-        // 用alert模拟轻提示（简洁直观）
         alert('🔄 排行榜数据由管理员人工同步，最新更新时间：2026-03-19 14:30。如需强制更新，请联系管理员。');
       });
     }
 
-    // 提交按钮引导
     const submitBtn = document.getElementById('submitGuidBtn');
     if (submitBtn) {
       submitBtn.addEventListener('click', function() {
         alert('📸 请按照卡片指引截图，并发送至管理员微信 okx_boost_admin 。\n\n我们会在每日22:00前统一录入排行榜。');
       });
     }
-
-    // 给折叠summary加点样式 (无需额外)
   })();
 </script>
 
-<!-- 保证所有字体回退 -->
 </body>
 </html>
