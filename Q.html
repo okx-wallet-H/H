@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>海豚社区 · H代币实时交易排行榜</title>
+    <title>海豚社区 · H代币实时交易排行榜（修复版）</title>
     <!-- ethers.js -->
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <!-- Font Awesome -->
@@ -25,7 +25,6 @@
             margin: 0 auto;
         }
 
-        /* 头部 */
         .header {
             display: flex;
             justify-content: space-between;
@@ -41,9 +40,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.2;
         }
-        .header-left .badge {
+        .badge {
             background: rgba(124, 58, 237, 0.12);
             color: #6d28d9;
             padding: 6px 14px;
@@ -64,17 +62,7 @@
             gap: 20px;
             flex-wrap: wrap;
         }
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #10b981;
-            display: inline-block;
-            margin-right: 6px;
-            box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
-        }
 
-        /* 卡片通用 */
         .card {
             background: white;
             border-radius: 28px;
@@ -104,18 +92,63 @@
             border-radius: 12px;
         }
 
-        /* 搜索框 */
+        /* 开关 */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 26px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #7c3aed;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
         .search-row {
             display: flex;
             gap: 12px;
             align-items: center;
-            margin-bottom: 20px;
             flex-wrap: wrap;
+            margin-bottom: 16px;
         }
         .search-input {
             flex: 3;
             min-width: 300px;
-            padding: 16px 20px;
+            padding: 14px 20px;
             border: 2px solid #e9e2f5;
             border-radius: 60px;
             font-size: 1rem;
@@ -129,7 +162,7 @@
             background: #7c3aed;
             color: white;
             border: none;
-            padding: 16px 32px;
+            padding: 14px 28px;
             border-radius: 60px;
             font-weight: 600;
             font-size: 1rem;
@@ -147,13 +180,12 @@
             background: white;
             border: 2px solid #e9e2f5;
             color: #4b5563;
-            padding: 14px 28px;
+            padding: 12px 24px;
             border-radius: 60px;
             font-weight: 500;
             cursor: pointer;
         }
 
-        /* 网格布局 */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
@@ -161,9 +193,7 @@
         }
         .col-8 { grid-column: span 8; }
         .col-4 { grid-column: span 4; }
-        .col-12 { grid-column: span 12; }
 
-        /* 实时交易流 */
         .tx-stream {
             max-height: 400px;
             overflow-y: auto;
@@ -173,7 +203,7 @@
         .tx-row {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
+            padding: 12px 16px;
             border-bottom: 1px solid #f5f0ff;
             font-size: 0.9rem;
         }
@@ -189,7 +219,7 @@
             text-overflow: ellipsis;
         }
         .tx-address {
-            width: 150px;
+            width: 140px;
             font-family: monospace;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -199,27 +229,14 @@
             font-weight: 600;
             text-align: right;
         }
-        .tx-type {
-            width: 70px;
-            text-align: center;
-        }
-        .type-badge {
-            background: #e6f7e6;
-            color: #0d9488;
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
 
-        /* 排行榜 */
         .rank-list {
             margin-top: 16px;
         }
         .rank-item {
             display: flex;
             align-items: center;
-            padding: 12px 0;
+            padding: 10px 0;
             border-bottom: 1px solid #f0e9ff;
         }
         .rank-num {
@@ -235,18 +252,17 @@
             font-weight: 700;
         }
 
-        /* 搜索结果卡片 */
-        .search-result {
+        .query-box {
             background: #faf8ff;
             border-radius: 20px;
             padding: 20px;
-            margin-top: 20px;
+            margin: 16px 0;
         }
         .stat-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
-            margin-bottom: 20px;
+            margin: 16px 0;
         }
         .stat-item {
             background: white;
@@ -259,11 +275,6 @@
             font-weight: 700;
             color: #7c3aed;
         }
-        .stat-label {
-            color: #64748b;
-            font-size: 0.85rem;
-        }
-
         .footer {
             text-align: center;
             margin-top: 40px;
@@ -272,65 +283,86 @@
             border-top: 1px solid #e2e8f0;
             padding-top: 30px;
         }
-        .badge {
-            background: #ede9fe;
-            color: #5b21b6;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+        .range-info {
+            font-size: 0.9rem;
+            color: #64748b;
+            background: #f1f5f9;
+            padding: 8px 16px;
+            border-radius: 40px;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- 头部 -->
     <div class="header">
         <div class="header-left">
-            <h1>🐬 海豚社区 · H代币实时交易排行榜</h1>
+            <h1>🐬 海豚社区 · H代币实时排行榜</h1>
             <div class="badge">
-                <span class="status-dot"></span> 自动统计前20名 · 无需审核
+                <i class="fa-regular fa-clock"></i> 查询范围: <span id="blockRange">加载中...</span>
             </div>
         </div>
         <div class="network-status">
-            <span><i class="fa-regular fa-database" style="color:#7c3aed;"></i> X Layer 链上实时数据</span>
-            <span><i class="fa-regular fa-clock"></i> 最新区块: <span id="latestBlock">-</span></span>
+            <span><i class="fa-regular fa-database"></i> X Layer 链上数据</span>
             <span><i class="fa-regular fa-rotate"></i> <span id="updateTime">-</span></span>
         </div>
     </div>
 
-    <!-- 搜索框 -->
+    <!-- 统计开关 -->
     <div class="card">
         <div class="card-header">
-            <h3><i class="fa-regular fa-magnifying-glass"></i> 查询地址交易记录</h3>
+            <h3><i class="fa-regular fa-sliders"></i> 统计规则</h3>
+            <div class="toggle-switch">
+                <span>包含所有转账</span>
+                <label class="switch">
+                    <input type="checkbox" id="includeTransfers" checked>
+                    <span class="slider"></span>
+                </label>
+                <span style="color:#64748b;">(开启后所有Transfer都计入)</span>
+            </div>
+        </div>
+        <p style="color:#64748b;"><i class="fa-regular fa-circle-info"></i> 默认包含所有转账（买入/卖出/转账）。关闭后仅统计与DEX交互的交易。</p>
+    </div>
+
+    <!-- 搜索地址 -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fa-regular fa-magnifying-glass"></i> 查询地址</h3>
         </div>
         <div class="search-row">
-            <input type="text" id="searchAddress" class="search-input" placeholder="输入0x地址，例如 0x29018d...30Bd">
+            <input type="text" id="searchAddress" class="search-input" placeholder="输入0x地址">
             <button id="searchBtn" class="btn-primary"><i class="fa-regular fa-search"></i> 查询</button>
             <button id="clearSearchBtn" class="btn-outline">清除</button>
         </div>
-        <div id="searchResult" style="display: none;">
-            <!-- 动态填充搜索结果 -->
+        <div id="searchResult" style="display: none;"></div>
+    </div>
+
+    <!-- 手动查询交易哈希 -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fa-regular fa-hashtag"></i> 手动查询交易哈希</h3>
         </div>
+        <div class="search-row">
+            <input type="text" id="txHashInput" class="search-input" placeholder="输入0x交易哈希 (66位)">
+            <button id="queryTxBtn" class="btn-primary"><i class="fa-regular fa-check"></i> 查询</button>
+        </div>
+        <div id="txQueryResult" style="display: none;" class="query-box"></div>
     </div>
 
     <!-- 实时交易流 + 排行榜 -->
     <div class="dashboard-grid">
-        <!-- 实时交易流 -->
         <div class="card col-8">
             <div class="card-header">
-                <h3><i class="fa-regular fa-rss"></i> 实时交易流 (最新50笔H转账)</h3>
-                <span class="badge" id="txCount">0 笔</span>
+                <h3><i class="fa-regular fa-rss"></i> 实时交易流 (最新50笔)</h3>
+                <span class="badge" id="txCount">0</span>
             </div>
             <div class="tx-stream" id="txStream">
                 <div style="text-align:center; padding:40px;">加载中...</div>
             </div>
         </div>
-
-        <!-- 排行榜 -->
         <div class="card col-4">
             <div class="card-header">
                 <h3><i class="fa-regular fa-ranking-star"></i> 累计交易量 TOP 20</h3>
-                <span class="badge">实时更新</span>
             </div>
             <div class="rank-list" id="rankList">
                 <div style="text-align:center; padding:20px;">加载中...</div>
@@ -338,9 +370,8 @@
         </div>
     </div>
 
-    <!-- 页脚 -->
     <div class="footer">
-        <p>© 海豚社区 · 数据基于X Layer公共RPC实时查询 · 仅统计买入/卖出交易（通过DEX合约过滤）</p>
+        <p>© 海豚社区 · 数据基于X Layer公共RPC · 每60秒自动刷新</p>
         <p>H合约: 0x867fdd2eef548f80808d0c9065cd55f57e207777</p>
     </div>
 </div>
@@ -349,29 +380,35 @@
 (function() {
     // --- 配置 ---
     const H_CONTRACT = '0x867fdd2eef548f80808d0c9065cd55f57e207777';
-    const RPC_URL = 'https://rpc.xlayer.tech';  // 公共RPC
+    const RPC_LIST = [
+        'https://rpc.xlayer.tech',
+        'https://xlayerrpc.okx.com',
+        'https://xlayer.drpc.org',
+        'https://endpoints.omniatech.io/v1/xlayer/mainnet/public'
+    ];
     const TOKEN_DECIMALS = 18;
-    const MAX_TXS = 50;          // 实时流显示条数
-    const BLOCK_RANGE = 28800;    // 查询最近28800个区块（约24小时）
+    const MAX_TXS = 50;
+    const BLOCK_RANGE = 200000; // 最近约7天 (X Layer 3秒/块 ≈ 20万块/7天)
 
-    // DEX合约列表 (用于判断交易，需补充X Layer上的实际DEX地址)
+    // DEX合约列表 (用于判断交易)
     const DEX_CONTRACTS = [
-        '0xa38e5b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f', // 示例QuickSwap
-        '0xb45e2b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f', // SyncSwap
-        '0xc55e5b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f',
-        // 请替换为真实DEX地址
+        '0xa38e5b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f',
+        '0xb45e2b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f',
+        '0xc55e5b7c4b1b947c8b524f1c1e1c5b7b9f9f9f9f'
     ].map(addr => addr.toLowerCase());
 
-    // --- 全局状态 ---
-    let provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-    let allTxs = [];               // 所有获取的交易 (已去重)
-    let addressStats = new Map();   // 地址 -> 累计交易量
-    let top20 = [];                // 前20地址
+    // --- 全局变量 ---
+    let provider = new ethers.providers.JsonRpcProvider(RPC_LIST[0]);
+    let currentRpcIndex = 0;
+    let allTxs = [];
+    let addressStats = new Map();
+    let top20 = [];
     let refreshTimer = null;
     let isLoading = false;
+    let includeTransfers = true; // 默认包含转账
 
     // --- UI 元素 ---
-    const latestBlockSpan = document.getElementById('latestBlock');
+    const blockRangeSpan = document.getElementById('blockRange');
     const updateTimeSpan = document.getElementById('updateTime');
     const txCountSpan = document.getElementById('txCount');
     const txStreamDiv = document.getElementById('txStream');
@@ -380,84 +417,100 @@
     const searchBtn = document.getElementById('searchBtn');
     const clearSearchBtn = document.getElementById('clearSearchBtn');
     const searchResultDiv = document.getElementById('searchResult');
+    const txHashInput = document.getElementById('txHashInput');
+    const queryTxBtn = document.getElementById('queryTxBtn');
+    const txQueryResultDiv = document.getElementById('txQueryResult');
+    const includeTransfersCheck = document.getElementById('includeTransfers');
 
-    // --- 工具函数 ---
-    const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-    // --- 获取最新区块并更新UI ---
-    async function updateLatestBlock() {
-        try {
-            const block = await provider.getBlockNumber();
-            latestBlockSpan.innerText = block.toLocaleString();
-        } catch (e) {}
+    // --- 切换RPC ---
+    function switchRpc() {
+        currentRpcIndex = (currentRpcIndex + 1) % RPC_LIST.length;
+        provider = new ethers.providers.JsonRpcProvider(RPC_LIST[currentRpcIndex]);
+        console.log('切换到RPC:', RPC_LIST[currentRpcIndex]);
     }
 
-    // --- 获取最近BLOCK_RANGE个区块的Transfer日志 ---
-    async function fetchRecentLogs() {
+    // --- 获取最新区块 ---
+    async function getLatestBlock() {
         try {
-            const latest = await provider.getBlockNumber();
-            const fromBlock = Math.max(latest - BLOCK_RANGE, 0);
-            const filter = {
-                address: H_CONTRACT,
-                topics: [ethers.utils.id('Transfer(address,address,uint256)')],
-                fromBlock: ethers.utils.hexValue(fromBlock),
-                toBlock: ethers.utils.hexValue(latest)
-            };
-            const logs = await provider.getLogs(filter);
-            return logs;
+            return await provider.getBlockNumber();
         } catch (e) {
-            console.error('fetchLogs error', e);
-            return [];
+            switchRpc();
+            return await provider.getBlockNumber();
         }
     }
 
-    // --- 解析日志，判断是否为交易（与DEX交互）---
-    async function parseLogsToTxs(logs) {
-        const txs = [];
-        const batchSize = 10; // 批量处理收据查询
+    // --- 获取日志 ---
+    async function fetchLogs(fromBlock, toBlock) {
+        const filter = {
+            address: H_CONTRACT,
+            topics: [ethers.utils.id('Transfer(address,address,uint256)')],
+            fromBlock: ethers.utils.hexValue(fromBlock),
+            toBlock: ethers.utils.hexValue(toBlock)
+        };
+        try {
+            return await provider.getLogs(filter);
+        } catch (e) {
+            console.error('getLogs失败', e);
+            switchRpc();
+            return await provider.getLogs(filter);
+        }
+    }
+
+    // --- 解析单笔交易 (带重试) ---
+    async function parseLog(log) {
+        try {
+            if (!log.topics || log.topics.length < 3) return null;
+            const from = '0x' + log.topics[1].slice(26);
+            const to = '0x' + log.topics[2].slice(26);
+            const value = BigInt(log.data);
+            const amount = Number(ethers.utils.formatUnits(value, TOKEN_DECIMALS));
+
+            // 获取交易收据和详情
+            const receipt = await provider.getTransactionReceipt(log.transactionHash);
+            if (!receipt) return null;
+            const tx = await provider.getTransaction(log.transactionHash);
+            if (!tx) return null;
+
+            const toAddr = tx.to ? tx.to.toLowerCase() : '';
+            const isSwap = DEX_CONTRACTS.includes(toAddr);
+
+            return {
+                txHash: log.transactionHash,
+                from,
+                to,
+                amount,
+                blockNumber: parseInt(log.blockNumber, 16),
+                isSwap,
+                time: null
+            };
+        } catch (e) {
+            console.warn('解析日志失败', log.transactionHash, e);
+            return null;
+        }
+    }
+
+    // --- 批量解析日志 ---
+    async function parseLogs(logs) {
+        const results = [];
+        const batchSize = 10;
         for (let i = 0; i < logs.length; i += batchSize) {
             const batch = logs.slice(i, i + batchSize);
-            await Promise.all(batch.map(async (log) => {
-                try {
-                    if (!log.topics || log.topics.length < 3) return;
-                    const from = '0x' + log.topics[1].slice(26);
-                    const to = '0x' + log.topics[2].slice(26);
-                    const value = BigInt(log.data);
-                    const amount = Number(ethers.utils.formatUnits(value, TOKEN_DECIMALS));
-                    // 判断是否为交易：需要查询交易收据，检查to地址是否在DEX列表
-                    // 注意：收据查询可能较慢，我们只针对每笔交易查询一次，并缓存结果
-                    const receipt = await provider.getTransactionReceipt(log.transactionHash);
-                    if (!receipt) return;
-                    // 获取交易详情以确定to地址
-                    const tx = await provider.getTransaction(log.transactionHash);
-                    if (!tx) return;
-                    const toAddr = tx.to ? tx.to.toLowerCase() : '';
-                    const isSwap = DEX_CONTRACTS.includes(toAddr);
-                    if (!isSwap) return; // 非交易不计入
-
-                    txs.push({
-                        txHash: log.transactionHash,
-                        from, to,
-                        amount,
-                        blockNumber: parseInt(log.blockNumber, 16),
-                        time: '--' // 稍后补充
-                    });
-                } catch (e) {
-                    // 忽略解析错误
+            const settled = await Promise.allSettled(batch.map(log => parseLog(log)));
+            settled.forEach((result, idx) => {
+                if (result.status === 'fulfilled' && result.value) {
+                    results.push(result.value);
                 }
-            }));
-            await sleep(100); // 避免请求过频
+            });
+            await new Promise(r => setTimeout(r, 100)); // 避免请求过频
         }
-        // 按区块降序
-        txs.sort((a, b) => b.blockNumber - a.blockNumber);
-        return txs;
+        return results;
     }
 
-    // --- 获取区块时间戳并补充到交易 ---
-    async function enrichTxsWithTime(txs) {
+    // --- 补充区块时间 ---
+    async function enrichTimes(txs) {
         const blocks = [...new Set(txs.slice(0, 20).map(t => t.blockNumber))];
         const times = {};
-        await Promise.all(blocks.map(async (bn) => {
+        await Promise.allSettled(blocks.map(async bn => {
             try {
                 const block = await provider.getBlock(bn);
                 times[bn] = block.timestamp * 1000;
@@ -465,35 +518,36 @@
         }));
         return txs.map(tx => ({
             ...tx,
-            time: times[tx.blockNumber] ? new Date(times[tx.blockNumber]).toLocaleTimeString() : '--'
+            time: times[tx.blockNumber] ? new Date(times[tx.blockNumber]).toLocaleString() : '--'
         }));
     }
 
-    // --- 更新地址累计统计和排行榜 ---
-    function updateStats(txs) {
+    // --- 更新统计 ---
+    function updateStats(txs, includeTransfers) {
         const stats = new Map();
         for (const tx of txs) {
+            // 根据开关过滤
+            if (!includeTransfers && !tx.isSwap) continue;
             const from = tx.from.toLowerCase();
             const to = tx.to.toLowerCase();
             stats.set(from, (stats.get(from) || 0) + tx.amount);
             stats.set(to, (stats.get(to) || 0) + tx.amount);
         }
         addressStats = stats;
-        // 计算前20
         top20 = Array.from(stats.entries())
             .map(([addr, vol]) => ({ addr, vol }))
             .sort((a, b) => b.vol - a.vol)
             .slice(0, 20);
     }
 
-    // --- 渲染实时交易流 ---
+    // --- 渲染 ---
     function renderTxStream(txs, highlightAddr) {
         if (txs.length === 0) {
             txStreamDiv.innerHTML = '<div style="text-align:center; padding:40px;">暂无交易</div>';
             return;
         }
-        let html = '';
         const highlightLower = highlightAddr ? highlightAddr.toLowerCase() : null;
+        let html = '';
         txs.slice(0, MAX_TXS).forEach(tx => {
             const isHighlight = highlightLower && (tx.from.toLowerCase() === highlightLower || tx.to.toLowerCase() === highlightLower);
             const rowClass = isHighlight ? 'tx-row highlight' : 'tx-row';
@@ -505,15 +559,13 @@
                 <span class="tx-address" title="${tx.from}">${fromShort}</span>
                 <span class="tx-address" title="${tx.to}">→ ${toShort}</span>
                 <span class="tx-amount">${tx.amount.toFixed(2)} H</span>
-                <span class="tx-type"><span class="type-badge">交易</span></span>
-                <span style="margin-left: auto; color:#94a3b8;">${tx.time}</span>
+                <span style="margin-left: auto; color:#94a3b8;">${tx.time || '--'}</span>
             </div>`;
         });
         txStreamDiv.innerHTML = html;
         txCountSpan.innerText = txs.length + ' 笔';
     }
 
-    // --- 渲染排行榜 ---
     function renderRanking() {
         if (top20.length === 0) {
             rankListDiv.innerHTML = '<div style="text-align:center; padding:20px;">暂无数据</div>';
@@ -531,24 +583,31 @@
         rankListDiv.innerHTML = html;
     }
 
-    // --- 刷新所有数据 (核心) ---
+    // --- 刷新主数据 ---
     async function refreshData() {
         if (isLoading) return;
         isLoading = true;
         updateTimeSpan.innerHTML = '<i class="fa-regular fa-spinner fa-spin"></i> 更新中...';
         try {
-            await updateLatestBlock();
-            const logs = await fetchRecentLogs();
-            const txs = await parseLogsToTxs(logs);
-            const enriched = await enrichTxsWithTime(txs);
+            const latest = await getLatestBlock();
+            const fromBlock = Math.max(latest - BLOCK_RANGE, 0);
+            blockRangeSpan.innerText = `${fromBlock.toLocaleString()} ～ ${latest.toLocaleString()}`;
+
+            const logs = await fetchLogs(fromBlock, latest);
+            const parsed = await parseLogs(logs);
+            const enriched = await enrichTimes(parsed);
             allTxs = enriched;
-            updateStats(enriched);
+
+            includeTransfers = includeTransfersCheck.checked;
+            updateStats(enriched, includeTransfers);
             renderTxStream(enriched, searchAddressInput.value.trim());
             renderRanking();
+
             updateTimeSpan.innerText = new Date().toLocaleTimeString();
         } catch (e) {
-            console.error(e);
-            updateTimeSpan.innerText = '更新失败';
+            console.error('刷新失败', e);
+            updateTimeSpan.innerText = '更新失败，尝试切换节点';
+            switchRpc();
         } finally {
             isLoading = false;
         }
@@ -561,15 +620,15 @@
             return;
         }
         const addrLower = addr.toLowerCase();
-        // 过滤该地址的所有交易
-        const addrTxs = allTxs.filter(tx => tx.from.toLowerCase() === addrLower || tx.to.toLowerCase() === addrLower);
+        const addrTxs = allTxs.filter(tx => {
+            if (!includeTransfers && !tx.isSwap) return false;
+            return tx.from.toLowerCase() === addrLower || tx.to.toLowerCase() === addrLower;
+        });
         const totalVol = addrTxs.reduce((sum, tx) => sum + tx.amount, 0);
-        // 查找排名
         const rank = Array.from(addressStats.entries())
             .sort((a, b) => b[1] - a[1])
             .findIndex(([a]) => a === addrLower) + 1;
 
-        // 渲染搜索结果
         let txsHtml = '';
         addrTxs.slice(0, 20).forEach(tx => {
             const fromShort = tx.from.slice(0,6) + '…' + tx.from.slice(-4);
@@ -578,23 +637,14 @@
         });
 
         searchResultDiv.innerHTML = `
-            <div class="search-result">
+            <div class="query-box">
                 <div class="stat-grid">
-                    <div class="stat-item">
-                        <div class="stat-value">${totalVol.toFixed(2)}</div>
-                        <div class="stat-label">累计交易量 (H)</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">${addrTxs.length}</div>
-                        <div class="stat-label">交易笔数</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">${rank > 0 ? '#'+rank : '未上榜'}</div>
-                        <div class="stat-label">当前排名</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-value">${totalVol.toFixed(2)}</div><div>累计H</div></div>
+                    <div class="stat-item"><div class="stat-value">${addrTxs.length}</div><div>交易笔数</div></div>
+                    <div class="stat-item"><div class="stat-value">${rank > 0 ? '#'+rank : '未上榜'}</div><div>排名</div></div>
                 </div>
-                <h4 style="margin-bottom:12px;">交易记录 (最近20笔)</h4>
-                <div style="max-height:300px; overflow-y:auto; border-radius:16px; border:1px solid #e9e2f5;">
+                <h4 style="margin:16px 0 8px;">最近20笔交易</h4>
+                <div style="max-height:300px; overflow-y:auto; border:1px solid #e9e2f5; border-radius:16px;">
                     <table style="width:100%; border-collapse:collapse;">
                         <thead><tr><th>方向</th><th>数量</th><th>时间</th></tr></thead>
                         <tbody>${txsHtml || '<tr><td colspan="3" style="text-align:center;">无交易记录</td></tr>'}</tbody>
@@ -603,8 +653,6 @@
             </div>
         `;
         searchResultDiv.style.display = 'block';
-
-        // 高亮实时流中该地址的交易
         renderTxStream(allTxs, addr);
     }
 
@@ -614,15 +662,72 @@
         renderTxStream(allTxs, null);
     }
 
-    // --- 初始化与定时刷新 ---
-    async function init() {
-        await refreshData();
-        refreshTimer = setInterval(refreshData, 60000); // 每分钟刷新一次
+    // --- 手动查询交易哈希 ---
+    async function queryTxHash(txHash) {
+        if (!txHash || !txHash.startsWith('0x') || txHash.length !== 66) {
+            txQueryResultDiv.style.display = 'block';
+            txQueryResultDiv.innerHTML = '<div style="color:#ef4444;">❌ 无效的交易哈希</div>';
+            return;
+        }
+        try {
+            const receipt = await provider.getTransactionReceipt(txHash);
+            if (!receipt) {
+                txQueryResultDiv.style.display = 'block';
+                txQueryResultDiv.innerHTML = '<div>❌ 交易未确认或不存在</div>';
+                return;
+            }
+            const tx = await provider.getTransaction(txHash);
+            const logs = receipt.logs.filter(l => l.address && l.address.toLowerCase() === H_CONTRACT.toLowerCase());
+            if (logs.length === 0) {
+                txQueryResultDiv.style.display = 'block';
+                txQueryResultDiv.innerHTML = '<div>❌ 该交易不包含H代币转账</div>';
+                return;
+            }
+            let details = '';
+            logs.forEach((log, i) => {
+                const from = '0x' + log.topics[1].slice(26);
+                const to = '0x' + log.topics[2].slice(26);
+                const value = BigInt(log.data);
+                const amt = ethers.utils.formatUnits(value, TOKEN_DECIMALS);
+                details += `<div>[${i+1}] ${from} → ${to} 数量: ${amt} H</div>`;
+            });
+            const toAddr = tx.to ? tx.to.toLowerCase() : '';
+            const isSwap = DEX_CONTRACTS.includes(toAddr);
+            const inStats = allTxs.some(t => t.txHash.toLowerCase() === txHash.toLowerCase());
+            txQueryResultDiv.style.display = 'block';
+            txQueryResultDiv.innerHTML = `
+                <div style="background:${inStats ? '#e6f7e6' : '#fff3e6'}; padding:16px; border-radius:16px;">
+                    <strong>${inStats ? '✅ 交易已计入统计' : '⚠️ 交易未在本次查询范围内'}</strong><br>
+                    交易哈希: ${txHash}<br>
+                    区块: ${receipt.blockNumber}<br>
+                    DEX交易: ${isSwap ? '是' : '否'}<br>
+                    H转账记录:<br>${details}
+                </div>
+            `;
+        } catch (e) {
+            txQueryResultDiv.style.display = 'block';
+            txQueryResultDiv.innerHTML = `<div style="color:#ef4444;">❌ 查询失败: ${e.message}</div>`;
+        }
     }
 
     // --- 事件绑定 ---
     searchBtn.addEventListener('click', () => searchAddress(searchAddressInput.value.trim()));
     clearSearchBtn.addEventListener('click', clearSearch);
+    queryTxBtn.addEventListener('click', () => queryTxHash(txHashInput.value.trim()));
+    includeTransfersCheck.addEventListener('change', function() {
+        includeTransfers = this.checked;
+        updateStats(allTxs, includeTransfers);
+        renderRanking();
+        if (searchAddressInput.value.trim()) {
+            searchAddress(searchAddressInput.value.trim()); // 刷新搜索结果
+        }
+    });
+
+    // --- 初始化 ---
+    async function init() {
+        await refreshData();
+        refreshTimer = setInterval(refreshData, 60000); // 每分钟
+    }
 
     init();
 
