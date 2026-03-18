@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>H代币·实时交易监控（优化版）</title>
-    <!-- 引入 ethers.js -->
+    <title>H代币·实时交易监控（修复版）</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         * {
@@ -225,10 +224,9 @@
 </head>
 <body>
 <div class="container">
-    <h1>⚡️ H代币 实时交易监控 (优化版)</h1>
+    <h1>⚡️ H代币 实时交易监控 (修复版)</h1>
     <div class="subtitle">X Layer · 合约地址: 0x867fdd2eef548f80808d0c9065cd55f57e207777</div>
 
-    <!-- 提示信息 -->
     <div class="info-box">
         <strong>🔍 交易未被统计？</strong> 可能原因：① 交易刚发生，需等待区块确认（通常几秒到几分钟）；② RPC节点延迟，可手动刷新；③ 当前查询范围仅 <span id="blockRangeDisplay">最近24小时</span>。您可以使用下方的“手动查询交易哈希”功能验证交易是否已上链。
     </div>
@@ -273,7 +271,7 @@
             <h2>手动查询交易哈希</h2>
         </div>
         <div class="query-hash">
-            <input type="text" id="txHashInput" placeholder="输入交易哈希 0x...">
+            <input type="text" id="txHashInput" placeholder="输入完整的交易哈希 0x... (66位)">
             <button id="queryTxBtn" class="btn-secondary">查询</button>
             <button id="addMissingTxBtn" class="btn-primary" style="background: #f59e0b; box-shadow: none;">➕ 手动补录（仅本地）</button>
         </div>
@@ -335,8 +333,8 @@
     let refreshTimer = null;
     let isRefreshing = false;
     let boundAddress = localStorage.getItem('bound_address') || '';
-    let allTxs = []; // 存储当前显示的交易
-    let currentBlockRange = { from: 0, to: 0 }; // 当前查询的区块范围
+    let allTxs = [];
+    let currentBlockRange = { from: 0, to: 0 };
 
     // UI元素
     const bindInput = document.getElementById('bindAddress');
@@ -384,7 +382,6 @@
         try {
             const latestBlock = await provider.getBlock('latest');
             const latestNumber = latestBlock.number;
-            // 假设平均3秒一个块，24小时 ≈ 28800块
             const blocksPerDay = 28800;
             const fromBlock = Math.max(latestNumber - blocksPerDay, 0);
             currentBlockRange = { from: fromBlock, to: latestNumber };
@@ -419,6 +416,7 @@
         const txs = [];
         for (const log of logs) {
             try {
+                if (!log.topics || log.topics.length < 3) continue; // 安全检查
                 const from = '0x' + log.topics[1].slice(26);
                 const to = '0x' + log.topics[2].slice(26);
                 const value = BigInt(log.data);
@@ -440,7 +438,7 @@
         return txs;
     }
 
-    // --- 获取区块时间戳（简化）---
+    // --- 获取区块时间戳 ---
     async function enrichTxsWithTimestamp(txs) {
         const blockNumbers = [...new Set(txs.slice(0, 20).map(tx => tx.blockNumber))];
         const blockTimes = {};
@@ -547,7 +545,7 @@
 
         if (allTxs.length > 0) {
             updateBoundStats(allTxs);
-            renderTxList(allTxs); // 重新渲染以高亮
+            renderTxList(allTxs);
         } else {
             refreshData();
         }
@@ -563,21 +561,27 @@
         renderTxList(allTxs);
     }
 
-    // --- 手动查询交易哈希 ---
+    // --- 手动查询交易哈希 (修复版) ---
     async function queryTxHash(txHash) {
         if (!txHash || !txHash.startsWith('0x')) {
-            alert('请输入有效的交易哈希');
+            queryResultDiv.style.display = 'block';
+            queryResultDiv.innerHTML = '❌ 请输入以0x开头的交易哈希';
+            return;
+        }
+        if (txHash.length !== 66) {
+            queryResultDiv.style.display = 'block';
+            queryResultDiv.innerHTML = '❌ 交易哈希长度错误，应为66位（0x + 64位十六进制）';
             return;
         }
         try {
             const receipt = await provider.getTransactionReceipt(txHash);
             if (!receipt) {
                 queryResultDiv.style.display = 'block';
-                queryResultDiv.innerHTML = '❌ 交易未找到或尚未确认';
+                queryResultDiv.innerHTML = '❌ 交易未找到或尚未确认（可能需要等待几秒）';
                 return;
             }
             // 查找该交易中H代币的Transfer日志
-            const logs = receipt.logs.filter(log => log.address.toLowerCase() === H_CONTRACT.toLowerCase());
+            const logs = receipt.logs.filter(log => log.address && log.address.toLowerCase() === H_CONTRACT.toLowerCase());
             if (logs.length === 0) {
                 queryResultDiv.style.display = 'block';
                 queryResultDiv.innerHTML = '❌ 该交易不包含H代币转账';
@@ -586,6 +590,11 @@
             // 解析日志
             let html = '<strong>✅ 交易已确认，H代币转账记录：</strong><br>';
             logs.forEach((log, idx) => {
+                // 安全检查
+                if (!log.topics || log.topics.length < 3) {
+                    html += `[${idx+1}] 日志格式异常（缺少topics）<br>`;
+                    return;
+                }
                 const from = '0x' + log.topics[1].slice(26);
                 const to = '0x' + log.topics[2].slice(26);
                 const value = BigInt(log.data);
@@ -608,29 +617,41 @@
         }
     }
 
-    // --- 手动补录交易（仅本地，用于测试）---
+    // --- 手动补录交易（优化版）---
     function addMissingTx() {
         const txHash = txHashInput.value.trim();
-        if (!txHash) return;
-        // 模拟一个交易对象（需要用户自己填写信息）
+        if (!txHash) {
+            alert('请输入交易哈希');
+            return;
+        }
+        // 弹出表单收集信息
+        const amount = prompt('请输入该交易的H代币数量（例如 100.5）');
+        if (amount === null) return;
+        const amountNum = parseFloat(amount);
+        if (isNaN(amountNum)) {
+            alert('数量无效');
+            return;
+        }
+        const from = prompt('输入发送方地址（0x格式）', boundAddress || '0x...');
+        if (!from || !from.startsWith('0x')) {
+            alert('地址格式错误');
+            return;
+        }
+        const to = prompt('输入接收方地址（0x格式）', boundAddress || '0x...');
+        if (!to || !to.startsWith('0x')) {
+            alert('地址格式错误');
+            return;
+        }
+
         const mockTx = {
             txHash: txHash,
-            from: '0x0000000000000000000000000000000000000000',
-            to: '0x0000000000000000000000000000000000000000',
-            amount: 0,
+            from: from,
+            to: to,
+            amount: amountNum,
             blockNumber: 0,
             time: '手动补录'
         };
-        // 尝试从之前查询的结果中提取信息？这里简化：让用户自行输入金额
-        const amount = prompt('请输入该交易的H代币数量（例如 100）');
-        if (amount === null) return;
-        mockTx.amount = parseFloat(amount) || 0;
-        const from = prompt('输入发送方地址（可选）', boundAddress || '0x...');
-        const to = prompt('输入接收方地址（可选）', boundAddress || '0x...');
-        mockTx.from = from || mockTx.from;
-        mockTx.to = to || mockTx.to;
 
-        // 插入列表头部
         allTxs.unshift(mockTx);
         allTxs = allTxs.slice(0, MAX_TXS);
         renderTxList(allTxs);
