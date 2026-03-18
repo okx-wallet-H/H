@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>海豚补贴 · OKX Boost交易返H</title>
+    <title>海豚社区 × OKX Boost 助力活动</title>
     <!-- Font Awesome 5 (免费) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Google Font: Inter -->
+    <!-- Google Font: Inter 现代无衬线 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -17,444 +17,472 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #0b1a2f; /* 深海底色 */
+            background: #0b1018;
             color: #fff;
             line-height: 1.5;
-            padding: 1.5rem 1rem;
             min-height: 100vh;
-            background-image: radial-gradient(circle at 20% 30%, #123456 0%, #030e1a 100%);
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 700px;
+        /* 高级动态背景 */
+        .hero {
+            position: relative;
+            background: radial-gradient(ellipse at 30% 40%, #132b44 0%, #030b14 100%);
+            padding: 2rem 1.5rem 3rem 1.5rem;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 20px 30px -10px #00000080;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.2"><path d="M50 100 Q 100 20, 150 100 T 250 100" stroke="%2340a0ff" fill="none" stroke-width="2"/><path d="M30 130 Q 80 70, 130 130 T 230 130" stroke="%2360c0ff" fill="none" stroke-width="1.5"/><circle cx="40" cy="40" r="5" fill="%2380d0ff"/><circle cx="170" cy="60" r="8" fill="%2380d0ff"/></svg>') repeat;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        /* 卡片 */
-        .card {
-            background: rgba(18, 34, 58, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 200, 255, 0.25);
-            border-radius: 32px;
-            padding: 1.5rem 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 15px 30px -10px #00000080;
+        /* 合作标识 */
+        .co-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 2rem;
+            background: rgba(0, 30, 60, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 0.6rem 1.8rem;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #00c3ff50;
         }
 
-        /* 标题 */
-        .title-section {
+        .co-brand span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #b5f0ff;
+        }
+
+        .co-brand i {
+            font-size: 2rem;
+            color: #2d9eff;
+        }
+
+        .title-main {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .dolphin-icon {
-            font-size: 3rem;
-            filter: drop-shadow(0 0 10px #00b7ff);
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #b3f0ff, #ffffff);
+        .title-main h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #aad0ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin: 0.2rem 0 0.3rem;
+            letter-spacing: -0.5px;
         }
 
-        .subhead {
-            color: #9fc9ff;
-            font-size: 0.95rem;
+        .title-main p {
+            color: #90c0ff;
+            font-weight: 500;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
         }
 
-        .badge {
-            background: #004a7c;
-            border-radius: 30px;
-            padding: 0.2rem 1rem;
+        /* 数据卡片网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(10, 30, 50, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid #29a5ff40;
+            border-radius: 28px;
+            padding: 1.2rem 1rem;
+            box-shadow: 0 8px 20px #0000004d;
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #00bbff;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #b0d5ff;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-sub {
             font-size: 0.8rem;
-            border: 1px solid #00c3ff;
+            color: #99ccff;
+            margin-top: 5px;
         }
 
-        /* 核心机制 */
-        .rule-grid {
+        /* 个人数据特殊卡片 (合并三排名) */
+        .personal-row {
             display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            margin: 1.5rem 0;
-        }
-
-        .rule-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
+            justify-content: space-around;
             background: rgba(0, 40, 70, 0.5);
-            border-radius: 24px;
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
             padding: 1rem;
-            border-left: 5px solid #00d0ff;
+            margin: 1rem 0 2rem 0;
+            border: 1px solid #0077ff;
         }
 
-        .rule-item i {
-            font-size: 1.8rem;
-            color: #00e0ff;
-            min-width: 40px;
+        .rank-item {
             text-align: center;
         }
 
-        .rule-item strong {
+        .rank-label {
+            font-size: 0.75rem;
+            color: #9ac7ff;
+        }
+
+        .rank-number {
+            font-size: 1.4rem;
+            font-weight: 700;
             color: #ffecaa;
-            font-size: 1.2rem;
         }
 
-        /* 补贴阶梯表 */
-        .reward-table {
-            background: #0a1e30;
-            border-radius: 24px;
-            padding: 1rem;
-            border: 1px solid #2d9eff;
-            margin: 1.2rem 0;
-        }
-
-        .reward-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem 0.5rem;
-            border-bottom: 1px solid #1f4b77;
-        }
-
-        .reward-row:last-child {
-            border-bottom: none;
-        }
-
-        .tier {
-            font-weight: 600;
-            color: #b3f0ff;
-        }
-
-        .tier-value {
-            font-weight: 700;
-            color: #ffd966;
-        }
-
-        .reward-h {
-            background: #003153;
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-            font-weight: 700;
-            color: #b9f2ff;
-        }
-
-        /* 进度条模拟 */
-        .user-progress {
-            background: #002a47;
-            border-radius: 30px;
+        /* 实时活动流 */
+        .live-feed {
+            background: #0b1c2e;
+            border-radius: 40px;
             padding: 1.2rem;
-            margin: 1.5rem 0;
-            border: 1px solid #00acff;
+            margin: 2rem 0;
+            border: 1px solid #0080ff;
         }
 
-        .progress-label {
+        .feed-header {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            color: #5fc3ff;
+            font-weight: 600;
         }
 
-        .progress-bar {
-            height: 18px;
-            background: #0a3855;
-            border-radius: 30px;
-            overflow: hidden;
-            margin-bottom: 10px;
+        .feed-list {
+            list-style: none;
         }
 
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #00c6ff, #0072ff);
-            border-radius: 30px;
-        }
-
-        /* 排行榜 */
-        .leaderboard-item {
+        .feed-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.7rem 0;
-            border-bottom: 1px solid #1a405d;
-        }
-
-        .leaderboard-rank {
-            width: 30px;
-            height: 30px;
-            background: #163a57;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            border: 1px solid #26c5ff;
-        }
-
-        .leaderboard-address {
-            font-family: monospace;
-            background: #0b2640;
-            padding: 0.2rem 1rem;
-            border-radius: 30px;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #1d4a75;
             font-size: 0.9rem;
         }
 
-        .leaderboard-volume {
-            font-weight: 600;
-            color: #93f0ff;
+        .feed-item:last-child {
+            border-bottom: none;
         }
 
-        /* 按钮 */
+        .feed-address {
+            font-family: monospace;
+            background: #102c44;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+        }
+
+        .feed-volume {
+            color: #7ff0b0;
+            font-weight: 600;
+        }
+
+        .feed-time {
+            color: #94b4d4;
+            font-size: 0.75rem;
+        }
+
+        /* 底部折叠规则与奖励 */
+        .details-section {
+            margin: 2rem 0 1rem;
+        }
+
+        details {
+            background: #0f253a;
+            border-radius: 40px;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid #3a7bb5;
+        }
+
+        summary {
+            font-weight: 600;
+            font-size: 1.2rem;
+            padding: 0.8rem 0;
+            cursor: pointer;
+            color: #b5e4ff;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after {
+            content: '\f078';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            transition: transform 0.3s;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .rules-content {
+            padding: 1rem 0 1.5rem;
+            color: #d0ebff;
+        }
+
+        .rule-block {
+            margin-bottom: 1.5rem;
+        }
+
+        .rule-block h4 {
+            color: #ffd966;
+            margin-bottom: 0.5rem;
+        }
+
+        .rule-block ul {
+            padding-left: 1.2rem;
+        }
+
+        .rule-block li {
+            margin-bottom: 0.3rem;
+        }
+
+        .reward-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .reward-item {
+            background: #1c3b5a;
+            border-radius: 20px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #6c8db0;
+            font-size: 0.8rem;
+            margin: 2rem 0 1rem;
+        }
+
+        /* 按钮样式 */
         .btn {
-            display: block;
-            width: 100%;
-            background: linear-gradient(145deg, #0077be, #004e8c);
+            background: linear-gradient(145deg, #006bb3, #003f77);
             border: none;
             color: white;
             padding: 1rem;
             border-radius: 60px;
-            font-size: 1.2rem;
             font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            border: 1px solid #7fd6ff;
-            box-shadow: 0 10px 20px #001b33;
-            margin: 1rem 0;
+            font-size: 1.1rem;
+            width: 100%;
+            border: 1px solid #6ec3ff;
+            box-shadow: 0 8px 20px #001a33;
+            margin: 0.5rem 0;
         }
 
-        .btn-secondary {
-            background: #1b3b5c;
-            border: 1px solid #0099ff;
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        /* 状态提示 */
-        .wallet-status {
-            background: #00355e;
-            border-radius: 40px;
-            padding: 0.8rem 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .status-connected {
-            color: #66ff99;
-        }
-
-        .footer-note {
-            font-size: 0.8rem;
-            color: #6f9bc0;
-            text-align: center;
-            margin-top: 2rem;
-        }
-
-        /* 模拟绑定信息 */
-        .invite-badge {
-            background: #0f2d44;
-            border-radius: 30px;
-            padding: 0.5rem 1rem;
-            border: 1px dashed #3ab4ff;
-            font-size: 0.9rem;
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 头部 -->
-        <div class="card" style="padding: 1.2rem; text-align: center;">
-            <div class="dolphin-icon">🐬</div>
-            <h1>OKX Boost 交易补贴</h1>
-            <div class="subhead">
-                <i class="fas fa-gas-pump"></i> 交易H代币，社区帮您付Gas
-                <span class="badge">邀请码已绑定</span>
+    <div class="hero">
+        <div class="hero-content">
+            <!-- 联合品牌 -->
+            <div class="co-brand">
+                <i class="fas fa-dolphin" style="color: #00c8ff;"></i>
+                <span>🐬 海豚社区  ✕  OKX Boost</span>
+                <i class="fab fa-opera" style="color: #0cf;"></i> <!-- 用opera图标暂代OKX -->
             </div>
-        </div>
-
-        <!-- 钱包状态模拟 (与App交互) -->
-        <div class="wallet-status">
-            <span><i class="fas fa-wallet"></i> OKX钱包</span>
-            <span class="status-connected"><i class="fas fa-check-circle"></i> 已绑定</span>
-        </div>
-        <div class="invite-badge" style="margin-bottom: 1.5rem;">
-            <i class="fas fa-tag"></i> 您的社区邀请码：<strong>DOLPHIN20</strong> (自动绑定，享20%折扣)
-        </div>
-
-        <!-- 核心规则 -->
-        <div class="card">
-            <h3 style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.5rem;">
-                <i class="fas fa-medal" style="color: gold;"></i> 补贴规则
-            </h3>
-            <div class="rule-item">
-                <i class="fas fa-chart-bar"></i>
-                <div><strong>按交易量补贴</strong><br>您在OKX DEX上交易H代币的总量（买入+卖出），将按阶梯获得H代币奖励。</div>
-            </div>
-            <div class="rule-item">
-                <i class="fas fa-sync-alt"></i>
-                <div><strong>自动统计</strong><br>已绑定钱包的交易数据自动同步，无需手动提交。</div>
-            </div>
-            <div class="rule-item">
-                <i class="fas fa-calendar-alt"></i>
-                <div><strong>活动时间</strong><br>2025.04.01 08:00 — 2025.04.15 08:00 (UTC+8)</div>
+            <!-- 主标题 -->
+            <div class="title-main">
+                <h1>Boost 助力计划</h1>
+                <p><i class="fas fa-bolt"></i> 交易H代币，双倍激励 <i class="fas fa-bolt"></i></p>
             </div>
 
-            <!-- 补贴阶梯表 -->
-            <div class="reward-table">
-                <div style="text-align: center; margin-bottom: 10px; color: #c5e3ff;">📊 累计交易量对应补贴</div>
-                <div class="reward-row">
-                    <span class="tier">≥ 500 USDC</span>
-                    <span class="reward-h">10 H</span>
+            <!-- 全局交易量卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fas fa-chart-line"></i> 今日总交易量</div>
+                    <div class="stat-value">2.45M</div>
+                    <div class="stat-sub">USDC</div>
                 </div>
-                <div class="reward-row">
-                    <span class="tier">≥ 1,000 USDC</span>
-                    <span class="reward-h">25 H</span>
-                </div>
-                <div class="reward-row">
-                    <span class="tier">≥ 2,500 USDC</span>
-                    <span class="reward-h">60 H</span>
-                </div>
-                <div class="reward-row">
-                    <span class="tier">≥ 5,000 USDC</span>
-                    <span class="reward-h">130 H</span>
-                </div>
-                <div class="reward-row">
-                    <span class="tier">≥ 10,000 USDC</span>
-                    <span class="reward-h">300 H</span>
-                </div>
-                <div class="reward-row">
-                    <span class="tier">≥ 25,000 USDC</span>
-                    <span class="reward-h">800 H + 稀有NFT</span>
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fas fa-calendar-alt"></i> 累计总交易量</div>
+                    <div class="stat-value">18.9M</div>
+                    <div class="stat-sub">USDC</div>
                 </div>
             </div>
-            <p style="font-size:0.85rem; color:#b0d0ff;">* 交易量按活动期间累计，每个地址独立计算，可同时参与Boost积分。</p>
-        </div>
 
-        <!-- 我的进度 (模拟数据，需要从App传入) -->
-        <div class="card">
-            <h3><i class="fas fa-user-astronaut"></i> 我的补贴进度</h3>
-            <div class="user-progress">
-                <div class="progress-label">
-                    <span>当前累计交易量</span>
-                    <span><strong>1,280 USDC</strong> / 2,500 USDC</span>
+            <!-- 个人数据卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fas fa-user"></i> 我的今日交易</div>
+                    <div class="stat-value">1,280</div>
+                    <div class="stat-sub">USDC</div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 51%;"></div>
-                </div>
-                <div class="progress-label">
-                    <span>已获得补贴</span>
-                    <span><strong>25 H</strong> (下一档加35H)</span>
+                <div class="stat-card">
+                    <div class="stat-label"><i class="fas fa-user-clock"></i> 我的累计交易</div>
+                    <div class="stat-value">8,450</div>
+                    <div class="stat-sub">USDC</div>
                 </div>
             </div>
-            <div style="background: #0d3b5e; border-radius: 30px; padding: 0.8rem; text-align: center;">
-                <i class="fas fa-gift"></i> 活动结束后7日内发放H代币至您的OKX钱包
-            </div>
-        </div>
 
-        <!-- 实时排行榜 (模拟，实际应由后端API驱动) -->
-        <div class="card">
-            <h3><i class="fas fa-chart-line"></i> 补贴排行榜</h3>
-            <div style="margin: 1rem 0;">
-                <div class="leaderboard-item">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span class="leaderboard-rank">1</span>
-                        <span class="leaderboard-address">0x8f3...cB2</span>
-                    </div>
-                    <span class="leaderboard-volume">48,200 USDC</span>
+            <!-- 排名三件套 -->
+            <div class="personal-row">
+                <div class="rank-item">
+                    <div class="rank-label">本期排名</div>
+                    <div class="rank-number">#102</div>
                 </div>
-                <div class="leaderboard-item">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span class="leaderboard-rank">2</span>
-                        <span class="leaderboard-address">0x2a1...Df9</span>
-                    </div>
-                    <span class="leaderboard-volume">36,750 USDC</span>
+                <div class="rank-item">
+                    <div class="rank-label">月排名</div>
+                    <div class="rank-number">#87</div>
                 </div>
-                <div class="leaderboard-item">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span class="leaderboard-rank">3</span>
-                        <span class="leaderboard-address">0x4d9...Ae4</span>
-                    </div>
-                    <span class="leaderboard-volume">29,120 USDC</span>
-                </div>
-                <div class="leaderboard-item">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span class="leaderboard-rank">4</span>
-                        <span class="leaderboard-address">0xb77...F2c</span>
-                    </div>
-                    <span class="leaderboard-volume">21,880 USDC</span>
-                </div>
-                <div class="leaderboard-item">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span class="leaderboard-rank">5</span>
-                        <span class="leaderboard-address">0xe29...8a1</span>
-                    </div>
-                    <span class="leaderboard-volume">18,450 USDC</span>
+                <div class="rank-item">
+                    <div class="rank-label">年度排名</div>
+                    <div class="rank-number">#203</div>
                 </div>
             </div>
-            <div style="text-align: center; color: #95c8ff; font-size: 0.9rem; border-top: 1px solid #266088; padding-top: 0.8rem;">
-                <i class="fas fa-chevron-down"></i> 我的当前排名：102 位 (再交易 220 USDC 可进前100)
-            </div>
-        </div>
-
-        <!-- 行动按钮：与App交互 -->
-        <a href="#" class="btn" onclick="alert('跳转至OKX DEX交易H代币 (演示)'); return false;">
-            <i class="fas fa-exchange-alt"></i> 去OKX DEX交易H
-        </a>
-        <a href="#" class="btn btn-secondary" onclick="alert('刷新数据 (实际由App调用API更新)'); return false;">
-            <i class="fas fa-sync-alt"></i> 刷新进度
-        </a>
-
-        <!-- 温馨提示 -->
-        <div class="card" style="background: #0f2840;">
-            <div style="display: flex; gap: 12px;">
-                <i class="fas fa-info-circle" style="color: #4dc3ff; font-size: 1.8rem;"></i>
-                <div>
-                    <strong>为什么能获得补贴？</strong><br>
-                    社区已绑定OKX邀请码，您交易产生的返佣将转化为H代币回馈给您。<br>
-                    <span style="color: #c0e0ff;">✅ 您无需任何额外操作，只要使用已绑定的OKX钱包交易即可。</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 底部 -->
-        <div class="footer-note">
-            <i class="fas fa-dolphin"></i> 海豚社区 · 让每一笔交易更有价值<br>
-            活动最终解释权归海豚社区所有
         </div>
     </div>
 
-    <!-- 与App交互的脚本示例 (监听App事件，更新UI) -->
-    <script>
-        // 模拟从App获取用户数据 (实际开发中可通过JSBridge)
-        window.onload = function() {
-            // 假设App注入全局变量或调用回调
-            if (window.AppInterface && typeof window.AppInterface.getUserData === 'function') {
-                // 真实App环境：调用原生获取
-                // let user = AppInterface.getUserData();
-                // 更新页面
-            } else {
-                console.log('演示模式：使用模拟数据');
-                // 可隐藏一些动态元素，或显示“未登录”状态
-            }
-        };
+    <div class="container">
+        <!-- 实时交易活动流 -->
+        <div class="live-feed">
+            <div class="feed-header">
+                <i class="fas fa-sync-alt fa-spin"></i> 实时H交易活动
+                <span style="margin-left: auto; font-size:0.8rem;">刚刚更新</span>
+            </div>
+            <ul class="feed-list">
+                <li class="feed-item">
+                    <span class="feed-address">0x8f3...cB2</span>
+                    <span class="feed-volume">+12,400 USDC</span>
+                    <span class="feed-time">30秒前</span>
+                </li>
+                <li class="feed-item">
+                    <span class="feed-address">0x2a1...Df9</span>
+                    <span class="feed-volume">+8,750 USDC</span>
+                    <span class="feed-time">2分钟前</span>
+                </li>
+                <li class="feed-item">
+                    <span class="feed-address">0x4d9...Ae4</span>
+                    <span class="feed-volume">+5,220 USDC</span>
+                    <span class="feed-time">5分钟前</span>
+                </li>
+                <li class="feed-item">
+                    <span class="feed-address">0xb77...F2c</span>
+                    <span class="feed-volume">+4,130 USDC</span>
+                    <span class="feed-time">8分钟前</span>
+                </li>
+                <li class="feed-item">
+                    <span class="feed-address">0xe29...8a1</span>
+                    <span class="feed-volume">+3,890 USDC</span>
+                    <span class="feed-time">12分钟前</span>
+                </li>
+            </ul>
+        </div>
 
-        // 示例：监听App发送的更新事件
-        document.addEventListener('userDataUpdated', function(e) {
-            // 更新UI
-            console.log('收到用户数据更新', e.detail);
-        });
+        <!-- 底部折叠规则与奖励 -->
+        <div class="details-section">
+            <details>
+                <summary>📋 活动规则与奖励</summary>
+                <div class="rules-content">
+                    <div class="rule-block">
+                        <h4>📌 参与方式</h4>
+                        <ul>
+                            <li>1. 在社区App内关联您的OKX钱包（仅需一次授权）。</li>
+                            <li>2. 使用OKX DEX交易H代币（任意链，推荐低费链）。</li>
+                            <li>3. 交易量自动累计，无需手动提交。</li>
+                        </ul>
+                    </div>
+                    <div class="rule-block">
+                        <h4>🎁 补贴规则</h4>
+                        <ul>
+                            <li>按活动期间累计交易量发放H代币，阶梯如下：</li>
+                        </ul>
+                        <div class="reward-grid">
+                            <div class="reward-item">≥500 USDC<br><strong>10 H</strong></div>
+                            <div class="reward-item">≥1,000 USDC<br><strong>25 H</strong></div>
+                            <div class="reward-item">≥2,500 USDC<br><strong>60 H</strong></div>
+                            <div class="reward-item">≥5,000 USDC<br><strong>130 H</strong></div>
+                            <div class="reward-item">≥10,000 USDC<br><strong>300 H</strong></div>
+                            <div class="reward-item">≥25,000 USDC<br><strong>800 H + NFT</strong></div>
+                        </div>
+                    </div>
+                    <div class="rule-block">
+                        <h4>⏳ 活动时间</h4>
+                        <p>2025.04.01 08:00 — 2025.04.15 08:00 (UTC+8)</p>
+                    </div>
+                    <div class="rule-block">
+                        <h4>🤝 特别说明</h4>
+                        <p>社区与OKX深度合作，您交易产生的部分返佣将转化为H代币回馈用户。奖励将于结束后7日内发放至您的OKX钱包。</p>
+                    </div>
+                </div>
+            </details>
+        </div>
+
+        <!-- 行动按钮 (模拟) -->
+        <button class="btn" onclick="alert('唤起OKX DEX (演示)')"><i class="fas fa-exchange-alt"></i> 前往OKX DEX交易H</button>
+        <button class="btn" style="background: #1f3a5f;" onclick="alert('刷新数据')"><i class="fas fa-sync-alt"></i> 刷新我的进度</button>
+
+        <!-- 底部合作信息 -->
+        <div class="footer-note">
+            <i class="fas fa-dolphin"></i> 海豚社区  ·  与OKX联合呈现<br>
+            <span style="font-size:0.7rem;">所有链上交易均公开可查，奖励公平发放</span>
+        </div>
+    </div>
+
+    <!-- 模拟动态数据 (静态演示) -->
+    <script>
+        // 这里可以后续对接App原生数据更新
+        console.log('页面加载完成，等待App注入真实数据');
     </script>
 </body>
 </html>
