@@ -1,538 +1,499 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>海豚社区 · 纯静态看板</title>
-    <!-- Font Awesome 6 免费图标库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Chart.js 轻量图表 -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        body {
-            background: linear-gradient(145deg, #d9e9fa 0%, #f0f7ff 100%);
-            padding: 16px 14px 32px 14px;
-            min-height: 100vh;
-            color: #1b3b4f;
-        }
-        .dashboard {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        /* 头部 */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .title-section h1 {
-            font-size: 1.7rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #0f4c75, #1b6d8a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.02em;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .title-section h1 i {
-            color: #0f7b9e;
-            font-size: 1.8rem;
-            -webkit-text-fill-color: initial;
-            background: none;
-        }
-        .badge {
-            background: #bee0f0;
-            color: #0e4b6b;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 4px;
-        }
-        .date-avatar {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(8px);
-            padding: 6px 16px 6px 16px;
-            border-radius: 50px;
-            border: 1px solid rgba(255,255,255,0.6);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.8rem;
-            box-shadow: 0 6px 12px rgba(0,30,50,0.08);
-        }
-        .date i, .avatar i { margin-right: 4px; color: #1a6b8a; }
-        .avatar span { font-weight: 600; color: #0f3b4f; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>社区 OKX Boost 交易量排行榜</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* 卡片通用 */
-        .card {
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 32px;
-            padding: 18px 18px;
-            margin-bottom: 18px;
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow: 0 15px 30px -12px rgba(0,80,120,0.2);
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .card-header h3 {
-            font-weight: 600;
-            font-size: 1.15rem;
-            color: #145872;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .card-header span {
-            background: #e1eff9;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.7rem;
-            color: #1c617c;
-        }
+    body {
+      background-color: #0c0c0e;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #e4e4e7;
+      line-height: 1.5;
+      padding: 16px 12px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-        /* 代币网格：手机两列，第五项跨列 */
-        .token-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .token-item {
-            background: #ffffffc9;
-            border-radius: 24px;
-            padding: 16px 12px;
-            border: 1px solid #cae1f0;
-            box-shadow: 0 4px 8px rgba(0,50,70,0.05);
-        }
-        .token-item:last-child {
-            grid-column: span 2;  /* 价格指标占整行 */
-        }
-        .token-label {
-            font-size: 0.7rem;
-            color: #3b6e8b;
-            letter-spacing: 0.3px;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .token-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0a3e55;
-            line-height: 1.1;
-        }
-        .token-sub {
-            font-size: 0.65rem;
-            color: #507e9a;
-            margin-top: 5px;
-        }
+    .container {
+      max-width: 720px;
+      width: 100%;
+    }
 
-        /* 金库资产：手机两列 */
-        .treasury-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-        .asset-card {
-            background: #ffffffde;
-            border-radius: 24px;
-            padding: 16px 12px;
-            border: 1px solid #cae1f0;
-        }
-        .asset-name {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #1c5e7e;
-            margin-bottom: 8px;
-        }
-        .asset-amount {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #0f3f57;
-        }
-        .asset-usd {
-            font-size: 0.75rem;
-            color: #487a98;
-            margin-top: 5px;
-        }
+    /* 标题区 */
+    .hero {
+      margin-bottom: 24px;
+      text-align: left;
+    }
 
-        /* 支出卡片列表 (移动友好) */
-        .expense-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .expense-card {
-            background: #ffffffde;
-            border-radius: 24px;
-            padding: 16px 16px;
-            border: 1px solid #cae1f0;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .expense-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .expense-time {
-            font-size: 0.8rem;
-            color: #4f7f9c;
-            background: #e6f0f7;
-            padding: 3px 10px;
-            border-radius: 30px;
-        }
-        .expense-type {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #104d69;
-        }
-        .expense-amount {
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: #cb6e2e;
-        }
-        .expense-detail {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px 12px;
-            font-size: 0.8rem;
-            color: #3b6d89;
-            border-top: 1px dashed #bdd6e8;
-            padding-top: 8px;
-        }
-        .expense-detail span {
-            background: #edf5fc;
-            padding: 2px 12px;
-            border-radius: 30px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .status-badge {
-            background: #c8f0d9;
-            color: #0e6742;
-            padding: 3px 12px;
-            border-radius: 40px;
-            font-size: 0.7rem;
-            font-weight: 600;
-        }
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #f9d77e 0%, #f5a623 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
 
-        /* 图表卡片 */
-        .chart-row {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-        .chart-box {
-            background: rgba(255,255,255,0.8);
-            border-radius: 32px;
-            padding: 18px 14px;
-        }
-        .chart-box h4 {
-            font-size: 0.95rem;
-            color: #145d7a;
-            margin-bottom: 10px;
-        }
-        .chart-wrapper {
-            height: 160px;
-            width: 100%;
-        }
+    .hero .date-badge {
+      display: inline-block;
+      background: rgba(245, 166, 35, 0.15);
+      color: #f5a623;
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 4px 14px;
+      border-radius: 30px;
+      border: 1px solid rgba(245, 166, 35, 0.3);
+      backdrop-filter: blur(4px);
+      margin-top: 6px;
+    }
 
-        /* 底部指引 */
-        .guide-note {
-            background: #e1f0fa;
-            border-radius: 28px;
-            padding: 18px 18px;
-            border: 1px dashed #2f86b3;
-            font-size: 0.8rem;
-            color: #125072;
-            margin-top: 12px;
-        }
-        .guide-note h4 {
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            display: flex;
-            gap: 6px;
-        }
-        .guide-note ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .guide-note li {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    /* 卡片通用 */
+    .card {
+      background: #18181b;
+      border-radius: 26px;
+      padding: 22px 20px;
+      margin-bottom: 20px;
+      border: 1px solid #2c2c30;
+      box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.8);
+      transition: transform 0.1s ease;
+    }
 
-        .refresh-btn {
-            background: #2399c9;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 40px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 8px 14px -6px #0f6b94;
-            cursor: pointer;
-            transition: 0.2s;
-            border: 1px solid #9fd3f0;
-        }
-        .refresh-btn:active { transform: scale(0.97); background: #1b7ea8; }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      border-bottom: 1px dashed #333;
+      padding-bottom: 12px;
+    }
 
-        .footer-meta {
-            text-align: center;
-            font-size: 0.6rem;
-            color: #7c9eb5;
-            margin-top: 20px;
-        }
-        /* 图标修正 */
-        .fa-dolphin:before { content: "\f578"; } /* 使用鱼图标替代 */
-    </style>
+    .card-header h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+
+    .card-header .emoji {
+      font-size: 1.6rem;
+    }
+
+    /* 规则列表 */
+    .rule-list {
+      list-style: none;
+    }
+
+    .rule-list li {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-size: 0.98rem;
+      color: #c8c8cf;
+      align-items: flex-start;
+    }
+
+    .rule-list li .rule-marker {
+      background: #2a2a30;
+      border-radius: 50%;
+      min-width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #f5a623;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .rule-list li strong {
+      color: #f5b344;
+      font-weight: 500;
+    }
+
+    .highlight-warning {
+      background: rgba(245, 90, 70, 0.1);
+      border-left: 4px solid #f55a46;
+      padding: 14px 16px;
+      border-radius: 16px;
+      margin-top: 16px;
+      font-size: 0.95rem;
+      color: #f0a8a0;
+    }
+
+    /* 表格区域 */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 20px;
+      background: #202024;
+      margin-top: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+      min-width: 480px;
+    }
+
+    th {
+      text-align: left;
+      padding: 16px 14px 12px;
+      background: #26262b;
+      color: #a1a1ab;
+      font-weight: 500;
+      font-size: 0.85rem;
+      letter-spacing: 0.3px;
+    }
+
+    td {
+      padding: 14px 14px;
+      border-bottom: 1px solid #2e2e35;
+      color: #efeff5;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .rank-col {
+      font-weight: 600;
+      color: #f5a623;
+      width: 60px;
+    }
+
+    .trader-col {
+      font-weight: 500;
+    }
+
+    .volume-col {
+      font-weight: 600;
+      font-family: 'Inter Mono', monospace;
+    }
+
+    .time-col {
+      color: #88889a;
+      font-size: 0.85rem;
+    }
+
+    /* 刷新提示 */
+    .update-note {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 12px 4px 4px;
+      color: #9b9baf;
+      font-size: 0.85rem;
+    }
+
+    .fake-refresh {
+      background: #2b2b31;
+      border: none;
+      color: #c9c9df;
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid #3d3d45;
+    }
+
+    .fake-refresh:hover {
+      background: #35353d;
+      color: #f5a623;
+    }
+
+    /* 提交卡片 */
+    .submit-area {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .submit-info {
+      background: #25252b;
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid #34343c;
+    }
+
+    .submit-info p {
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-submit {
+      background: #f5a623;
+      border: none;
+      color: #0c0c0e;
+      font-weight: 700;
+      font-size: 1.2rem;
+      padding: 18px 0;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: 0.15s;
+      box-shadow: 0 10px 20px -5px rgba(245, 166, 35, 0.25);
+      border: 1px solid rgba(255, 215, 120, 0.5);
+      letter-spacing: 0.5px;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+      background: #e09115;
+    }
+
+    .hint {
+      color: #aaa;
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hint .icon {
+      font-size: 1.2rem;
+    }
+
+    /* 折叠区块 */
+    details {
+      background: #202024;
+      border-radius: 20px;
+      padding: 8px 16px;
+      margin-top: 16px;
+    }
+
+    summary {
+      font-weight: 500;
+      color: #ddd;
+      padding: 10px 0;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: '▶';
+      font-size: 0.8rem;
+      margin-left: auto;
+      color: #f5a623;
+      transition: transform 0.2s;
+    }
+
+    details[open] summary::after {
+      transform: rotate(90deg);
+    }
+
+    .detail-content {
+      padding: 8px 0 16px;
+      border-top: 1px solid #333;
+      color: #b0b0c0;
+    }
+
+    .step-list {
+      margin-left: 18px;
+      padding: 8px 0;
+    }
+
+    .step-list li {
+      margin-bottom: 10px;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 30px;
+      color: #6c6c7a;
+      font-size: 0.8rem;
+      border-top: 1px solid #242428;
+      padding-top: 20px;
+    }
+
+    .flex-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
 <body>
-<div class="dashboard">
-    <!-- 头部 -->
-    <div class="header">
-        <div class="title-section">
-            <h1><i class="fa-solid fa-fish"></i> 海豚社区</h1>
-            <div class="badge"><i class="fa-regular fa-hand-peace"></i> 透明治理 · 静态演示</div>
-        </div>
-        <div class="date-avatar">
-            <div class="date"><i class="fa-regular fa-calendar"></i> <span id="currentDate"></span></div>
-            <div class="avatar"><i class="fa-regular fa-circle-user"></i> <span>多签钱包</span></div>
-        </div>
+<div class="container">
+  <!-- 头部 -->
+  <div class="hero">
+    <h1>⚡️ OKX BOOST<br>社区交易量挑战赛</h1>
+    <div class="date-badge">📅 2026.03.20 – 2026.04.03</div>
+  </div>
+
+  <!-- 规则卡片 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="emoji">📋</span>
+      <h2>活动规则 · 必读</h2>
+    </div>
+    <ul class="rule-list">
+      <li><span class="rule-marker">1</span><span><strong>Boost交易量</strong> = OKX App内显示的数值（过去10-15日均值，非实际交易额）</span></li>
+      <li><span class="rule-marker">2</span><span><strong>⚠️ 不计入：</strong> 稳定币对（USDT/USDC等）、部分低流动性币种，倍率可能为0</span></li>
+      <li><span class="rule-marker">3</span><span><strong>数据延迟：</strong> 每日交易量次日 <strong>UTC 8:00 + 1~2h</strong> 更新（建议每天10:00后查看）</span></li>
+      <li><span class="rule-marker">4</span><span><strong>反作弊：</strong> 严禁P图、刷量，OKX官方会复核，违规取消资格并公示</span></li>
+    </ul>
+    <div class="highlight-warning">
+      💡 排行榜数据由管理员人工同步，每2小时更新一次。最终排名以活动截止日官方审核为准。
+    </div>
+  </div>
+
+  <!-- 排行榜卡片 -->
+  <div class="card">
+    <div class="card-header">
+      <span class="emoji">🏆</span>
+      <h2>当前排名 · 人工同步</h2>
+    </div>
+    <div class="update-note">
+      <span>⏱️ 最后更新：2026-03-19 14:30</span>
+      <button class="fake-refresh" id="refreshToastBtn">⟳ 模拟刷新</button>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>参与者</th>
+            <th>Boost 交易量 (USDT)</th>
+            <th>提交时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rank-col">🥇 1</td>
+            <td class="trader-col">CryptoKing</td>
+            <td class="volume-col">1,250,000</td>
+            <td class="time-col">03-19 10:23</td>
+          </tr>
+          <tr>
+            <td class="rank-col">🥈 2</td>
+            <td class="trader-col">MoonWalker</td>
+            <td class="volume-col">980,500</td>
+            <td class="time-col">03-19 09:15</td>
+          </tr>
+          <tr>
+            <td class="rank-col">🥉 3</td>
+            <td class="trader-col">BlockchainBob</td>
+            <td class="volume-col">752,200</td>
+            <td class="time-col">03-19 08:30</td>
+          </tr>
+          <tr>
+            <td class="rank-col">4</td>
+            <td class="trader-col">Alice0x</td>
+            <td class="volume-col">621,800</td>
+            <td class="time-col">03-18 22:12</td>
+          </tr>
+          <tr>
+            <td class="rank-col">5</td>
+            <td class="trader-col">Satoshii_77</td>
+            <td class="volume-col">504,200</td>
+            <td class="time-col">03-18 19:40</td>
+          </tr>
+          <tr>
+            <td class="rank-col">6</td>
+            <td class="trader-col">ETHMaxi</td>
+            <td class="volume-col">412,000</td>
+            <td class="time-col">03-18 15:33</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 14px; color: #aaa; font-size: 0.85rem; display: flex; gap: 14px; flex-wrap: wrap;">
+      <span>🟢 数据由会员提交截图 + 人工审核</span>
+      <span>🔞 严禁伪造，违者永久拉黑</span>
+    </div>
+  </div>
+
+  <!-- 提交交易量卡片 -->
+  <div class="card" style="padding-bottom: 20px;">
+    <div class="card-header">
+      <span class="emoji">📸</span>
+      <h2>提交你的 Boost 交易量</h2>
+    </div>
+    <div class="submit-area">
+      <div class="submit-info">
+        <p>📱 <strong>如何提交：</strong></p>
+        <p>1. 打开 OKX App → 进入【Boost】页面</p>
+        <p>2. 截图<strong>完整页面</strong>（必须包含当前Boost数值 + 时间）</p>
+        <p>3. 发送截图至社区管理员微信：<span style="background: #2d2d35; padding: 4px 10px; border-radius: 40px; color:#f5a623;">okx_boost_admin</span></p>
+        <p class="hint" style="margin-top: 12px;">⏳ 管理员每日22:00前统一录入排行榜，早提交早更新</p>
+      </div>
+
+      <!-- 按钮仅作为引导，点击弹出提示 -->
+      <button class="btn-submit" id="submitGuidBtn">📤 我已截图，立即提交</button>
+      <div class="hint">
+        <span class="icon">⚠️</span> 请勿重复提交，截图必须包含Boost页面和系统时间栏（或状态栏）
+      </div>
     </div>
 
-    <!-- 代币经济卡片 -->
-    <div class="card">
-        <div class="card-header">
-            <h3><i class="fa-solid fa-chart-pie"></i> 代币经济 · $DOLPHIN</h3>
-            <span>ERC-20</span>
-        </div>
-        <div class="token-grid">
-            <div class="token-item"><div class="token-label"><i class="fa-solid fa-coins"></i> 总供应</div><div class="token-value">100M</div><div class="token-sub">固定</div></div>
-            <div class="token-item"><div class="token-label"><i class="fa-solid fa-chart-line"></i> 流通量</div><div class="token-value">72.4M</div><div class="token-sub">72.4%</div></div>
-            <div class="token-item"><div class="token-label"><i class="fa-solid fa-users"></i> 持币地址</div><div class="token-value">8,245</div><div class="token-sub">+124 本周</div></div>
-            <div class="token-item"><div class="token-label"><i class="fa-regular fa-clock"></i> 解锁进度</div><div class="token-value">83%</div><div class="token-sub">vesting</div></div>
-            <div class="token-item"><div class="token-label"><i class="fa-solid fa-dollar-sign"></i> 当前价格</div><div class="token-value">$0.42</div><div class="token-sub">市值 $30.4M</div></div>
-        </div>
-    </div>
-
-    <!-- 金库资产 -->
-    <div class="card">
-        <div class="card-header">
-            <h3><i class="fa-regular fa-building"></i> 社区金库</h3>
-            <span>多签: 0x8f3C...a1b2</span>
-        </div>
-        <div class="treasury-grid">
-            <div class="asset-card"><div class="asset-name"><i class="fa-brands fa-usdt"></i> USDT</div><div class="asset-amount">428.5k</div><div class="asset-usd">$428,500</div></div>
-            <div class="asset-card"><div class="asset-name"><i class="fa-brands fa-ethereum"></i> ETH</div><div class="asset-amount">1,245.6</div><div class="asset-usd">$3.12M</div></div>
-            <div class="asset-card"><div class="asset-name"><i class="fa-solid fa-coins"></i> DOLPHIN</div><div class="asset-amount">2.85M</div><div class="asset-usd">$1.20M</div></div>
-            <div class="asset-card"><div class="asset-name"><i class="fa-solid fa-sack-dollar"></i> 总价值</div><div class="asset-amount">$4.75M</div><div class="asset-usd">+2.3%</div></div>
-        </div>
-    </div>
-
-    <!-- 近期支出 (卡片列表) -->
-    <div class="card" style="padding-bottom: 12px;">
-        <div class="card-header">
-            <h3><i class="fa-regular fa-clock"></i> 近期多签支出</h3>
-            <button class="refresh-btn" id="refreshExpenseBtn"><i class="fa-solid fa-rotate"></i> 刷新</button>
-        </div>
-        <div id="expenseListContainer" class="expense-list">
-            <!-- 动态生成支出卡片 -->
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-top: 12px; padding: 0 4px;">
-            <span style="background:#e2eff8; padding:5px 15px; border-radius:30px; font-size:0.7rem;"><i class="fa-regular fa-clock"></i> 今日总支出 USDT: $28,420</span>
-            <span style="background:#e2eff8; padding:5px 15px; border-radius:30px; font-size:0.7rem;"><i class="fa-solid fa-coins"></i> DOLPHIN: 125k</span>
-        </div>
-    </div>
-
-    <!-- 图表区 -->
-    <div class="chart-row">
-        <div class="chart-box">
-            <h4><i class="fa-regular fa-chart-line"></i> 近7日支出 (USDT)</h4>
-            <div class="chart-wrapper">
-                <canvas id="expenseTrendChart"></canvas>
-            </div>
-        </div>
-        <div class="chart-box">
-            <h4><i class="fa-regular fa-chart-pie"></i> 代币分布 (前10)</h4>
-            <div class="chart-wrapper">
-                <canvas id="holderChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <!-- 说明：纯静态演示 -->
-    <div class="guide-note">
-        <h4><i class="fa-regular fa-lightbulb"></i> 关于数据</h4>
-        <ul>
-            <li><i class="fa-regular fa-circle-check"></i> 当前页面所有数据均为<strong>前端模拟生成</strong>，无需后端。</li>
-            <li><i class="fa-regular fa-circle-check"></i> 点击“刷新”按钮会随机生成新的支出数据。</li>
-            <li><i class="fa-regular fa-circle-check"></i> 要接入真实链上数据，需通过后端代理或支持CORS的RPC（如使用Infura）。</li>
-            <li><i class="fa-regular fa-circle-check"></i> 本HTML可部署在任何静态服务器上，直接打开即可使用。</li>
+    <!-- 折叠：查看截图示例 & 注意延迟 -->
+    <details>
+      <summary>📌 点击查看截图示例 & 常见问题</summary>
+      <div class="detail-content">
+        <ul class="step-list" style="list-style-type: disc;">
+          <li><strong>✅ 有效截图：</strong> 清晰显示Boost交易量（如“1.25M”）、Boost图标、手机状态栏（显示时间）或带时间的锁屏界面。</li>
+          <li><strong>❌ 无效截图：</strong> 只拍数字、无时间、模糊、使用相册编辑拼贴。</li>
+          <li><strong>⏰ 为什么我的交易量没变？</strong> OKX Boost交易量每日更新一次，若你今天交易，请于次日UTC 8:00后（北京下午4点）再查看，通常1-2小时后显示增加。</li>
+          <li><strong>🔄 倍率问题：</strong> 不同币种倍率不同，稳定币对倍率极低甚至为0，这是官方规则，请以App为准。</li>
         </ul>
-    </div>
-    <div class="footer-meta">
-        <i class="fa-regular fa-eye"></i> 海豚社区 · 纯静态演示版 · 2026-03-18
-    </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- 页脚免责 -->
+  <div class="footer-note">
+    <p>© 社区Boost活动组 · 本排行榜基于人工录入，仅供参考<br>活动最终解释权归社区所有，OKX平台仅提供技术支持</p>
+  </div>
 </div>
 
+<!-- 简单交互：模拟刷新toast + 提交按钮引导 -->
 <script>
-    (function() {
-        // 设置当前日期为 2026年3月18日
-        const dateSpan = document.getElementById('currentDate');
-        if (dateSpan) {
-            const demoDate = new Date(2026, 2, 18); // 月份0=1月，2=3月
-            dateSpan.textContent = demoDate.toLocaleDateString('zh-CN', { month:'numeric', day:'numeric' }) + ' 周三';
-        }
+  (function() {
+    // 模拟刷新按钮
+    const refreshBtn = document.getElementById('refreshToastBtn');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', function() {
+        // 用alert模拟轻提示（简洁直观）
+        alert('🔄 排行榜数据由管理员人工同步，最新更新时间：2026-03-19 14:30。如需强制更新，请联系管理员。');
+      });
+    }
 
-        // ---------- 生成模拟支出卡片 ----------
-        function generateMockExpenses(count = 4) {
-            const times = ['09:23', '10:45', '11:12', '13:42', '14:18', '15:04', '16:30'];
-            const hashes = ['0x8f3c...a1b2', '0x1a4d...c8e9', '0x3b7e...f5a6', '0x9c2d...b4e8', '0x7a1f...d3c5'];
-            const types = ['开发赏金', '社区活动', '节点运维', '市场Grant', '安全审计', '流动性激励'];
-            const tokens = ['USDT', 'DOLPHIN', 'ETH'];
-            let expenses = [];
-            for (let i = 0; i < count; i++) {
-                const token = tokens[Math.floor(Math.random() * tokens.length)];
-                let amount, amountDisplay;
-                if (token === 'USDT') {
-                    amount = (Math.random() * 12000 + 2000).toFixed(2);
-                    amountDisplay = '$' + amount;
-                } else if (token === 'DOLPHIN') {
-                    amount = (Math.random() * 50000 + 8000).toFixed(0);
-                    amountDisplay = amount + ' DOLPHIN';
-                } else {
-                    amount = (Math.random() * 30 + 1).toFixed(2);
-                    amountDisplay = amount + ' ETH';
-                }
-                expenses.push({
-                    time: times[i % times.length],
-                    hash: hashes[i % hashes.length],
-                    type: types[Math.floor(Math.random() * types.length)],
-                    token: token,
-                    amountDisplay: amountDisplay,
-                    status: '已确认'
-                });
-            }
-            // 按时间倒序
-            return expenses.sort((a,b) => b.time.localeCompare(a.time));
-        }
+    // 提交按钮引导
+    const submitBtn = document.getElementById('submitGuidBtn');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', function() {
+        alert('📸 请按照卡片指引截图，并发送至管理员微信 okx_boost_admin 。\n\n我们会在每日22:00前统一录入排行榜。');
+      });
+    }
 
-        function renderExpenseCards(expenses) {
-            const container = document.getElementById('expenseListContainer');
-            if (!container) return;
-            container.innerHTML = expenses.map(e => {
-                return `
-                <div class="expense-card">
-                    <div class="expense-row">
-                        <span class="expense-time"><i class="fa-regular fa-clock"></i> ${e.time}</span>
-                        <span class="expense-type">${e.type}</span>
-                        <span class="expense-amount">-${e.amountDisplay}</span>
-                    </div>
-                    <div class="expense-detail">
-                        <span><i class="fa-regular fa-hashtag"></i> ${e.hash}</span>
-                        <span><i class="fa-regular fa-circle"></i> ${e.token}</span>
-                        <span class="status-badge">${e.status}</span>
-                    </div>
-                </div>
-                `;
-            }).join('');
-        }
-
-        // 初始化支出数据
-        let currentExpenses = generateMockExpenses(4);
-        renderExpenseCards(currentExpenses);
-
-        // 刷新按钮
-        document.getElementById('refreshExpenseBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            currentExpenses = generateMockExpenses(Math.floor(Math.random() * 3) + 3); // 3-5条
-            renderExpenseCards(currentExpenses);
-            const btn = this;
-            btn.innerHTML = '<i class="fa-solid fa-rotate fa-spin"></i> 刷新中';
-            setTimeout(() => {
-                btn.innerHTML = '<i class="fa-solid fa-rotate"></i> 刷新';
-            }, 700);
-        });
-
-        // ---------- 图表 ----------
-        // 支出趋势
-        const ctxTrend = document.getElementById('expenseTrendChart')?.getContext('2d');
-        if (ctxTrend) {
-            new Chart(ctxTrend, {
-                type: 'line',
-                data: {
-                    labels: ['12', '13', '14', '15', '16', '17', '18'],
-                    datasets: [{
-                        label: 'USDT',
-                        data: [12300, 18500, 16200, 21000, 24800, 26700, 28420],
-                        borderColor: '#1f8fc5',
-                        backgroundColor: 'rgba(31,143,197,0.1)',
-                        tension: 0.3,
-                        fill: true,
-                        borderWidth: 2.5,
-                        pointBackgroundColor: '#0f6b94'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { ticks: { callback: val => '$' + (val/1000) + 'k' } } }
-                }
-            });
-        }
-
-        // 持币分布饼图
-        const ctxHold = document.getElementById('holderChart')?.getContext('2d');
-        if (ctxHold) {
-            new Chart(ctxHold, {
-                type: 'pie',
-                data: {
-                    labels: ['金库 (27%)', '团队 (15%)', '社区激励 (13%)', '早期投资者 (10%)', '其他 (35%)'],
-                    datasets: [{
-                        data: [27, 15, 13, 10, 35],
-                        backgroundColor: ['#118ab2', '#f3a712', '#06d6a0', '#9b87f5', '#a0b9c6'],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } }
-                }
-            });
-        }
-    })();
+    // 给折叠summary加点样式 (无需额外)
+  })();
 </script>
+
+<!-- 保证所有字体回退 -->
 </body>
 </html>
