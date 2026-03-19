@@ -1,49 +1,494 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>H社区 · AMM数据仪表盘</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-<title>Boost</title>
+        body {
+            background: linear-gradient(165deg, #0b1428 0%, #182044 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 14px;
+        }
 
-<link rel="stylesheet" href="style.css">
+        /* 手机容器 */
+        .dashboard {
+            max-width: 420px;
+            width: 100%;
+            background: rgba(18, 26, 40, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(98, 126, 234, 0.25);
+            border-radius: 48px;
+            padding: 24px 18px;
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(168, 192, 255, 0.1) inset;
+        }
 
+        /* 头部 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding: 0 8px;
+        }
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a6c1ff, #6288ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            font-size: 13px;
+            color: #8096d9;
+            font-weight: 500;
+            display: block;
+            margin-top: 2px;
+        }
+        .badge {
+            background: #28345c;
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: #b0c6ff;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #4159a0;
+            backdrop-filter: blur(5px);
+        }
+
+        /* 池子卡片 (主要) */
+        .pool-card {
+            background: linear-gradient(145deg, #1e2748, #161e3a);
+            border-radius: 40px;
+            padding: 24px 20px;
+            margin-bottom: 20px;
+            border: 1px solid #31486e;
+            box-shadow: 0 20px 30px -10px #00000055;
+        }
+        .pool-header {
+            display: flex;
+            justify-content: space-between;
+            color: #9bb0ec;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 0.3px;
+        }
+        .pool-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .token-pair {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .token-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(145deg, #36487a, #1d2950);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 20px;
+            color: #b7ceff;
+            border: 2px solid #5b77c0;
+        }
+        .token-symbol {
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+            margin-right: 8px;
+        }
+        .token-symbol small {
+            font-size: 18px;
+            color: #8096cc;
+            font-weight: 500;
+        }
+        .price-box {
+            background: #0f1730;
+            padding: 12px 20px;
+            border-radius: 60px;
+            border: 1px solid #3c4e82;
+        }
+        .price-label {
+            font-size: 12px;
+            color: #8ba0e0;
+        }
+        .price-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            line-height: 1.2;
+        }
+        .price-value small {
+            font-size: 16px;
+            color: #b0c0ee;
+            font-weight: 500;
+        }
+
+        /* 流动性数据网格 */
+        .liquidity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0 16px;
+        }
+        .liquidity-item {
+            background: #1b2447;
+            border-radius: 28px;
+            padding: 18px 14px;
+            text-align: center;
+            border: 1px solid #314f85;
+        }
+        .liquidity-item .label {
+            color: #8da2e6;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+        .liquidity-item .value {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+        }
+        .liquidity-item .sub {
+            color: #afbee0;
+            font-size: 12px;
+        }
+
+        /* k线信息条 */
+        .k-line {
+            display: flex;
+            justify-content: space-between;
+            background: #121b38;
+            border-radius: 40px;
+            padding: 12px 18px;
+            border: 1px solid #2b4070;
+            margin: 16px 0 8px;
+        }
+        .k-line span {
+            color: #b9ceff;
+            font-weight: 500;
+        }
+        .k-line .k-value {
+            color: white;
+            font-family: monospace;
+            font-size: 16px;
+        }
+
+        /* 交易列表 */
+        .section-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0 16px 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title span {
+            background: #2f3f70;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 13px;
+            color: #b3c7ff;
+        }
+
+        .tx-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .tx-item {
+            background: #1d274b;
+            border-radius: 28px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #3c528b;
+        }
+        .tx-type {
+            background: #283464;
+            border-radius: 30px;
+            padding: 5px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #aac2ff;
+        }
+        .tx-detail {
+            text-align: right;
+        }
+        .tx-amount {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .tx-time {
+            color: #8096cf;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        /* 质押池状态卡 */
+        .stake-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .stake-card {
+            background: #1e2a51;
+            border-radius: 30px;
+            padding: 18px 16px;
+            flex: 1 1 calc(50% - 6px);
+            border: 1px solid #435faa;
+        }
+        .stake-card .title {
+            color: #9fb2f0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .stake-card .number {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        .stake-card .unit {
+            color: #8da2e6;
+            font-size: 14px;
+            margin-left: 4px;
+        }
+
+        /* 国库/奖励池小卡片 */
+        .treasury-row {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0 12px;
+        }
+        .treasury-item {
+            background: #1f2c55;
+            border-radius: 26px;
+            padding: 16px;
+            flex: 1;
+            border: 1px solid #3d5693;
+        }
+        .treasury-item .label {
+            color: #9bb2f5;
+            font-size: 13px;
+        }
+        .treasury-item .value {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        /* 底部水印 */
+        .footer-note {
+            text-align: center;
+            color: #435e96;
+            font-size: 12px;
+            margin-top: 28px;
+            border-top: 1px dashed #334573;
+            padding-top: 18px;
+        }
+
+        /* 刷新指示 */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #1d3060;
+            border-radius: 40px;
+            padding: 5px 14px;
+            width: fit-content;
+            margin-bottom: 15px;
+        }
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: #3eff9e;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff88;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
 </head>
-
 <body>
+    <div class="dashboard">
+        <!-- 实时指示器 + 头 -->
+        <div class="header">
+            <div class="logo">
+                <h1>H / USDT</h1>
+                <span>Uniswap V2 · 社区AMM</span>
+            </div>
+            <div class="badge">🟢 已同步</div>
+        </div>
 
-<div class="navbar">
+        <!-- 实时状态点 -->
+        <div class="live-badge">
+            <span class="dot"></span>
+            <span style="color:#c0d0ff;">实时数据流 · 最新区块 19283746</span>
+        </div>
 
-<div class="logo">Boost Wallet</div>
+        <!-- 主池卡片 -->
+        <div class="pool-card">
+            <div class="pool-header">
+                <span>🔥 流动性池 #H-USDT</span>
+                <span>0x9D1b...E7f2</span>
+            </div>
+            <div class="pool-main">
+                <div class="token-pair">
+                    <div class="token-icon">H</div>
+                    <div class="token-symbol">H <small>/</small> <span style="color:#dbb42c;">USDT</span></div>
+                </div>
+                <div class="price-box">
+                    <div class="price-label">当前价格</div>
+                    <div class="price-value">0.00605 <small>U</small></div>
+                </div>
+            </div>
 
-<div class="menu">
+            <!-- 流动性深度网格 -->
+            <div class="liquidity-grid">
+                <div class="liquidity-item">
+                    <div class="label">池子 H</div>
+                    <div class="value">18,181,818</div>
+                    <div class="sub">≈ $110,000</div>
+                </div>
+                <div class="liquidity-item">
+                    <div class="label">池子 USDT</div>
+                    <div class="value">110,000</div>
+                    <div class="sub">≈ 110k U</div>
+                </div>
+            </div>
 
-<a href="wallet.html">钱包</a>
-<a href="market.html">行情</a>
-<a href="earn.html">赚币</a>
-<a href="boost.html">Boost</a>
+            <!-- K线常数 -->
+            <div class="k-line">
+                <span>🔵 恒定乘积 k</span>
+                <span class="k-value">2.000 × 10¹²</span>
+            </div>
+        </div>
 
-</div>
+        <!-- 交易活动 (最近交换) -->
+        <div class="section-title">
+            ⚡ 最新交换 <span>实时</span>
+        </div>
+        <div class="tx-list">
+            <div class="tx-item">
+                <span class="tx-type">BUY</span>
+                <div class="tx-detail">
+                    <div class="tx-amount">+2,845 H</div>
+                    <div class="tx-time">16.2 U · 35秒前</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <span class="tx-type">SELL</span>
+                <div class="tx-detail">
+                    <div class="tx-amount">-1,200 H</div>
+                    <div class="tx-time">7.26 U · 2分前</div>
+                </div>
+            </div>
+            <div class="tx-item">
+                <span class="tx-type">BUY</span>
+                <div class="tx-detail">
+                    <div class="tx-amount">+5,000 H</div>
+                    <div class="tx-time">30.2 U · 5分前</div>
+                </div>
+            </div>
+        </div>
 
-</div>
+        <!-- 双质押池状态 (来自模型) -->
+        <div class="section-title">
+            🔒 质押池状态
+        </div>
+        <div class="stake-stats">
+            <div class="stake-card">
+                <div class="title">质押 H → U</div>
+                <div class="number">45.2M <span class="unit">H</span></div>
+                <div style="color:#8ea9ff; font-size:13px; margin-top:5px;">年化 11.2%</div>
+            </div>
+            <div class="stake-card">
+                <div class="title">质押 U → H</div>
+                <div class="number">1.85M <span class="unit">U</span></div>
+                <div style="color:#8ea9ff; font-size:13px; margin-top:5px;">年化 10.8%</div>
+            </div>
+        </div>
 
-<div class="container">
+        <!-- 国库 + 奖励池 (社区资产) -->
+        <div class="treasury-row">
+            <div class="treasury-item">
+                <div class="label">🏦 国库 U</div>
+                <div class="value">43,200 U</div>
+                <div style="color:#7c94d4; font-size: 12px;">≈ 7.14M H 回购力</div>
+            </div>
+            <div class="treasury-item">
+                <div class="label">🎁 奖励池 H</div>
+                <div class="value">287.5M H</div>
+                <div style="color:#7c94d4; font-size: 12px;">占初始 95.8%</div>
+            </div>
+        </div>
 
-<h2>Boost</h2>
+        <!-- 社区金库持币 (多签) -->
+        <div style="background: #1c264b; border-radius: 30px; padding: 18px; margin: 12px 0; border: 1px solid #3b5090;">
+            <div style="display: flex; justify-content: space-between; color: #b0c5ff;">
+                <span>🏛️ 社区金库多签 (7/5)</span>
+                <span style="font-weight: 700; color: white;">682.6M H</span>
+            </div>
+            <div style="color: #6f8ad2; font-size: 13px; margin-top: 6px;">占总供应 68.26% · 极端干预储备</div>
+        </div>
 
-<div class="card">
+        <!-- 24h 交易概要 -->
+        <div style="display: flex; gap: 12px; margin: 18px 0 10px;">
+            <div style="background: #202d58; border-radius: 26px; padding: 14px; flex:1;">
+                <div style="color:#b2c6fc;">24h 交易量</div>
+                <div style="color:white; font-size:22px; font-weight:700;">187k U</div>
+            </div>
+            <div style="background: #202d58; border-radius: 26px; padding: 14px; flex:1;">
+                <div style="color:#b2c6fc;">总税收 (24h)</div>
+                <div style="color:white; font-size:22px; font-weight:700;">9,350 U</div>
+            </div>
+        </div>
 
-<h3>Boost Campaign</h3>
+        <!-- 价格影响模拟器 (简洁) -->
+        <div style="background: #141f43; border-radius: 36px; padding: 18px; margin: 18px 0 10px; border: 1px solid #2c4180;">
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between;">
+                <span style="color:#adc2ff;">📊 买入10k U 滑点</span>
+                <span style="background:#25386e; padding:6px 16px; border-radius: 40px; color:white; font-weight:600;">≈ 2.3%</span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-top: 12px;">
+                <span style="color:#adc2ff;">📉 卖出50k H 滑点</span>
+                <span style="background:#25386e; padding:6px 16px; border-radius: 40px; color:white; font-weight:600;">≈ 3.1%</span>
+            </div>
+        </div>
 
-<p>Stake OKB</p>
-
-<p>APR 35%</p>
-
-<button>参与</button>
-
-</div>
-
-</div>
-
+        <!-- 数据源脚注 -->
+        <div class="footer-note">
+            ⭐ 数据基于链上子图实时更新 · 多签地址: 0x7C3a...F2e1<br>
+            所有数值为示例/模拟，实际请连接TheGraph查询[citation:3]
+        </div>
+    </div>
 </body>
-
 </html>
