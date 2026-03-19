@@ -12,10 +12,11 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Inter',sans-serif; background:#0b1018; color:#fff; line-height:1.5; min-height:100vh; padding:0; overflow-x:hidden; }
 
+        /* 高级动态头部 */
         .hero {
             position: relative;
             background: radial-gradient(ellipse at 30% 40%, #132b44 0%, #030b14 100%);
-            padding: 2rem 1.5rem 2rem 1.5rem;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
             border-bottom-left-radius: 40px;
             border-bottom-right-radius: 40px;
             overflow: hidden;
@@ -31,6 +32,7 @@
         }
         .hero-content { position:relative; z-index:2; max-width:600px; margin:0 auto; }
 
+        /* 合作标识 */
         .co-brand {
             display: flex; align-items: center; justify-content: center; gap:12px;
             margin-bottom: 1rem; background: rgba(0,30,60,0.6); backdrop-filter:blur(8px);
@@ -44,7 +46,7 @@
         }
         .co-brand span { font-size:1.2rem; font-weight:600; color:#b5f0ff; }
 
-        .title-main { text-align:center; margin-bottom:1.2rem; }
+        .title-main { text-align:center; margin-bottom:0.8rem; }
         .title-main h1 {
             font-size:2.2rem; font-weight:800; background:linear-gradient(135deg, #ffffff, #aad0ff);
             -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
@@ -52,166 +54,174 @@
         }
         .title-main p { color:#90c0ff; font-weight:500; display:flex; align-items:center; justify-content:center; gap:8px; }
         .activity-date {
-            text-align:center; font-size:0.9rem; color:#b0e0ff; margin-bottom:1.5rem;
+            text-align:center; font-size:0.9rem; color:#b0e0ff; margin-bottom:1rem;
         }
 
-        .live-feed {
-            background: #0b1c2e; border-radius: 40px; padding: 1rem 1.2rem; margin: 1rem 0 1.5rem;
-            border: 2px solid #00a6ff; box-shadow: 0 0 15px #0099ff80;
+        /* 容器 */
+        .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
+
+        /* 可折叠卡片通用样式 */
+        .collapse-card {
+            background: rgba(12, 30, 50, 0.7);
             backdrop-filter: blur(10px);
+            border: 1px solid #29a5ff40;
+            border-radius: 32px;
+            margin-bottom: 1.2rem;
+            box-shadow: 0 8px 20px #0000004d;
+            transition: all 0.2s;
         }
-        .feed-header { display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#fff; font-weight:600; font-size:1.1rem; }
-        .feed-list { list-style:none; max-height:200px; overflow-y:hidden; }
+        .collapse-card:hover { border-color: #00bbff; }
+
+        .card-header {
+            padding: 1.2rem 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-header-left i {
+            font-size: 1.6rem;
+            color: #00c8ff;
+            width: 32px;
+            text-align: center;
+        }
+        .card-header-left .title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #b7ecff;
+        }
+        .card-header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .summary-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #ffecaa;
+        }
+        .summary-stats span { font-weight: 600; color: #fff; margin-left: 4px; }
+        .expand-icon {
+            font-size: 1.2rem;
+            color: #6ec3ff;
+            transition: transform 0.3s;
+        }
+        .card-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding: 0 1.2rem;
+        }
+        .card-content.expanded {
+            max-height: 1000px; /* 足够展示所有内容 */
+            padding-bottom: 1.2rem;
+        }
+
+        /* K线图模拟 */
+        .kline-sim {
+            background: #0f2842;
+            border-radius: 24px;
+            padding: 0.8rem;
+            margin: 0.5rem 0 1rem;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 80px;
+        }
+        .kline-bar {
+            width: 8px;
+            background: #00c8ff;
+            border-radius: 4px 4px 0 0;
+            height: calc(100% * var(--h));
+            min-height: 4px;
+        }
+        .kline-bar.red { background: #ff5e5e; }
+
+        /* 实时交易流 */
+        .live-feed { margin: 0.5rem 0; }
+        .feed-list { list-style:none; }
         .feed-item {
-            display:flex; align-items:center; justify-content:space-between; padding:0.4rem 0;
-            border-bottom:1px solid #1f5a85; font-size:0.9rem; transition:all 0.3s;
-            animation: fadeIn 0.5s;
+            display:flex; align-items:center; justify-content:space-between; padding:0.5rem 0;
+            border-bottom:1px solid #1f5a85; font-size:0.9rem;
         }
         .feed-item:last-child { border-bottom:none; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
         .feed-address { font-family:monospace; background:#102c44; padding:0.2rem 0.8rem; border-radius:30px; }
         .feed-volume { color:#7ff0b0; font-weight:600; }
         .feed-time { color:#94b4d4; font-size:0.7rem; }
 
-        .section-header {
-            font-size:1.4rem; font-weight:700; margin:1.5rem 0 1rem 0; display:flex; align-items:center; gap:8px;
-            color:#b7ecff; border-left:5px solid #00a6ff; padding-left:15px;
-        }
-
-        .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; margin:0.5rem 0; }
+        /* 个人数据卡片内布局 */
+        .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; margin:1rem 0; }
         .stat-card {
-            background:rgba(10,30,50,0.7); backdrop-filter:blur(10px); border:1px solid #29a5ff40;
-            border-radius:28px; padding:1.2rem 1rem; box-shadow:0 8px 20px #0000004d;
+            background:rgba(10,30,50,0.7); border:1px solid #29a5ff40;
+            border-radius:20px; padding:1rem; box-shadow:0 4px 10px #0000004d;
         }
-        .stat-label { font-size:0.85rem; color:#b0e0ff; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
-        .stat-value { font-size:1.6rem; font-weight:700; color:white; }
-        .stat-sub { font-size:0.8rem; color:#b0e0ff; margin-top:5px; }
+        .stat-label { font-size:0.8rem; color:#b0e0ff; margin-bottom:4px; }
+        .stat-value { font-size:1.4rem; font-weight:700; color:white; }
 
         .personal-reward-card {
-            background: #00497e40; border-radius: 30px; padding: 1rem; margin: 0.5rem 0 1rem;
+            background: #00497e40; border-radius: 20px; padding: 1rem; margin: 1rem 0;
             border: 1px solid #3fa2ff;
         }
-        .personal-reward-row {
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;
-        }
+        .personal-reward-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
         .personal-reward-label { color:#b0ecff; }
         .personal-reward-value { font-size:1.4rem; font-weight:700; color:#ffd966; }
         .next-tier { font-size:0.8rem; color:#a0d0ff; }
-        .progress-bar-container {
-            width:100%; height:10px; background:#1f3f60; border-radius:10px; margin:0.5rem 0;
-        }
-        .progress-bar-fill {
-            height:100%; background:linear-gradient(90deg, #00c6ff, #0072ff); border-radius:10px;
-            width:0%; transition:width 0.3s;
-        }
+
+        .progress-bar-container { width:100%; height:8px; background:#1f3f60; border-radius:8px; margin:0.5rem 0; }
+        .progress-bar-fill { height:100%; background:linear-gradient(90deg, #00c6ff, #0072ff); border-radius:8px; width:0%; transition:width 0.3s; }
 
         .personal-row {
-            display:flex; justify-content:space-around; background:rgba(0,40,70,0.5); backdrop-filter:blur(8px);
-            border-radius:60px; padding:0.8rem; margin:0.5rem 0 0; border:1px solid #0077ff;
+            display:flex; justify-content:space-around; background:rgba(0,40,70,0.5);
+            border-radius:40px; padding:0.6rem; margin:1rem 0; border:1px solid #0077ff;
         }
         .rank-item { text-align:center; }
-        .rank-label { font-size:0.7rem; color:#9ac7ff; }
-        .rank-number { font-size:1.2rem; font-weight:700; color:#ffecaa; }
-
-        .unbind-prompt {
-            background: #004d80; border-radius: 30px; padding: 1rem; margin: 1rem 0;
-            border: 2px solid #ffaa33; display: flex; align-items: center; gap: 15px;
-        }
-        .unbind-prompt i { font-size:2rem; color:#ffaa33; }
-        .unbind-prompt button {
-            background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1rem;
-            border-radius:30px; margin-left:auto; cursor:pointer;
-        }
-
-        .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
-
-        .team-section {
-            background:linear-gradient(145deg, #0a2540, #031a2f); border-radius:40px; padding:1.8rem 1.5rem;
-            margin:2rem 0; border:1px solid #0088ff; box-shadow:0 15px 25px #00000060;
-        }
+        .rank-label { font-size:0.65rem; color:#9ac7ff; }
+        .rank-number { font-size:1rem; font-weight:700; color:#ffecaa; }
 
         .team-stats-row {
-            display:flex; justify-content:space-between; background:#00497e40; border-radius:30px;
-            padding:1rem; margin:1rem 0; border:1px solid #3fa2ff;
+            display:flex; justify-content:space-between; background:#00497e40; border-radius:24px;
+            padding:0.8rem; margin:1rem 0; border:1px solid #3fa2ff;
         }
         .team-stat-item { text-align:center; flex:1; }
-        .team-stat-label { font-size:0.75rem; color:#b0daff; }
-        .team-stat-value { font-size:1.4rem; font-weight:700; color:#ffecaa; }
-
-        .info-icon {
-            display:inline-flex; background:#1f5a85; width:18px; height:18px; border-radius:50%;
-            font-size:0.7rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
-        }
+        .team-stat-label { font-size:0.7rem; color:#b0daff; }
+        .team-stat-value { font-size:1.2rem; font-weight:700; color:#ffecaa; }
 
         .team-effective-box {
-            background:#002a55; border-radius:30px; padding:1rem; margin-bottom:1.5rem;
+            background:#002a55; border-radius:20px; padding:1rem; margin:1rem 0;
             border:1px solid #3fa2ff;
         }
-        .team-effective-row {
-            display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem;
-        }
+        .team-effective-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
         .team-effective-label { color:#b0ecff; }
-        .team-effective-value { font-size:1.6rem; font-weight:700; color:#ffecaa; margin-left:10px; }
-        .team-effective-unit { font-size:0.9rem; color:#99ccff; }
+        .team-effective-value { font-size:1.4rem; font-weight:700; color:#ffecaa; margin-left:10px; }
+        .team-effective-unit { font-size:0.8rem; color:#99ccff; }
 
-        .member-list { margin:1.5rem 0; }
-        .member-item {
-            display:flex; align-items:center; justify-content:space-between; padding:0.8rem 0;
-            border-bottom:1px solid #1f5275;
-        }
-        .member-info { display:flex; align-items:center; gap:12px; }
-        .member-level {
-            background:#0059a3; border-radius:20px; padding:0.2rem 1rem; font-size:0.75rem; font-weight:600;
-        }
-        .member-address { font-family:monospace; font-size:0.9rem; }
-        .member-volume { color:#9effb4; font-weight:600; }
+        .member-list { margin:0.5rem 0; }
+        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid #1f5275; }
+        .member-info { display:flex; align-items:center; gap:10px; }
+        .member-level { background:#0059a3; border-radius:20px; padding:0.2rem 1rem; font-size:0.7rem; font-weight:600; }
+        .member-address { font-family:monospace; font-size:0.8rem; }
 
         .team-reward-card {
-            background:#00335e; border-radius:30px; padding:1.2rem; margin-top:1.5rem;
+            background:#00335e; border-radius:20px; padding:1rem; margin:1rem 0;
             border:2px dashed #4db8ff; text-align:center;
         }
-        .team-reward-amount { font-size:2rem; font-weight:800; color:#ffd966; }
+        .team-reward-amount { font-size:1.8rem; font-weight:800; color:#ffd966; }
 
-        details {
-            background:#0f253a; border-radius:40px; padding:0.5rem 1.5rem; border:1px solid #3a7bb5;
-            margin:2rem 0;
+        .btn-small {
+            background: #00497e; border:none; color:white; padding:0.6rem 1rem;
+            border-radius:30px; font-size:0.9rem; width:100%; margin:0.5rem 0; cursor:pointer;
         }
-        summary {
-            font-weight:600; font-size:1.2rem; padding:0.8rem 0; cursor:pointer; color:#b5e4ff;
-            list-style:none; display:flex; align-items:center; justify-content:space-between;
-        }
-        summary::-webkit-details-marker { display:none; }
-        summary::after { content:'\f078'; font-family:'Font Awesome 5 Free'; font-weight:900; transition:transform 0.3s; }
-        details[open] summary::after { transform:rotate(180deg); }
+        .btn-primary-small { background:linear-gradient(145deg, #00a86b, #007755); }
 
-        .tab-buttons {
-            display:flex; gap:10px; margin:1rem 0; background:#1a3550; border-radius:40px; padding:0.3rem;
-        }
-        .tab-btn {
-            flex:1; text-align:center; padding:0.6rem; border-radius:30px; background:transparent;
-            color:#b0d0ff; cursor:pointer; border:none; font-weight:600;
-        }
-        .tab-btn.active { background:#0077ff; color:#fff; }
-        .tab-pane { display:none; }
-        .tab-pane.active { display:block; }
-
-        .rules-content { padding:0.5rem 0 1.5rem; color:#d0ebff; }
-        .rule-block { margin-bottom:1.5rem; }
-        .rule-block h4 { color:#ffd966; margin-bottom:0.5rem; font-size:1rem; }
-        .rule-block ul { padding-left:1.2rem; }
-        .rule-block li { margin-bottom:0.3rem; font-size:0.9rem; }
-        .reward-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-top:0.5rem; }
-        .reward-item { background:#1c3b5a; border-radius:20px; padding:0.8rem; text-align:center; font-size:0.9rem; }
-
-        .btn {
-            background:linear-gradient(145deg, #006bb3, #003f77); border:none; color:white; padding:1rem;
-            border-radius:60px; font-weight:600; font-size:1.1rem; width:100%; border:1px solid #6ec3ff;
-            box-shadow:0 8px 20px #001a33; margin:0.5rem 0; cursor:pointer;
-        }
-        .btn-primary { background:linear-gradient(145deg, #00a86b, #007755); border-color:#7ff0b0; }
-        .footer-note { text-align:center; color:#6c8db0; font-size:0.8rem; margin:2rem 0 1rem; }
-        .highlight { color:#ffe484; font-weight:700; }
-        .countdown { color:#ffaa33; font-weight:600; }
+        .footer-note { text-align:center; color:#6c8db0; font-size:0.8rem; margin:2rem 0; }
+        .info-icon { display:inline-flex; background:#1f5a85; width:16px; height:16px; border-radius:50%; font-size:0.6rem; align-items:center; justify-content:center; margin-left:5px; cursor:help; }
     </style>
 </head>
 <body>
@@ -225,202 +235,228 @@
             </div>
             <div class="title-main">
                 <h1>团队助力计划</h1>
-                <p><i class="fas fa-users"></i> 邀请好友，团队交易额外奖励 <i class="fas fa-bolt"></i></p>
+                <p><i class="fas fa-users"></i> 邀请好友，团队交易额外奖励</p>
             </div>
             <div class="activity-date">
-                <i class="far fa-calendar-alt"></i> 活动时间：4月1日 08:00 — 4月15日 08:00 (UTC+8)
-            </div>
-
-            <!-- 板块1: H代币实时交易动态 -->
-            <div class="section-header">📊 H代币实时交易动态</div>
-            <div class="live-feed">
-                <div class="feed-header">
-                    <i class="fas fa-sync-alt fa-spin"></i> 最新成交
-                </div>
-                <ul class="feed-list" id="feedList"></ul>
+                <i class="far fa-calendar-alt"></i> 4月1日 08:00 — 4月15日 08:00 (UTC+8)
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- 未绑定状态演示 -->
-        <div class="unbind-prompt" id="unbindPrompt" style="display: none;">
-            <i class="fas fa-link"></i>
-            <span>绑定OKX钱包，立即参与活动</span>
-            <button onclick="alert('唤起绑定流程')">立即绑定</button>
-        </div>
-
-        <!-- 板块2: 我的交易 -->
-        <div class="section-header">💰 我的交易</div>
-
-        <!-- 个人数据卡片 -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label"><i class="fas fa-user"></i> 今日交易量</div>
-                <div class="stat-value" id="userToday">1,280</div>
-                <div class="stat-sub">USDC</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label"><i class="fas fa-user-clock"></i> 累计交易量</div>
-                <div class="stat-value" id="userTotal">8,450</div>
-                <div class="stat-sub">USDC</div>
+        <!-- 未绑定状态提示 (默认隐藏) -->
+        <div class="collapse-card" id="unbindPrompt" style="display: none; background:#004d80; border-color:#ffaa33;">
+            <div style="display:flex; align-items:center; gap:15px; padding:1rem;">
+                <i class="fas fa-link" style="font-size:2rem; color:#ffaa33;"></i>
+                <span>绑定OKX钱包，立即参与活动</span>
+                <button style="background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1rem; border-radius:30px; margin-left:auto; cursor:pointer;" onclick="alert('唤起绑定流程')">立即绑定</button>
             </div>
         </div>
 
-        <!-- 个人奖励与进度条卡片 -->
-        <div class="personal-reward-card" id="personalRewardCard">
-            <div class="personal-reward-row">
-                <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
-                <span class="personal-reward-value" id="personalReward">42.25 H</span>
-            </div>
-            <div class="personal-reward-row">
-                <span class="next-tier" id="nextTier">再交易1,550 USDC升至0.8%</span>
-            </div>
-            <!-- 个人进度条，宽度限制0-100% -->
-            <div class="progress-bar-container">
-                <div class="progress-bar-fill" id="personalProgress" style="width:84.5%"></div>
-            </div>
-            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#a0c0ff;">
-                <span>当前累计: <span id="userTotalSmall">8,450</span> USDC</span>
-                <span>下一目标: <span id="nextTarget">10,000</span> USDC</span>
-            </div>
-        </div>
-
-        <!-- 个人排名（额外信息） -->
-        <div class="personal-row">
-            <div class="rank-item"><div class="rank-label">本期排名</div><div class="rank-number" id="rankPeriod">#102</div></div>
-            <div class="rank-item"><div class="rank-label">月排名</div><div class="rank-number" id="rankMonth">#87</div></div>
-            <div class="rank-item"><div class="rank-label">年度排名</div><div class="rank-number" id="rankYear">#203</div></div>
-        </div>
-
-        <!-- 发放倒计时提示 -->
-        <div style="text-align:center; margin:1rem 0; font-size:0.9rem; background:#002a55; padding:0.5rem; border-radius:40px;">
-            <i class="far fa-clock"></i> 下次奖励发放：4月10日 08:00 <span class="countdown" id="countdown">(剩余2天)</span>
-        </div>
-
-        <!-- 板块3: 我的团队 -->
-        <div class="section-header">⚓ 我的团队</div>
-        <div class="team-section">
-            <!-- 团队三指标：人数、团队总交易量、团队贡献值（原名有效团队量） -->
-            <div class="team-stats-row">
-                <div class="team-stat-item">
-                    <div class="team-stat-label">团队人数</div>
-                    <div class="team-stat-value" id="teamCount">23</div>
+        <!-- 卡片1: H代币实时交易动态 -->
+        <div class="collapse-card" id="cardLive">
+            <div class="card-header" onclick="toggleCard('liveContent')">
+                <div class="card-header-left">
+                    <i class="fas fa-chart-line"></i>
+                    <span class="title">实时交易动态</span>
                 </div>
-                <div class="team-stat-item">
-                    <div class="team-stat-label">
-                        团队总交易量
-                        <span class="info-icon" title="所有成员实际交易额之和">?</span>
+                <div class="card-header-right">
+                    <div class="summary-stats">
+                        <span>H价 <span id="hPrice">$0.124</span></span>
+                        <span>24h <span id="hChange" style="color:#7ff0b0;">+2.3%</span></span>
                     </div>
-                    <div class="team-stat-value" id="teamRawVolume">148.2k</div>
-                </div>
-                <div class="team-stat-item">
-                    <div class="team-stat-label">
-                        团队贡献值
-                        <span class="info-icon" title="加权量 = 本人100% + 一级50% + 二级10%，用于计算团队奖励">?</span>
-                    </div>
-                    <div class="team-stat-value" id="teamWeighted">128.4k</div>
+                    <i class="fas fa-chevron-down expand-icon" id="liveIcon"></i>
                 </div>
             </div>
-
-            <!-- 团队贡献值进度条（宽度限制100%） -->
-            <div class="team-effective-box">
-                <div class="team-effective-row">
-                    <span class="team-effective-label"><i class="fas fa-chart-line"></i> 团队贡献值</span>
-                    <span class="team-effective-value" id="teamWeightedDetail">128,400</span>
-                    <span class="team-effective-unit">USDT</span>
+            <div class="card-content" id="liveContent">
+                <!-- 模拟K线图 -->
+                <div class="kline-sim">
+                    <div class="kline-bar" style="--h:0.6"></div>
+                    <div class="kline-bar red" style="--h:0.3"></div>
+                    <div class="kline-bar" style="--h:0.8"></div>
+                    <div class="kline-bar red" style="--h:0.4"></div>
+                    <div class="kline-bar" style="--h:0.7"></div>
+                    <div class="kline-bar" style="--h:0.5"></div>
+                    <div class="kline-bar red" style="--h:0.2"></div>
+                    <div class="kline-bar" style="--h:0.9"></div>
+                    <div class="kline-bar" style="--h:0.6"></div>
+                    <div class="kline-bar red" style="--h:0.3"></div>
+                    <div class="kline-bar" style="--h:0.7"></div>
                 </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" id="teamProgress" style="width:100%"></div>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#a0c0ff; margin-top:0.3rem;">
-                    <span id="teamTierDisplay">当前档位: 100,000 USDT (1%)</span>
-                    <span id="teamProgressText">已达标</span>
+                <!-- 实时交易列表 -->
+                <div class="live-feed">
+                    <ul class="feed-list" id="feedList"></ul>
                 </div>
             </div>
-
-            <!-- 团队成员列表（前3条，可展开） -->
-            <div class="member-list" id="memberList"></div>
-            <button class="btn" style="margin-bottom:1rem; background:#00497e;" onclick="toggleMembers()">查看全部成员</button>
-
-            <!-- 团队奖励预估 -->
-            <div class="team-reward-card">
-                <div style="font-size:1rem; color:#b0ecff;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
-                <div class="team-reward-amount" id="teamReward">1,284 H</div>
-                <div style="font-size:0.85rem; margin-top:5px;">已达成100,000 USDT档位，获得1% H代币奖励</div>
-            </div>
-
-            <button class="btn btn-primary" style="margin-top:1rem;" onclick="alert('复制邀请链接')"><i class="fas fa-link"></i> 邀请好友加入舰队</button>
         </div>
 
-        <!-- 底部折叠规则（带Tab切换） -->
-        <details>
-            <summary>📋 活动规则与奖励详情</summary>
-            <div class="rules-content">
-                <div class="tab-buttons">
-                    <button class="tab-btn active" data-tab="personal">个人奖励</button>
-                    <button class="tab-btn" data-tab="team">团队奖励</button>
+        <!-- 卡片2: 我的交易 -->
+        <div class="collapse-card" id="cardMyTrade">
+            <div class="card-header" onclick="toggleCard('myTradeContent')">
+                <div class="card-header-left">
+                    <i class="fas fa-wallet"></i>
+                    <span class="title">我的交易</span>
                 </div>
-
-                <!-- 个人奖励Tab -->
-                <div class="tab-pane active" id="tabPersonal">
-                    <div class="rule-block">
-                        <h4>🎁 个人交易奖励（比例制）</h4>
-                        <p>每月10日、20日、30日根据累计交易量按比例发放H代币：</p>
-                        <ul>
-                            <li>≥ 10,000 USDT → 奖励总额的 <strong>0.5%</strong> H代币</li>
-                            <li>≥ 30,000 USDT → 奖励总额的 <strong>0.8%</strong> H代币</li>
-                            <li>≥ 50,000 USDT → 奖励总额的 <strong>1%</strong> H代币</li>
-                            <li>≥ 100,000 USDT → 奖励总额的 <strong>1.2%</strong> H代币</li>
-                        </ul>
-                        <p class="highlight">示例：累计交易40,000 USDT，奖励 = 40,000 × 0.8% = 320 H代币</p>
+                <div class="card-header-right">
+                    <div class="summary-stats">
+                        <span>今日 <span id="userTodaySummary">1,280</span></span>
+                        <span>累计 <span id="userTotalSummary">8,450</span></span>
+                    </div>
+                    <i class="fas fa-chevron-down expand-icon" id="myTradeIcon"></i>
+                </div>
+            </div>
+            <div class="card-content" id="myTradeContent">
+                <!-- 详细内容 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="fas fa-user"></i> 今日交易量</div>
+                        <div class="stat-value" id="userToday">1,280</div>
+                        <div class="stat-sub">USDC</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label"><i class="fas fa-user-clock"></i> 累计交易量</div>
+                        <div class="stat-value" id="userTotal">8,450</div>
+                        <div class="stat-sub">USDC</div>
                     </div>
                 </div>
 
-                <!-- 团队奖励Tab -->
-                <div class="tab-pane" id="tabTeam">
-                    <div class="rule-block">
-                        <h4>👥 团队奖励规则</h4>
-                        <p><span class="highlight">团队贡献值 = 本人100% + 一级50% + 二级10%</span></p>
-                        <p>当团队贡献值达到以下门槛，额外获得H代币奖励：</p>
-                        <ul>
-                            <li>≥ 50,000 USDT → 奖励贡献值的 <strong>0.5%</strong> H代币</li>
-                            <li>≥ 100,000 USDT → 奖励贡献值的 <strong>1%</strong> H代币</li>
-                        </ul>
-                        <p>累计制，每月10/20/30日随个人奖励一并发放。</p>
+                <div class="personal-reward-card">
+                    <div class="personal-reward-row">
+                        <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
+                        <span class="personal-reward-value" id="personalReward">42.25 H</span>
+                    </div>
+                    <div class="personal-reward-row">
+                        <span class="next-tier" id="nextTier">再交易1,550 USDC升至0.8%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="personalProgress" style="width:84.5%"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#a0c0ff;">
+                        <span>当前累计: <span id="userTotalSmall">8,450</span> USDC</span>
+                        <span>下一目标: <span id="nextTarget">10,000</span> USDC</span>
                     </div>
                 </div>
 
-                <!-- 公共规则 -->
-                <div class="rule-block">
-                    <h4>⏱️ 自动发放说明</h4>
-                    <p>✅ 每月10日、20日、30日系统对当前累计交易量进行快照，自动计算并发放奖励至您绑定的OKX钱包。活动结束后（4月15日）最终结算补差。</p>
+                <div class="personal-row">
+                    <div class="rank-item"><div class="rank-label">本期排名</div><div class="rank-number" id="rankPeriod">#102</div></div>
+                    <div class="rank-item"><div class="rank-label">月排名</div><div class="rank-number" id="rankMonth">#87</div></div>
+                    <div class="rank-item"><div class="rank-label">年度排名</div><div class="rank-number" id="rankYear">#203</div></div>
                 </div>
-                <div class="rule-block">
-                    <h4>📌 参与方式</h4>
-                    <ul>
-                        <li>1. 在社区App内绑定您的OKX钱包。</li>
-                        <li>2. 使用OKX DEX交易H代币（任意链）。</li>
-                        <li>3. 通过社区邀请码邀请好友，好友绑定后自动计入团队。</li>
+            </div>
+        </div>
+
+        <!-- 卡片3: 我的团队 -->
+        <div class="collapse-card" id="cardTeam">
+            <div class="card-header" onclick="toggleCard('teamContent')">
+                <div class="card-header-left">
+                    <i class="fas fa-users"></i>
+                    <span class="title">我的团队</span>
+                </div>
+                <div class="card-header-right">
+                    <div class="summary-stats">
+                        <span>人数 <span id="teamCountSummary">23</span></span>
+                        <span>贡献 <span id="teamWeightedSummary">128.4k</span></span>
+                    </div>
+                    <i class="fas fa-chevron-down expand-icon" id="teamIcon"></i>
+                </div>
+            </div>
+            <div class="card-content" id="teamContent">
+                <!-- 团队三指标 -->
+                <div class="team-stats-row">
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">团队人数</div>
+                        <div class="team-stat-value" id="teamCount">23</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">
+                            总交易量
+                            <span class="info-icon" title="所有成员实际交易额之和">?</span>
+                        </div>
+                        <div class="team-stat-value" id="teamRawVolume">148.2k</div>
+                    </div>
+                    <div class="team-stat-item">
+                        <div class="team-stat-label">
+                            贡献值
+                            <span class="info-icon" title="加权量 = 本人100% + 一级50% + 二级10%">?</span>
+                        </div>
+                        <div class="team-stat-value" id="teamWeighted">128.4k</div>
+                    </div>
+                </div>
+
+                <!-- 贡献值进度条 -->
+                <div class="team-effective-box">
+                    <div class="team-effective-row">
+                        <span class="team-effective-label"><i class="fas fa-chart-line"></i> 团队贡献值</span>
+                        <span class="team-effective-value" id="teamWeightedDetail">128,400</span>
+                        <span class="team-effective-unit">USDT</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="teamProgress" style="width:100%"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#a0c0ff;">
+                        <span id="teamTierDisplay">当前档位: 100,000 USDT (1%)</span>
+                        <span id="teamProgressText">已达标</span>
+                    </div>
+                </div>
+
+                <!-- 成员列表（前3条） -->
+                <div class="member-list" id="memberList"></div>
+                <button class="btn-small" onclick="toggleMembers()">查看全部成员</button>
+
+                <!-- 团队奖励预估 -->
+                <div class="team-reward-card">
+                    <div style="font-size:0.9rem; color:#b0ecff;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
+                    <div class="team-reward-amount" id="teamReward">1,284 H</div>
+                    <div style="font-size:0.75rem;">已达成100,000 USDT档位，获得1% H代币奖励</div>
+                </div>
+
+                <button class="btn-small btn-primary-small" onclick="alert('复制邀请链接')"><i class="fas fa-link"></i> 邀请好友加入舰队</button>
+            </div>
+        </div>
+
+        <!-- 底部折叠规则（与卡片风格一致） -->
+        <div class="collapse-card">
+            <div class="card-header" onclick="toggleCard('ruleContent')">
+                <div class="card-header-left">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="title">活动规则与奖励</span>
+                </div>
+                <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
+            </div>
+            <div class="card-content" id="ruleContent">
+                <div style="padding:0.5rem 0;">
+                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem;">🎁 个人交易奖励</h4>
+                    <ul style="padding-left:1.2rem; font-size:0.9rem;">
+                        <li>≥10,000 USDT → 总额0.5% H代币</li>
+                        <li>≥30,000 USDT → 总额0.8% H代币</li>
+                        <li>≥50,000 USDT → 总额1% H代币</li>
+                        <li>≥100,000 USDT → 总额1.2% H代币</li>
                     </ul>
+                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem;">👥 团队奖励</h4>
+                    <p style="font-size:0.9rem;">团队贡献值 = 本人100% + 一级50% + 二级10%</p>
+                    <ul style="padding-left:1.2rem; font-size:0.9rem;">
+                        <li>≥50,000 USDT → 贡献值0.5% H代币</li>
+                        <li>≥100,000 USDT → 贡献值1% H代币</li>
+                    </ul>
+                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem;">⏱️ 自动发放</h4>
+                    <p style="font-size:0.9rem;">每月10日、20日、30日快照，自动发放至绑定的OKX钱包。</p>
                 </div>
             </div>
-        </details>
+        </div>
 
         <!-- 行动按钮 -->
-        <button class="btn btn-primary" onclick="alert('唤起OKX DEX (演示)')"><i class="fas fa-exchange-alt"></i> 前往OKX DEX交易H</button>
-        <button class="btn" onclick="refreshData()"><i class="fas fa-sync-alt"></i> 刷新我的进度</button>
+        <button class="btn-small btn-primary-small" onclick="alert('唤起OKX DEX (演示)')"><i class="fas fa-exchange-alt"></i> 前往OKX DEX交易H</button>
+        <button class="btn-small" onclick="refreshData()"><i class="fas fa-sync-alt"></i> 刷新数据</button>
 
         <div class="footer-note">
-            <i class="fas fa-dolphin"></i> 海豚社区 · 与OKX联合呈现 · 每月10/20/30日自动发放奖励<br>
-            <span style="font-size:0.7rem;">所有数据链上可查，公平透明</span>
+            <i class="fas fa-dolphin"></i> 海豚社区 · 每月10/20/30日自动发放奖励
         </div>
     </div>
 
     <script>
-        // 模拟数据（实际应由App注入）
+        // 模拟数据
         const userData = {
-            walletBound: true,           // 是否绑定钱包
+            walletBound: true,
             todayVolume: 1280,
             totalVolume: 8450,
             rankPeriod: 102,
@@ -430,7 +466,6 @@
                 count: 23,
                 rawVolume: 148200,
                 weightedVolume: 128400,
-                rank: 12,
                 members: [
                     { level: 1, address: '0x8f3...cB2', volume: 45200 },
                     { level: 1, address: '0x2a1...Df9', volume: 38100 },
@@ -443,7 +478,7 @@
             }
         };
 
-        // 实时交易模拟数据流
+        // 实时交易流数据
         const feedData = [
             { addr: '0x8f3...cB2', vol: 12400, time: '30秒前' },
             { addr: '0x2a1...Df9', vol: 8750, time: '2分钟前' },
@@ -452,19 +487,18 @@
             { addr: '0xe29...8a1', vol: 3890, time: '12分钟前' }
         ];
 
-        // 动态更新实时交易流
-        function updateFeed() {
-            const feedList = document.getElementById('feedList');
-            if (!feedList) return;
-            const newVol = Math.floor(Math.random() * 5000 + 3000);
-            const newAddr = '0x' + Math.random().toString(16).substring(2,8) + '...' + Math.random().toString(16).substring(2,5);
-            const newItem = document.createElement('li');
-            newItem.className = 'feed-item';
-            newItem.innerHTML = `<span class="feed-address">${newAddr}</span><span class="feed-volume">+${newVol} USDC</span><span class="feed-time">刚刚</span>`;
-            newItem.style.animation = 'fadeIn 0.5s';
-            feedList.prepend(newItem);
-            while (feedList.children.length > 6) {
-                feedList.removeChild(feedList.lastElementChild);
+        // 折叠卡片控制
+        function toggleCard(contentId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(contentId.replace('Content', 'Icon')) || 
+                        document.querySelector(`#${contentId}Icon`) || 
+                        document.querySelector(`#${contentId.replace('Content','')}Icon`);
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('expanded');
+                if (icon) icon.style.transform = 'rotate(180deg)';
             }
         }
 
@@ -477,7 +511,6 @@
             return 0;
         }
 
-        // 计算下一档位
         function getNextTier(volume) {
             if (volume < 10000) return { next: 10000, rate: 0.5 };
             if (volume < 30000) return { next: 30000, rate: 0.8 };
@@ -486,14 +519,20 @@
             return null;
         }
 
-        // 渲染页面数据
+        // 渲染所有数据
         function renderUserData() {
+            // 绑定状态
             if (!userData.walletBound) {
                 document.getElementById('unbindPrompt').style.display = 'flex';
             } else {
                 document.getElementById('unbindPrompt').style.display = 'none';
             }
 
+            // 摘要数据
+            document.getElementById('userTodaySummary').innerText = userData.todayVolume.toLocaleString();
+            document.getElementById('userTotalSummary').innerText = userData.totalVolume.toLocaleString();
+
+            // 详细数据
             document.getElementById('userToday').innerText = userData.todayVolume.toLocaleString();
             document.getElementById('userTotal').innerText = userData.totalVolume.toLocaleString();
             document.getElementById('userTotalSmall').innerText = userData.totalVolume.toLocaleString();
@@ -507,7 +546,7 @@
                 document.getElementById('nextTier').innerText = `再交易 ${need.toLocaleString()} USDC 升至 ${next.rate}%`;
                 document.getElementById('nextTarget').innerText = next.next.toLocaleString();
                 let progress = (userData.totalVolume / next.next) * 100;
-                if (progress > 100) progress = 100; // 限制进度条最大100%
+                if (progress > 100) progress = 100;
                 document.getElementById('personalProgress').style.width = progress + '%';
             } else {
                 document.getElementById('nextTier').innerText = '已达到最高档位！';
@@ -520,22 +559,21 @@
             document.getElementById('rankYear').innerText = '#' + userData.rankYear;
 
             // 团队数据
+            document.getElementById('teamCountSummary').innerText = userData.team.count;
+            document.getElementById('teamWeightedSummary').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
+
             document.getElementById('teamCount').innerText = userData.team.count;
             document.getElementById('teamRawVolume').innerText = (userData.team.rawVolume/1000).toFixed(1) + 'k';
             document.getElementById('teamWeighted').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
             document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
-            // 团队奖励计算与进度条
-            let teamReward = 0;
-            let teamTierText = '';
-            let teamProgressPercent = 0;
-            let teamStatusText = '';
-
+            // 团队奖励与进度条
+            let teamReward = 0, teamTierText = '', teamProgressPercent = 0, teamStatusText = '';
             if (userData.team.weightedVolume >= 100000) {
                 teamReward = userData.team.weightedVolume * 0.01;
                 teamTierText = '当前档位: 100,000 USDT (1%)';
-                teamProgressPercent = 100; // 进度条满
+                teamProgressPercent = 100;
                 teamStatusText = '已达标';
             } else if (userData.team.weightedVolume >= 50000) {
                 teamReward = userData.team.weightedVolume * 0.005;
@@ -548,15 +586,13 @@
                 teamProgressPercent = (userData.team.weightedVolume / 50000) * 100;
                 teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
             }
-            // 限制进度条宽度不超过100%
             if (teamProgressPercent > 100) teamProgressPercent = 100;
             document.getElementById('teamProgress').style.width = teamProgressPercent + '%';
             document.getElementById('teamTierDisplay').innerText = teamTierText;
             document.getElementById('teamProgressText').innerText = teamStatusText;
-
             document.getElementById('teamReward').innerText = Math.round(teamReward) + ' H';
 
-            // 渲染成员列表（前3个）
+            // 成员列表
             renderMemberList(false);
         }
 
@@ -585,23 +621,33 @@
             if (btn) btn.innerText = showAllMembers ? '收起成员' : '查看全部成员';
         }
 
-        // 倒计时模拟
-        function updateCountdown() {
-            const countdownEl = document.getElementById('countdown');
-            countdownEl.innerText = '(剩余2天)';
+        // 实时交易流更新
+        function updateFeed() {
+            const feedList = document.getElementById('feedList');
+            if (!feedList) return;
+            const newVol = Math.floor(Math.random() * 5000 + 3000);
+            const newAddr = '0x' + Math.random().toString(16).substring(2,8) + '...' + Math.random().toString(16).substring(2,5);
+            const newItem = document.createElement('li');
+            newItem.className = 'feed-item';
+            newItem.innerHTML = `<span class="feed-address">${newAddr}</span><span class="feed-volume">+${newVol} USDC</span><span class="feed-time">刚刚</span>`;
+            newItem.style.animation = 'fadeIn 0.5s';
+            feedList.prepend(newItem);
+            while (feedList.children.length > 6) {
+                feedList.removeChild(feedList.lastElementChild);
+            }
         }
 
-        // 刷新数据
+        // 刷新数据（模拟）
         function refreshData() {
-            alert('数据已刷新（演示）');
-            // 实际可从App获取新数据并调用renderUserData
+            alert('数据已刷新');
+            renderUserData();
         }
 
         // 初始化
         window.onload = function() {
             renderUserData();
 
-            // 预填充实时交易流
+            // 填充实时交易流
             const feedList = document.getElementById('feedList');
             feedData.forEach(item => {
                 const li = document.createElement('li');
@@ -610,23 +656,7 @@
                 feedList.appendChild(li);
             });
 
-            // 每15秒模拟新交易
             setInterval(updateFeed, 15000);
-
-            // Tab切换
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    const target = this.dataset.tab;
-                    document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
-                    if (target === 'personal') document.getElementById('tabPersonal').classList.add('active');
-                    else document.getElementById('tabTeam').classList.add('active');
-                });
-            });
-
-            updateCountdown();
         };
     </script>
 </body>
