@@ -12,7 +12,6 @@
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family:'Inter',sans-serif; background:#0b1018; color:#fff; line-height:1.5; min-height:100vh; padding:0; overflow-x:hidden; }
 
-        /* 高级动态头部 */
         .hero {
             position: relative;
             background: radial-gradient(ellipse at 30% 40%, #132b44 0%, #030b14 100%);
@@ -32,7 +31,6 @@
         }
         .hero-content { position:relative; z-index:2; max-width:600px; margin:0 auto; }
 
-        /* 合作标识 */
         .co-brand {
             display: flex; align-items: center; justify-content: center; gap:12px;
             margin-bottom: 1rem; background: rgba(0,30,60,0.6); backdrop-filter:blur(8px);
@@ -57,7 +55,6 @@
             text-align:center; font-size:0.9rem; color:#b0e0ff; margin-bottom:1.5rem;
         }
 
-        /* 实时交易流 */
         .live-feed {
             background: #0b1c2e; border-radius: 40px; padding: 1rem 1.2rem; margin: 1rem 0 1.5rem;
             border: 2px solid #00a6ff; box-shadow: 0 0 15px #0099ff80;
@@ -76,13 +73,11 @@
         .feed-volume { color:#7ff0b0; font-weight:600; }
         .feed-time { color:#94b4d4; font-size:0.7rem; }
 
-        /* 板块标题 */
         .section-header {
             font-size:1.4rem; font-weight:700; margin:1.5rem 0 1rem 0; display:flex; align-items:center; gap:8px;
             color:#b7ecff; border-left:5px solid #00a6ff; padding-left:15px;
         }
 
-        /* 个人数据卡片 */
         .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; margin:0.5rem 0; }
         .stat-card {
             background:rgba(10,30,50,0.7); backdrop-filter:blur(10px); border:1px solid #29a5ff40;
@@ -92,7 +87,6 @@
         .stat-value { font-size:1.6rem; font-weight:700; color:white; }
         .stat-sub { font-size:0.8rem; color:#b0e0ff; margin-top:5px; }
 
-        /* 个人奖励与进度条卡片 */
         .personal-reward-card {
             background: #00497e40; border-radius: 30px; padding: 1rem; margin: 0.5rem 0 1rem;
             border: 1px solid #3fa2ff;
@@ -111,7 +105,6 @@
             width:0%; transition:width 0.3s;
         }
 
-        /* 个人排名 */
         .personal-row {
             display:flex; justify-content:space-around; background:rgba(0,40,70,0.5); backdrop-filter:blur(8px);
             border-radius:60px; padding:0.8rem; margin:0.5rem 0 0; border:1px solid #0077ff;
@@ -120,7 +113,6 @@
         .rank-label { font-size:0.7rem; color:#9ac7ff; }
         .rank-number { font-size:1.2rem; font-weight:700; color:#ffecaa; }
 
-        /* 未绑定状态提示 */
         .unbind-prompt {
             background: #004d80; border-radius: 30px; padding: 1rem; margin: 1rem 0;
             border: 2px solid #ffaa33; display: flex; align-items: center; gap: 15px;
@@ -131,16 +123,13 @@
             border-radius:30px; margin-left:auto; cursor:pointer;
         }
 
-        /* 容器 */
         .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
 
-        /* 团队板块 */
         .team-section {
             background:linear-gradient(145deg, #0a2540, #031a2f); border-radius:40px; padding:1.8rem 1.5rem;
             margin:2rem 0; border:1px solid #0088ff; box-shadow:0 15px 25px #00000060;
         }
 
-        /* 团队三指标卡片 */
         .team-stats-row {
             display:flex; justify-content:space-between; background:#00497e40; border-radius:30px;
             padding:1rem; margin:1rem 0; border:1px solid #3fa2ff;
@@ -154,7 +143,6 @@
             font-size:0.7rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
         }
 
-        /* 团队有效交易量及进度条 */
         .team-effective-box {
             background:#002a55; border-radius:30px; padding:1rem; margin-bottom:1.5rem;
             border:1px solid #3fa2ff;
@@ -184,7 +172,6 @@
         }
         .team-reward-amount { font-size:2rem; font-weight:800; color:#ffd966; }
 
-        /* 底部折叠规则 */
         details {
             background:#0f253a; border-radius:40px; padding:0.5rem 1.5rem; border:1px solid #3a7bb5;
             margin:2rem 0;
@@ -289,7 +276,7 @@
             <div class="personal-reward-row">
                 <span class="next-tier" id="nextTier">再交易1,550 USDC升至0.8%</span>
             </div>
-            <!-- 进度条：个人累计交易量占下一档位的百分比 -->
+            <!-- 个人进度条，宽度限制0-100% -->
             <div class="progress-bar-container">
                 <div class="progress-bar-fill" id="personalProgress" style="width:84.5%"></div>
             </div>
@@ -314,7 +301,7 @@
         <!-- 板块3: 我的团队 -->
         <div class="section-header">⚓ 我的团队</div>
         <div class="team-section">
-            <!-- 团队三指标：人数、团队总交易量、本期有效交易量 -->
+            <!-- 团队三指标：人数、团队总交易量、团队贡献值（原名有效团队量） -->
             <div class="team-stats-row">
                 <div class="team-stat-item">
                     <div class="team-stat-label">团队人数</div>
@@ -329,26 +316,26 @@
                 </div>
                 <div class="team-stat-item">
                     <div class="team-stat-label">
-                        有效团队交易量
-                        <span class="info-icon" title="加权量 = 本人100% + 一级50% + 二级10%，用于奖励计算">?</span>
+                        团队贡献值
+                        <span class="info-icon" title="加权量 = 本人100% + 一级50% + 二级10%，用于计算团队奖励">?</span>
                     </div>
                     <div class="team-stat-value" id="teamWeighted">128.4k</div>
                 </div>
             </div>
 
-            <!-- 有效交易量进度条 -->
+            <!-- 团队贡献值进度条（宽度限制100%） -->
             <div class="team-effective-box">
                 <div class="team-effective-row">
-                    <span class="team-effective-label"><i class="fas fa-chart-line"></i> 有效团队交易量</span>
+                    <span class="team-effective-label"><i class="fas fa-chart-line"></i> 团队贡献值</span>
                     <span class="team-effective-value" id="teamWeightedDetail">128,400</span>
                     <span class="team-effective-unit">USDT</span>
                 </div>
                 <div class="progress-bar-container">
-                    <div class="progress-bar-fill" id="teamProgress" style="width:128.4%"></div>
+                    <div class="progress-bar-fill" id="teamProgress" style="width:100%"></div>
                 </div>
                 <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#a0c0ff; margin-top:0.3rem;">
-                    <span>当前档位: 100,000 USDT (1%)</span>
-                    <span>进度 128%</span>
+                    <span id="teamTierDisplay">当前档位: 100,000 USDT (1%)</span>
+                    <span id="teamProgressText">已达标</span>
                 </div>
             </div>
 
@@ -358,9 +345,9 @@
 
             <!-- 团队奖励预估 -->
             <div class="team-reward-card">
-                <div style="font-size:1rem; color:#b0ecff;">⚡ 当前有效团队交易量 <span id="teamWeightedDisplay">128,400</span> USDT</div>
+                <div style="font-size:1rem; color:#b0ecff;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
                 <div class="team-reward-amount" id="teamReward">1,284 H</div>
-                <div style="font-size:0.85rem; margin-top:5px;">已达成100,000 USDT档位，享受1%奖励</div>
+                <div style="font-size:0.85rem; margin-top:5px;">已达成100,000 USDT档位，获得1% H代币奖励</div>
             </div>
 
             <button class="btn btn-primary" style="margin-top:1rem;" onclick="alert('复制邀请链接')"><i class="fas fa-link"></i> 邀请好友加入舰队</button>
@@ -381,12 +368,12 @@
                         <h4>🎁 个人交易奖励（比例制）</h4>
                         <p>每月10日、20日、30日根据累计交易量按比例发放H代币：</p>
                         <ul>
-                            <li>≥ 10,000 USDT → 奖励总额的 <strong>0.5%</strong> 等值H</li>
-                            <li>≥ 30,000 USDT → 奖励总额的 <strong>0.8%</strong> 等值H</li>
-                            <li>≥ 50,000 USDT → 奖励总额的 <strong>1%</strong> 等值H</li>
-                            <li>≥ 100,000 USDT → 奖励总额的 <strong>1.2%</strong> 等值H</li>
+                            <li>≥ 10,000 USDT → 奖励总额的 <strong>0.5%</strong> H代币</li>
+                            <li>≥ 30,000 USDT → 奖励总额的 <strong>0.8%</strong> H代币</li>
+                            <li>≥ 50,000 USDT → 奖励总额的 <strong>1%</strong> H代币</li>
+                            <li>≥ 100,000 USDT → 奖励总额的 <strong>1.2%</strong> H代币</li>
                         </ul>
-                        <p class="highlight">示例：累计交易40,000 USDT，奖励 = 40,000 × 0.8% = 320 H</p>
+                        <p class="highlight">示例：累计交易40,000 USDT，奖励 = 40,000 × 0.8% = 320 H代币</p>
                     </div>
                 </div>
 
@@ -394,11 +381,11 @@
                 <div class="tab-pane" id="tabTeam">
                     <div class="rule-block">
                         <h4>👥 团队奖励规则</h4>
-                        <p><span class="highlight">加权团队交易量 = 本人100% + 一级50% + 二级10%</span></p>
-                        <p>当加权团队交易量达到以下门槛，额外获得等值USDT的H代币：</p>
+                        <p><span class="highlight">团队贡献值 = 本人100% + 一级50% + 二级10%</span></p>
+                        <p>当团队贡献值达到以下门槛，额外获得H代币奖励：</p>
                         <ul>
-                            <li>≥ 50,000 USDT → 奖励加权总量的 <strong>0.5%</strong></li>
-                            <li>≥ 100,000 USDT → 奖励加权总量的 <strong>1%</strong></li>
+                            <li>≥ 50,000 USDT → 奖励贡献值的 <strong>0.5%</strong> H代币</li>
+                            <li>≥ 100,000 USDT → 奖励贡献值的 <strong>1%</strong> H代币</li>
                         </ul>
                         <p>累计制，每月10/20/30日随个人奖励一并发放。</p>
                     </div>
@@ -519,8 +506,8 @@
                 const need = next.next - userData.totalVolume;
                 document.getElementById('nextTier').innerText = `再交易 ${need.toLocaleString()} USDC 升至 ${next.rate}%`;
                 document.getElementById('nextTarget').innerText = next.next.toLocaleString();
-                // 进度条百分比 = 当前/下一档 * 100
-                const progress = (userData.totalVolume / next.next) * 100;
+                let progress = (userData.totalVolume / next.next) * 100;
+                if (progress > 100) progress = 100; // 限制进度条最大100%
                 document.getElementById('personalProgress').style.width = progress + '%';
             } else {
                 document.getElementById('nextTier').innerText = '已达到最高档位！';
@@ -539,32 +526,35 @@
             document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
-            // 团队奖励
+            // 团队奖励计算与进度条
             let teamReward = 0;
-            let teamTier = '';
+            let teamTierText = '';
             let teamProgressPercent = 0;
+            let teamStatusText = '';
+
             if (userData.team.weightedVolume >= 100000) {
                 teamReward = userData.team.weightedVolume * 0.01;
-                teamTier = '100,000 USDT (1%)';
-                teamProgressPercent = (userData.team.weightedVolume / 100000) * 100;
+                teamTierText = '当前档位: 100,000 USDT (1%)';
+                teamProgressPercent = 100; // 进度条满
+                teamStatusText = '已达标';
             } else if (userData.team.weightedVolume >= 50000) {
                 teamReward = userData.team.weightedVolume * 0.005;
-                teamTier = '50,000 USDT (0.5%)';
+                teamTierText = '当前档位: 50,000 USDT (0.5%)';
                 teamProgressPercent = (userData.team.weightedVolume / 50000) * 100;
+                teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
             } else {
                 teamReward = 0;
-                teamTier = '50,000 USDT (0.5%)';
+                teamTierText = '当前档位: 50,000 USDT (0.5%)';
                 teamProgressPercent = (userData.team.weightedVolume / 50000) * 100;
+                teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
             }
+            // 限制进度条宽度不超过100%
+            if (teamProgressPercent > 100) teamProgressPercent = 100;
+            document.getElementById('teamProgress').style.width = teamProgressPercent + '%';
+            document.getElementById('teamTierDisplay').innerText = teamTierText;
+            document.getElementById('teamProgressText').innerText = teamStatusText;
+
             document.getElementById('teamReward').innerText = Math.round(teamReward) + ' H';
-            // 更新进度条和档位文本
-            const teamProgressFill = document.getElementById('teamProgress');
-            teamProgressFill.style.width = teamProgressPercent + '%';
-            // 在进度条下方显示当前档位文本（已在HTML中固定，但可以动态更新）
-            const teamProgressText = document.querySelector('.team-effective-box div:last-child span:first-child');
-            if (teamProgressText) teamProgressText.innerText = `当前档位: ${teamTier}`;
-            const teamProgressPercentSpan = document.querySelector('.team-effective-box div:last-child span:last-child');
-            if (teamProgressPercentSpan) teamProgressPercentSpan.innerText = `进度 ${teamProgressPercent.toFixed(1)}%`;
 
             // 渲染成员列表（前3个）
             renderMemberList(false);
