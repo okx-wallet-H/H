@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>海豚舰队 · 团队助力计划</title>
-    <!-- Font Awesome 5 (免费) -->
+    <!-- Font Awesome 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Google Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -32,7 +32,7 @@
         }
         .hero-content { position:relative; z-index:2; max-width:600px; margin:0 auto; }
 
-        /* 合作标识 - 修正为OKX文字标识 */
+        /* 合作标识 */
         .co-brand {
             display: flex; align-items: center; justify-content: center; gap:12px;
             margin-bottom: 1rem; background: rgba(0,30,60,0.6); backdrop-filter:blur(8px);
@@ -57,13 +57,13 @@
             text-align:center; font-size:0.9rem; color:#b0e0ff; margin-bottom:1.5rem;
         }
 
-        /* 实时交易流 - 动态 */
+        /* 实时交易流 */
         .live-feed {
             background: #0b1c2e; border-radius: 40px; padding: 1rem 1.2rem; margin: 1rem 0 1.5rem;
             border: 2px solid #00a6ff; box-shadow: 0 0 15px #0099ff80;
             backdrop-filter: blur(10px);
         }
-        .feed-header { display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#fff; font-weight:600; font-size:1rem; }
+        .feed-header { display:flex; align-items:center; gap:8px; margin-bottom:0.5rem; color:#fff; font-weight:600; font-size:1.1rem; }
         .feed-list { list-style:none; max-height:200px; overflow-y:hidden; }
         .feed-item {
             display:flex; align-items:center; justify-content:space-between; padding:0.4rem 0;
@@ -76,8 +76,14 @@
         .feed-volume { color:#7ff0b0; font-weight:600; }
         .feed-time { color:#94b4d4; font-size:0.7rem; }
 
+        /* 板块标题 */
+        .section-header {
+            font-size:1.4rem; font-weight:700; margin:1.5rem 0 1rem 0; display:flex; align-items:center; gap:8px;
+            color:#b7ecff; border-left:5px solid #00a6ff; padding-left:15px;
+        }
+
         /* 个人数据卡片 */
-        .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; margin:1.5rem 0; }
+        .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; margin:0.5rem 0; }
         .stat-card {
             background:rgba(10,30,50,0.7); backdrop-filter:blur(10px); border:1px solid #29a5ff40;
             border-radius:28px; padding:1.2rem 1rem; box-shadow:0 8px 20px #0000004d;
@@ -123,23 +129,16 @@
             background:linear-gradient(145deg, #0a2540, #031a2f); border-radius:40px; padding:1.8rem 1.5rem;
             margin:2rem 0; border:1px solid #0088ff; box-shadow:0 15px 25px #00000060;
         }
-        .section-title { font-size:1.4rem; font-weight:700; margin-bottom:1.2rem; display:flex; align-items:center; gap:8px; color:#b7ecff; }
 
-        /* 团队摘要 - 三列 */
-        .team-summary-row {
+        /* 团队三指标卡片 */
+        .team-stats-row {
             display:flex; justify-content:space-between; background:#00497e40; border-radius:30px;
-            padding:1rem; margin-bottom:0.8rem; border:1px solid #3fa2ff;
+            padding:1rem; margin:1rem 0; border:1px solid #3fa2ff;
         }
-        .team-summary-item { text-align:center; flex:1; }
-        .team-summary-label { font-size:0.75rem; color:#b0daff; }
-        .team-summary-value { font-size:1.4rem; font-weight:700; color:#ffecaa; }
-        .weighted-box {
-            background:#002a55; border-radius:30px; padding:0.8rem; margin-bottom:1.5rem;
-            display:flex; align-items:center; justify-content:space-between; border:1px solid #3fa2ff;
-        }
-        .weighted-label { color:#b0ecff; font-size:0.9rem; }
-        .weighted-value { font-size:1.6rem; font-weight:700; color:#ffecaa; margin-left:10px; }
-        .weighted-unit { font-size:0.9rem; color:#99ccff; }
+        .team-stat-item { text-align:center; flex:1; }
+        .team-stat-label { font-size:0.75rem; color:#b0daff; }
+        .team-stat-value { font-size:1.4rem; font-weight:700; color:#ffecaa; }
+
         .info-icon {
             display:inline-flex; background:#1f5a85; width:18px; height:18px; border-radius:50%;
             font-size:0.7rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
@@ -163,7 +162,7 @@
         }
         .team-reward-amount { font-size:2rem; font-weight:800; color:#ffd966; }
 
-        /* 底部折叠 - 带Tab */
+        /* 底部折叠规则 */
         details {
             background:#0f253a; border-radius:40px; padding:0.5rem 1.5rem; border:1px solid #3a7bb5;
             margin:2rem 0;
@@ -209,7 +208,7 @@
 <body>
     <div class="hero">
         <div class="hero-content">
-            <!-- 合作标识（修正为OKX文字） -->
+            <!-- 合作标识 -->
             <div class="co-brand">
                 <span class="dolphin"><i class="fas fa-dolphin"></i></span>
                 <span>海豚舰队</span>
@@ -224,36 +223,37 @@
                 <i class="far fa-calendar-alt"></i> 活动时间：4月1日 08:00 — 4月15日 08:00 (UTC+8)
             </div>
 
-            <!-- 实时交易流（动态模拟） -->
+            <!-- 板块1: H代币实时交易动态 -->
+            <div class="section-header">📊 H代币实时交易动态</div>
             <div class="live-feed">
                 <div class="feed-header">
-                    <i class="fas fa-sync-alt fa-spin"></i> 实时H交易动态
-                    <span style="margin-left: auto;">滚动更新</span>
+                    <i class="fas fa-sync-alt fa-spin"></i> 最新成交
                 </div>
-                <ul class="feed-list" id="feedList">
-                    <!-- 动态通过JS插入 -->
-                </ul>
+                <ul class="feed-list" id="feedList"></ul>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- 未绑定状态演示（实际根据App状态显示/隐藏） -->
+        <!-- 未绑定状态演示 -->
         <div class="unbind-prompt" id="unbindPrompt" style="display: none;">
             <i class="fas fa-link"></i>
             <span>绑定OKX钱包，立即参与活动</span>
             <button onclick="alert('唤起绑定流程')">立即绑定</button>
         </div>
 
+        <!-- 板块2: 我的交易 -->
+        <div class="section-header">💰 我的交易</div>
+
         <!-- 个人数据卡片 -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-label"><i class="fas fa-user"></i> 我的今日交易</div>
+                <div class="stat-label"><i class="fas fa-user"></i> 今日交易量</div>
                 <div class="stat-value" id="userToday">1,280</div>
                 <div class="stat-sub">USDC</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label"><i class="fas fa-user-clock"></i> 我的累计交易</div>
+                <div class="stat-label"><i class="fas fa-user-clock"></i> 累计交易量</div>
                 <div class="stat-value" id="userTotal">8,450</div>
                 <div class="stat-sub">USDC</div>
             </div>
@@ -261,12 +261,12 @@
 
         <!-- 个人奖励预估卡片 -->
         <div class="personal-reward-card" id="personalRewardCard">
-            <span class="personal-reward-label"><i class="fas fa-gift"></i> 当前个人预估奖励</span>
+            <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
             <span class="personal-reward-value" id="personalReward">42.25 H</span>
             <span class="next-tier" id="nextTier">再交易1,550 USDC升至0.8%</span>
         </div>
 
-        <!-- 个人排名 -->
+        <!-- 个人排名（额外信息） -->
         <div class="personal-row">
             <div class="rank-item"><div class="rank-label">本期排名</div><div class="rank-number" id="rankPeriod">#102</div></div>
             <div class="rank-item"><div class="rank-label">月排名</div><div class="rank-number" id="rankMonth">#87</div></div>
@@ -278,34 +278,29 @@
             <i class="far fa-clock"></i> 下次奖励发放：4月10日 08:00 <span class="countdown" id="countdown">(剩余2天)</span>
         </div>
 
-        <!-- 团队板块 -->
+        <!-- 板块3: 我的团队 -->
+        <div class="section-header">⚓ 我的团队</div>
         <div class="team-section">
-            <div class="section-title"><i class="fas fa-users" style="color: #ffd966;"></i> 我的舰队</div>
-
-            <!-- 团队摘要：人数、原始总量、排名 -->
-            <div class="team-summary-row">
-                <div class="team-summary-item">
-                    <div class="team-summary-label">团队人数</div>
-                    <div class="team-summary-value" id="teamCount">23</div>
+            <!-- 团队三指标：人数、团队总交易量、本期有效交易量 -->
+            <div class="team-stats-row">
+                <div class="team-stat-item">
+                    <div class="team-stat-label">团队人数</div>
+                    <div class="team-stat-value" id="teamCount">23</div>
                 </div>
-                <div class="team-summary-item">
-                    <div class="team-summary-label">原始总交易量</div>
-                    <div class="team-summary-value" id="teamRawVolume">148.2k</div>
+                <div class="team-stat-item">
+                    <div class="team-stat-label">
+                        团队总交易量
+                        <span class="info-icon" title="所有成员实际交易额之和">?</span>
+                    </div>
+                    <div class="team-stat-value" id="teamRawVolume">148.2k</div>
                 </div>
-                <div class="team-summary-item">
-                    <div class="team-summary-label">团队排名</div>
-                    <div class="team-summary-value" id="teamRank">#12</div>
+                <div class="team-stat-item">
+                    <div class="team-stat-label">
+                        本期有效交易量
+                        <span class="info-icon" title="加权量 = 本人100% + 一级50% + 二级10%，用于奖励计算">?</span>
+                    </div>
+                    <div class="team-stat-value" id="teamWeighted">128.4k</div>
                 </div>
-            </div>
-
-            <!-- 加权团队交易量（用于奖励） -->
-            <div class="weighted-box">
-                <span class="weighted-label">
-                    加权团队交易量（奖励用）
-                    <span class="info-icon" title="加权总量 = 本人100% + 一级50% + 二级10%">?</span>
-                </span>
-                <span class="weighted-value" id="teamWeighted">128.4k</span>
-                <span class="weighted-unit">USDT</span>
             </div>
 
             <!-- 团队成员列表（前3条，可展开） -->
@@ -314,7 +309,7 @@
 
             <!-- 团队奖励预估 -->
             <div class="team-reward-card">
-                <div style="font-size:1rem; color:#b0ecff;">⚡ 当前加权团队交易量 <span id="teamWeightedDisplay">128,400</span> USDT</div>
+                <div style="font-size:1rem; color:#b0ecff;">⚡ 当前有效团队交易量 <span id="teamWeightedDisplay">128,400</span> USDT</div>
                 <div class="team-reward-amount" id="teamReward">1,284 H</div>
                 <div style="font-size:0.85rem; margin-top:5px;">已达成100,000 USDT档位，享受1%奖励</div>
             </div>
@@ -406,7 +401,7 @@
                     { level: 2, address: '0x4d9...Ae4', volume: 21300 },
                     { level: 2, address: '0xb77...F2c', volume: 15800 },
                     { level: 2, address: '0xe29...8a1', volume: 8000 },
-                    { level: 1, address: '0x7fa...3d2', volume: 12300 }, // 更多成员
+                    { level: 1, address: '0x7fa...3d2', volume: 12300 },
                     { level: 2, address: '0x9ce...5f7', volume: 9700 }
                 ]
             }
@@ -425,7 +420,6 @@
         function updateFeed() {
             const feedList = document.getElementById('feedList');
             if (!feedList) return;
-            // 模拟新交易随机插入
             const newVol = Math.floor(Math.random() * 5000 + 3000);
             const newAddr = '0x' + Math.random().toString(16).substring(2,8) + '...' + Math.random().toString(16).substring(2,5);
             const newItem = document.createElement('li');
@@ -433,7 +427,6 @@
             newItem.innerHTML = `<span class="feed-address">${newAddr}</span><span class="feed-volume">+${newVol} USDC</span><span class="feed-time">刚刚</span>`;
             newItem.style.animation = 'fadeIn 0.5s';
             feedList.prepend(newItem);
-            // 保持最多6条
             while (feedList.children.length > 6) {
                 feedList.removeChild(feedList.lastElementChild);
             }
@@ -459,10 +452,8 @@
 
         // 渲染页面数据
         function renderUserData() {
-            // 绑定状态处理
             if (!userData.walletBound) {
                 document.getElementById('unbindPrompt').style.display = 'flex';
-                // 可隐藏其他数据或置灰
             } else {
                 document.getElementById('unbindPrompt').style.display = 'none';
             }
@@ -488,7 +479,6 @@
             // 团队数据
             document.getElementById('teamCount').innerText = userData.team.count;
             document.getElementById('teamRawVolume').innerText = (userData.team.rawVolume/1000).toFixed(1) + 'k';
-            document.getElementById('teamRank').innerText = '#' + userData.team.rank;
             document.getElementById('teamWeighted').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
@@ -530,14 +520,12 @@
         // 倒计时模拟
         function updateCountdown() {
             const countdownEl = document.getElementById('countdown');
-            // 简单模拟：4月10日剩余2天，4月20日剩余12天等，这里用固定演示
             countdownEl.innerText = '(剩余2天)';
         }
 
-        // 刷新数据（模拟）
+        // 刷新数据
         function refreshData() {
             alert('数据已刷新（演示）');
-            // 实际可从App获取新数据并调用renderUserData
         }
 
         // 初始化
@@ -562,7 +550,7 @@
                 btn.addEventListener('click', function() {
                     tabBtns.forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
-                    const target = this.dataset.tab; // 'personal' 或 'team'
+                    const target = this.dataset.tab;
                     document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
                     if (target === 'personal') document.getElementById('tabPersonal').classList.add('active');
                     else document.getElementById('tabTeam').classList.add('active');
