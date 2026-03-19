@@ -14,7 +14,7 @@
             font-family: 'Inter', sans-serif;
             background: #ffffff;
             color: #1e1e2f;
-            line-height: 1.5;
+            line-height: 1.6;          /* 增加行高 */
             letter-spacing: 0.02em;
             min-height: 100vh;
             padding: 0;
@@ -22,7 +22,7 @@
 
         .hero {
             background: linear-gradient(145deg, #f4f0ff, #e9e2ff);
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            padding: 2.5rem 1.5rem 1.8rem 1.5rem;  /* 微调顶部内边距 */
             border-bottom: 1px solid #d0c4ff;
             box-shadow: 0 4px 12px rgba(106, 66, 255, 0.08);
         }
@@ -43,6 +43,7 @@
         .title-main h1 {
             font-size:2rem; font-weight:600; color:#4a3a8c;
             letter-spacing:-0.02em;
+            line-height:1.3;
         }
         .title-main p { color:#6f5ea0; font-weight:400; font-size:1rem; }
 
@@ -51,11 +52,11 @@
         .action-bar {
             display: flex;
             gap: 12px;
-            margin: 1.2rem 0 0.8rem 0;
+            margin: 1.5rem 0 1rem 0;   /* 增加上方间距 */
         }
         .action-btn {
             flex: 1;
-            padding: 0.9rem 0;
+            padding: 1rem 0;            /* 增加按钮高度 */
             border-radius: 40px;
             font-weight: 600;
             font-size: 1rem;
@@ -87,8 +88,8 @@
 
         .collapse-card {
             background: #ffffff;
-            border-radius: 28px;
-            margin-bottom: 1.5rem;
+            border-radius: 32px;         /* 圆角略大 */
+            margin-bottom: 1.8rem;        /* 卡片间距增加 */
             box-shadow: 0 8px 20px rgba(106, 66, 255, 0.1);
             border: 1px solid #e5dcff;
             transition: all 0.2s;
@@ -101,11 +102,11 @@
         .card-first { margin-top: 0.8rem; }
 
         .card-header {
-            padding: 1.2rem 1rem;
+            padding: 1.4rem 1.2rem;       /* 增加内边距 */
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             user-select: none;
         }
         .header-row {
@@ -116,26 +117,26 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .header-left i {
-            font-size: 1.8rem;
+            font-size: 2rem;               /* 图标略大 */
             color: #6b4eff;
-            width: 36px;
+            width: 40px;
             text-align: center;
         }
         .header-left .title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;              /* 标题略大 */
             font-weight: 500;
             color: #2a1f4d;
             letter-spacing: -0.02em;
         }
         .expand-icon {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: #6b4eff;
             transition: transform 0.2s;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -147,20 +148,20 @@
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 16px 20px;
-            margin-left: 46px;
+            gap: 16px 24px;
+            margin-left: 52px;               /* 与图标对齐 */
             font-size: 1rem;
             color: #4a3a8c;
             background: #f9f6ff;
-            padding: 0.6rem 1rem;
+            padding: 0.8rem 1.2rem;          /* 内边距增加 */
             border-radius: 30px;
             border: 1px solid #e0d6ff;
-            min-height: 3.2rem;
+            min-height: 3.6rem;               /* 高度统一 */
         }
         .summary-item {
             display: flex;
             align-items: baseline;
-            gap: 6px;
+            gap: 8px;
         }
         .summary-item .label {
             color: #8a7ab3;
@@ -169,26 +170,26 @@
         .summary-item .value {
             font-weight: 600;
             color: #6b4eff;
-            font-size: 1.1rem;
+            font-size: 1.2rem;                 /* 数值略大 */
         }
 
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            padding: 0 1rem;
+            padding: 0 1.2rem;
         }
         .card-content.expanded {
             max-height: 1500px;
-            padding-bottom: 1.2rem;
+            padding-bottom: 1.4rem;              /* 底部内边距增加 */
         }
 
-        /* 优化后的K线图 */
+        /* K线图 */
         .candlestick-container {
             background: #f9f6ff;
-            border-radius: 24px;
-            padding: 1rem;
-            margin: 0.5rem 0 1.2rem;
+            border-radius: 28px;
+            padding: 1.2rem;
+            margin: 0.8rem 0 1.2rem;
             border: 1px solid #e0d6ff;
         }
         .chart-header {
@@ -210,14 +211,8 @@
             width: 70%; background: #6b4eff; border-radius: 2px; height: calc(100% * var(--h)); min-height: 2px; position: relative; z-index: 2;
             transition: height 0.2s;
         }
-        .candle-body.green { background: #4caf50; } /* 涨 */
-        .candle-body.red { background: #ff6b8b; } /* 跌 */
-        .candle-wick {
-            position: absolute; width: 2px; background: #8a7ab3; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 1;
-            height: 100%; display: none; /* 简化版暂不显示影线，保持干净 */
-        }
-        .candle:hover .candle-body { opacity: 0.8; }
-
+        .candle-body.green { background: #4caf50; }
+        .candle-body.red { background: #ff6b8b; }
         .volume-bars {
             display: flex; align-items: flex-end; justify-content: space-between; height: 40px; margin-top: 10px; gap: 4px;
         }
@@ -225,11 +220,11 @@
             flex: 1; background: #d0c0ff; border-radius: 2px 2px 0 0; height: calc(100% * var(--v)); min-height: 2px;
         }
 
-        /* 交易动态美化 */
+        /* 交易动态 */
         .live-feed {
             background: #f9f6ff;
-            border-radius: 24px;
-            padding: 1rem;
+            border-radius: 28px;
+            padding: 1.2rem;
             margin: 1rem 0;
             border: 1px solid #e0d6ff;
         }
@@ -242,55 +237,83 @@
             overflow-y: auto;
         }
         .feed-item {
-            display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0;
+            display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 0;
             border-bottom: 1px solid #eee5ff; font-size:0.9rem;
             animation: slideIn 0.3s;
         }
         .feed-item:last-child { border-bottom: none; }
         .feed-address { font-family: monospace; background: #f2edff; padding:0.2rem 1rem; border-radius:30px; color:#4a3a8c; }
         .feed-price { font-weight:600; color:#6b4eff; }
-        .feed-change { font-size:0.8rem; padding:0.2rem 0.5rem; border-radius:20px; background:#e0d6ff; }
+        .feed-change { font-size:0.8rem; padding:0.2rem 0.6rem; border-radius:20px; background:#e0d6ff; }
         .feed-change.up { background:#c8e6c9; color:#2e7d32; }
         .feed-change.down { background:#ffcdd2; color:#c62828; }
         .feed-time { color:#a394cc; font-size:0.7rem; }
 
-        @keyframes slideIn {
-            from { opacity:0; transform: translateX(-10px); }
-            to { opacity:1; transform: translateX(0); }
+        /* 日历模块 */
+        .calendar-container {
+            background: #f9f6ff;
+            border-radius: 28px;
+            padding: 1.2rem;
+            margin: 0.5rem 0 1.2rem;
+            border: 1px solid #e0d6ff;
         }
+        .calendar-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;
+        }
+        .calendar-header span { color:#6f5ea0; font-weight:500; }
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+        }
+        .weekday {
+            text-align: center; color:#8a7ab3; font-size:0.7rem; padding:0.2rem 0;
+        }
+        .calendar-day {
+            aspect-ratio:1; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size:0.75rem; color:#4a3a8c; background: #e0d6ff; transition:0.1s;
+        }
+        .calendar-day.high { background: #6b4eff; color:white; }
+        .calendar-day.medium { background: #b3a0ff; color:white; }
+        .calendar-day.low { background: #d0c0ff; color:#4a3a8c; }
+        .calendar-legend {
+            display: flex; justify-content: flex-end; gap: 12px; margin-top: 0.8rem; font-size:0.7rem; color:#8a7ab3;
+        }
+        .legend-item { display: flex; align-items: center; gap:4px; }
+        .legend-color { width:12px; height:12px; border-radius:4px; }
 
-        /* 其余样式保持不变 */
+        /* 个人奖励卡片 */
         .personal-reward-card {
-            background:#f2edff; border-radius:24px; padding:1.2rem; margin:1.2rem 0;
+            background:#f2edff; border-radius:28px; padding:1.4rem; margin:1.2rem 0;
             border:1px solid #d0c0ff;
         }
-        .personal-reward-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem; }
-        .personal-reward-label { color:#6f5ea0; font-size:0.9rem; }
-        .personal-reward-value { font-size:1.8rem; font-weight:600; color:#6b4eff; }
-        .next-tier { font-size:0.8rem; color:#8a7ab3; background:#ffffff; padding:0.2rem 1rem; border-radius:30px; border:1px solid #d0c0ff; }
+        .personal-reward-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.8rem; }
+        .personal-reward-label { color:#6f5ea0; font-size:0.95rem; }
+        .personal-reward-value { font-size:2rem; font-weight:600; color:#6b4eff; }
+        .next-tier { font-size:0.85rem; color:#8a7ab3; background:#ffffff; padding:0.2rem 1.2rem; border-radius:30px; border:1px solid #d0c0ff; }
 
         .progress-bar-container { width:100%; height:8px; background:#e0d6ff; border-radius:8px; margin:0.8rem 0; overflow:hidden; }
         .progress-bar-fill { height:100%; background:#6b4eff; border-radius:8px; width:0%; transition:width 0.3s; }
 
         .personal-row {
             display:flex; justify-content:space-around; background:#f9f6ff; border-radius:40px;
-            padding:0.8rem; margin:1.2rem 0; border:1px solid #e0d6ff;
+            padding:1rem; margin:1.2rem 0; border:1px solid #e0d6ff;
         }
         .rank-item { text-align:center; }
-        .rank-label { font-size:0.65rem; color:#8a7ab3; margin-bottom:2px; }
-        .rank-number { font-size:1.1rem; font-weight:600; color:#6b4eff; }
+        .rank-label { font-size:0.7rem; color:#8a7ab3; margin-bottom:4px; }
+        .rank-number { font-size:1.2rem; font-weight:600; color:#6b4eff; }
 
+        /* 团队贡献值 */
         .team-effective-box {
-            background:#f2edff; border-radius:28px; padding:1.2rem; margin:1.2rem 0;
+            background:#f2edff; border-radius:28px; padding:1.4rem; margin:1.2rem 0;
             border:1px solid #d0c0ff;
         }
-        .team-effective-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
-        .team-effective-label { color:#6f5ea0; font-size:0.9rem; }
-        .team-effective-value { font-size:1.8rem; font-weight:600; color:#6b4eff; margin-left:10px; }
-        .team-effective-unit { font-size:0.8rem; color:#8a7ab3; }
+        .team-effective-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.8rem; }
+        .team-effective-label { color:#6f5ea0; font-size:0.95rem; }
+        .team-effective-value { font-size:2rem; font-weight:600; color:#6b4eff; margin-left:10px; }
+        .team-effective-unit { font-size:0.85rem; color:#8a7ab3; }
 
+        /* 趋势图 */
         .trend-container {
-            background: #f9f6ff; border-radius: 24px; padding: 1rem; margin: 1.2rem 0; border: 1px solid #e0d6ff;
+            background: #f9f6ff; border-radius: 28px; padding: 1.2rem; margin: 1.2rem 0; border: 1px solid #e0d6ff;
         }
         .trend-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; color:#6f5ea0; font-weight:500; }
         .trend-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 60px; gap: 6px; }
@@ -298,25 +321,51 @@
         .trend-bar.medium { background: #b3a0ff; }
         .trend-bar.low { background: #d0c0ff; }
 
+        /* 成员列表 */
         .member-list { margin:1rem 0; }
-        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid #eee5ff; }
+        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0; border-bottom:1px solid #eee5ff; }
         .member-info { display:flex; align-items:center; gap:10px; }
-        .member-level { background:#e0d6ff; border-radius:20px; padding:0.2rem 1rem; font-size:0.7rem; font-weight:500; color:#4a3a8c; }
-        .member-address { font-family:monospace; font-size:0.85rem; color:#4a3a8c; }
+        .member-level { background:#e0d6ff; border-radius:20px; padding:0.2rem 1rem; font-size:0.75rem; font-weight:500; color:#4a3a8c; }
 
+        /* 团队奖励卡片 (去掉重复的贡献值显示) */
         .team-reward-card {
-            background:#f2edff; border-radius:28px; padding:1.2rem; margin:1.2rem 0;
+            background:#f2edff; border-radius:28px; padding:1.4rem; margin:1.2rem 0;
             border:2px dashed #b3a0ff; text-align:center;
         }
-        .team-reward-amount { font-size:2rem; font-weight:600; color:#6b4eff; }
+        .team-reward-amount { font-size:2.2rem; font-weight:600; color:#6b4eff; line-height:1.3; }
 
         .info-icon {
-            display:inline-flex; background:#d0c0ff; width:16px; height:16px; border-radius:50%;
+            display:inline-flex; background:#d0c0ff; width:18px; height:18px; border-radius:50%;
             font-size:0.6rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
             color:#4a3a8c;
         }
 
-        .footer-note { text-align:center; color:#a394cc; font-size:0.8rem; margin:2rem 0; }
+        /* 表格样式 - 高端简约 */
+        .rules-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 0.5rem;
+        }
+        .rules-table th {
+            text-align: left;
+            padding: 0.8rem 0.5rem 0.5rem 0;
+            font-weight: 600;
+            color: #6b4eff;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #d0c0ff;
+        }
+        .rules-table td {
+            padding: 0.7rem 0.5rem;
+            color: #4a3a8c;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee5ff;
+        }
+        .rules-table tr:last-child td { border-bottom: none; }
+        .rules-table .highlight { color: #6b4eff; font-weight: 600; }
+
+        .footer-note {
+            text-align:center; color:#a394cc; font-size:0.8rem; margin:2.5rem 0;
+        }
     </style>
 </head>
 <body>
@@ -353,7 +402,7 @@
             </div>
         </div>
 
-        <!-- 卡片1: 实时动态 (优化K线图和交易动态) -->
+        <!-- 卡片1: 实时动态 -->
         <div class="collapse-card card-first" id="cardLive">
             <div class="card-header" onclick="toggleCard('liveContent')">
                 <div class="header-row">
@@ -369,14 +418,12 @@
                 </div>
             </div>
             <div class="card-content" id="liveContent">
-                <!-- 改进的K线图 -->
                 <div class="candlestick-container">
                     <div class="chart-header">
                         <span>H/USDT · 4h</span>
                         <span>最高 0.128 / 最低 0.121</span>
                     </div>
                     <div class="chart-grid">
-                        <!-- 蜡烛图数据：每个蜡烛的高度由收盘价决定，颜色红绿 -->
                         <div class="candle" style="--h:0.6"><div class="candle-body green" style="--h:0.6"></div></div>
                         <div class="candle" style="--h:0.4"><div class="candle-body red" style="--h:0.4"></div></div>
                         <div class="candle" style="--h:0.8"><div class="candle-body green" style="--h:0.8"></div></div>
@@ -389,26 +436,20 @@
                         <div class="candle" style="--h:0.7"><div class="candle-body green" style="--h:0.7"></div></div>
                         <div class="candle" style="--h:0.5"><div class="candle-body red" style="--h:0.5"></div></div>
                     </div>
-                    <!-- 成交量柱状图 -->
                     <div class="volume-bars">
                         <div class="volume-bar" style="--v:0.5"></div><div class="volume-bar" style="--v:0.3"></div><div class="volume-bar" style="--v:0.8"></div><div class="volume-bar" style="--v:0.4"></div><div class="volume-bar" style="--v:0.6"></div><div class="volume-bar" style="--v:0.2"></div><div class="volume-bar" style="--v:0.9"></div><div class="volume-bar" style="--v:0.5"></div><div class="volume-bar" style="--v:0.3"></div><div class="volume-bar" style="--v:0.7"></div><div class="volume-bar" style="--v:0.4"></div>
                     </div>
                 </div>
-
-                <!-- 改进的交易动态 -->
                 <div class="live-feed">
                     <div class="feed-header">
                         <span><i class="fas fa-sync-alt fa-spin"></i> 实时成交</span>
                         <span>最新价格 0.124</span>
                     </div>
-                    <ul class="feed-list" id="feedList">
-                        <!-- 动态通过JS生成 -->
-                    </ul>
+                    <ul class="feed-list" id="feedList"></ul>
                 </div>
             </div>
         </div>
 
-        <!-- 其余卡片不变（我的交易、我的团队、活动规则） -->
         <!-- 卡片2: 我的交易 (含日历) -->
         <div class="collapse-card" id="cardMyTrade">
             <div class="card-header" onclick="toggleCard('myTradeContent')">
@@ -425,7 +466,6 @@
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
-                <!-- 日历模块 -->
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <span><i class="far fa-calendar-alt"></i> 本月交易日历</span>
@@ -469,7 +509,7 @@
             </div>
         </div>
 
-        <!-- 卡片3: 我的团队 (含趋势图) -->
+        <!-- 卡片3: 我的团队 -->
         <div class="collapse-card" id="cardTeam">
             <div class="card-header" onclick="toggleCard('teamContent')">
                 <div class="header-row">
@@ -527,17 +567,18 @@
                 <div class="member-list" id="memberList"></div>
                 <button class="action-btn action-btn-secondary" style="width:100%; margin:0.5rem 0;" onclick="toggleMembers()">查看全部成员</button>
 
+                <!-- 团队奖励卡片 - 已移除重复的贡献值显示 -->
                 <div class="team-reward-card">
-                    <div style="font-size:0.9rem; color:#6f5ea0;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
+                    <div style="font-size:0.95rem; color:#6f5ea0; margin-bottom:0.3rem;">⚡ 当前团队奖励</div>
                     <div class="team-reward-amount" id="teamReward">1,284 H</div>
-                    <div style="font-size:0.75rem;">已达成100,000 USDT档位，获得1% H代币奖励</div>
+                    <div style="font-size:0.75rem; color:#8a7ab3;">已达成100,000 USDT档位，获得1% H代币奖励</div>
                 </div>
 
                 <button class="action-btn action-btn-primary" style="width:100%;" onclick="alert('复制邀请链接')"><i class="fas fa-link"></i> 邀请好友加入舰队</button>
             </div>
         </div>
 
-        <!-- 卡片4: 活动规则 -->
+        <!-- 卡片4: 活动规则 (表格形式) -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
                 <div class="header-row">
@@ -555,19 +596,25 @@
             <div class="card-content" id="ruleContent">
                 <div style="padding:0.5rem 0;">
                     <h4 style="color:#6b4eff; margin:1rem 0 0.5rem;">🎁 个人交易奖励</h4>
-                    <ul style="padding-left:1.2rem; font-size:0.9rem; color:#4a3a8c; line-height:1.6;">
-                        <li>≥10,000 USDT → 总额0.5% H代币</li>
-                        <li>≥30,000 USDT → 总额0.8% H代币</li>
-                        <li>≥50,000 USDT → 总额1% H代币</li>
-                        <li>≥100,000 USDT → 总额1.2% H代币</li>
-                    </ul>
-                    <h4 style="color:#6b4eff; margin:1.5rem 0 0.5rem;">👥 团队奖励</h4>
-                    <p style="font-size:0.9rem; color:#4a3a8c;">团队贡献值 = 本人100% + 一级50% + 二级10%</p>
-                    <ul style="padding-left:1.2rem; font-size:0.9rem; color:#4a3a8c;">
-                        <li>≥50,000 USDT → 贡献值0.5% H代币</li>
-                        <li>≥100,000 USDT → 贡献值1% H代币</li>
-                    </ul>
-                    <h4 style="color:#6b4eff; margin:1.5rem 0 0.5rem;">⏱️ 自动发放</h4>
+                    <table class="rules-table">
+                        <tr><th>累计交易量</th><th>奖励比例</th></tr>
+                        <tr><td>≥ 10,000 USDT</td><td class="highlight">0.5% H代币</td></tr>
+                        <tr><td>≥ 30,000 USDT</td><td class="highlight">0.8% H代币</td></tr>
+                        <tr><td>≥ 50,000 USDT</td><td class="highlight">1% H代币</td></tr>
+                        <tr><td>≥ 100,000 USDT</td><td class="highlight">1.2% H代币</td></tr>
+                    </table>
+
+                    <h4 style="color:#6b4eff; margin:2rem 0 0.5rem;">👥 团队奖励</h4>
+                    <p style="font-size:0.9rem; color:#4a3a8c; margin-bottom:0.5rem;">团队贡献值 = 本人100% + 一级50% + 二级10%</p>
+                    <table class="rules-table">
+                        <tr><th>团队贡献值</th><th>奖励比例</th></tr>
+                        <tr><td>≥ 50,000 USDT</td><td class="highlight">0.5% H代币</td></tr>
+                        <tr><td>≥ 100,000 USDT</td><td class="highlight">0.8% H代币</td></tr>
+                        <tr><td>≥ 150,000 USDT</td><td class="highlight">1% H代币</td></tr>
+                        <tr><td>≥ 300,000 USDT</td><td class="highlight">1.2% H代币</td></tr>
+                    </table>
+
+                    <h4 style="color:#6b4eff; margin:2rem 0 0.5rem;">⏱️ 自动发放</h4>
                     <p style="font-size:0.9rem; color:#4a3a8c;">每月10日、20日、30日快照，自动发放至绑定的OKX钱包。</p>
                 </div>
             </div>
@@ -579,6 +626,7 @@
     </div>
 
     <script>
+        // 模拟数据
         const userData = {
             walletBound: true,
             todayVolume: 1280,
@@ -602,7 +650,6 @@
             }
         };
 
-        // 初始交易流数据（带价格和涨跌幅）
         let feedData = [
             { addr: '0x8f3...cB2', price: 0.1243, change: '+0.02%', vol: 12400, time: '30秒前' },
             { addr: '0x2a1...Df9', price: 0.1241, change: '-0.01%', vol: 8750, time: '2分钟前' },
@@ -676,18 +723,29 @@
             document.getElementById('teamCountSummary').innerText = userData.team.count;
             document.getElementById('teamWeightedSummary').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
             document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
-            document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamRawVolume').innerText = (userData.team.rawVolume/1000).toFixed(1) + 'k USDT';
 
             document.getElementById('ruleUserTotalSummary').innerText = userData.totalVolume.toLocaleString();
             document.getElementById('ruleTeamWeightedSummary').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
 
             let teamReward = 0, teamTierText = '', teamProgressPercent = 0, teamStatusText = '';
-            if (userData.team.weightedVolume >= 100000) {
-                teamReward = userData.team.weightedVolume * 0.01;
-                teamTierText = '当前档位: 100,000 USDT (1%)';
+            if (userData.team.weightedVolume >= 300000) {
+                teamReward = userData.team.weightedVolume * 0.012;
+                teamTierText = '当前档位: 300,000 USDT (1.2%)';
                 teamProgressPercent = 100;
                 teamStatusText = '已达标';
+            } else if (userData.team.weightedVolume >= 150000) {
+                teamReward = userData.team.weightedVolume * 0.01;
+                teamTierText = '当前档位: 150,000 USDT (1%)';
+                teamProgressPercent = (userData.team.weightedVolume / 150000) * 100;
+                if (teamProgressPercent > 100) teamProgressPercent = 100;
+                teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
+            } else if (userData.team.weightedVolume >= 100000) {
+                teamReward = userData.team.weightedVolume * 0.008;
+                teamTierText = '当前档位: 100,000 USDT (0.8%)';
+                teamProgressPercent = (userData.team.weightedVolume / 100000) * 100;
+                if (teamProgressPercent > 100) teamProgressPercent = 100;
+                teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
             } else if (userData.team.weightedVolume >= 50000) {
                 teamReward = userData.team.weightedVolume * 0.005;
                 teamTierText = '当前档位: 50,000 USDT (0.5%)';
@@ -699,7 +757,6 @@
                 teamProgressPercent = (userData.team.weightedVolume / 50000) * 100;
                 teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
             }
-            if (teamProgressPercent > 100) teamProgressPercent = 100;
             document.getElementById('teamProgress').style.width = teamProgressPercent + '%';
             document.getElementById('teamTierDisplay').innerText = teamTierText;
             document.getElementById('teamProgressText').innerText = teamStatusText;
@@ -730,7 +787,6 @@
             if (btn) btn.innerText = showAllMembers ? '收起成员' : '查看全部成员';
         }
 
-        // 更新实时交易列表
         function updateFeed() {
             const feedList = document.getElementById('feedList');
             if (!feedList) return;
