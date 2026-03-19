@@ -6,17 +6,26 @@
     <title>海豚舰队 · 团队助力计划</title>
     <!-- Font Awesome 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Google Font: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Google Font: Inter (优化字体) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:'Inter',sans-serif; background:#0b1018; color:#fff; line-height:1.5; min-height:100vh; padding:0; overflow-x:hidden; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b1018;
+            color: #fff;
+            line-height: 1.6; /* 增加行高 */
+            letter-spacing: 0.02em; /* 轻微字间距 */
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
         /* 高级动态头部 */
         .hero {
             position: relative;
             background: radial-gradient(ellipse at 30% 40%, #132b44 0%, #030b14 100%);
-            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            padding: 2.5rem 1.5rem 2rem 1.5rem; /* 增加顶部内边距 */
             border-bottom-left-radius: 40px;
             border-bottom-right-radius: 40px;
             overflow: hidden;
@@ -32,52 +41,63 @@
         }
         .hero-content { position:relative; z-index:2; max-width:600px; margin:0 auto; }
 
-        /* 合作标识 */
+        /* 合作标识 - 字体优化 */
         .co-brand {
             display: flex; align-items: center; justify-content: center; gap:12px;
-            margin-bottom: 1rem; background: rgba(0,30,60,0.6); backdrop-filter:blur(8px);
-            border-radius: 60px; padding:0.5rem 1.5rem; width:fit-content; margin-left:auto; margin-right:auto;
+            margin-bottom: 1.5rem; background: rgba(0,30,60,0.6); backdrop-filter:blur(8px);
+            border-radius: 60px; padding:0.6rem 1.8rem; width:fit-content; margin-left:auto; margin-right:auto;
             border:1px solid #00c3ff50;
+            font-weight: 500;
+            letter-spacing: 0.03em;
         }
         .co-brand .dolphin { font-size:1.8rem; color:#00c8ff; }
         .co-brand .okx-logo {
             background: #000; color:#fff; font-weight:700; font-size:1.2rem;
-            padding:0.2rem 0.8rem; border-radius:30px; border:1px solid #2d9eff;
+            padding:0.2rem 1rem; border-radius:30px; border:1px solid #2d9eff;
         }
-        .co-brand span { font-size:1.2rem; font-weight:600; color:#b5f0ff; }
+        .co-brand span { font-size:1.2rem; font-weight:600; color:#e2f0ff; }
 
-        .title-main { text-align:center; margin-bottom:0.8rem; }
+        .title-main { text-align:center; margin-bottom:1rem; }
         .title-main h1 {
-            font-size:2.2rem; font-weight:800; background:linear-gradient(135deg, #ffffff, #aad0ff);
+            font-size:2.4rem; font-weight:700; 
+            background:linear-gradient(135deg, #ffffff, #b0e0ff);
             -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-            letter-spacing:-0.5px;
+            letter-spacing:-0.02em;
+            line-height:1.2;
         }
-        .title-main p { color:#90c0ff; font-weight:500; display:flex; align-items:center; justify-content:center; gap:8px; }
+        .title-main p {
+            color:#a0c8ff; font-weight:400; font-size:1rem;
+            display:flex; align-items:center; justify-content:center; gap:8px;
+            letter-spacing:0.02em;
+        }
         .activity-date {
-            text-align:center; font-size:0.9rem; color:#b0e0ff; margin-bottom:1rem;
+            text-align:center; font-size:0.9rem; color:#b0d0ff; background:rgba(0,40,60,0.4);
+            padding:0.4rem 1rem; border-radius:40px; width:fit-content; margin:0 auto 1rem auto;
+            border:1px solid #2d9eff40;
+            letter-spacing:0.02em;
         }
 
         /* 容器 */
         .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
 
-        /* 可折叠卡片通用样式 - 增大尺寸，两行头部 */
+        /* 可折叠卡片 - 优化间距与颜色 */
         .collapse-card {
-            background: rgba(16, 34, 54, 0.85);
+            background: rgba(18, 36, 56, 0.85);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 160, 255, 0.3);
-            border-radius: 36px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 15px 30px -12px #000000b3, 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
+            border: 1px solid rgba(64, 192, 255, 0.25);
+            border-radius: 40px;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 20px 30px -15px #000000cc, 0 0 0 1px rgba(64, 192, 255, 0.2) inset;
             transition: all 0.2s;
         }
-        .collapse-card:hover { border-color: #00bbff; transform: translateY(-2px); }
+        .collapse-card:hover { border-color: #2db8ff; transform: translateY(-3px); }
 
         .card-header {
-            padding: 1.5rem 1.5rem;
+            padding: 1.8rem 1.8rem;
             cursor: pointer;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
             user-select: none;
         }
         .header-row {
@@ -91,82 +111,90 @@
             gap: 12px;
         }
         .header-left i {
-            font-size: 2rem;
-            color: #00d0ff;
-            width: 40px;
+            font-size: 2.2rem;
+            color: #2db8ff;
+            width: 44px;
             text-align: center;
-            filter: drop-shadow(0 0 5px #00a6ff);
+            filter: drop-shadow(0 0 8px #0099ff);
         }
         .header-left .title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 600;
-            color: #e2f0ff;
-            letter-spacing: -0.3px;
+            color: #eaf5ff;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
         }
         .expand-icon {
-            font-size: 1.6rem;
-            color: #8ed0ff;
+            font-size: 1.8rem;
+            color: #9aceff;
             transition: transform 0.3s;
-            background: rgba(0, 100, 200, 0.3);
-            width: 44px;
-            height: 44px;
+            background: rgba(0, 120, 210, 0.3);
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            border: 1px solid #4db8ff60;
         }
-        /* 第二行：摘要数据 */
+        /* 摘要行 - 优化 */
         .summary-row {
             display: flex;
             align-items: center;
-            gap: 24px;
-            margin-left: 52px; /* 与图标对齐 */
+            gap: 32px;
+            margin-left: 56px;
             font-size: 1rem;
-            color: #b0ecff;
-            background: rgba(0, 40, 60, 0.5);
-            padding: 0.6rem 1.2rem;
+            color: #d0ecff;
+            background: rgba(0, 44, 75, 0.5);
+            padding: 0.7rem 1.5rem;
             border-radius: 40px;
-            border: 1px solid #2d9eff40;
+            border: 1px solid #3fa2ff60;
+            backdrop-filter: blur(4px);
         }
         .summary-item {
             display: flex;
-            align-items: center;
+            align-items: baseline;
             gap: 6px;
         }
         .summary-item .label {
-            color: #a0c0ff;
+            color: #b0d4ff;
+            font-weight: 400;
+            font-size: 0.9rem;
         }
         .summary-item .value {
             font-weight: 600;
             color: #ffecaa;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            letter-spacing: 0.02em;
         }
 
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease-out;
-            padding: 0 1.5rem;
+            padding: 0 1.8rem;
         }
         .card-content.expanded {
             max-height: 1500px;
-            padding-bottom: 1.5rem;
+            padding-bottom: 1.8rem;
         }
 
-        /* K线图模拟 - 美化 */
+        /* K线图模拟 */
         .kline-container {
             background: #0f2842;
-            border-radius: 28px;
-            padding: 1rem;
-            margin: 0.5rem 0 1rem;
+            border-radius: 32px;
+            padding: 1.2rem;
+            margin: 0.5rem 0 1.5rem;
             border: 1px solid #2d9eff;
+            box-shadow: inset 0 0 10px #00000060;
         }
         .kline-title {
             display: flex;
             justify-content: space-between;
             font-size: 0.9rem;
-            margin-bottom: 0.8rem;
+            margin-bottom: 1rem;
             color: #b0e0ff;
+            letter-spacing: 0.02em;
         }
         .kline-bars {
             display: flex;
@@ -183,95 +211,100 @@
             min-height: 4px;
             transition: height 0.2s;
         }
-        .kline-bar.red { background: #ff5e5e; }
+        .kline-bar.red { background: #ff6b6b; }
 
         /* 实时交易流 */
         .live-feed { margin: 1rem 0; }
-        .feed-header { display:flex; align-items:center; gap:8px; color:#a0d0ff; font-weight:500; margin-bottom:0.5rem; }
+        .feed-header { display:flex; align-items:center; gap:8px; color:#b0e0ff; font-weight:500; margin-bottom:0.8rem; }
         .feed-list { list-style:none; }
         .feed-item {
-            display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0;
-            border-bottom:1px solid #1f5a85; font-size:0.9rem;
+            display:flex; align-items:center; justify-content:space-between; padding:0.8rem 0;
+            border-bottom:1px solid #1f5a85; font-size:0.95rem;
+            line-height:1.5;
         }
         .feed-item:last-child { border-bottom:none; }
-        .feed-address { font-family:monospace; background:#102c44; padding:0.3rem 1rem; border-radius:30px; }
+        .feed-address { font-family:monospace; background:#102c44; padding:0.3rem 1.2rem; border-radius:30px; color:#b0e0ff; }
         .feed-volume { color:#7ff0b0; font-weight:600; }
-        .feed-time { color:#94b4d4; font-size:0.7rem; }
+        .feed-time { color:#a0c0d0; font-size:0.75rem; }
 
         /* 内部数据卡片 */
-        .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; margin:1rem 0; }
+        .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; margin:1.5rem 0; }
         .stat-card {
-            background:rgba(0, 35, 65, 0.7); border:1px solid #29a5ff40;
-            border-radius:24px; padding:1.2rem; box-shadow:0 4px 12px #0000004d;
+            background:rgba(0, 35, 65, 0.7); border:1px solid #2d9eff40;
+            border-radius:28px; padding:1.4rem 1.2rem; box-shadow:0 8px 20px #00000060;
         }
-        .stat-label { font-size:0.75rem; color:#b0e0ff; margin-bottom:4px; display:flex; align-items:center; gap:4px; }
-        .stat-value { font-size:1.6rem; font-weight:700; color:white; line-height:1.2; }
-        .stat-sub { font-size:0.7rem; color:#a0c0ff; margin-top:2px; }
+        .stat-label { font-size:0.8rem; color:#b0e0ff; margin-bottom:6px; display:flex; align-items:center; gap:6px; letter-spacing:0.02em; }
+        .stat-value { font-size:1.8rem; font-weight:700; color:white; line-height:1.2; }
+        .stat-sub { font-size:0.75rem; color:#a0c0ff; margin-top:4px; letter-spacing:0.02em; }
 
         .personal-reward-card {
-            background: #003d66; border-radius: 28px; padding: 1.2rem; margin: 1rem 0;
-            border: 1px solid #3fa2ff;
+            background: #003d66; border-radius: 32px; padding: 1.4rem; margin: 1.5rem 0;
+            border: 1px solid #4db8ff;
         }
-        .personal-reward-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
-        .personal-reward-label { color:#b0ecff; font-size:0.9rem; }
-        .personal-reward-value { font-size:1.8rem; font-weight:700; color:#ffd966; }
-        .next-tier { font-size:0.8rem; color:#a0d0ff; background:#002a55; padding:0.3rem 1rem; border-radius:30px; }
+        .personal-reward-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+        .personal-reward-label { color:#c0e8ff; font-size:0.95rem; letter-spacing:0.02em; }
+        .personal-reward-value { font-size:2rem; font-weight:700; color:#ffd966; }
+        .next-tier { font-size:0.85rem; color:#b0e0ff; background:#002a55; padding:0.3rem 1.2rem; border-radius:30px; }
 
-        .progress-bar-container { width:100%; height:10px; background:#1f3f60; border-radius:10px; margin:0.8rem 0; overflow:hidden; }
-        .progress-bar-fill { height:100%; background:linear-gradient(90deg, #00c6ff, #0072ff); border-radius:10px; width:0%; transition:width 0.3s; }
+        .progress-bar-container { width:100%; height:10px; background:#1f4a70; border-radius:10px; margin:1rem 0; overflow:hidden; }
+        .progress-bar-fill { height:100%; background:linear-gradient(90deg, #2db8ff, #0072ff); border-radius:10px; width:0%; transition:width 0.3s; }
 
         .personal-row {
-            display:flex; justify-content:space-around; background:rgba(0, 30, 60, 0.7);
-            border-radius:40px; padding:0.8rem; margin:1rem 0; border:1px solid #0077ff;
+            display:flex; justify-content:space-around; background:rgba(0, 44, 75, 0.7);
+            border-radius:40px; padding:1rem; margin:1.5rem 0; border:1px solid #2d9eff;
         }
         .rank-item { text-align:center; }
-        .rank-label { font-size:0.65rem; color:#9ac7ff; }
-        .rank-number { font-size:1.1rem; font-weight:700; color:#ffecaa; }
+        .rank-label { font-size:0.7rem; color:#b0d0ff; margin-bottom:4px; letter-spacing:0.02em; }
+        .rank-number { font-size:1.2rem; font-weight:700; color:#ffecaa; }
 
         .team-stats-row {
-            display:flex; justify-content:space-between; background:#003e6b; border-radius:28px;
-            padding:1rem; margin:1rem 0; border:1px solid #3fa2ff;
+            display:flex; justify-content:space-between; background:#00497e; border-radius:32px;
+            padding:1.2rem; margin:1.5rem 0; border:1px solid #4db8ff;
         }
         .team-stat-item { text-align:center; flex:1; }
-        .team-stat-label { font-size:0.7rem; color:#b0daff; display:flex; align-items:center; justify-content:center; gap:3px; }
-        .team-stat-value { font-size:1.4rem; font-weight:700; color:#ffecaa; }
+        .team-stat-label { font-size:0.75rem; color:#c0e0ff; display:flex; align-items:center; justify-content:center; gap:4px; letter-spacing:0.02em; }
+        .team-stat-value { font-size:1.6rem; font-weight:700; color:#ffecaa; line-height:1.3; }
 
         .team-effective-box {
-            background:#00335e; border-radius:28px; padding:1.2rem; margin:1rem 0;
-            border:1px solid #4db8ff;
+            background:#00497e; border-radius:32px; padding:1.4rem; margin:1.5rem 0;
+            border:1px solid #5ac0ff;
         }
-        .team-effective-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
-        .team-effective-label { color:#b0ecff; font-size:0.9rem; }
-        .team-effective-value { font-size:1.8rem; font-weight:700; color:#ffecaa; margin-left:10px; }
-        .team-effective-unit { font-size:0.8rem; color:#99ccff; }
+        .team-effective-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.8rem; }
+        .team-effective-label { color:#c0e8ff; font-size:0.95rem; letter-spacing:0.02em; }
+        .team-effective-value { font-size:2rem; font-weight:700; color:#ffecaa; margin-left:10px; }
+        .team-effective-unit { font-size:0.85rem; color:#b0d0ff; }
 
-        .member-list { margin:1rem 0; }
-        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0; border-bottom:1px solid #1f5a85; }
+        .member-list { margin:1.5rem 0; }
+        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.8rem 0; border-bottom:1px solid #1f5a85; }
         .member-info { display:flex; align-items:center; gap:12px; }
-        .member-level { background:#0059a3; border-radius:20px; padding:0.2rem 1rem; font-size:0.7rem; font-weight:600; }
-        .member-address { font-family:monospace; font-size:0.85rem; }
+        .member-level { background:#0066a0; border-radius:20px; padding:0.2rem 1.2rem; font-size:0.75rem; font-weight:600; color:#e0f0ff; }
+        .member-address { font-family:monospace; font-size:0.9rem; color:#d0e8ff; }
 
         .team-reward-card {
-            background:#00497e; border-radius:28px; padding:1.2rem; margin:1.2rem 0;
-            border:2px dashed #4db8ff; text-align:center;
+            background:#00497e; border-radius:32px; padding:1.4rem; margin:1.5rem 0;
+            border:2px dashed #5ac0ff; text-align:center;
         }
-        .team-reward-amount { font-size:2rem; font-weight:800; color:#ffd966; }
+        .team-reward-amount { font-size:2.2rem; font-weight:800; color:#ffd966; line-height:1.3; }
 
         .btn-small {
-            background: #00497e; border:none; color:white; padding:0.7rem 1rem;
-            border-radius:40px; font-size:0.95rem; width:100%; margin:0.5rem 0; cursor:pointer;
-            font-weight:600; border:1px solid #3fa2ff; transition:0.2s;
+            background: #00497e; border:none; color:white; padding:0.8rem 1.2rem;
+            border-radius:40px; font-size:1rem; width:100%; margin:0.6rem 0; cursor:pointer;
+            font-weight:600; border:1px solid #4db8ff; transition:0.2s;
+            letter-spacing:0.03em;
         }
         .btn-small:hover { background:#0059a3; }
-        .btn-primary-small { background:linear-gradient(145deg, #00a86b, #007755); border-color:#7ff0b0; }
+        .btn-primary-small { background:linear-gradient(145deg, #008f5c, #006644); border-color:#7ff0b0; }
 
         .info-icon {
             display:inline-flex; background:#1f5a85; width:18px; height:18px; border-radius:50%;
             font-size:0.6rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
-            border:1px solid #4db8ff;
+            border:1px solid #5ac0ff; color:#e0f0ff;
         }
 
-        .footer-note { text-align:center; color:#6c8db0; font-size:0.8rem; margin:2rem 0; }
+        .footer-note { text-align:center; color:#8aaac0; font-size:0.85rem; margin:2.5rem 0; letter-spacing:0.02em; }
+
+        /* 微调动画 */
+        @keyframes fadeIn { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
     </style>
 </head>
 <body>
@@ -299,7 +332,7 @@
             <div style="display:flex; align-items:center; gap:15px; padding:1.5rem;">
                 <i class="fas fa-link" style="font-size:2rem; color:#ffaa33;"></i>
                 <span style="flex:1;">绑定OKX钱包，立即参与活动</span>
-                <button style="background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1.2rem; border-radius:40px; cursor:pointer;" onclick="alert('唤起绑定流程')">立即绑定</button>
+                <button style="background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1.5rem; border-radius:40px; cursor:pointer;" onclick="alert('唤起绑定流程')">立即绑定</button>
             </div>
         </div>
 
@@ -320,7 +353,6 @@
                 </div>
             </div>
             <div class="card-content" id="liveContent">
-                <!-- K线模拟 -->
                 <div class="kline-container">
                     <div class="kline-title">
                         <span>H/USDT (4h)</span>
@@ -340,7 +372,6 @@
                         <div class="kline-bar" style="--h:0.7"></div>
                     </div>
                 </div>
-                <!-- 实时交易列表 -->
                 <div class="live-feed">
                     <div class="feed-header"><i class="fas fa-sync-alt fa-spin"></i> 最新成交</div>
                     <ul class="feed-list" id="feedList"></ul>
@@ -364,7 +395,6 @@
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
-                <!-- 详细数据 -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label"><i class="fas fa-user"></i> 今日交易量</div>
@@ -389,7 +419,7 @@
                     <div class="progress-bar-container">
                         <div class="progress-bar-fill" id="personalProgress" style="width:84.5%"></div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#a0c0ff;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#b0d0ff;">
                         <span>当前累计: <span id="userTotalSmall">8,450</span> USDC</span>
                         <span>下一目标: <span id="nextTarget">10,000</span> USDC</span>
                     </div>
@@ -419,7 +449,6 @@
                 </div>
             </div>
             <div class="card-content" id="teamContent">
-                <!-- 团队三指标 -->
                 <div class="team-stats-row">
                     <div class="team-stat-item">
                         <div class="team-stat-label">团队人数</div>
@@ -441,7 +470,6 @@
                     </div>
                 </div>
 
-                <!-- 贡献值进度条 -->
                 <div class="team-effective-box">
                     <div class="team-effective-row">
                         <span class="team-effective-label"><i class="fas fa-chart-line"></i> 团队贡献值</span>
@@ -451,21 +479,19 @@
                     <div class="progress-bar-container">
                         <div class="progress-bar-fill" id="teamProgress" style="width:100%"></div>
                     </div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#a0c0ff;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#b0d0ff;">
                         <span id="teamTierDisplay">当前档位: 100,000 USDT (1%)</span>
                         <span id="teamProgressText">已达标</span>
                     </div>
                 </div>
 
-                <!-- 成员列表（前3条） -->
                 <div class="member-list" id="memberList"></div>
                 <button class="btn-small" onclick="toggleMembers()">查看全部成员</button>
 
-                <!-- 团队奖励预估 -->
                 <div class="team-reward-card">
-                    <div style="font-size:0.9rem; color:#b0ecff;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
+                    <div style="font-size:0.95rem; color:#c0e8ff;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
                     <div class="team-reward-amount" id="teamReward">1,284 H</div>
-                    <div style="font-size:0.75rem;">已达成100,000 USDT档位，获得1% H代币奖励</div>
+                    <div style="font-size:0.8rem;">已达成100,000 USDT档位，获得1% H代币奖励</div>
                 </div>
 
                 <button class="btn-small btn-primary-small" onclick="alert('复制邀请链接')"><i class="fas fa-link"></i> 邀请好友加入舰队</button>
@@ -482,26 +508,26 @@
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
                 </div>
-                <!-- 规则卡片没有摘要行，可留空 -->
+                <!-- 规则卡片没有摘要行，用一个占位隐藏 -->
                 <div class="summary-row" style="visibility: hidden; height: 1px; padding: 0; margin:0;"></div>
             </div>
             <div class="card-content" id="ruleContent">
                 <div style="padding:0.5rem 0;">
-                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem;">🎁 个人交易奖励</h4>
-                    <ul style="padding-left:1.2rem; font-size:0.9rem;">
+                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem; font-weight:600;">🎁 个人交易奖励</h4>
+                    <ul style="padding-left:1.5rem; font-size:0.95rem; color:#d0e8ff; line-height:1.7;">
                         <li>≥10,000 USDT → 总额0.5% H代币</li>
                         <li>≥30,000 USDT → 总额0.8% H代币</li>
                         <li>≥50,000 USDT → 总额1% H代币</li>
                         <li>≥100,000 USDT → 总额1.2% H代币</li>
                     </ul>
-                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem;">👥 团队奖励</h4>
-                    <p style="font-size:0.9rem;">团队贡献值 = 本人100% + 一级50% + 二级10%</p>
-                    <ul style="padding-left:1.2rem; font-size:0.9rem;">
+                    <h4 style="color:#ffd966; margin:1.5rem 0 0.5rem; font-weight:600;">👥 团队奖励</h4>
+                    <p style="font-size:0.95rem; color:#d0e8ff;">团队贡献值 = 本人100% + 一级50% + 二级10%</p>
+                    <ul style="padding-left:1.5rem; font-size:0.95rem; color:#d0e8ff; line-height:1.7;">
                         <li>≥50,000 USDT → 贡献值0.5% H代币</li>
                         <li>≥100,000 USDT → 贡献值1% H代币</li>
                     </ul>
-                    <h4 style="color:#ffd966; margin:1rem 0 0.5rem;">⏱️ 自动发放</h4>
-                    <p style="font-size:0.9rem;">每月10日、20日、30日快照，自动发放至绑定的OKX钱包。</p>
+                    <h4 style="color:#ffd966; margin:1.5rem 0 0.5rem; font-weight:600;">⏱️ 自动发放</h4>
+                    <p style="font-size:0.95rem; color:#d0e8ff;">每月10日、20日、30日快照，自动发放至绑定的OKX钱包。</p>
                 </div>
             </div>
         </div>
@@ -583,18 +609,15 @@
 
         // 渲染所有数据
         function renderUserData() {
-            // 绑定状态
             if (!userData.walletBound) {
                 document.getElementById('unbindPrompt').style.display = 'block';
             } else {
                 document.getElementById('unbindPrompt').style.display = 'none';
             }
 
-            // 摘要数据
             document.getElementById('userTodaySummary').innerText = userData.todayVolume.toLocaleString();
             document.getElementById('userTotalSummary').innerText = userData.totalVolume.toLocaleString();
 
-            // 详细数据
             document.getElementById('userToday').innerText = userData.todayVolume.toLocaleString();
             document.getElementById('userTotal').innerText = userData.totalVolume.toLocaleString();
             document.getElementById('userTotalSmall').innerText = userData.totalVolume.toLocaleString();
@@ -620,7 +643,6 @@
             document.getElementById('rankMonth').innerText = '#' + userData.rankMonth;
             document.getElementById('rankYear').innerText = '#' + userData.rankYear;
 
-            // 团队数据
             document.getElementById('teamCountSummary').innerText = userData.team.count;
             document.getElementById('teamWeightedSummary').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
 
@@ -630,7 +652,6 @@
             document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
-            // 团队奖励与进度条
             let teamReward = 0, teamTierText = '', teamProgressPercent = 0, teamStatusText = '';
             if (userData.team.weightedVolume >= 100000) {
                 teamReward = userData.team.weightedVolume * 0.01;
@@ -654,7 +675,6 @@
             document.getElementById('teamProgressText').innerText = teamStatusText;
             document.getElementById('teamReward').innerText = Math.round(teamReward) + ' H';
 
-            // 成员列表
             renderMemberList(false);
         }
 
@@ -699,17 +719,14 @@
             }
         }
 
-        // 刷新数据（模拟）
         function refreshData() {
             alert('数据已刷新');
             renderUserData();
         }
 
-        // 初始化
         window.onload = function() {
             renderUserData();
 
-            // 填充实时交易流
             const feedList = document.getElementById('feedList');
             feedData.forEach(item => {
                 const li = document.createElement('li');
