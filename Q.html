@@ -20,7 +20,6 @@
             padding: 0;
         }
 
-        /* 头部 */
         .hero {
             background: linear-gradient(145deg, #f4f0ff, #e9e2ff);
             padding: 2rem 1.5rem 1.5rem 1.5rem;
@@ -54,7 +53,6 @@
 
         .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
 
-        /* 顶部操作栏 */
         .action-bar {
             display: flex;
             gap: 12px;
@@ -92,7 +90,6 @@
             background: #e5dcff;
         }
 
-        /* 卡片样式：统一内边距 */
         .collapse-card {
             background: #ffffff;
             border-radius: 28px;
@@ -151,7 +148,6 @@
             background: #f2edff;
         }
 
-        /* 摘要行 - 统一高度 */
         .summary-row {
             display: flex;
             flex-wrap: wrap;
@@ -164,7 +160,7 @@
             padding: 0.6rem 1rem;
             border-radius: 30px;
             border: 1px solid #e0d6ff;
-            min-height: 3.2rem; /* 确保高度一致 */
+            min-height: 3.2rem;
         }
         .summary-item {
             display: flex;
@@ -192,7 +188,6 @@
             padding-bottom: 1.2rem;
         }
 
-        /* K线图 */
         .kline-container {
             background: #f9f6ff;
             border-radius: 24px;
@@ -223,7 +218,6 @@
         .feed-volume { color:#6b4eff; font-weight:600; }
         .feed-time { color:#a394cc; font-size:0.7rem; }
 
-        /* 内部卡片 */
         .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; margin:1.2rem 0; }
         .stat-card {
             background:#f9f6ff; border:1px solid #e0d6ff; border-radius:24px; padding:1.2rem 1rem;
@@ -288,8 +282,6 @@
         }
 
         .footer-note { text-align:center; color:#a394cc; font-size:0.8rem; margin:2rem 0; }
-
-        /* 规则卡片内新增数据行（折叠后已由summary-row展示，此处无需额外） */
     </style>
 </head>
 <body>
@@ -312,7 +304,6 @@
     </div>
 
     <div class="container">
-        <!-- 操作栏：刷新和交易按钮 -->
         <div class="action-bar">
             <button class="action-btn action-btn-secondary" onclick="refreshData()">
                 <i class="fas fa-sync-alt"></i> 刷新
@@ -322,7 +313,6 @@
             </button>
         </div>
 
-        <!-- 未绑定状态提示 (默认隐藏) -->
         <div class="collapse-card" id="unbindPrompt" style="display: none; background:#fff2e6; border-color:#ffaa33;">
             <div style="display:flex; align-items:center; gap:15px; padding:1.2rem;">
                 <i class="fas fa-link" style="font-size:2rem; color:#ffaa33;"></i>
@@ -331,19 +321,18 @@
             </div>
         </div>
 
-        <!-- 卡片1: 实时动态 (带顶部间距) -->
+        <!-- 卡片1: 实时动态 (优化摘要行，只保留H和量) -->
         <div class="collapse-card card-first" id="cardLive">
             <div class="card-header" onclick="toggleCard('liveContent')">
                 <div class="header-row">
                     <div class="header-left">
-                        <i class="fas fa-chart-line"></i>
+                        <i class="fas fa-water"></i> <!-- 改为海洋波浪图标，更应景 -->
                         <span class="title">实时动态</span>
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="liveIcon"></i>
                 </div>
                 <div class="summary-row">
                     <div class="summary-item"><span class="label">H</span><span class="value" id="hPrice">0.124</span></div>
-                    <div class="summary-item"><span class="label">24h</span><span class="value" id="hChange" style="color:#6b4eff;">+2.3%</span></div>
                     <div class="summary-item"><span class="label">量</span><span class="value">2.45M</span></div>
                 </div>
             </div>
@@ -487,7 +476,7 @@
             </div>
         </div>
 
-        <!-- 卡片4: 活动规则 (带个人/团队摘要行，确保高度一致) -->
+        <!-- 卡片4: 活动规则 -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
                 <div class="header-row">
@@ -497,7 +486,6 @@
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
                 </div>
-                <!-- 摘要行显示个人和团队本期交易量，与其他卡片统一高度 -->
                 <div class="summary-row">
                     <div class="summary-item"><span class="label">个人</span><span class="value" id="ruleUserTotalSummary">8,450</span></div>
                     <div class="summary-item"><span class="label">团队</span><span class="value" id="ruleTeamWeightedSummary">128.4k</span></div>
@@ -530,7 +518,6 @@
     </div>
 
     <script>
-        // 模拟数据
         const userData = {
             walletBound: true,
             todayVolume: 1280,
@@ -634,7 +621,6 @@
             document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
-            // 规则卡片摘要行数据
             document.getElementById('ruleUserTotalSummary').innerText = userData.totalVolume.toLocaleString();
             document.getElementById('ruleTeamWeightedSummary').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
 
