@@ -2,545 +2,528 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>APP 风格 · 字体与交互规范</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>光·遇社区 · 液态玻璃概念</title>
+  <!-- 引入 Inter 可变字体 & Font Awesome 6 免费图标库 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">
   <style>
-    /* ----- 全局设计 —— 深色背景，突出可交互元素 ----- */
+    /* reset & 基础变量 — 深色背景，液态玻璃氛围 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: #0c111f;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 30% 10%, hsl(260, 70%, 25%), hsl(300, 80%, 12%));
       min-height: 100vh;
       display: flex;
+      align-items: center;
       justify-content: center;
-      padding: 2rem 1.2rem;
+      transition: background 0.2s ease; /* 滚动时微调色调，实现动态叙事 */
+      margin: 0;
+      padding: 8px;
     }
 
-    .spec-container {
-      max-width: 1280px;
+    /* 主应用窗口 — 模拟手机卡片，自带圆角和阴影 */
+    .app-container {
       width: 100%;
-      background: rgba(15, 22, 36, 0.8);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 48px;
-      padding: 2.5rem 2.2rem;
-      box-shadow: 0 40px 60px -20px #000000, inset 0 1px 2px rgba(255,255,255,0.05);
-    }
-
-    /* 页内标题 */
-    .master-title {
-      font-size: 2.8rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      background: linear-gradient(145deg, #f0f4ff, #b0c6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.5rem;
-    }
-    .master-desc {
-      font-size: 1.2rem;
-      color: #92a5cc;
-      margin-bottom: 3rem;
-      border-left: 4px solid #4f8cff;
-      padding-left: 1.2rem;
-    }
-
-    /* 区块卡片通用 */
-    .section {
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 36px;
-      padding: 2rem 2rem;
-      margin-bottom: 2.8rem;
-      border: 1px solid rgba(255,255,255,0.04);
-      backdrop-filter: blur(8px);
-      transition: border-color 0.2s;
-    }
-    .section:hover {
-      border-color: rgba(120, 180, 255, 0.2);
-    }
-
-    .section-title {
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: -0.01em;
-      margin-bottom: 1.5rem;
+      max-width: 380px;
+      height: 780px;
+      background: transparent;
+      border-radius: 42px;
+      box-shadow: 
+        0 30px 60px -10px rgba(0, 0, 0, 0.6),
+        inset 0 1px 2px rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(2px); /* 整体轻微模糊，与外层背景融合 */
       display: flex;
-      align-items: center;
-    }
-    .section-title span {
-      background: #2d3d60;
-      border-radius: 60px;
-      padding: 0.2rem 1rem;
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: #b7d0ff;
-      margin-left: 1rem;
-      border: 1px solid #4466aa;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    /* ---------- 1. 菜单栏演示 ---------- */
-    .menu-bar-demo {
-      background: rgba(25, 35, 55, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 60px;
-      padding: 0.8rem 1.5rem;
+    /* 状态栏极简 (仿灵动岛) */
+    .status-bar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 20px -5px #03060b;
-    }
-    .menu-left, .menu-right {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-    .menu-item {
-      color: #d3e0ff;
-      font-size: 1rem;  /* 菜单栏字体 16px */
+      padding: 12px 22px 6px 22px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
       font-weight: 500;
-      padding: 0.4rem 0.8rem;
-      border-radius: 40px;
-      transition: all 0.2s ease;
-      cursor: default;
+      letter-spacing: 0.3px;
       background: transparent;
-      border: 1px solid transparent;
     }
-    .menu-item:hover {
-      background: rgba(80, 130, 255, 0.15);
-      border-color: rgba(80, 130, 255, 0.5);
-      color: white;
-      transform: translateY(-1px);
+
+    /* 主导航 — 液态玻璃 + 可变字体演示 */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 20px 12px 20px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 4px;
     }
-    .menu-item:active {
-      background: rgba(50, 100, 230, 0.3);
-      transform: scale(0.96);
-    }
-    .menu-logo {
-      font-weight: 700;
-      font-size: 1.3rem;
-      background: linear-gradient(145deg, #aaccff, #ffffff);
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;  /* 基础字重，JS滚动将动态改变 */
+      background: linear-gradient(135deg, #fff8, #ffe);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-right: 0.5rem;
-    }
-    .badge {
-      font-size: 0.8rem;
-      background: #315599;
-      padding: 0.2rem 0.8rem;
-      border-radius: 30px;
-      color: white;
-      margin-left: 0.5rem;
-      border: 1px solid #4f7fff;
-    }
-    .menu-desc {
-      color: #90a5d0;
-      font-size: 0.85rem;
-      margin-top: 1rem;
-      text-align: center;
-      letter-spacing: 0.3px;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      transition: font-weight 0.1s ease;
     }
 
-    /* ---------- 2. 标题层级 ---------- */
-    .type-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 2rem;
-      margin: 1rem 0 0.5rem;
-    }
-    .type-item {
-      background: rgba(0,0,0,0.3);
-      border-radius: 28px;
-      padding: 1.6rem 1.5rem;
-      border: 1px solid #2b3850;
-      transition: border 0.2s, box-shadow 0.2s;
-    }
-    .type-item:hover {
-      border-color: #5c87d9;
-      box-shadow: 0 6px 12px -8px #3870ff;
-    }
-    .type-sample {
-      margin-bottom: 0.8rem;
-    }
-    .h1-sample {
-      font-size: 2.5rem;  /* 40px */
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
-    }
-    .h2-sample {
-      font-size: 2rem;    /* 32px */
-      font-weight: 600;
-      color: #f0f5ff;
-    }
-    .h3-sample {
-      font-size: 1.6rem;  /* 25.6px */
-      font-weight: 600;
-      color: #eef3ff;
-    }
-    .subtitle-sample {
-      font-size: 1.2rem;  /* 19px */
-      font-weight: 500;
-      color: #c7d6ff;
-      letter-spacing: 0.3px;
-    }
-    .body-sample {
-      font-size: 1rem;    /* 16px */
-      font-weight: 400;
-      color: #b2c6f0;
-      line-height: 1.5;
-    }
-    .type-meta {
-      font-size: 0.8rem;
-      color: #8ba2d9;
-      background: #1d2a44;
-      display: inline-block;
-      padding: 0.2rem 1rem;
-      border-radius: 30px;
-      border: 1px solid #3b5080;
-    }
-
-    /* ---------- 3. 按钮交互 ---------- */
-    .buttons-showcase {
+    .nav-actions {
       display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
+      gap: 20px;
+    }
+    .nav-actions i {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.5rem;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+      transition: all 0.2s;
+    }
+    .nav-actions i:active { transform: scale(0.92); opacity: 0.7; }
+
+    /* 滚动内容区 — 弹簧滚动 */
+    .feed {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 16px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      scroll-behavior: smooth;
+      /* 隐藏滚动条但保留功能（更干净） */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+    }
+    .feed::-webkit-scrollbar { display: none; }
+
+    /* ---------- 卡片：液态玻璃 + 有机曲线 + 渐变光感 ---------- */
+    .card {
+      background: rgba(20, 15, 30, 0.35);
+      backdrop-filter: blur(22px) saturate(200%);
+      -webkit-backdrop-filter: blur(22px) saturate(200%);
+      border-radius: 36px 36px 36px 36px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 20px 35px -12px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      padding: 18px 18px 14px 18px;
+      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.4s;
+      opacity: 0;
+      transform: translateY(20px) scale(0.98);
+      animation: cardFloatIn 0.5s ease forwards;
+      /* 每个卡片动画延迟，依次出现 */
+    }
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes cardFloatIn {
+      0% { opacity: 0; transform: translateY(30px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* 卡片在滚动视口中再次微高亮（滚动叙事补充）*/
+    .card.in-sight {
+      box-shadow: 0 25px 45px -10px rgba(160, 120, 255, 0.4), 0 0 0 1px rgba(200, 180, 255, 0.3);
+      transition: box-shadow 0.3s;
+    }
+
+    /* 卡片头部：有机形态头像 + 可变文字 */
+    .card-header {
+      display: flex;
       align-items: center;
-      justify-content: flex-start;
+      gap: 12px;
+      margin-bottom: 14px;
     }
-    .btn-group {
+    .avatar {
+      width: 48px;
+      height: 48px;
+      /* 不规则圆 — 有机曲线 */
+      border-radius: 60% 40% 40% 60% / 50% 40% 60% 50%;
+      background: linear-gradient(145deg, #cdb2ff, #8f6eff);
       display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      min-width: 150px;
-    }
-    .btn-label {
-      color: #8ba0cc;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .btn {
-      padding: 0.8rem 2rem;
-      border-radius: 60px;
-      font-size: 1rem;  /* 16px */
-      font-weight: 500;
-      border: none;
-      cursor: default;
-      transition: all 0.2s ease;
-      background: transparent;
-      text-align: center;
-      border: 2px solid transparent;
-    }
-    /* 主要按钮 */
-    .btn-primary {
-      background: #2f5bdb;
+      align-items: center;
+      justify-content: center;
       color: white;
-      box-shadow: 0 6px 14px rgba(0, 65, 200, 0.4);
-    }
-    .btn-primary:hover {
-      background: #4470f0;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 20px -8px #1e47a0;
-    }
-    .btn-primary:active {
-      background: #1a3d9e;
-      transform: translateY(2px) scale(0.97);
-      box-shadow: 0 2px 8px #0f2a6b;
-    }
-    /* 次要按钮 */
-    .btn-secondary {
-      background: transparent;
-      border: 2px solid #527ad6;
-      color: #b8d0ff;
-    }
-    .btn-secondary:hover {
-      background: rgba(70, 120, 255, 0.1);
-      border-color: #89abff;
-      color: white;
-    }
-    .btn-secondary:active {
-      background: rgba(30, 80, 200, 0.3);
-      transform: scale(0.96);
-      border-color: #a0bcff;
-    }
-    /* 文本按钮 */
-    .btn-text {
-      background: transparent;
-      color: #9bb6ff;
-      border: none;
-      box-shadow: none;
-      padding: 0.5rem 1rem;
-    }
-    .btn-text:hover {
-      background: rgba(255,255,255,0.05);
-      color: #ffffff;
-      text-decoration: underline;
-    }
-    .btn-text:active {
-      background: rgba(0, 0, 0, 0.3);
-      transform: scale(0.94);
-    }
-    /* 禁用按钮 */
-    .btn-disabled {
-      background: #2b3850;
-      color: #6b7fa0;
-      pointer-events: none;
-      opacity: 0.5;
-      border: none;
-    }
-
-    /* ---------- 4. 边框交互（卡片、输入框） ---------- */
-    .border-demo {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
-      margin-top: 1.5rem;
-    }
-    .card-border {
-      background: #111b2c;
-      border-radius: 32px;
-      padding: 2rem 2rem 1.8rem;
-      width: 220px;
-      border: 2px solid #2c3d60;
-      transition: border 0.2s, box-shadow 0.2s, transform 0.2s;
-      box-shadow: 0 10px 18px -10px #000;
-    }
-    .card-border:hover {
-      border-color: #6080dd;
-      transform: translateY(-4px);
-      box-shadow: 0 22px 30px -16px #284080;
-    }
-    .card-border:active {
-      transform: scale(0.98) translateY(-2px);
-      border-color: #aac5ff;
-    }
-    .card-title {
-      font-size: 1.4rem;
       font-weight: 600;
-      color: #dbe6ff;
-      margin-bottom: 0.6rem;
+      font-size: 22px;
+      box-shadow: 0 8px 14px -4px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,240,0.3);
     }
-    .card-desc {
-      font-size: 0.9rem;
-      color: #a0b5dd;
+    .user-info {
+      flex: 1;
     }
-
-    /* 输入框边框交互 */
-    .input-demo {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      min-width: 250px;
-    }
-    .input-field {
-      background: rgba(0, 0, 0, 0.3);
-      border: 2px solid #35476b;
-      border-radius: 40px;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      color: #f0f4ff;
-      outline: none;
-      transition: border 0.2s, box-shadow 0.2s;
-    }
-    .input-field:hover {
-      border-color: #6d90e0;
-    }
-    .input-field:focus {
-      border-color: #4f8cff;
-      box-shadow: 0 0 0 4px rgba(70, 130, 255, 0.3);
-    }
-    .input-label {
-      font-size: 0.9rem;
-      color: #b0c8ff;
-      margin-bottom: -0.5rem;
-      margin-left: 0.8rem;
-    }
-
-    /* 列表项 / 标签边框 */
-    .chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .chip {
-      background: #1a253b;
-      border: 1.5px solid #3f5280;
-      border-radius: 50px;
-      padding: 0.4rem 1.2rem;
-      font-size: 0.9rem;
-      color: #ccdcff;
-      transition: all 0.15s;
-    }
-    .chip:hover {
-      background: #263a60;
-      border-color: #809fff;
+    .user-info h4 {
+      font-size: 18px;
+      font-weight: 620;  /* 可变字体中间值 */
       color: white;
-      transform: scale(1.02);
+      letter-spacing: -0.2px;
+      line-height: 1.2;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
-    .chip:active {
-      background: #10223f;
-      transform: scale(0.96);
+    .user-info span {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
     }
+    .user-info span i { font-size: 10px; opacity: 0.7; }
 
-    /* 辅助文字 */
-    .note-text {
-      font-size: 0.85rem;
-      color: #768bb8;
-      margin-top: 1.5rem;
-      border-top: 1px dashed #334十五;
-      padding-top: 1.2rem;
+    /* 正文内容 */
+    .post-content {
+      margin-bottom: 18px;
+    }
+    .post-content p {
+      color: rgba(255,255,255,0.9);
+      font-weight: 380;
+      font-size: 15px;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      letter-spacing: 0.1px;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+    .post-media {
+      width: 100%;
+      height: 190px;
+      border-radius: 26px;  /* 和卡片圆角呼应，但略小 */
+      overflow: hidden;
+      background: #2e1b3c;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+    }
+    .post-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    .card:active .post-media img { transform: scale(1.02); } /* 细微触感 */
+
+    /* 互动工具栏 — 微交互动效 */
+    .post-actions {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 16px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .action-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 60px;
+      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      backdrop-filter: blur(4px);
+      background: rgba(255,255,255,0.02);
+    }
+    .action-btn i { font-size: 1.3rem; filter: drop-shadow(0 2px 2px black); }
+    .action-btn span { font-size: 14px; font-weight: 480; }
+
+    .action-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.15); }
+    /* 点赞激活效果（通过JS切换类） */
+    .action-btn.liked {
+      color: #ffb6e1;
+      text-shadow: 0 0 8px #ff80bf;
+    }
+    .action-btn.liked i { font-weight: 900; }
+
+    /* 底部导航 — 同样是液态玻璃，图标带呼吸感 */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 12px 22px 14px 22px;
+      background: rgba(20, 10, 25, 0.4);
+      backdrop-filter: blur(25px) saturate(200%);
+      -webkit-backdrop-filter: blur(25px) saturate(200%);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .nav-item {
+      color: rgba(255,255,255,0.55);
+      font-size: 1.7rem;
+      transition: all 0.15s;
+      padding: 6px;
+      border-radius: 30px;
+      cursor: pointer;
+      width: 48px;
       text-align: center;
     }
-
-    hr {
-      border: 0.5px solid #25324b;
-      margin: 1.8rem 0;
+    .nav-item.active {
+      color: white;
+      text-shadow: 0 0 15px #b49bff, 0 0 30px #a06eff;
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(5px);
     }
+    .nav-item:active { transform: scale(0.9); opacity: 0.8; }
+
+    /* 装饰性的微光元素（让玻璃更生动）*/
+    .glow-ball {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      background: radial-gradient(circle at 30% 30%, rgba(180, 130, 255, 0.3), transparent 70%);
+      border-radius: 50%;
+      top: 10px;
+      right: -60px;
+      filter: blur(50px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* 可变字体演示标签（滚动时字重变化）*/
+    .var-demo {
+      font-weight: 700; /* 基础，由JS动态改变 */
+    }
+
+    /* 一些小提示 */
+    .hint-text {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      text-align: center;
+      margin-bottom: 4px;
+      letter-spacing: 0.8px;
+    }
+
   </style>
 </head>
 <body>
-  <div class="spec-container">
-    <div class="master-title">APP 设计语言</div>
-    <div class="master-desc">字体层级 · 按钮状态 · 边框交互 —— 完整风格指南</div>
+  <div class="app-container">
+    <!-- 背景氛围光点 -->
+    <div class="glow-ball"></div>
 
-    <!-- 1. 菜单栏演示 -->
-    <div class="section">
-      <div class="section-title">菜单栏 / 导航栏 <span>字重500, 16px</span></div>
-      <div class="menu-bar-demo">
-        <div class="menu-left">
-          <div class="menu-logo">🍏 Style</div>
-          <div class="menu-item">首页</div>
-          <div class="menu-item">探索</div>
-          <div class="menu-item">资料库</div>
-        </div>
-        <div class="menu-right">
-          <div class="menu-item">通知</div>
-          <div class="menu-item">个人</div>
-          <div class="badge">新</div>
-        </div>
-      </div>
-      <div class="menu-desc">悬停/点击菜单项 → 背景/边框变化。字体16px, 活跃态有微交互</div>
+    <!-- 状态条 -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <span><i class="fa-solid fa-wifi"></i> 5G <i class="fa-regular fa-battery-full"></i></span>
     </div>
 
-    <!-- 2. 标题层级 -->
-    <div class="section">
-      <div class="section-title">标题 · 副标题 · 正文 <span>字号/字重规范</span></div>
-      <div class="type-grid">
-        <div class="type-item">
-          <div class="type-sample h1-sample">H1 大标题</div>
-          <div class="type-meta">2.5rem (40px) · 700</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample h2-sample">H2 章节</div>
-          <div class="type-meta">2rem (32px) · 600</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample h3-sample">H3 卡片</div>
-          <div class="type-meta">1.6rem (26px) · 600</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample subtitle-sample">小标题</div>
-          <div class="type-meta">1.2rem (19px) · 500</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample body-sample">正文内容 用于说明文字、段落等，字重400，行距舒适。</div>
-          <div class="type-meta">1rem (16px) · 400</div>
-        </div>
+    <!-- 导航栏（可变字重体验） -->
+    <div class="navbar">
+      <div class="logo" id="logoWeight">Vibe</div>
+      <div class="nav-actions">
+        <i class="fa-regular fa-magnifying-glass"></i>
+        <i class="fa-regular fa-bell"></i>
       </div>
-      <div class="note-text">每个层级卡片悬停时有边框高亮反馈，可应用于列表或区块</div>
     </div>
 
-    <!-- 3. 按钮交互 -->
-    <div class="section">
-      <div class="section-title">按钮 · 交互状态 <span>默认/悬停/点击/禁用</span></div>
-      <div class="buttons-showcase">
-        <div class="btn-group">
-          <div class="btn-label">主要按钮</div>
-          <div class="btn btn-primary">确认操作</div>
-          <div class="btn btn-primary" style="pointer-events: none; opacity:0.6;">禁用状态</div>
-        </div>
-        <div class="btn-group">
-          <div class="btn-label">次要按钮</div>
-          <div class="btn btn-secondary">取消</div>
-          <div class="btn btn-secondary">更多选项</div>
-        </div>
-        <div class="btn-group">
-          <div class="btn-label">文本按钮</div>
-          <div class="btn btn-text">查看详情</div>
-          <div class="btn btn-text">帮助</div>
-        </div>
-      </div>
-      <div class="note-text">悬停观察变化：主按钮上浮，次按钮边框变色，文本按钮加下划线。点击有轻微缩放。</div>
-    </div>
-
-    <!-- 4. 边框交互 (卡片 / 输入框 / 标签) -->
-    <div class="section">
-      <div class="section-title">边框 · 卡片 · 输入框 <span>悬停/聚焦反馈</span></div>
-      <div class="border-demo">
-        <!-- 卡片 -->
-        <div class="card-border">
-          <div class="card-title">卡片标题</div>
-          <div class="card-desc">悬停时边框变色、轻微上浮。点击缩放效果。字体：标题1.4rem，描述0.9rem</div>
-        </div>
-        <!-- 输入框组 -->
-        <div class="input-demo">
-          <div class="input-label">用户名</div>
-          <input class="input-field" type="text" placeholder="悬停/聚焦" value="交互边框" readonly disabled> 
-          <!-- disabled 防止实际输入，仅展示 -->
-          <div class="input-label" style="margin-top:0.5rem;">密码</div>
-          <input class="input-field" type="text" placeholder="聚焦时发光" value="hover效果" readonly>
-        </div>
-        <!-- 标签/ chips -->
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <div class="btn-label">标签 / 筛选框</div>
-          <div class="chip-list">
-            <span class="chip">生活</span>
-            <span class="chip">科技</span>
-            <span class="chip">设计</span>
-            <span class="chip">交互</span>
+    <!-- 滚动内容：信息流卡片 -->
+    <div class="feed" id="feedScroll">
+      <!-- 卡片 1 -->
+      <div class="card" data-id="1">
+        <div class="card-header">
+          <div class="avatar">M</div>
+          <div class="user-info">
+            <h4>mira.eth</h4>
+            <span><i class="fa-regular fa-circle-check"></i> 2h ago · 摄影</span>
           </div>
-          <div style="color:#7d95c9; font-size:0.8rem; margin-top:1rem;">标签悬停边框变色+轻微放大</div>
+        </div>
+        <div class="post-content">
+          <p>傍晚的玻璃折射率刚刚好 🌆 液态的温柔。</p>
+          <div class="post-media">
+            <img src="https://picsum.photos/360/200?random=1" alt="流动的城市">
+          </div>
+        </div>
+        <div class="post-actions">
+          <button class="action-btn like-btn" data-liked="false"><i class="fa-regular fa-heart"></i> <span>24</span></button>
+          <button class="action-btn"><i class="fa-regular fa-comment"></i> <span>8</span></button>
+          <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
         </div>
       </div>
-    </div>
 
-    <!-- 5. 补充：列表项分割线 / 更多边框 -->
-    <div class="section">
-      <div class="section-title">列表项 · 分割线交互</div>
-      <div style="background: #0f1a2b; border-radius: 30px; padding: 1rem 0;">
-        <div style="display: flex; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid #2e3f5e; transition: background 0.2s; cursor: default;" class="menu-item" style="border-radius:0;">
-          <span>消息通知</span>
-          <span style="color:#6b8bdf;">开启</span>
+      <!-- 卡片 2 -->
+      <div class="card" data-id="2">
+        <div class="card-header">
+          <div class="avatar">J</div>
+          <div class="user-info">
+            <h4>junyao</h4>
+            <span><i class="fa-regular fa-circle-check"></i> 5h ago · 日常</span>
+          </div>
         </div>
-        <div style="display: flex; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid #2e3f5e; transition: background 0.2s; cursor: default;" class="menu-item" style="border-radius:0;">
-          <span>深色模式</span>
-          <span style="color:#6b8bdf;">自动</span>
+        <div class="post-content">
+          <p>新做的毛玻璃渐变壁纸，灵感来自社区的名字✨</p>
+          <div class="post-media">
+            <img src="https://picsum.photos/360/200?random=2" alt="玻璃质感">
+          </div>
         </div>
-        <div style="display: flex; justify-content: space-between; padding: 1rem 2rem; transition: background 0.2s; cursor: default;" class="menu-item" style="border-radius:0;">
-          <span>版本更新</span>
-          <span style="color:#6b8bdf;">v2.3.0</span>
+        <div class="post-actions">
+          <button class="action-btn like-btn" data-liked="false"><i class="fa-regular fa-heart"></i> <span>56</span></button>
+          <button class="action-btn"><i class="fa-regular fa-comment"></i> <span>12</span></button>
+          <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
         </div>
       </div>
-      <div class="note-text">列表项悬停时背景轻微变化，分割线保持半透明。字体为16px正文。</div>
+
+      <!-- 卡片 3 (较长文本，展示可变) -->
+      <div class="card" data-id="3">
+        <div class="card-header">
+          <div class="avatar">K</div>
+          <div class="user-info">
+            <h4>kin.creativ</h4>
+            <span><i class="fa-regular fa-circle-check"></i> 1d ago · 设计</span>
+          </div>
+        </div>
+        <div class="post-content">
+          <p>尝试了有机曲线和液态玻璃的界面，每个圆角都是独一无二的，就像社区的每一个人。</p>
+          <div class="post-media">
+            <img src="https://picsum.photos/360/200?random=3" alt="有机设计">
+          </div>
+        </div>
+        <div class="post-actions">
+          <button class="action-btn like-btn" data-liked="false"><i class="fa-regular fa-heart"></i> <span>132</span></button>
+          <button class="action-btn"><i class="fa-regular fa-comment"></i> <span>27</span></button>
+          <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
+        </div>
+      </div>
+
+      <!-- 额外小提示：滚动会改变背景色调和logo字重 -->
+      <div class="hint-text">↓ 向下滚动，体验色调叙事 ↓</div>
     </div>
 
-    <!-- 汇总说明 -->
-    <hr>
-    <div style="display: flex; justify-content: space-between; color: #5b73a5; font-size: 0.9rem; padding: 0.5rem;">
-      <span>菜单栏:16px · 标题层级:40/32/26/19/16 · 按钮文字:16px · 标签:14px</span>
-      <span>交互: 边框/背景/缩放/阴影</span>
+    <!-- 底部导航栏 (交互激活) -->
+    <div class="bottom-nav">
+      <i class="fa-regular fa-house nav-item active" data-nav="home"></i>
+      <i class="fa-regular fa-compass nav-item" data-nav="explore"></i>
+      <i class="fa-regular fa-plus-circle nav-item" style="font-size: 2.2rem; color: #c7b1ff;" data-nav="post"></i>
+      <i class="fa-regular fa-bell nav-item" data-nav="notify"></i>
+      <i class="fa-regular fa-user nav-item" data-nav="profile"></i>
     </div>
   </div>
+
+  <script>
+    (function() {
+      // ---------- 1. 滚动叙事：改变背景色相 (hue) 和 Logo 字重 ----------
+      const body = document.body;
+      const logo = document.getElementById('logoWeight');
+      const feed = document.getElementById('feedScroll');
+      
+      // 初始背景色值 (hsl)
+      let baseHue = 260;      // 初始紫色调
+      const hueRange = 40;    // 滚动时色调变化范围
+
+      function updateBackgroundAndWeight() {
+        if (!feed) return;
+        const scrollTop = feed.scrollTop;
+        const maxScroll = feed.scrollHeight - feed.clientHeight || 1;
+        const percent = Math.min(scrollTop / maxScroll, 1);
+        
+        // 色调：从260 -> 300 (紫到紫红)
+        const newHue = baseHue + percent * hueRange;
+        body.style.background = `radial-gradient(circle at 30% 10%, hsl(${newHue}, 70%, 25%), hsl(${newHue + 40}, 80%, 12%))`;
+
+        // Logo 字重随滚动变化 (700 -> 900) 展示可变字体
+        if (logo) {
+          const weight = Math.round(700 + percent * 200); // 700~900
+          logo.style.fontWeight = weight;
+          // 稍微增强阴影
+          logo.style.textShadow = `0 0 ${6 + percent * 10}px rgba(200,160,255,0.6)`;
+        }
+
+        // 可选：卡片高亮 (in-sight类) 基于可见性由 Intersection Observer 负责，这里只做背景
+      }
+
+      feed.addEventListener('scroll', () => {
+        requestAnimationFrame(updateBackgroundAndWeight);
+      });
+      // 立即调用一次初始状态
+      updateBackgroundAndWeight();
+
+      // ---------- 2. Intersection Observer 给可见卡片加微光 (in-sight) ----------
+      const cards = document.querySelectorAll('.card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-sight');
+          } else {
+            entry.target.classList.remove('in-sight');
+          }
+        });
+      }, { threshold: 0.4, root: feed }); // 以feed为滚动根
+
+      cards.forEach(card => observer.observe(card));
+
+      // ---------- 3. 点赞切换（微交互：点击心形填充 + 数字变化）----------
+      const likeButtons = document.querySelectorAll('.like-btn');
+      likeButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const icon = btn.querySelector('i');
+          const span = btn.querySelector('span');
+          let count = parseInt(span.innerText, 10);
+          
+          // 切换 liked 类
+          if (btn.classList.contains('liked')) {
+            btn.classList.remove('liked');
+            icon.className = 'fa-regular fa-heart';  // 空心
+            span.innerText = count - 1;
+          } else {
+            btn.classList.add('liked');
+            icon.className = 'fa-solid fa-heart';   // 实心
+            span.innerText = count + 1;
+          }
+
+          // 附加微缩放动画 (用style快速实现)
+          btn.style.transform = 'scale(1.2)';
+          setTimeout(() => { btn.style.transform = ''; }, 150);
+        });
+      });
+
+      // ---------- 4. 底部导航激活切换 ----------
+      const navItems = document.querySelectorAll('.nav-item');
+      navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          navItems.forEach(nav => nav.classList.remove('active'));
+          item.classList.add('active');
+          // 简单反馈
+          item.style.transform = 'scale(0.9)';
+          setTimeout(() => item.style.transform = '', 120);
+        });
+      });
+
+      // ---------- 5. 让头像的有机曲线更明显一点 (可选: 随机微调) - 已经写在CSS中 ----------
+
+      // 额外细节：点击卡片任意位置可预览微小反馈（仅为体现交互，不加逻辑）
+      cards.forEach(c => {
+        c.addEventListener('touchstart', () => {
+          c.style.transition = 'transform 0.1s';
+          c.style.transform = 'scale(0.99)';
+        });
+        c.addEventListener('touchend', () => {
+          c.style.transform = '';
+        });
+        // 取消鼠标事件冒泡
+      });
+
+      // 确保滚动性能
+    })();
+  </script>
+
+  <!-- 注：所有交互效果均符合2026年轻量、沉浸、玻璃质感趋势 -->
+  <!-- 设计思路：液态玻璃卡片、有机曲线头像、可变字体、滚动色调叙事、点赞微交互、底部导航激活态 -->
 </body>
 </html>
