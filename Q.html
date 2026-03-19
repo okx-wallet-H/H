@@ -60,80 +60,97 @@
         /* 容器 */
         .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
 
-        /* 可折叠卡片通用样式 - 优化版 */
+        /* 可折叠卡片通用样式 - 增大尺寸，两行头部 */
         .collapse-card {
-            background: rgba(16, 34, 54, 0.8);
+            background: rgba(16, 34, 54, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(0, 160, 255, 0.3);
             border-radius: 36px;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 15px 30px -12px #000000b3, 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
             transition: all 0.2s;
         }
         .collapse-card:hover { border-color: #00bbff; transform: translateY(-2px); }
 
         .card-header {
-            padding: 1.4rem 1.4rem;
+            padding: 1.5rem 1.5rem;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            user-select: none;
+        }
+        .header-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            user-select: none;
         }
-        .card-header-left {
+        .header-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .card-header-left i {
-            font-size: 1.8rem;
+        .header-left i {
+            font-size: 2rem;
             color: #00d0ff;
-            width: 36px;
+            width: 40px;
             text-align: center;
             filter: drop-shadow(0 0 5px #00a6ff);
         }
-        .card-header-left .title {
-            font-size: 1.3rem;
+        .header-left .title {
+            font-size: 1.5rem;
             font-weight: 600;
             color: #e2f0ff;
             letter-spacing: -0.3px;
         }
-        .card-header-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        .summary-stats {
-            display: flex;
-            gap: 16px;
-            font-size: 0.9rem;
-            background: rgba(0, 40, 70, 0.5);
-            padding: 0.3rem 1rem;
-            border-radius: 40px;
-            border: 1px solid #29a5ff40;
-        }
-        .summary-stats span { font-weight: 600; color: #ffecaa; margin-left: 4px; }
         .expand-icon {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             color: #8ed0ff;
             transition: transform 0.3s;
             background: rgba(0, 100, 200, 0.3);
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
         }
+        /* 第二行：摘要数据 */
+        .summary-row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-left: 52px; /* 与图标对齐 */
+            font-size: 1rem;
+            color: #b0ecff;
+            background: rgba(0, 40, 60, 0.5);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            border: 1px solid #2d9eff40;
+        }
+        .summary-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .summary-item .label {
+            color: #a0c0ff;
+        }
+        .summary-item .value {
+            font-weight: 600;
+            color: #ffecaa;
+            font-size: 1.1rem;
+        }
+
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease-out;
-            padding: 0 1.4rem;
+            padding: 0 1.5rem;
         }
         .card-content.expanded {
-            max-height: 1500px; /* 足够展示所有内容 */
-            padding-bottom: 1.4rem;
+            max-height: 1500px;
+            padding-bottom: 1.5rem;
         }
 
         /* K线图模拟 - 美化 */
@@ -181,7 +198,7 @@
         .feed-volume { color:#7ff0b0; font-weight:600; }
         .feed-time { color:#94b4d4; font-size:0.7rem; }
 
-        /* 个人数据卡片内布局 - 优化 */
+        /* 内部数据卡片 */
         .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; margin:1rem 0; }
         .stat-card {
             background:rgba(0, 35, 65, 0.7); border:1px solid #29a5ff40;
@@ -279,7 +296,7 @@
     <div class="container">
         <!-- 未绑定状态提示 (默认隐藏) -->
         <div class="collapse-card" id="unbindPrompt" style="display: none; background:#004d80; border-color:#ffaa33;">
-            <div style="display:flex; align-items:center; gap:15px; padding:1rem;">
+            <div style="display:flex; align-items:center; gap:15px; padding:1.5rem;">
                 <i class="fas fa-link" style="font-size:2rem; color:#ffaa33;"></i>
                 <span style="flex:1;">绑定OKX钱包，立即参与活动</span>
                 <button style="background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1.2rem; border-radius:40px; cursor:pointer;" onclick="alert('唤起绑定流程')">立即绑定</button>
@@ -289,16 +306,17 @@
         <!-- 卡片1: H代币实时交易动态 -->
         <div class="collapse-card" id="cardLive">
             <div class="card-header" onclick="toggleCard('liveContent')">
-                <div class="card-header-left">
-                    <i class="fas fa-chart-line"></i>
-                    <span class="title">实时动态</span>
-                </div>
-                <div class="card-header-right">
-                    <div class="summary-stats">
-                        <span>H <span id="hPrice">0.124</span></span>
-                        <span>24h <span id="hChange" style="color:#7ff0b0;">+2.3%</span></span>
+                <div class="header-row">
+                    <div class="header-left">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="title">实时动态</span>
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="liveIcon"></i>
+                </div>
+                <div class="summary-row">
+                    <div class="summary-item"><span class="label">H</span><span class="value" id="hPrice">0.124</span></div>
+                    <div class="summary-item"><span class="label">24h</span><span class="value" id="hChange" style="color:#7ff0b0;">+2.3%</span></div>
+                    <div class="summary-item"><span class="label">量</span><span class="value">2.45M</span></div>
                 </div>
             </div>
             <div class="card-content" id="liveContent">
@@ -333,16 +351,16 @@
         <!-- 卡片2: 我的交易 -->
         <div class="collapse-card" id="cardMyTrade">
             <div class="card-header" onclick="toggleCard('myTradeContent')">
-                <div class="card-header-left">
-                    <i class="fas fa-wallet"></i>
-                    <span class="title">我的交易</span>
-                </div>
-                <div class="card-header-right">
-                    <div class="summary-stats">
-                        <span>今日 <span id="userTodaySummary">1,280</span></span>
-                        <span>累计 <span id="userTotalSummary">8,450</span></span>
+                <div class="header-row">
+                    <div class="header-left">
+                        <i class="fas fa-wallet"></i>
+                        <span class="title">我的交易</span>
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="myTradeIcon"></i>
+                </div>
+                <div class="summary-row">
+                    <div class="summary-item"><span class="label">今日</span><span class="value" id="userTodaySummary">1,280</span></div>
+                    <div class="summary-item"><span class="label">累计</span><span class="value" id="userTotalSummary">8,450</span></div>
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
@@ -388,16 +406,16 @@
         <!-- 卡片3: 我的团队 -->
         <div class="collapse-card" id="cardTeam">
             <div class="card-header" onclick="toggleCard('teamContent')">
-                <div class="card-header-left">
-                    <i class="fas fa-users"></i>
-                    <span class="title">我的团队</span>
-                </div>
-                <div class="card-header-right">
-                    <div class="summary-stats">
-                        <span>人数 <span id="teamCountSummary">23</span></span>
-                        <span>贡献 <span id="teamWeightedSummary">128.4k</span></span>
+                <div class="header-row">
+                    <div class="header-left">
+                        <i class="fas fa-users"></i>
+                        <span class="title">我的团队</span>
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="teamIcon"></i>
+                </div>
+                <div class="summary-row">
+                    <div class="summary-item"><span class="label">人数</span><span class="value" id="teamCountSummary">23</span></div>
+                    <div class="summary-item"><span class="label">贡献</span><span class="value" id="teamWeightedSummary">128.4k</span></div>
                 </div>
             </div>
             <div class="card-content" id="teamContent">
@@ -457,11 +475,15 @@
         <!-- 底部折叠规则卡片 -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
-                <div class="card-header-left">
-                    <i class="fas fa-file-alt"></i>
-                    <span class="title">活动规则</span>
+                <div class="header-row">
+                    <div class="header-left">
+                        <i class="fas fa-file-alt"></i>
+                        <span class="title">活动规则</span>
+                    </div>
+                    <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
                 </div>
-                <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
+                <!-- 规则卡片没有摘要行，可留空 -->
+                <div class="summary-row" style="visibility: hidden; height: 1px; padding: 0; margin:0;"></div>
             </div>
             <div class="card-content" id="ruleContent">
                 <div style="padding:0.5rem 0;">
@@ -531,8 +553,8 @@
         function toggleCard(contentId) {
             const content = document.getElementById(contentId);
             const icon = document.getElementById(contentId.replace('Content', 'Icon')) || 
-                        document.querySelector(`#${contentId}Icon`) || 
-                        document.querySelector(`#${contentId.replace('Content','')}Icon`);
+                        document.getElementById(contentId + 'Icon') || 
+                        document.getElementById(contentId.replace('Content','') + 'Icon');
             if (content.classList.contains('expanded')) {
                 content.classList.remove('expanded');
                 if (icon) icon.style.transform = 'rotate(0deg)';
