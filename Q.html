@@ -3,33 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>稳重·冷翠 · 社区设计系统</title>
-  <!-- 字体：Inter 可变 + Crimson Pro 衬线 (保持不变) -->
+  <title>白底稳重 · 社区设计系统</title>
+  <!-- 字体：Inter 可变 + Crimson Pro 衬线 -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap">
   <!-- Font Awesome 6 图标库 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ---------- 设计令牌 · 冷翠自然 ---------- */
+    /* ---------- 设计令牌 · 白底深蓝灰 ---------- */
     :root {
-      /* 全新色彩：鼠尾草绿 + 暖灰基底 */
-      --bg-base: #f4f6f0;        /* 柔白带绿调 */
-      --bg-surface: #fffffff2;    /* 半透白 */
-      --bg-glass: rgba(255, 255, 255, 0.7);
-      --border-light: rgba(90, 100, 80, 0.1);
-      --border-medium: rgba(90, 100, 80, 0.2);
+      /* 纯白基底，深蓝灰主色 */
+      --bg-base: #ffffff;           /* 纯白背景 */
+      --bg-surface: #ffffff;        /* 表面纯白 */
+      --bg-glass: rgba(255, 255, 255, 0.8);
+      --border-light: #eaeef2;      /* 浅灰蓝边框 */
+      --border-medium: #d0d9e0;
       
-      --text-primary: #2c3a2b;    /* 深绿灰 */
-      --text-secondary: #5f6b5a;
-      --text-tertiary: #899283;
+      --text-primary: #1e2b3c;      /* 深蓝灰 */
+      --text-secondary: #4a5a6e;
+      --text-tertiary: #7b8b9f;
       
-      --accent-100: #e4ead9;      /* 浅鼠尾草 */
-      --accent-300: #c2d0b0;
-      --accent-500: #8c9a7d;      /* 主色：鼠尾草绿 */
-      --accent-700: #5f6b53;
+      --accent-100: #e9edf2;        /* 极浅灰蓝 */
+      --accent-300: #b8c5d4;
+      --accent-500: #2c3e50;        /* 主色：深蓝灰，稳重 */
+      --accent-700: #1a2a38;
       
-      --success: #3a7b5c;
-      --warning: #b58a5a;
-      --danger: #c96b6b;
+      --success: #2c7a5a;
+      --warning: #b85e3a;
+      --danger: #c24b4b;
       
       /* 以下保持不变 (字体家族、尺寸、间距、圆角、阴影、过渡) */
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -69,11 +69,11 @@
       --radius-xl: 1.75rem;
       --radius-full: 9999px;
       
-      --shadow-sm: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
-      --shadow-md: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
-      --shadow-lg: 0 20px 30px -10px rgba(0,0,0,0.08), 0 8px 15px rgba(0,0,0,0.03);
-      --shadow-xl: 0 30px 40px -15px rgba(0,0,0,0.1);
-      --shadow-glass: 0 10px 30px -10px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.6);
+      --shadow-sm: 0 2px 6px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.02);
+      --shadow-md: 0 8px 20px rgba(0,0,0,0.02), 0 2px 6px rgba(0,0,0,0.05);
+      --shadow-lg: 0 20px 30px -10px rgba(0,0,0,0.05), 0 8px 15px rgba(0,0,0,0.03);
+      --shadow-xl: 0 30px 40px -15px rgba(0,0,0,0.08);
+      --shadow-glass: 0 10px 30px -10px rgba(0,0,0,0.02), inset 0 1px 1px rgba(255,255,255,0.8);
       
       --transition-fast: 200ms ease;
       --transition-base: 300ms cubic-bezier(0.2, 0, 0, 1);
@@ -241,7 +241,7 @@
     .avatar {
       width: 48px;
       height: 48px;
-      border-radius: var(--radius-lg);  /* 有机方形 */
+      border-radius: var(--radius-lg);
       background: var(--accent-300);
       display: flex;
       align-items: center;
@@ -275,7 +275,7 @@
 
     /* 数据卡片 */
     .data-card {
-      background: linear-gradient(145deg, #ffffff, #f9fbf5);
+      background: #ffffff;
       border-radius: var(--radius-lg);
       padding: var(--space-5);
       text-align: center;
@@ -353,7 +353,7 @@
       border: 1px solid var(--border-light);
     }
     .badge-success {
-      background: #e0f0e8;
+      background: #e3f2ed;
       color: var(--success);
     }
 
@@ -467,14 +467,15 @@
       overflow: hidden;
       background: white;
       box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border-light);
     }
   </style>
 </head>
 <body>
 <div class="container">
   <div class="ds-header">
-    <h1>稳重 · 冷翠自然 · 社区设计系统</h1>
-    <p>鼠尾草绿 · 暖灰基底 · 清新沉稳</p>
+    <h1>白底稳重 · 社区设计系统</h1>
+    <p>纯白基底 · 深蓝灰主色 · 干净耐看</p>
   </div>
 
   <div class="ds-layout">
@@ -494,14 +495,14 @@
     <div class="ds-content">
       <!-- 色彩 -->
       <section id="colors" class="section-card">
-        <h2 class="section-title">色彩系统 · 冷翠</h2>
+        <h2 class="section-title">色彩系统 · 白底深蓝灰</h2>
         <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-          <div style="width: 100px; height: 100px; background: var(--accent-500); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white; font-weight: 500;">主色 8c9a7d</div>
-          <div style="width: 100px; height: 100px; background: var(--accent-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: var(--text-primary);">辅色 e4ead9</div>
-          <div style="width: 100px; height: 100px; background: var(--text-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">文字 2c3a2b</div>
+          <div style="width: 100px; height: 100px; background: var(--accent-500); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white; font-weight: 500;">主色 2c3e50</div>
+          <div style="width: 100px; height: 100px; background: var(--accent-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: var(--text-primary);">辅色 e9edf2</div>
+          <div style="width: 100px; height: 100px; background: var(--text-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">文字 1e2b3c</div>
           <div style="width: 100px; height: 100px; background: var(--text-secondary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">辅助文字</div>
         </div>
-        <p class="text-secondary" style="margin-top: 1rem;">主色鼠尾草绿，清新自然；搭配暖白，稳重大方</p>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">纯白背景，深蓝灰主色，干净稳重，层次分明</p>
       </section>
 
       <!-- 字体 -->
@@ -510,7 +511,7 @@
         <div class="font-demo">
           <div class="font-row">
             <span class="font-tag">衬线标题 Crimson Pro</span>
-            <span style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--accent-700);">冷翠社区</span>
+            <span style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--accent-700);">稳重大道</span>
           </div>
           <div class="font-row">
             <span class="font-tag">正文 Inter Regular</span>
@@ -522,7 +523,7 @@
           </div>
           <div class="font-row">
             <span class="font-tag">引用/说明</span>
-            <span style="font-family: var(--font-serif); font-style: italic;">— 清新不失温度</span>
+            <span style="font-family: var(--font-serif); font-style: italic;">— 干净、耐看</span>
           </div>
         </div>
       </section>
@@ -648,14 +649,14 @@
       <section class="section-card" style="background: var(--accent-100);">
         <h2 class="section-title" style="border-left-color: var(--accent-700);">快速成型指南</h2>
         <p style="margin-bottom: 1rem;">所有样式基于 CSS 变量，可一键替换主题。推荐搭配 <strong>Radix UI / Shadcn UI</strong> 使用，组件行为由库保证，样式用这套令牌覆盖。</p>
-        <pre style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: var(--radius-lg);">:root {<br>  --accent-500: #8c9a7d;<br>  --font-serif: 'Crimson Pro', serif;<br>  ...<br>}</pre>
+        <pre style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: var(--radius-lg);">:root {<br>  --accent-500: #2c3e50;<br>  --font-serif: 'Crimson Pro', serif;<br>  ...<br>}</pre>
       </section>
     </div>
   </div>
 
   <!-- 手机预览框（模拟实际效果） -->
   <div style="margin-top: 4rem;">
-    <h2 class="section-title" style="text-align: center;">📱 移动端预览 · 冷翠风格</h2>
+    <h2 class="section-title" style="text-align: center;">📱 移动端预览 · 白底深蓝灰</h2>
     <div class="phone-frame">
       <div style="padding: 1rem 1rem 0.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; font-size: 0.75rem;">
         <span>9:41</span><span><i class="fa-regular fa-signal"></i> 5G</span>
