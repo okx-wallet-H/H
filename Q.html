@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>链上赚币 · 简洁蓝调</title>
+    <title>链上赚币 · 黑白极简</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: #F5F9FF;  /* 非常浅的蓝白背景 */
+            background: #FFFFFF;  /* 纯白背景 */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -21,19 +21,19 @@
             padding: 1rem;
         }
 
-        /* 主卡片——纯白背景，柔和蓝调边框，干净阴影 */
+        /* 主卡片——纯白背景，极细灰边框，柔和阴影 */
         .stake-card {
             max-width: 780px;
             width: 100%;
             background: #FFFFFF;
             border-radius: 40px;
-            box-shadow: 0 20px 40px -12px rgba(0, 80, 160, 0.15), 0 0 0 1px rgba(0, 112, 243, 0.1) inset;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
             padding: 2rem 1.8rem;
-            color: #1A2B3C;
+            color: #1E1E1E;
             transition: all 0.2s;
         }
 
-        /* 动态标题区：蓝色大字 + 流动线条改为蓝色系 */
+        /* 动态标题区：黑色大字 + 灰色流动线条 */
         .dynamic-header {
             position: relative;
             text-align: center;
@@ -45,30 +45,30 @@
             font-size: 3.4rem;
             font-weight: 700;
             letter-spacing: 4px;
-            color: #0066CC;          /* 主蓝色 */
-            text-shadow: 0 2px 8px rgba(0, 102, 204, 0.15);
-            animation: softPulse 2.8s infinite ease-in-out;
+            color: #000000;          /* 纯黑 */
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            animation: softPulseBlack 2.8s infinite ease-in-out;
             margin-bottom: 0.2rem;
             position: relative;
             z-index: 5;
         }
 
-        @keyframes softPulse {
-            0% { opacity: 1; text-shadow: 0 2px 8px rgba(0, 102, 204, 0.1); }
-            50% { opacity: 0.95; text-shadow: 0 4px 16px rgba(0, 102, 204, 0.3); }
-            100% { opacity: 1; text-shadow: 0 2px 8px rgba(0, 102, 204, 0.1); }
+        @keyframes softPulseBlack {
+            0% { opacity: 1; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); }
+            50% { opacity: 0.96; text-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
+            100% { opacity: 1; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.03); }
         }
 
-        /* 三条流动线条——蓝色渐变流线，更轻盈 */
+        /* 三条流动线条——灰色渐变 */
         .flow-line {
             position: absolute;
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, #4D9EFF, #0066CC, #4D9EFF, transparent);
+            background: linear-gradient(90deg, transparent, #AAAAAA, #333333, #AAAAAA, transparent);
             background-size: 200% 100%;
             animation: flowHorizontal 4s infinite linear;
-            opacity: 0.45;
+            opacity: 0.3;
             filter: blur(0.3px);
         }
 
@@ -84,7 +84,7 @@
             animation-delay: 0.7s;
             width: 95%;
             margin-left: 2.5%;
-            background: linear-gradient(90deg, transparent, #6AAEFF, #1E7AE0, #6AAEFF, transparent);
+            background: linear-gradient(90deg, transparent, #999999, #3F3F3F, #999999, transparent);
         }
         .line-bottom {
             bottom: 0;
@@ -100,7 +100,7 @@
 
         .header-sub {
             font-size: 0.9rem;
-            color: #5A6F88;
+            color: #666666;
             letter-spacing: 1.5px;
             margin-top: 0.5rem;
             display: flex;
@@ -109,11 +109,11 @@
             gap: 0.6rem;
         }
         .header-sub span {
-            color: #0066CC;
+            color: #000000;
             font-weight: 500;
         }
 
-        /* 四象限数据卡片：浅蓝灰背景，柔和边框 */
+        /* 四象限数据卡片：浅灰背景，灰边框 */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -122,21 +122,21 @@
         }
 
         .stat-item {
-            background: #F8FAFE;
-            border: 1px solid #E1ECFF;
+            background: #F9F9F9;
+            border: 1px solid #E8E8E8;
             border-radius: 28px;
             padding: 1.4rem 1.2rem;
-            box-shadow: 0 6px 14px -8px rgba(0, 60, 120, 0.12);
+            box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.08);
             transition: 0.2s;
         }
         .stat-item:hover {
-            border-color: #99C2FF;
-            box-shadow: 0 8px 18px -8px rgba(0, 102, 204, 0.2);
+            border-color: #B0B0B0;
+            box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.15);
         }
 
         .stat-label {
             font-size: 0.9rem;
-            color: #4F658D;
+            color: #555555;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -145,33 +145,33 @@
         .stat-value {
             font-size: 2.2rem;
             font-weight: 700;
-            color: #003E7E;
+            color: #000000;
             line-height: 1.2;
         }
         .stat-sub {
             font-size: 0.85rem;
-            color: #6A7F9E;
+            color: #777777;
             margin-left: 4px;
         }
 
-        .badge-blue {
-            background: #E6F0FF;
+        .badge-gray {
+            background: #EEEEEE;
             border-radius: 40px;
             padding: 0.2rem 0.8rem;
             font-size: 0.8rem;
-            color: #0066CC;
-            border: 0.5px solid #B8D3FF;
+            color: #333333;
+            border: 0.5px solid #CCCCCC;
             display: inline-block;
         }
 
-        /* 立即领取按钮——蓝色渐变，简洁有力 */
+        /* 立即领取按钮——黑色风格 */
         .claim-row {
             display: flex;
             justify-content: flex-end;
             margin: 0.6rem 0 1.8rem 0;
         }
         .btn-claim {
-            background: linear-gradient(145deg, #0066CC, #004999);
+            background: #000000;
             border: none;
             border-radius: 60px;
             padding: 0.8rem 3rem;
@@ -179,30 +179,30 @@
             font-weight: 600;
             font-size: 1.4rem;
             letter-spacing: 1px;
-            box-shadow: 0 10px 20px -8px #004C99;
+            box-shadow: 0 10px 20px -8px #333333;
             transition: all 0.15s;
             cursor: default;
-            border: 1px solid #86B9FF;
+            border: 1px solid #333333;
             text-transform: uppercase;
         }
 
         /* 质押操作区 */
         .stake-section {
-            background: #F8FCFF;
+            background: #FCFCFC;
             border-radius: 36px;
             padding: 1.8rem 1.5rem;
-            border: 1px solid #DBEBFF;
+            border: 1px solid #E0E0E0;
             margin-bottom: 2rem;
         }
 
         .section-title {
             font-size: 1.1rem;
-            color: #00397A;
+            color: #1E1E1E;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 6px;
-            border-left: 4px solid #0066CC;
+            border-left: 4px solid #000000;
             padding-left: 0.8rem;
             font-weight: 600;
         }
@@ -216,10 +216,10 @@
         .h-balance-bold span:first-child {
             font-size: 2.3rem;
             font-weight: 700;
-            color: #003E7E;
+            color: #000000;
         }
         .h-balance-bold span:last-child {
-            color: #557DA5;
+            color: #6F6F6F;
         }
 
         .stake-input-group {
@@ -232,59 +232,59 @@
         .stake-input {
             flex: 2 1 250px;
             background: #FFFFFF;
-            border: 1.5px solid #C2D9FF;
+            border: 1.5px solid #DDDDDD;
             border-radius: 48px;
             padding: 1.2rem 1.8rem;
             font-size: 1.4rem;
             font-weight: 500;
-            color: #003366;
+            color: #1E1E1E;
             outline: none;
             transition: 0.2s;
         }
         .stake-input:focus {
-            border-color: #0066CC;
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            border-color: #000000;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.03);
         }
         .stake-input::placeholder {
-            color: #A6B9D0;
+            color: #AAAAAA;
             font-weight: 400;
             font-size: 1rem;
         }
         .btn-stake {
             flex: 1 0 140px;
             background: white;
-            border: 2px solid #0066CC;
+            border: 2px solid #000000;
             border-radius: 60px;
             padding: 1.1rem 1rem;
             font-weight: 600;
             font-size: 1.5rem;
-            color: #0066CC;
+            color: #000000;
             cursor: default;
             transition: 0.15s;
             text-align: center;
         }
         .btn-stake:hover {
-            background: #EBF3FF;
+            background: #F2F2F2;
         }
 
         .info-note {
             display: flex;
             justify-content: space-between;
-            color: #4F658A;
+            color: #5F5F5F;
             font-size: 0.95rem;
             padding: 0 0.2rem;
         }
-        .bold-blue {
-            color: #0066CC;
+        .bold-black {
+            color: #000000;
             font-weight: 700;
         }
 
-        /* 智能阶梯收益规则——浅蓝卡片网格 */
+        /* 智能阶梯收益规则——浅灰网格 */
         .rule-panel {
-            background: #F2F8FF;
+            background: #F8F8F8;
             border-radius: 32px;
             padding: 1.5rem 1.5rem;
-            border: 1px solid #CDE2FF;
+            border: 1px solid #DDDDDD;
             margin-bottom: 2.2rem;
         }
         .rule-header {
@@ -292,7 +292,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.2rem;
-            color: #003E7E;
+            color: #222222;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -308,11 +308,11 @@
             border-radius: 20px;
             padding: 0.9rem 0.7rem;
             text-align: center;
-            border: 1px solid #C4D9FF;
-            box-shadow: 0 4px 6px -4px rgba(0, 70, 150, 0.1);
+            border: 1px solid #D6D6D6;
+            box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.05);
         }
         .days {
-            color: #1E5A9B;
+            color: #3B3B3B;
             font-weight: 600;
             font-size: 1rem;
             margin-bottom: 6px;
@@ -320,18 +320,18 @@
         .rate {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #004C99;
+            color: #000000;
             line-height: 1.2;
         }
         .rate small {
             font-size: 0.8rem;
-            color: #5D79A6;
+            color: #6F6F6F;
         }
         .extra-note {
             margin-top: 1rem;
             font-size: 0.8rem;
-            color: #4A6D94;
-            border-top: 1px dashed #B8D1FF;
+            color: #555555;
+            border-top: 1px dashed #CCCCCC;
             padding-top: 0.8rem;
             display: flex;
             flex-wrap: wrap;
@@ -339,23 +339,23 @@
             justify-content: center;
         }
         .extra-note span i {
-            color: #0066CC;
+            color: #000000;
             font-style: normal;
             font-weight: 500;
         }
 
-        /* 账单动态——清爽列表 */
+        /* 账单动态——黑白列表 */
         .billboard {
-            background: #F5FAFF;
+            background: #FBFBFB;
             border-radius: 30px;
             padding: 1.4rem 1.2rem;
-            border: 1px solid #D0E4FF;
+            border: 1px solid #E2E2E2;
         }
         .bill-title {
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #004080;
+            color: #1F1F1F;
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 1.2rem;
@@ -373,10 +373,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #D3E5FF;
+            border: 1px solid #E0E0E0;
             font-size: 0.95rem;
             flex-wrap: wrap;
-            box-shadow: 0 2px 6px -4px #B0C8F0;
+            box-shadow: 0 2px 6px -4px #BDBDBD;
         }
         .bill-left {
             display: flex;
@@ -384,37 +384,37 @@
             align-items: center;
         }
         .bill-type {
-            background: #E1EDFF;
+            background: #F0F0F0;
             border-radius: 40px;
             padding: 0.2rem 0.8rem;
-            color: #004C99;
-            border: 0.5px solid #9FC0FF;
+            color: #2D2D2D;
+            border: 0.5px solid #C0C0C0;
         }
         .bill-desc {
-            color: #2D4B75;
+            color: #4A4A4A;
         }
         .bill-amount {
             font-weight: 600;
-            color: #003E7E;
+            color: #000000;
         }
         .bill-time {
-            color: #6682A5;
+            color: #7A7A7A;
             font-size: 0.8rem;
         }
 
         hr {
-            border: 0.5px solid #CDDEFF;
+            border: 0.5px solid #E8E8E8;
             margin: 1rem 0;
         }
 
         /* 点缀小元素 */
-        .dot-blue {
+        .dot-black {
             width: 8px;
             height: 8px;
-            background: #0066CC;
+            background: #000000;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 4px #7CB2FF;
+            box-shadow: 0 0 4px #888888;
             margin-right: 4px;
         }
 
@@ -431,14 +431,14 @@
 <body>
     <div class="stake-card">
 
-        <!-- 动态标题：蓝色大字 + 蓝色流动线条 -->
+        <!-- 动态标题：黑色大字 + 灰色流动线条 -->
         <div class="dynamic-header">
             <div class="flow-line line-top"></div>
             <div class="flow-line line-middle"></div>
             <div class="flow-line line-bottom"></div>
             <h1 class="main-title">链上赚币</h1>
             <div class="header-sub">
-                <span class="dot-blue"></span> 简洁 · 高效 · 透明 <span class="dot-blue"></span>
+                <span class="dot-black"></span> 简洁 · 高效 · 透明 <span class="dot-black"></span>
             </div>
         </div>
 
@@ -447,26 +447,26 @@
             <div class="stat-item">
                 <div class="stat-label">📊 总锁仓价值 (TVL)</div>
                 <div class="stat-value">$6,284,192 <span class="stat-sub">USD</span></div>
-                <div style="margin-top: 0.3rem;"><span class="badge-blue">≈ 12.47M H</span></div>
+                <div style="margin-top: 0.3rem;"><span class="badge-gray">≈ 12.47M H</span></div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">✅ 已领取收益 (U)</div>
                 <div class="stat-value">2,485.32 <span class="stat-sub">U</span></div>
-                <div style="color: #4F658A;">终身累计</div>
+                <div style="color: #6F6F6F;">终身累计</div>
             </div>
             <div class="stat-item">
                 <div class="stat-label">⏳ 待领取收益 (U)</div>
                 <div class="stat-value">1,208.75 <span class="stat-sub">U</span></div>
-                <div style="color: #557DA5;">截止今日20:00</div>
+                <div style="color: #6F6F6F;">截止今日20:00</div>
             </div>
             <div class="stat-item" style="display: flex; flex-direction: column; justify-content: center;">
                 <div class="stat-label">📅 下一笔发放</div>
                 <div class="stat-value" style="font-size: 1.6rem;">≈ 16.42 U</div>
-                <div class="badge-blue" style="align-self: flex-start;">今日20:00</div>
+                <div class="badge-gray" style="align-self: flex-start;">今日20:00</div>
             </div>
         </div>
 
-        <!-- 立即领取按钮（蓝色） -->
+        <!-- 立即领取按钮（黑色） -->
         <div class="claim-row">
             <button class="btn-claim" disabled="disabled" style="cursor: not-allowed; opacity:0.9;">立即领取</button>
         </div>
@@ -487,16 +487,16 @@
             </div>
 
             <div class="info-note">
-                <span>🪙 当前可质押 <span class="bold-blue">12,945.33 H</span></span>
+                <span>🪙 当前可质押 <span class="bold-black">12,945.33 H</span></span>
                 <span>⚖️ 钱包余额: 13,020.15 H</span>
             </div>
         </div>
 
-        <!-- 智能阶梯收益规则（蓝色调表格） -->
+        <!-- 智能阶梯收益规则（黑白表格） -->
         <div class="rule-panel">
             <div class="rule-header">
                 <span>📊 智能阶梯收益规则（每日20:00发U）</span>
-                <span class="badge-blue">随存随取</span>
+                <span class="badge-gray">随存随取</span>
             </div>
             <div class="rule-grid">
                 <div class="rule-item"><div class="days">1–7 天</div><div class="rate">0.5% <small>/日</small></div></div>
@@ -515,7 +515,7 @@
         <div class="billboard">
             <div class="bill-title">
                 <span>📋 账单动态</span>
-                <span style="font-size: 0.8rem; background:#E1EDFF; padding:0.2rem 0.9rem; border-radius:30px; color:#004080;">最新10条</span>
+                <span style="font-size: 0.8rem; background:#F0F0F0; padding:0.2rem 0.9rem; border-radius:30px; color:#2D2D2D;">最新10条</span>
             </div>
             <div class="bill-list">
                 <div class="bill-item">
@@ -545,11 +545,11 @@
                 </div>
             </div>
             <hr>
-            <div style="color:#6682B0; font-size:0.85rem; text-align:center;">⚡ 更多记录请前往个人中心 ⚡</div>
+            <div style="color:#7F7F7F; font-size:0.85rem; text-align:center;">⚡ 更多记录请前往个人中心 ⚡</div>
         </div>
 
-        <!-- 底部快捷提示，改为蓝色风格 -->
-        <div style="display:flex; gap:0.8rem; justify-content:flex-end; margin-top:1.2rem; font-size:0.75rem; color:#6A86AC;">
+        <!-- 底部快捷提示，灰色调 -->
+        <div style="display:flex; gap:0.8rem; justify-content:flex-end; margin-top:1.2rem; font-size:0.75rem; color:#888888;">
             <span>⏳ 收益计算器</span>
             <span>🔍 质押记录</span>
             <span>🔄 模拟策略</span>
