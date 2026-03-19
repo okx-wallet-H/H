@@ -14,7 +14,7 @@
             font-family: 'Inter', sans-serif;
             background: #ffffff;
             color: #1e1e2f;
-            line-height: 1.6;          /* 增加行高 */
+            line-height: 1.6;
             letter-spacing: 0.02em;
             min-height: 100vh;
             padding: 0;
@@ -22,7 +22,7 @@
 
         .hero {
             background: linear-gradient(145deg, #f4f0ff, #e9e2ff);
-            padding: 2.5rem 1.5rem 1.8rem 1.5rem;  /* 微调顶部内边距 */
+            padding: 2.5rem 1.5rem 1.8rem 1.5rem;
             border-bottom: 1px solid #d0c4ff;
             box-shadow: 0 4px 12px rgba(106, 66, 255, 0.08);
         }
@@ -52,11 +52,11 @@
         .action-bar {
             display: flex;
             gap: 12px;
-            margin: 1.5rem 0 1rem 0;   /* 增加上方间距 */
+            margin: 1.5rem 0 1rem 0;
         }
         .action-btn {
             flex: 1;
-            padding: 1rem 0;            /* 增加按钮高度 */
+            padding: 1rem 0;
             border-radius: 40px;
             font-weight: 600;
             font-size: 1rem;
@@ -88,8 +88,8 @@
 
         .collapse-card {
             background: #ffffff;
-            border-radius: 32px;         /* 圆角略大 */
-            margin-bottom: 1.8rem;        /* 卡片间距增加 */
+            border-radius: 32px;
+            margin-bottom: 1.8rem;
             box-shadow: 0 8px 20px rgba(106, 66, 255, 0.1);
             border: 1px solid #e5dcff;
             transition: all 0.2s;
@@ -102,7 +102,7 @@
         .card-first { margin-top: 0.8rem; }
 
         .card-header {
-            padding: 1.4rem 1.2rem;       /* 增加内边距 */
+            padding: 1.4rem 1.2rem;
             cursor: pointer;
             display: flex;
             flex-direction: column;
@@ -120,13 +120,13 @@
             gap: 12px;
         }
         .header-left i {
-            font-size: 2rem;               /* 图标略大 */
+            font-size: 2rem;
             color: #6b4eff;
             width: 40px;
             text-align: center;
         }
         .header-left .title {
-            font-size: 1.5rem;              /* 标题略大 */
+            font-size: 1.5rem;
             font-weight: 500;
             color: #2a1f4d;
             letter-spacing: -0.02em;
@@ -149,14 +149,14 @@
             flex-wrap: wrap;
             align-items: center;
             gap: 16px 24px;
-            margin-left: 52px;               /* 与图标对齐 */
+            margin-left: 52px;
             font-size: 1rem;
             color: #4a3a8c;
             background: #f9f6ff;
-            padding: 0.8rem 1.2rem;          /* 内边距增加 */
+            padding: 0.8rem 1.2rem;
             border-radius: 30px;
             border: 1px solid #e0d6ff;
-            min-height: 3.6rem;               /* 高度统一 */
+            min-height: 3.6rem;
         }
         .summary-item {
             display: flex;
@@ -170,7 +170,7 @@
         .summary-item .value {
             font-weight: 600;
             color: #6b4eff;
-            font-size: 1.2rem;                 /* 数值略大 */
+            font-size: 1.2rem;
         }
 
         .card-content {
@@ -181,7 +181,7 @@
         }
         .card-content.expanded {
             max-height: 1500px;
-            padding-bottom: 1.4rem;              /* 底部内边距增加 */
+            padding-bottom: 1.4rem;
         }
 
         /* K线图 */
@@ -327,7 +327,7 @@
         .member-info { display:flex; align-items:center; gap:10px; }
         .member-level { background:#e0d6ff; border-radius:20px; padding:0.2rem 1rem; font-size:0.75rem; font-weight:500; color:#4a3a8c; }
 
-        /* 团队奖励卡片 (去掉重复的贡献值显示) */
+        /* 团队奖励卡片 */
         .team-reward-card {
             background:#f2edff; border-radius:28px; padding:1.4rem; margin:1.2rem 0;
             border:2px dashed #b3a0ff; text-align:center;
@@ -340,7 +340,7 @@
             color:#4a3a8c;
         }
 
-        /* 表格样式 - 高端简约 */
+        /* 表格样式 */
         .rules-table {
             width: 100%;
             border-collapse: collapse;
@@ -378,8 +378,8 @@
                 <span>Boost</span>
             </div>
             <div class="title-main">
-                <h1>团队助力计划</h1>
-                <p>邀请好友，团队交易额外奖励</p>
+                <h1>okx Boost 收益计划</h1>
+                <p>海豚创新社区协同策略，助力资产双向增值</p>
             </div>
         </div>
     </div>
@@ -535,8 +535,8 @@
                         <div class="progress-bar-fill" id="teamProgress" style="width:100%"></div>
                     </div>
                     <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#8a7ab3;">
-                        <span id="teamTierDisplay">当前档位: 100,000 USDT (1%)</span>
-                        <span id="teamProgressText">已达标</span>
+                        <span id="teamTierDisplay">当前档位: 100,000 USDT (0.8%)</span>
+                        <span id="teamProgressText">进度 100%</span>
                     </div>
                 </div>
 
@@ -567,18 +567,17 @@
                 <div class="member-list" id="memberList"></div>
                 <button class="action-btn action-btn-secondary" style="width:100%; margin:0.5rem 0;" onclick="toggleMembers()">查看全部成员</button>
 
-                <!-- 团队奖励卡片 - 已移除重复的贡献值显示 -->
                 <div class="team-reward-card">
                     <div style="font-size:0.95rem; color:#6f5ea0; margin-bottom:0.3rem;">⚡ 当前团队奖励</div>
                     <div class="team-reward-amount" id="teamReward">1,284 H</div>
-                    <div style="font-size:0.75rem; color:#8a7ab3;">已达成100,000 USDT档位，获得1% H代币奖励</div>
+                    <div style="font-size:0.75rem; color:#8a7ab3;">已达成100,000 USDT档位，获得0.8% H代币奖励</div>
                 </div>
 
                 <button class="action-btn action-btn-primary" style="width:100%;" onclick="alert('复制邀请链接')"><i class="fas fa-link"></i> 邀请好友加入舰队</button>
             </div>
         </div>
 
-        <!-- 卡片4: 活动规则 (表格形式) -->
+        <!-- 卡片4: 活动规则 (表格形式，包含更新后的发放时间) -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
                 <div class="header-row">
@@ -615,13 +614,16 @@
                     </table>
 
                     <h4 style="color:#6b4eff; margin:2rem 0 0.5rem;">⏱️ 自动发放</h4>
-                    <p style="font-size:0.9rem; color:#4a3a8c;">每月10日、20日、30日快照，自动发放至绑定的OKX钱包。</p>
+                    <p style="font-size:0.9rem; color:#4a3a8c;">
+                        • 个人奖励：每月10日、20日、30日 20:00 发放，按发放时H价格折算为U。<br>
+                        • 团队奖励：每月15日、30日 20:00 发放，按发放时H价格折算为U。
+                    </p>
                 </div>
             </div>
         </div>
 
         <div class="footer-note">
-            <i class="fas fa-dolphin"></i> 海豚社区 · 每月10/20/30日自动发放奖励
+            <i class="fas fa-dolphin"></i> 海豚社区 · 每月10/20/30日个人发放 / 每月15/30日团队发放
         </div>
     </div>
 
@@ -744,7 +746,6 @@
                 teamReward = userData.team.weightedVolume * 0.008;
                 teamTierText = '当前档位: 100,000 USDT (0.8%)';
                 teamProgressPercent = (userData.team.weightedVolume / 100000) * 100;
-                if (teamProgressPercent > 100) teamProgressPercent = 100;
                 teamStatusText = `进度 ${teamProgressPercent.toFixed(1)}%`;
             } else if (userData.team.weightedVolume >= 50000) {
                 teamReward = userData.team.weightedVolume * 0.005;
