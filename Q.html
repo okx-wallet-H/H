@@ -183,90 +183,83 @@
             padding-bottom: 1.2rem;
         }
 
-        /* K线图 */
-        .kline-container {
+        /* 优化后的K线图 */
+        .candlestick-container {
             background: #f9f6ff;
             border-radius: 24px;
             padding: 1rem;
             margin: 0.5rem 0 1.2rem;
             border: 1px solid #e0d6ff;
         }
-        .kline-title {
+        .chart-header {
             display: flex; justify-content: space-between; font-size:0.85rem; color:#6f5ea0; margin-bottom:0.8rem;
         }
-        .kline-bars {
-            display: flex; align-items: flex-end; justify-content: space-between; height: 80px; gap: 4px;
+        .chart-grid {
+            display: flex; align-items: flex-end; justify-content: space-between; height: 120px; margin: 10px 0;
+            position: relative;
         }
-        .kline-bar {
-            flex:1; background: #6b4eff; border-radius: 6px 6px 0 0; height: calc(100% * var(--h)); min-height:4px;
+        .chart-grid::before {
+            content: '';
+            position: absolute;
+            left: 0; right: 0; top: 50%; height: 1px; background: #e0d6ff; z-index: 0;
         }
-        .kline-bar.red { background: #ff6b8b; }
-
-        .live-feed { margin:0.8rem 0; }
-        .feed-header { color:#6f5ea0; font-weight:500; margin-bottom:0.5rem; }
-        .feed-list { list-style:none; }
-        .feed-item {
-            display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0;
-            border-bottom:1px solid #eee5ff; font-size:0.95rem;
+        .candle {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; position: relative; min-width: 8px;
         }
-        .feed-item:last-child { border-bottom:none; }
-        .feed-address { font-family:monospace; background:#f2edff; padding:0.2rem 1rem; border-radius:30px; color:#4a3a8c; }
-        .feed-volume { color:#6b4eff; font-weight:600; }
-        .feed-time { color:#a394cc; font-size:0.7rem; }
-
-        /* 日历模块 */
-        .calendar-container {
-            background: #f9f6ff;
-            border-radius: 24px;
-            padding: 1rem;
-            margin: 0.5rem 0 1.2rem;
-            border: 1px solid #e0d6ff;
-        }
-        .calendar-header {
-            display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;
-        }
-        .calendar-header span { color:#6f5ea0; font-weight:500; }
-        .calendar-grid {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
-        }
-        .weekday {
-            text-align: center; color:#8a7ab3; font-size:0.7rem; padding:0.2rem 0;
-        }
-        .calendar-day {
-            aspect-ratio:1; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-            font-size:0.75rem; color:#4a3a8c; background: #e0d6ff; transition:0.1s;
-        }
-        .calendar-day.high { background: #6b4eff; color:white; }
-        .calendar-day.medium { background: #b3a0ff; color:white; }
-        .calendar-day.low { background: #d0c0ff; color:#4a3a8c; }
-        .calendar-legend {
-            display: flex; justify-content: flex-end; gap: 12px; margin-top: 0.5rem; font-size:0.7rem; color:#8a7ab3;
-        }
-        .legend-item { display: flex; align-items: center; gap:4px; }
-        .legend-color { width:12px; height:12px; border-radius:4px; }
-
-        /* 迷你趋势图（团队近7日） */
-        .trend-container {
-            background: #f9f6ff;
-            border-radius: 24px;
-            padding: 1rem;
-            margin: 1.2rem 0;
-            border: 1px solid #e0d6ff;
-        }
-        .trend-header {
-            display: flex; justify-content: space-between; margin-bottom: 0.8rem;
-            color:#6f5ea0; font-weight:500;
-        }
-        .trend-bars {
-            display: flex; align-items: flex-end; justify-content: space-between; height: 60px; gap: 6px;
-        }
-        .trend-bar {
-            flex:1; background: #6b4eff; border-radius: 6px 6px 0 0; height: calc(100% * var(--h)); min-height:4px;
+        .candle-body {
+            width: 70%; background: #6b4eff; border-radius: 2px; height: calc(100% * var(--h)); min-height: 2px; position: relative; z-index: 2;
             transition: height 0.2s;
         }
-        .trend-bar.medium { background: #b3a0ff; }
-        .trend-bar.low { background: #d0c0ff; }
+        .candle-body.green { background: #4caf50; } /* 涨 */
+        .candle-body.red { background: #ff6b8b; } /* 跌 */
+        .candle-wick {
+            position: absolute; width: 2px; background: #8a7ab3; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 1;
+            height: 100%; display: none; /* 简化版暂不显示影线，保持干净 */
+        }
+        .candle:hover .candle-body { opacity: 0.8; }
 
+        .volume-bars {
+            display: flex; align-items: flex-end; justify-content: space-between; height: 40px; margin-top: 10px; gap: 4px;
+        }
+        .volume-bar {
+            flex: 1; background: #d0c0ff; border-radius: 2px 2px 0 0; height: calc(100% * var(--v)); min-height: 2px;
+        }
+
+        /* 交易动态美化 */
+        .live-feed {
+            background: #f9f6ff;
+            border-radius: 24px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border: 1px solid #e0d6ff;
+        }
+        .feed-header {
+            display: flex; justify-content: space-between; color:#6f5ea0; font-weight:500; margin-bottom:0.8rem;
+        }
+        .feed-list {
+            list-style: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .feed-item {
+            display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 0;
+            border-bottom: 1px solid #eee5ff; font-size:0.9rem;
+            animation: slideIn 0.3s;
+        }
+        .feed-item:last-child { border-bottom: none; }
+        .feed-address { font-family: monospace; background: #f2edff; padding:0.2rem 1rem; border-radius:30px; color:#4a3a8c; }
+        .feed-price { font-weight:600; color:#6b4eff; }
+        .feed-change { font-size:0.8rem; padding:0.2rem 0.5rem; border-radius:20px; background:#e0d6ff; }
+        .feed-change.up { background:#c8e6c9; color:#2e7d32; }
+        .feed-change.down { background:#ffcdd2; color:#c62828; }
+        .feed-time { color:#a394cc; font-size:0.7rem; }
+
+        @keyframes slideIn {
+            from { opacity:0; transform: translateX(-10px); }
+            to { opacity:1; transform: translateX(0); }
+        }
+
+        /* 其余样式保持不变 */
         .personal-reward-card {
             background:#f2edff; border-radius:24px; padding:1.2rem; margin:1.2rem 0;
             border:1px solid #d0c0ff;
@@ -295,6 +288,15 @@
         .team-effective-label { color:#6f5ea0; font-size:0.9rem; }
         .team-effective-value { font-size:1.8rem; font-weight:600; color:#6b4eff; margin-left:10px; }
         .team-effective-unit { font-size:0.8rem; color:#8a7ab3; }
+
+        .trend-container {
+            background: #f9f6ff; border-radius: 24px; padding: 1rem; margin: 1.2rem 0; border: 1px solid #e0d6ff;
+        }
+        .trend-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; color:#6f5ea0; font-weight:500; }
+        .trend-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 60px; gap: 6px; }
+        .trend-bar { flex:1; background: #6b4eff; border-radius: 6px 6px 0 0; height: calc(100% * var(--h)); min-height:4px; }
+        .trend-bar.medium { background: #b3a0ff; }
+        .trend-bar.low { background: #d0c0ff; }
 
         .member-list { margin:1rem 0; }
         .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid #eee5ff; }
@@ -330,7 +332,6 @@
                 <h1>团队助力计划</h1>
                 <p>邀请好友，团队交易额外奖励</p>
             </div>
-            <!-- 活动时间已移除 -->
         </div>
     </div>
 
@@ -352,7 +353,7 @@
             </div>
         </div>
 
-        <!-- 卡片1: 实时动态 (海洋波浪图标) -->
+        <!-- 卡片1: 实时动态 (优化K线图和交易动态) -->
         <div class="collapse-card card-first" id="cardLive">
             <div class="card-header" onclick="toggleCard('liveContent')">
                 <div class="header-row">
@@ -368,32 +369,46 @@
                 </div>
             </div>
             <div class="card-content" id="liveContent">
-                <div class="kline-container">
-                    <div class="kline-title">
-                        <span>H/USDT (4h)</span>
-                        <span>Vol 2.45M</span>
+                <!-- 改进的K线图 -->
+                <div class="candlestick-container">
+                    <div class="chart-header">
+                        <span>H/USDT · 4h</span>
+                        <span>最高 0.128 / 最低 0.121</span>
                     </div>
-                    <div class="kline-bars">
-                        <div class="kline-bar" style="--h:0.6"></div>
-                        <div class="kline-bar red" style="--h:0.3"></div>
-                        <div class="kline-bar" style="--h:0.8"></div>
-                        <div class="kline-bar red" style="--h:0.4"></div>
-                        <div class="kline-bar" style="--h:0.7"></div>
-                        <div class="kline-bar" style="--h:0.5"></div>
-                        <div class="kline-bar red" style="--h:0.2"></div>
-                        <div class="kline-bar" style="--h:0.9"></div>
-                        <div class="kline-bar" style="--h:0.6"></div>
-                        <div class="kline-bar red" style="--h:0.3"></div>
-                        <div class="kline-bar" style="--h:0.7"></div>
+                    <div class="chart-grid">
+                        <!-- 蜡烛图数据：每个蜡烛的高度由收盘价决定，颜色红绿 -->
+                        <div class="candle" style="--h:0.6"><div class="candle-body green" style="--h:0.6"></div></div>
+                        <div class="candle" style="--h:0.4"><div class="candle-body red" style="--h:0.4"></div></div>
+                        <div class="candle" style="--h:0.8"><div class="candle-body green" style="--h:0.8"></div></div>
+                        <div class="candle" style="--h:0.5"><div class="candle-body red" style="--h:0.5"></div></div>
+                        <div class="candle" style="--h:0.7"><div class="candle-body green" style="--h:0.7"></div></div>
+                        <div class="candle" style="--h:0.3"><div class="candle-body red" style="--h:0.3"></div></div>
+                        <div class="candle" style="--h:0.9"><div class="candle-body green" style="--h:0.9"></div></div>
+                        <div class="candle" style="--h:0.6"><div class="candle-body green" style="--h:0.6"></div></div>
+                        <div class="candle" style="--h:0.4"><div class="candle-body red" style="--h:0.4"></div></div>
+                        <div class="candle" style="--h:0.7"><div class="candle-body green" style="--h:0.7"></div></div>
+                        <div class="candle" style="--h:0.5"><div class="candle-body red" style="--h:0.5"></div></div>
+                    </div>
+                    <!-- 成交量柱状图 -->
+                    <div class="volume-bars">
+                        <div class="volume-bar" style="--v:0.5"></div><div class="volume-bar" style="--v:0.3"></div><div class="volume-bar" style="--v:0.8"></div><div class="volume-bar" style="--v:0.4"></div><div class="volume-bar" style="--v:0.6"></div><div class="volume-bar" style="--v:0.2"></div><div class="volume-bar" style="--v:0.9"></div><div class="volume-bar" style="--v:0.5"></div><div class="volume-bar" style="--v:0.3"></div><div class="volume-bar" style="--v:0.7"></div><div class="volume-bar" style="--v:0.4"></div>
                     </div>
                 </div>
+
+                <!-- 改进的交易动态 -->
                 <div class="live-feed">
-                    <div class="feed-header"><i class="fas fa-sync-alt fa-spin"></i> 最新成交</div>
-                    <ul class="feed-list" id="feedList"></ul>
+                    <div class="feed-header">
+                        <span><i class="fas fa-sync-alt fa-spin"></i> 实时成交</span>
+                        <span>最新价格 0.124</span>
+                    </div>
+                    <ul class="feed-list" id="feedList">
+                        <!-- 动态通过JS生成 -->
+                    </ul>
                 </div>
             </div>
         </div>
 
+        <!-- 其余卡片不变（我的交易、我的团队、活动规则） -->
         <!-- 卡片2: 我的交易 (含日历) -->
         <div class="collapse-card" id="cardMyTrade">
             <div class="card-header" onclick="toggleCard('myTradeContent')">
@@ -410,19 +425,16 @@
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
-                <!-- 日历模块 (当月1日到昨日) -->
+                <!-- 日历模块 -->
                 <div class="calendar-container">
                     <div class="calendar-header">
                         <span><i class="far fa-calendar-alt"></i> 本月交易日历</span>
                         <span style="font-size:0.8rem;">单位: USDC</span>
                     </div>
                     <div class="calendar-grid">
-                        <!-- 星期缩写 -->
                         <div class="weekday">一</div><div class="weekday">二</div><div class="weekday">三</div><div class="weekday">四</div><div class="weekday">五</div><div class="weekday">六</div><div class="weekday">日</div>
-                        <!-- 日期格子：1-15日，部分高亮模拟交易量，实际应由后端数据生成 -->
                         <div class="calendar-day low">1</div><div class="calendar-day">2</div><div class="calendar-day medium">3</div><div class="calendar-day low">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div><div class="calendar-day low">7</div>
                         <div class="calendar-day medium">8</div><div class="calendar-day high">9</div><div class="calendar-day high">10</div><div class="calendar-day medium">11</div><div class="calendar-day low">12</div><div class="calendar-day">13</div><div class="calendar-day low">14</div><div class="calendar-day medium">15</div>
-                        <!-- 剩余日期留白 -->
                         <div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div>
                     </div>
                     <div class="calendar-legend">
@@ -432,7 +444,6 @@
                     </div>
                 </div>
 
-                <!-- 预估奖励卡片 -->
                 <div class="personal-reward-card">
                     <div class="personal-reward-row">
                         <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
@@ -450,7 +461,6 @@
                     </div>
                 </div>
 
-                <!-- 排名 -->
                 <div class="personal-row">
                     <div class="rank-item"><div class="rank-label">本期排名</div><div class="rank-number" id="rankPeriod">#102</div></div>
                     <div class="rank-item"><div class="rank-label">月排名</div><div class="rank-number" id="rankMonth">#87</div></div>
@@ -459,7 +469,7 @@
             </div>
         </div>
 
-        <!-- 卡片3: 我的团队 (含近7日趋势图) -->
+        <!-- 卡片3: 我的团队 (含趋势图) -->
         <div class="collapse-card" id="cardTeam">
             <div class="card-header" onclick="toggleCard('teamContent')">
                 <div class="header-row">
@@ -475,7 +485,6 @@
                 </div>
             </div>
             <div class="card-content" id="teamContent">
-                <!-- 贡献值进度条 -->
                 <div class="team-effective-box">
                     <div class="team-effective-row">
                         <span class="team-effective-label"><i class="fas fa-chart-line"></i> 团队贡献值</span>
@@ -491,7 +500,6 @@
                     </div>
                 </div>
 
-                <!-- 近7日团队贡献趋势 -->
                 <div class="trend-container">
                     <div class="trend-header">
                         <span><i class="fas fa-chart-line"></i> 近7日团队贡献趋势</span>
@@ -511,17 +519,14 @@
                     </div>
                 </div>
 
-                <!-- 团队总交易量 (原始) -->
                 <div style="background:#f9f6ff; border-radius:24px; padding:0.8rem 1rem; margin:1rem 0; border:1px solid #e0d6ff;">
                     <span style="color:#6f5ea0;">团队总交易量 (原始) :</span>
                     <span style="float:right; font-weight:600; color:#6b4eff;" id="teamRawVolume">148.2k USDT</span>
                 </div>
 
-                <!-- 成员列表 -->
                 <div class="member-list" id="memberList"></div>
                 <button class="action-btn action-btn-secondary" style="width:100%; margin:0.5rem 0;" onclick="toggleMembers()">查看全部成员</button>
 
-                <!-- 团队奖励预估 -->
                 <div class="team-reward-card">
                     <div style="font-size:0.9rem; color:#6f5ea0;">⚡ 当前团队贡献值 <span id="teamWeightedDisplay">128,400</span> USDT</div>
                     <div class="team-reward-amount" id="teamReward">1,284 H</div>
@@ -597,12 +602,13 @@
             }
         };
 
-        const feedData = [
-            { addr: '0x8f3...cB2', vol: 12400, time: '30秒前' },
-            { addr: '0x2a1...Df9', vol: 8750, time: '2分钟前' },
-            { addr: '0x4d9...Ae4', vol: 5220, time: '5分钟前' },
-            { addr: '0xb77...F2c', vol: 4130, time: '8分钟前' },
-            { addr: '0xe29...8a1', vol: 3890, time: '12分钟前' }
+        // 初始交易流数据（带价格和涨跌幅）
+        let feedData = [
+            { addr: '0x8f3...cB2', price: 0.1243, change: '+0.02%', vol: 12400, time: '30秒前' },
+            { addr: '0x2a1...Df9', price: 0.1241, change: '-0.01%', vol: 8750, time: '2分钟前' },
+            { addr: '0x4d9...Ae4', price: 0.1245, change: '+0.03%', vol: 5220, time: '5分钟前' },
+            { addr: '0xb77...F2c', price: 0.1239, change: '-0.02%', vol: 4130, time: '8分钟前' },
+            { addr: '0xe29...8a1', price: 0.1242, change: '+0.01%', vol: 3890, time: '12分钟前' }
         ];
 
         function toggleCard(contentId) {
@@ -724,14 +730,24 @@
             if (btn) btn.innerText = showAllMembers ? '收起成员' : '查看全部成员';
         }
 
+        // 更新实时交易列表
         function updateFeed() {
             const feedList = document.getElementById('feedList');
             if (!feedList) return;
+            const basePrice = 0.124 + Math.random() * 0.002 - 0.001;
+            const change = ((basePrice - 0.124) / 0.124 * 100).toFixed(2);
+            const changeClass = change >= 0 ? 'up' : 'down';
+            const changeSign = change >= 0 ? '+' : '';
             const newVol = Math.floor(Math.random() * 5000 + 3000);
             const newAddr = '0x' + Math.random().toString(16).substring(2,8) + '...' + Math.random().toString(16).substring(2,5);
             const newItem = document.createElement('li');
             newItem.className = 'feed-item';
-            newItem.innerHTML = `<span class="feed-address">${newAddr}</span><span class="feed-volume">+${newVol} USDC</span><span class="feed-time">刚刚</span>`;
+            newItem.innerHTML = `
+                <span class="feed-address">${newAddr}</span>
+                <span class="feed-price">${basePrice.toFixed(4)}</span>
+                <span class="feed-change ${changeClass}">${changeSign}${change}%</span>
+                <span class="feed-time">刚刚</span>
+            `;
             feedList.prepend(newItem);
             while (feedList.children.length > 6) feedList.removeChild(feedList.lastElementChild);
         }
@@ -744,10 +760,15 @@
             feedData.forEach(item => {
                 const li = document.createElement('li');
                 li.className = 'feed-item';
-                li.innerHTML = `<span class="feed-address">${item.addr}</span><span class="feed-volume">+${item.vol} USDC</span><span class="feed-time">${item.time}</span>`;
+                li.innerHTML = `
+                    <span class="feed-address">${item.addr}</span>
+                    <span class="feed-price">${item.price.toFixed(4)}</span>
+                    <span class="feed-change ${item.change.includes('+') ? 'up' : 'down'}">${item.change}</span>
+                    <span class="feed-time">${item.time}</span>
+                `;
                 feedList.appendChild(li);
             });
-            setInterval(updateFeed, 15000);
+            setInterval(updateFeed, 8000);
         };
     </script>
 </body>
