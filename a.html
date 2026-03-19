@@ -1,529 +1,459 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>光·遇社区 · 液态玻璃概念</title>
-  <!-- 引入 Inter 可变字体 & Font Awesome 6 免费图标库 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>社区字体 · 统一风格指南</title>
+  <!-- 引入Font Awesome图标库 (v6免费) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">
   <style>
-    /* reset & 基础变量 — 深色背景，液态玻璃氛围 */
+    /* ----- 基础重置 & 字体变量 ----- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: radial-gradient(circle at 30% 10%, hsl(260, 70%, 25%), hsl(300, 80%, 12%));
-      min-height: 100vh;
+      background: #f5f3f8;  /* 柔和底色 */
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
-      align-items: center;
       justify-content: center;
-      transition: background 0.2s ease; /* 滚动时微调色调，实现动态叙事 */
-      margin: 0;
-      padding: 8px;
+      min-height: 100vh;
+      padding: 20px 12px;
     }
 
-    /* 主应用窗口 — 模拟手机卡片，自带圆角和阴影 */
-    .app-container {
+    /* 主卡片：承载所有字体示例，轻质感 */
+    .style-guide {
+      max-width: 400px;
       width: 100%;
-      max-width: 380px;
-      height: 780px;
-      background: transparent;
-      border-radius: 42px;
-      box-shadow: 
-        0 30px 60px -10px rgba(0, 0, 0, 0.6),
-        inset 0 1px 2px rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(2px); /* 整体轻微模糊，与外层背景融合 */
-      display: flex;
-      flex-direction: column;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255,255,255,0.6);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      padding: 24px 20px 32px;
       overflow: hidden;
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    /* 状态栏极简 (仿灵动岛) */
-    .status-bar {
-      display: flex;
-      justify-content: space-between;
-      padding: 12px 22px 6px 22px;
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      background: transparent;
+    /* 标题区域 */
+    .title-section {
+      margin-bottom: 28px;
     }
-
-    /* 主导航 — 液态玻璃 + 可变字体演示 */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px 20px 12px 20px;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(18px) saturate(180%);
-      -webkit-backdrop-filter: blur(18px) saturate(180%);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 4px;
-    }
-
-    .logo {
-      font-size: 26px;
-      font-weight: 700;  /* 基础字重，JS滚动将动态改变 */
-      background: linear-gradient(135deg, #fff8, #ffe);
+    .title-section h1 {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #2F1C4A, #5D3B7A);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      letter-spacing: -0.5px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-      transition: font-weight 0.1s ease;
+      margin-bottom: 4px;
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; /* 统一字体栈示例 */
+    }
+    .title-section p {
+      font-size: 15px;
+      color: #4A3A5C;
+      opacity: 0.75;
+      font-weight: 400;
+      letter-spacing: 0.2px;
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
     }
 
-    .nav-actions {
+    /* 每个字体示例区块 */
+    .font-block {
+      margin-bottom: 32px;
+      padding: 16px 14px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 6px 12px -8px rgba(0,0,0,0.1);
+    }
+
+    .font-label {
       display: flex;
-      gap: 20px;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #3A2A4A;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1.5px dashed #CBB8E3;
+      padding-bottom: 8px;
     }
-    .nav-actions i {
-      color: rgba(255, 255, 255, 0.85);
-      font-size: 1.5rem;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
-      transition: all 0.2s;
+    .font-label i {
+      font-size: 18px;
+      color: #7A5FA0;
     }
-    .nav-actions i:active { transform: scale(0.92); opacity: 0.7; }
 
-    /* 滚动内容区 — 弹簧滚动 */
-    .feed {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 16px 16px 16px;
+    /* 字体展示行 */
+    .font-demo-row {
       display: flex;
-      flex-direction: column;
-      gap: 18px;
-      scroll-behavior: smooth;
-      /* 隐藏滚动条但保留功能（更干净） */
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 12px 16px;
+      margin-bottom: 14px;
     }
-    .feed::-webkit-scrollbar { display: none; }
-
-    /* ---------- 卡片：液态玻璃 + 有机曲线 + 渐变光感 ---------- */
-    .card {
-      background: rgba(20, 15, 30, 0.35);
-      backdrop-filter: blur(22px) saturate(200%);
-      -webkit-backdrop-filter: blur(22px) saturate(200%);
-      border-radius: 36px 36px 36px 36px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 
-        0 20px 35px -12px rgba(0, 0, 0, 0.6),
-        inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-      padding: 18px 18px 14px 18px;
-      transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.4s;
-      opacity: 0;
-      transform: translateY(20px) scale(0.98);
-      animation: cardFloatIn 0.5s ease forwards;
-      /* 每个卡片动画延迟，依次出现 */
-    }
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.2s; }
-    .card:nth-child(3) { animation-delay: 0.3s; }
-
-    @keyframes cardFloatIn {
-      0% { opacity: 0; transform: translateY(30px) scale(0.96); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
+    .demo-tag {
+      font-size: 12px;
+      color: #7B6A8F;
+      background: rgba(210, 190, 240, 0.3);
+      padding: 4px 12px;
+      border-radius: 30px;
+      letter-spacing: 0.3px;
+      border: 1px solid rgba(255,255,255,0.5);
     }
 
-    /* 卡片在滚动视口中再次微高亮（滚动叙事补充）*/
-    .card.in-sight {
-      box-shadow: 0 25px 45px -10px rgba(160, 120, 255, 0.4), 0 0 0 1px rgba(200, 180, 255, 0.3);
-      transition: box-shadow 0.3s;
+    /* 具体字体样式 */
+    .font-primary-title {  /* 思源黑体 / 阿里妈妈普惠体 — 主标题 */
+      font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      color: #1E0F2E;
+      line-height: 1.2;
+    }
+    .font-secondary-title { /* 新宋体 / 现代宋体 — 文化感标题 */
+      font-family: 'Songti SC', 'Times New Roman', 'Songti', serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: #2E1A44;
+    }
+    .font-body {  /* 正文 — 思源黑体常规 */
+      font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      color: #2B1D36;
+      line-height: 1.5;
+    }
+    .font-body-light {
+      font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      color: #4D3A5E;
+    }
+    .font-accent {  /* 站酷快乐体 — 情感化 */
+      font-family: 'ZCOOL KuaiLe', 'PingFang SC', cursive, sans-serif;
+      font-weight: 400;
+      font-size: 22px;
+      color: #B24A6F;
+    }
+    .font-handwritten { /* 手写体模拟 (使用系统上的手写风格字体) */
+      font-family: 'KaiTi', '楷体', 'STKaiti', '华文楷体', cursive;
+      font-weight: 400;
+      font-size: 20px;
+      color: #755B8A;
+    }
+    .font-mono {  /* 代码/标签 (Inter或等宽) */
+      font-family: 'Inter', 'JetBrains Mono', 'Fira Code', monospace;
+      font-weight: 500;
+      font-size: 16px;
+      color: #5B3E6E;
+      background: #E9DFF5;
+      padding: 2px 8px;
+      border-radius: 20px;
+      display: inline-block;
     }
 
-    /* 卡片头部：有机形态头像 + 可变文字 */
-    .card-header {
+    /* 按钮样式 — 展示字体统一 */
+    .button-row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin: 20px 0 12px;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 60px;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;  /* 统一字体栈 */
+      background: #F0E8FF;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: 0.2s;
+      color: #2A153D;
+      border: 1px solid rgba(255,255,255,0.7);
+      cursor: default; /* 展示用 */
+    }
+    .btn-primary {
+      background: #5F3E8C;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 10px 18px -8px #8F6EB0;
+    }
+    .btn i {
+      margin-right: 6px;
+    }
+
+    /* 卡片组件 — 模拟社区帖子 */
+    .post-card {
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 28px;
+      padding: 16px 16px 12px;
+      margin: 20px 0 16px;
+      border: 1px solid rgba(255,255,255,0.8);
+      box-shadow: 0 10px 18px -10px rgba(0,0,0,0.1);
+    }
+    .post-header {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
-    .avatar {
+    .post-avatar {
       width: 48px;
       height: 48px;
-      /* 不规则圆 — 有机曲线 */
-      border-radius: 60% 40% 40% 60% / 50% 40% 60% 50%;
-      background: linear-gradient(145deg, #cdb2ff, #8f6eff);
+      border-radius: 45% 55% 50% 50% / 50% 45% 55% 50%; /* 有机曲线 */
+      background: linear-gradient(145deg, #B597E0, #7A5FA0);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-weight: 600;
       font-size: 22px;
-      box-shadow: 0 8px 14px -4px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.2);
-      border: 2px solid rgba(255,255,240,0.3);
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
     }
-    .user-info {
-      flex: 1;
-    }
-    .user-info h4 {
+    .post-user h4 {
       font-size: 18px;
-      font-weight: 620;  /* 可变字体中间值 */
-      color: white;
-      letter-spacing: -0.2px;
-      line-height: 1.2;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      font-weight: 650;
+      font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      color: #241734;
     }
-    .user-info span {
+    .post-user span {
       font-size: 13px;
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
       font-weight: 400;
-      color: rgba(255,255,255,0.6);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 2px;
-    }
-    .user-info span i { font-size: 10px; opacity: 0.7; }
-
-    /* 正文内容 */
-    .post-content {
-      margin-bottom: 18px;
+      color: #69577C;
     }
     .post-content p {
-      color: rgba(255,255,255,0.9);
-      font-weight: 380;
+      font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-weight: 400;
       font-size: 15px;
-      line-height: 1.4;
+      color: #31223F;
       margin-bottom: 16px;
-      letter-spacing: 0.1px;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+      line-height: 1.5;
     }
-    .post-media {
-      width: 100%;
-      height: 190px;
-      border-radius: 26px;  /* 和卡片圆角呼应，但略小 */
-      overflow: hidden;
-      background: #2e1b3c;
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
-    }
-    .post-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-    .card:active .post-media img { transform: scale(1.02); } /* 细微触感 */
-
-    /* 互动工具栏 — 微交互动效 */
-    .post-actions {
+    .post-meta {
       display: flex;
-      justify-content: space-around;
-      margin-top: 16px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,0.1);
+      gap: 24px;
+      margin-top: 12px;
+      border-top: 1px solid rgba(128, 128, 128, 0.2);
+      padding-top: 12px;
     }
-    .action-btn {
-      background: transparent;
+    .post-meta span {
+      font-family: 'Inter', 'PingFang SC', sans-serif;
+      font-size: 14px;
+      color: #5A4670;
+      font-weight: 500;
+    }
+    .post-meta i {
+      margin-right: 6px;
+      color: #8F73B0;
+    }
+
+    /* 标签组 */
+    .tags {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 18px 0 8px;
+    }
+    .tag {
+      font-family: 'Inter', 'PingFang SC', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      background: #E2D5F2;
+      color: #3C2A4F;
+      padding: 6px 18px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+
+    /* 统一说明卡片 */
+    .unified-note {
+      background: #E1D1F2;
+      border-radius: 26px;
+      padding: 18px;
+      margin-top: 25px;
+      border: 1px solid rgba(255,255,255,0.5);
+      font-size: 14px;
+      color: #271B34;
+      font-family: 'Inter', 'PingFang SC', sans-serif;
+      box-shadow: inset 0 1px 4px rgba(255,255,255,0.8);
+    }
+    .unified-note i {
+      color: #5F458C;
+      margin-right: 6px;
+    }
+    .unified-note code {
+      background: #F2E9FF;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-family: 'Inter', monospace;
+      font-size: 13px;
+    }
+
+    hr {
       border: none;
-      color: rgba(255,255,255,0.7);
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: 60px;
-      transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1);
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      backdrop-filter: blur(4px);
-      background: rgba(255,255,255,0.02);
+      border-top: 2px dotted #CBB3E8;
+      margin: 24px 0 16px;
     }
-    .action-btn i { font-size: 1.3rem; filter: drop-shadow(0 2px 2px black); }
-    .action-btn span { font-size: 14px; font-weight: 480; }
-
-    .action-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.15); }
-    /* 点赞激活效果（通过JS切换类） */
-    .action-btn.liked {
-      color: #ffb6e1;
-      text-shadow: 0 0 8px #ff80bf;
-    }
-    .action-btn.liked i { font-weight: 900; }
-
-    /* 底部导航 — 同样是液态玻璃，图标带呼吸感 */
-    .bottom-nav {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 12px 22px 14px 22px;
-      background: rgba(20, 10, 25, 0.4);
-      backdrop-filter: blur(25px) saturate(200%);
-      -webkit-backdrop-filter: blur(25px) saturate(200%);
-      border-top: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
-    }
-    .nav-item {
-      color: rgba(255,255,255,0.55);
-      font-size: 1.7rem;
-      transition: all 0.15s;
-      padding: 6px;
-      border-radius: 30px;
-      cursor: pointer;
-      width: 48px;
-      text-align: center;
-    }
-    .nav-item.active {
-      color: white;
-      text-shadow: 0 0 15px #b49bff, 0 0 30px #a06eff;
-      transform: translateY(-2px);
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(5px);
-    }
-    .nav-item:active { transform: scale(0.9); opacity: 0.8; }
-
-    /* 装饰性的微光元素（让玻璃更生动）*/
-    .glow-ball {
-      position: absolute;
-      width: 240px;
-      height: 240px;
-      background: radial-gradient(circle at 30% 30%, rgba(180, 130, 255, 0.3), transparent 70%);
-      border-radius: 50%;
-      top: 10px;
-      right: -60px;
-      filter: blur(50px);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    /* 可变字体演示标签（滚动时字重变化）*/
-    .var-demo {
-      font-weight: 700; /* 基础，由JS动态改变 */
-    }
-
-    /* 一些小提示 */
-    .hint-text {
-      font-size: 11px;
-      color: rgba(255,255,255,0.3);
-      text-align: center;
-      margin-bottom: 4px;
-      letter-spacing: 0.8px;
-    }
-
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <!-- 背景氛围光点 -->
-    <div class="glow-ball"></div>
+<div class="style-guide">
 
-    <!-- 状态条 -->
-    <div class="status-bar">
-      <span>9:41</span>
-      <span><i class="fa-solid fa-wifi"></i> 5G <i class="fa-regular fa-battery-full"></i></span>
+  <!-- 标题区 -->
+  <div class="title-section">
+    <h1>字体·统一指南</h1>
+    <p>为社区App选择的字体组合，兼顾个性与阅读</p>
+  </div>
+
+  <!-- ========= 字体展示区块 ========= -->
+
+  <!-- 1. 主标题 / 品牌字体 (思源黑体 / 阿里妈妈普惠体) -->
+  <div class="font-block">
+    <div class="font-label"><i class="fa-solid fa-heading"></i> 主标题 / 品牌字体 · 思源黑体 / 阿里妈妈普惠体</div>
+    <div class="font-demo-row">
+      <span class="demo-tag">Weight 700</span>
+      <span class="font-primary-title">Vibe 社区 · 今日热门</span>
     </div>
-
-    <!-- 导航栏（可变字重体验） -->
-    <div class="navbar">
-      <div class="logo" id="logoWeight">Vibe</div>
-      <div class="nav-actions">
-        <i class="fa-regular fa-magnifying-glass"></i>
-        <i class="fa-regular fa-bell"></i>
-      </div>
+    <div class="font-demo-row">
+      <span class="demo-tag">Weight 500</span>
+      <span style="font-family: 'Source Han Sans', 'PingFang SC', sans-serif; font-weight: 500; font-size: 20px; color:#2C1C38;">探索全新的邻里关系</span>
     </div>
-
-    <!-- 滚动内容：信息流卡片 -->
-    <div class="feed" id="feedScroll">
-      <!-- 卡片 1 -->
-      <div class="card" data-id="1">
-        <div class="card-header">
-          <div class="avatar">M</div>
-          <div class="user-info">
-            <h4>mira.eth</h4>
-            <span><i class="fa-regular fa-circle-check"></i> 2h ago · 摄影</span>
-          </div>
-        </div>
-        <div class="post-content">
-          <p>傍晚的玻璃折射率刚刚好 🌆 液态的温柔。</p>
-          <div class="post-media">
-            <img src="https://picsum.photos/360/200?random=1" alt="流动的城市">
-          </div>
-        </div>
-        <div class="post-actions">
-          <button class="action-btn like-btn" data-liked="false"><i class="fa-regular fa-heart"></i> <span>24</span></button>
-          <button class="action-btn"><i class="fa-regular fa-comment"></i> <span>8</span></button>
-          <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-        </div>
-      </div>
-
-      <!-- 卡片 2 -->
-      <div class="card" data-id="2">
-        <div class="card-header">
-          <div class="avatar">J</div>
-          <div class="user-info">
-            <h4>junyao</h4>
-            <span><i class="fa-regular fa-circle-check"></i> 5h ago · 日常</span>
-          </div>
-        </div>
-        <div class="post-content">
-          <p>新做的毛玻璃渐变壁纸，灵感来自社区的名字✨</p>
-          <div class="post-media">
-            <img src="https://picsum.photos/360/200?random=2" alt="玻璃质感">
-          </div>
-        </div>
-        <div class="post-actions">
-          <button class="action-btn like-btn" data-liked="false"><i class="fa-regular fa-heart"></i> <span>56</span></button>
-          <button class="action-btn"><i class="fa-regular fa-comment"></i> <span>12</span></button>
-          <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-        </div>
-      </div>
-
-      <!-- 卡片 3 (较长文本，展示可变) -->
-      <div class="card" data-id="3">
-        <div class="card-header">
-          <div class="avatar">K</div>
-          <div class="user-info">
-            <h4>kin.creativ</h4>
-            <span><i class="fa-regular fa-circle-check"></i> 1d ago · 设计</span>
-          </div>
-        </div>
-        <div class="post-content">
-          <p>尝试了有机曲线和液态玻璃的界面，每个圆角都是独一无二的，就像社区的每一个人。</p>
-          <div class="post-media">
-            <img src="https://picsum.photos/360/200?random=3" alt="有机设计">
-          </div>
-        </div>
-        <div class="post-actions">
-          <button class="action-btn like-btn" data-liked="false"><i class="fa-regular fa-heart"></i> <span>132</span></button>
-          <button class="action-btn"><i class="fa-regular fa-comment"></i> <span>27</span></button>
-          <button class="action-btn"><i class="fa-regular fa-bookmark"></i></button>
-        </div>
-      </div>
-
-      <!-- 额外小提示：滚动会改变背景色调和logo字重 -->
-      <div class="hint-text">↓ 向下滚动，体验色调叙事 ↓</div>
-    </div>
-
-    <!-- 底部导航栏 (交互激活) -->
-    <div class="bottom-nav">
-      <i class="fa-regular fa-house nav-item active" data-nav="home"></i>
-      <i class="fa-regular fa-compass nav-item" data-nav="explore"></i>
-      <i class="fa-regular fa-plus-circle nav-item" style="font-size: 2.2rem; color: #c7b1ff;" data-nav="post"></i>
-      <i class="fa-regular fa-bell nav-item" data-nav="notify"></i>
-      <i class="fa-regular fa-user nav-item" data-nav="profile"></i>
+    <div class="font-demo-row">
+      <span class="demo-tag">Weight 300 (light)</span>
+      <span class="font-body-light">这里记录着生活的细微光点</span>
     </div>
   </div>
 
-  <script>
-    (function() {
-      // ---------- 1. 滚动叙事：改变背景色相 (hue) 和 Logo 字重 ----------
-      const body = document.body;
-      const logo = document.getElementById('logoWeight');
-      const feed = document.getElementById('feedScroll');
-      
-      // 初始背景色值 (hsl)
-      let baseHue = 260;      // 初始紫色调
-      const hueRange = 40;    // 滚动时色调变化范围
+  <!-- 2. 文化感标题 · 新宋体 / 宋体 -->
+  <div class="font-block">
+    <div class="font-label"><i class="fa-regular fa-pen-to-square"></i> 文化感标题 · 新宋体 / 宋体</div>
+    <div class="font-demo-row">
+      <span class="demo-tag">现代宋体</span>
+      <span class="font-secondary-title">旧巷新事 · 城市记忆</span>
+    </div>
+    <div class="font-demo-row">
+      <span style="font-family: 'Songti SC', serif; font-weight: 400; font-size: 18px; color:#3F2A53;">那些被时光打磨的故事</span>
+    </div>
+  </div>
 
-      function updateBackgroundAndWeight() {
-        if (!feed) return;
-        const scrollTop = feed.scrollTop;
-        const maxScroll = feed.scrollHeight - feed.clientHeight || 1;
-        const percent = Math.min(scrollTop / maxScroll, 1);
-        
-        // 色调：从260 -> 300 (紫到紫红)
-        const newHue = baseHue + percent * hueRange;
-        body.style.background = `radial-gradient(circle at 30% 10%, hsl(${newHue}, 70%, 25%), hsl(${newHue + 40}, 80%, 12%))`;
+  <!-- 3. 情感化 · 站酷快乐体 / 手写体 -->
+  <div class="font-block">
+    <div class="font-label"><i class="fa-regular fa-face-smile"></i> 情感表达 · 站酷快乐体 / 手写体</div>
+    <div class="font-demo-row">
+      <span class="demo-tag">ZCOOL KuaiLe</span>
+      <span class="font-accent">今天也要开心鸭！</span>
+    </div>
+    <div class="font-demo-row">
+      <span class="demo-tag">手写楷体</span>
+      <span class="font-handwritten">给生活一点温度 ✨</span>
+    </div>
+  </div>
 
-        // Logo 字重随滚动变化 (700 -> 900) 展示可变字体
-        if (logo) {
-          const weight = Math.round(700 + percent * 200); // 700~900
-          logo.style.fontWeight = weight;
-          // 稍微增强阴影
-          logo.style.textShadow = `0 0 ${6 + percent * 10}px rgba(200,160,255,0.6)`;
-        }
+  <!-- 4. 正文/UI · Inter / 普惠体 (统一) -->
+  <div class="font-block">
+    <div class="font-label"><i class="fa-regular fa-file-lines"></i> 正文 / UI 字体 · Inter / 普惠体</div>
+    <div class="font-demo-row">
+      <span class="demo-tag">正文 Regular 16px</span>
+      <span class="font-body">在社区里，每一次分享都像一颗星星，汇聚成温暖的星河。</span>
+    </div>
+    <div class="font-demo-row">
+      <span class="demo-tag">小号注释 (14px)</span>
+      <span style="font-family: 'Inter', 'PingFang SC', sans-serif; font-weight: 400; font-size: 14px; color: #4A395B;">2小时前 · 来自摄影日常</span>
+    </div>
+    <div class="font-demo-row">
+      <span class="demo-tag">数字/标签</span>
+      <span class="font-mono">24 点赞 · 8 评论</span>
+    </div>
+  </div>
 
-        // 可选：卡片高亮 (in-sight类) 基于可见性由 Intersection Observer 负责，这里只做背景
-      }
+  <hr>
 
-      feed.addEventListener('scroll', () => {
-        requestAnimationFrame(updateBackgroundAndWeight);
-      });
-      // 立即调用一次初始状态
-      updateBackgroundAndWeight();
+  <!-- ========= 统一应用示例 ========= -->
+  <h2 style="font-family: 'Inter', 'PingFang SC', sans-serif; font-size: 20px; margin-bottom: 16px; color: #2B193D;"><i class="fa-regular fa-cubes"></i> 统一应用 · 社区卡片示例</h2>
 
-      // ---------- 2. Intersection Observer 给可见卡片加微光 (in-sight) ----------
-      const cards = document.querySelectorAll('.card');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-sight');
-          } else {
-            entry.target.classList.remove('in-sight');
-          }
-        });
-      }, { threshold: 0.4, root: feed }); // 以feed为滚动根
+  <!-- 卡片模拟1 (完全使用统一字体栈) -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-avatar">M</div>
+      <div class="post-user">
+        <h4 style="font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-weight: 650;">mira.eth</h4>
+        <span style="font-family: 'Inter', 'PingFang SC', sans-serif;">2h ago · 摄影</span>
+      </div>
+    </div>
+    <div class="post-content">
+      <p style="font-family: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-weight: 400;">傍晚的玻璃折射率刚刚好 🌆 液态的温柔。</p>
+    </div>
+    <div class="post-meta">
+      <span><i class="fa-regular fa-heart"></i> 24</span>
+      <span><i class="fa-regular fa-comment"></i> 8</span>
+      <span><i class="fa-regular fa-bookmark"></i> 收藏</span>
+    </div>
+  </div>
 
-      cards.forEach(card => observer.observe(card));
+  <!-- 卡片模拟2 (展示标题中使用宋体/快乐体) -->
+  <div class="post-card">
+    <div class="post-header">
+      <div class="post-avatar">J</div>
+      <div class="post-user">
+        <h4 style="font-family: 'Source Han Sans', 'PingFang SC', sans-serif; font-weight: 650;">junyao</h4>
+        <span style="font-family: 'Inter', 'PingFang SC', sans-serif;">5h ago · 日常</span>
+      </div>
+    </div>
+    <div class="post-content">
+      <p style="font-family: 'Source Han Sans', 'PingFang SC', sans-serif;">在街角遇见<span style="font-family: 'ZCOOL KuaiLe', cursive; color:#9F5075;"> 惊喜 </span>，用快乐体记录心情。</p>
+      <p style="font-family: 'Songti SC', serif; font-size: 16px; color: #4E3766;">「老建筑里长出新的故事」</p>
+    </div>
+    <div class="post-meta">
+      <span><i class="fa-regular fa-heart"></i> 56</span>
+      <span><i class="fa-regular fa-comment"></i> 12</span>
+    </div>
+  </div>
 
-      // ---------- 3. 点赞切换（微交互：点击心形填充 + 数字变化）----------
-      const likeButtons = document.querySelectorAll('.like-btn');
-      likeButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const icon = btn.querySelector('i');
-          const span = btn.querySelector('span');
-          let count = parseInt(span.innerText, 10);
-          
-          // 切换 liked 类
-          if (btn.classList.contains('liked')) {
-            btn.classList.remove('liked');
-            icon.className = 'fa-regular fa-heart';  // 空心
-            span.innerText = count - 1;
-          } else {
-            btn.classList.add('liked');
-            icon.className = 'fa-solid fa-heart';   // 实心
-            span.innerText = count + 1;
-          }
+  <!-- 标签组示例 -->
+  <div class="tags">
+    <span class="tag"># 设计日常</span>
+    <span class="tag"># 摄影</span>
+    <span class="tag"># 心情</span>
+    <span class="tag"># 城市漫步</span>
+  </div>
 
-          // 附加微缩放动画 (用style快速实现)
-          btn.style.transform = 'scale(1.2)';
-          setTimeout(() => { btn.style.transform = ''; }, 150);
-        });
-      });
+  <!-- 按钮统一字体 -->
+  <div class="button-row">
+    <button class="btn" disabled><i class="fa-regular fa-thumbs-up"></i> 点赞</button>
+    <button class="btn btn-primary" disabled><i class="fa-regular fa-pen-to-square"></i> 发布</button>
+    <button class="btn" disabled><i class="fa-regular fa-comment-dots"></i> 评论</button>
+  </div>
 
-      // ---------- 4. 底部导航激活切换 ----------
-      const navItems = document.querySelectorAll('.nav-item');
-      navItems.forEach(item => {
-        item.addEventListener('click', (e) => {
-          navItems.forEach(nav => nav.classList.remove('active'));
-          item.classList.add('active');
-          // 简单反馈
-          item.style.transform = 'scale(0.9)';
-          setTimeout(() => item.style.transform = '', 120);
-        });
-      });
+  <!-- 统一字体策略说明 -->
+  <div class="unified-note">
+    <i class="fa-solid fa-circle-check"></i> <strong>字体统一方案</strong><br><br>
+    • 主标题 / 正文使用 <code>思源黑体 / Inter</code> 家族（字重 300-700），保证全平台一致性。<br>
+    • 文化类标题调用 <code>宋体</code> 系列，增加人文气息；情感短句使用 <code>站酷快乐体 / 楷体</code> 点缀。<br>
+    • 所有中文字体都包含 <code>'PingFang SC', 'Microsoft YaHei'</code> 作为后备，英文字体优先 <code>Inter</code>。<br>
+    • 通过 CSS 变量或统一 <code>font-family</code> 声明，一处定义，全局使用，轻松实现统一。
+  </div>
 
-      // ---------- 5. 让头像的有机曲线更明显一点 (可选: 随机微调) - 已经写在CSS中 ----------
+  <!-- 字体栈参考 -->
+  <div style="margin-top: 24px; font-size: 13px; background: #F0E5FC; border-radius: 30px; padding: 14px; color: #2B1F35;">
+    <i class="fa-regular fa-code"></i> 字体栈示例：<br>
+    <code style="background: transparent; display: block; margin-top: 8px;">
+      --font-primary: 'Source Han Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;<br>
+      --font-serif: 'Songti SC', 'Times New Roman', serif;<br>
+      --font-accent: 'ZCOOL KuaiLe', 'KaiTi', cursive;<br>
+      --font-ui: 'Inter', var(--font-primary);
+    </code>
+  </div>
 
-      // 额外细节：点击卡片任意位置可预览微小反馈（仅为体现交互，不加逻辑）
-      cards.forEach(c => {
-        c.addEventListener('touchstart', () => {
-          c.style.transition = 'transform 0.1s';
-          c.style.transform = 'scale(0.99)';
-        });
-        c.addEventListener('touchend', () => {
-          c.style.transform = '';
-        });
-        // 取消鼠标事件冒泡
-      });
+  <!-- 装饰脚注 -->
+  <p style="text-align: right; margin-top: 20px; color: #8F79A3; font-size: 12px; opacity: 0.7;">统一字体 · 和谐体验</p>
 
-      // 确保滚动性能
-    })();
-  </script>
-
-  <!-- 注：所有交互效果均符合2026年轻量、沉浸、玻璃质感趋势 -->
-  <!-- 设计思路：液态玻璃卡片、有机曲线头像、可变字体、滚动色调叙事、点赞微交互、底部导航激活态 -->
+</div>
 </body>
 </html>
