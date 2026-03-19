@@ -188,6 +188,7 @@
             padding-bottom: 1.2rem;
         }
 
+        /* K线图 */
         .kline-container {
             background: #f9f6ff;
             border-radius: 24px;
@@ -217,6 +218,37 @@
         .feed-address { font-family:monospace; background:#f2edff; padding:0.2rem 1rem; border-radius:30px; color:#4a3a8c; }
         .feed-volume { color:#6b4eff; font-weight:600; }
         .feed-time { color:#a394cc; font-size:0.7rem; }
+
+        /* 日历模块 */
+        .calendar-container {
+            background: #f9f6ff;
+            border-radius: 24px;
+            padding: 1rem;
+            margin: 0.5rem 0 1.2rem;
+            border: 1px solid #e0d6ff;
+        }
+        .calendar-header {
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;
+        }
+        .calendar-header span { color:#6f5ea0; font-weight:500; }
+        .calendar-grid {
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+        }
+        .weekday {
+            text-align: center; color:#8a7ab3; font-size:0.7rem; padding:0.2rem 0;
+        }
+        .calendar-day {
+            aspect-ratio:1; border-radius: 8px; display: flex; align-items: center; justify-content: center;
+            font-size:0.75rem; color:#4a3a8c; background: #e0d6ff; transition:0.1s;
+        }
+        .calendar-day.high { background: #6b4eff; color:white; }
+        .calendar-day.medium { background: #b3a0ff; color:white; }
+        .calendar-day.low { background: #d0c0ff; color:#4a3a8c; }
+        .calendar-legend {
+            display: flex; justify-content: flex-end; gap: 12px; margin-top: 0.5rem; font-size:0.7rem; color:#8a7ab3;
+        }
+        .legend-item { display: flex; align-items: center; gap:4px; }
+        .legend-color { width:12px; height:12px; border-radius:4px; }
 
         .personal-reward-card {
             background:#f2edff; border-radius:24px; padding:1.2rem; margin:1.2rem 0;
@@ -347,7 +379,7 @@
             </div>
         </div>
 
-        <!-- 卡片2: 我的交易 (移除重复的今日/累计卡片) -->
+        <!-- 卡片2: 我的交易 (含日历) -->
         <div class="collapse-card" id="cardMyTrade">
             <div class="card-header" onclick="toggleCard('myTradeContent')">
                 <div class="header-row">
@@ -363,7 +395,29 @@
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
-                <!-- 移除今日/累计卡片，只保留预估奖励和排名 -->
+                <!-- 日历模块 -->
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <span><i class="far fa-calendar-alt"></i> 四月交易日历</span>
+                        <span style="font-size:0.8rem;">活动期 4.1-4.15</span>
+                    </div>
+                    <div class="calendar-grid">
+                        <!-- 星期缩写 -->
+                        <div class="weekday">一</div><div class="weekday">二</div><div class="weekday">三</div><div class="weekday">四</div><div class="weekday">五</div><div class="weekday">六</div><div class="weekday">日</div>
+                        <!-- 日期格子：1-15日，部分高亮模拟交易量 -->
+                        <div class="calendar-day low">1</div><div class="calendar-day">2</div><div class="calendar-day medium">3</div><div class="calendar-day low">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div><div class="calendar-day low">7</div>
+                        <div class="calendar-day medium">8</div><div class="calendar-day high">9</div><div class="calendar-day high">10</div><div class="calendar-day medium">11</div><div class="calendar-day low">12</div><div class="calendar-day">13</div><div class="calendar-day low">14</div><div class="calendar-day medium">15</div>
+                        <!-- 剩余日期占位空白 (可留空) -->
+                        <div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div>
+                    </div>
+                    <div class="calendar-legend">
+                        <div class="legend-item"><span class="legend-color" style="background:#d0c0ff;"></span> < 500</div>
+                        <div class="legend-item"><span class="legend-color" style="background:#b3a0ff;"></span> 500-2k</div>
+                        <div class="legend-item"><span class="legend-color" style="background:#6b4eff;"></span> >2k</div>
+                    </div>
+                </div>
+
+                <!-- 预估奖励卡片 -->
                 <div class="personal-reward-card">
                     <div class="personal-reward-row">
                         <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
@@ -381,6 +435,7 @@
                     </div>
                 </div>
 
+                <!-- 排名 -->
                 <div class="personal-row">
                     <div class="rank-item"><div class="rank-label">本期排名</div><div class="rank-number" id="rankPeriod">#102</div></div>
                     <div class="rank-item"><div class="rank-label">月排名</div><div class="rank-number" id="rankMonth">#87</div></div>
@@ -389,7 +444,7 @@
             </div>
         </div>
 
-        <!-- 卡片3: 我的团队 (移除三指标卡片，整合信息) -->
+        <!-- 卡片3: 我的团队 -->
         <div class="collapse-card" id="cardTeam">
             <div class="card-header" onclick="toggleCard('teamContent')">
                 <div class="header-row">
@@ -405,7 +460,7 @@
                 </div>
             </div>
             <div class="card-content" id="teamContent">
-                <!-- 贡献值进度条 (包含数字) -->
+                <!-- 贡献值进度条 -->
                 <div class="team-effective-box">
                     <div class="team-effective-row">
                         <span class="team-effective-label"><i class="fas fa-chart-line"></i> 团队贡献值</span>
@@ -421,7 +476,7 @@
                     </div>
                 </div>
 
-                <!-- 团队总交易量 (原始总量，补充信息) -->
+                <!-- 团队总交易量 (原始) -->
                 <div style="background:#f9f6ff; border-radius:24px; padding:0.8rem 1rem; margin:1rem 0; border:1px solid #e0d6ff;">
                     <span style="color:#6f5ea0;">团队总交易量 (原始) :</span>
                     <span style="float:right; font-weight:600; color:#6b4eff;" id="teamRawVolume">148.2k USDT</span>
