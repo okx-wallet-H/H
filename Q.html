@@ -92,14 +92,24 @@
         .stat-value { font-size:1.6rem; font-weight:700; color:white; }
         .stat-sub { font-size:0.8rem; color:#b0e0ff; margin-top:5px; }
 
-        /* 个人奖励预估卡片 */
+        /* 个人奖励与进度条卡片 */
         .personal-reward-card {
             background: #00497e40; border-radius: 30px; padding: 1rem; margin: 0.5rem 0 1rem;
-            border: 1px solid #3fa2ff; display: flex; align-items: center; justify-content: space-between;
+            border: 1px solid #3fa2ff;
+        }
+        .personal-reward-row {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem;
         }
         .personal-reward-label { color:#b0ecff; }
         .personal-reward-value { font-size:1.4rem; font-weight:700; color:#ffd966; }
         .next-tier { font-size:0.8rem; color:#a0d0ff; }
+        .progress-bar-container {
+            width:100%; height:10px; background:#1f3f60; border-radius:10px; margin:0.5rem 0;
+        }
+        .progress-bar-fill {
+            height:100%; background:linear-gradient(90deg, #00c6ff, #0072ff); border-radius:10px;
+            width:0%; transition:width 0.3s;
+        }
 
         /* 个人排名 */
         .personal-row {
@@ -143,6 +153,18 @@
             display:inline-flex; background:#1f5a85; width:18px; height:18px; border-radius:50%;
             font-size:0.7rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
         }
+
+        /* 团队有效交易量及进度条 */
+        .team-effective-box {
+            background:#002a55; border-radius:30px; padding:1rem; margin-bottom:1.5rem;
+            border:1px solid #3fa2ff;
+        }
+        .team-effective-row {
+            display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem;
+        }
+        .team-effective-label { color:#b0ecff; }
+        .team-effective-value { font-size:1.6rem; font-weight:700; color:#ffecaa; margin-left:10px; }
+        .team-effective-unit { font-size:0.9rem; color:#99ccff; }
 
         .member-list { margin:1.5rem 0; }
         .member-item {
@@ -208,7 +230,6 @@
 <body>
     <div class="hero">
         <div class="hero-content">
-            <!-- 合作标识 -->
             <div class="co-brand">
                 <span class="dolphin"><i class="fas fa-dolphin"></i></span>
                 <span>海豚舰队</span>
@@ -259,11 +280,23 @@
             </div>
         </div>
 
-        <!-- 个人奖励预估卡片 -->
+        <!-- 个人奖励与进度条卡片 -->
         <div class="personal-reward-card" id="personalRewardCard">
-            <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
-            <span class="personal-reward-value" id="personalReward">42.25 H</span>
-            <span class="next-tier" id="nextTier">再交易1,550 USDC升至0.8%</span>
+            <div class="personal-reward-row">
+                <span class="personal-reward-label"><i class="fas fa-gift"></i> 预估个人奖励</span>
+                <span class="personal-reward-value" id="personalReward">42.25 H</span>
+            </div>
+            <div class="personal-reward-row">
+                <span class="next-tier" id="nextTier">再交易1,550 USDC升至0.8%</span>
+            </div>
+            <!-- 进度条：个人累计交易量占下一档位的百分比 -->
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="personalProgress" style="width:84.5%"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#a0c0ff;">
+                <span>当前累计: <span id="userTotalSmall">8,450</span> USDC</span>
+                <span>下一目标: <span id="nextTarget">10,000</span> USDC</span>
+            </div>
         </div>
 
         <!-- 个人排名（额外信息） -->
@@ -296,10 +329,26 @@
                 </div>
                 <div class="team-stat-item">
                     <div class="team-stat-label">
-                        本期有效交易量
+                        有效团队交易量
                         <span class="info-icon" title="加权量 = 本人100% + 一级50% + 二级10%，用于奖励计算">?</span>
                     </div>
                     <div class="team-stat-value" id="teamWeighted">128.4k</div>
+                </div>
+            </div>
+
+            <!-- 有效交易量进度条 -->
+            <div class="team-effective-box">
+                <div class="team-effective-row">
+                    <span class="team-effective-label"><i class="fas fa-chart-line"></i> 有效团队交易量</span>
+                    <span class="team-effective-value" id="teamWeightedDetail">128,400</span>
+                    <span class="team-effective-unit">USDT</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="teamProgress" style="width:128.4%"></div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#a0c0ff; margin-top:0.3rem;">
+                    <span>当前档位: 100,000 USDT (1%)</span>
+                    <span>进度 128%</span>
                 </div>
             </div>
 
@@ -460,6 +509,7 @@
 
             document.getElementById('userToday').innerText = userData.todayVolume.toLocaleString();
             document.getElementById('userTotal').innerText = userData.totalVolume.toLocaleString();
+            document.getElementById('userTotalSmall').innerText = userData.totalVolume.toLocaleString();
 
             const reward = calculatePersonalReward(userData.totalVolume);
             document.getElementById('personalReward').innerText = reward + ' H';
@@ -468,8 +518,14 @@
             if (next) {
                 const need = next.next - userData.totalVolume;
                 document.getElementById('nextTier').innerText = `再交易 ${need.toLocaleString()} USDC 升至 ${next.rate}%`;
+                document.getElementById('nextTarget').innerText = next.next.toLocaleString();
+                // 进度条百分比 = 当前/下一档 * 100
+                const progress = (userData.totalVolume / next.next) * 100;
+                document.getElementById('personalProgress').style.width = progress + '%';
             } else {
                 document.getElementById('nextTier').innerText = '已达到最高档位！';
+                document.getElementById('nextTarget').innerText = userData.totalVolume.toLocaleString();
+                document.getElementById('personalProgress').style.width = '100%';
             }
 
             document.getElementById('rankPeriod').innerText = '#' + userData.rankPeriod;
@@ -480,13 +536,35 @@
             document.getElementById('teamCount').innerText = userData.team.count;
             document.getElementById('teamRawVolume').innerText = (userData.team.rawVolume/1000).toFixed(1) + 'k';
             document.getElementById('teamWeighted').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
+            document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
             // 团队奖励
             let teamReward = 0;
-            if (userData.team.weightedVolume >= 100000) teamReward = userData.team.weightedVolume * 0.01;
-            else if (userData.team.weightedVolume >= 50000) teamReward = userData.team.weightedVolume * 0.005;
+            let teamTier = '';
+            let teamProgressPercent = 0;
+            if (userData.team.weightedVolume >= 100000) {
+                teamReward = userData.team.weightedVolume * 0.01;
+                teamTier = '100,000 USDT (1%)';
+                teamProgressPercent = (userData.team.weightedVolume / 100000) * 100;
+            } else if (userData.team.weightedVolume >= 50000) {
+                teamReward = userData.team.weightedVolume * 0.005;
+                teamTier = '50,000 USDT (0.5%)';
+                teamProgressPercent = (userData.team.weightedVolume / 50000) * 100;
+            } else {
+                teamReward = 0;
+                teamTier = '50,000 USDT (0.5%)';
+                teamProgressPercent = (userData.team.weightedVolume / 50000) * 100;
+            }
             document.getElementById('teamReward').innerText = Math.round(teamReward) + ' H';
+            // 更新进度条和档位文本
+            const teamProgressFill = document.getElementById('teamProgress');
+            teamProgressFill.style.width = teamProgressPercent + '%';
+            // 在进度条下方显示当前档位文本（已在HTML中固定，但可以动态更新）
+            const teamProgressText = document.querySelector('.team-effective-box div:last-child span:first-child');
+            if (teamProgressText) teamProgressText.innerText = `当前档位: ${teamTier}`;
+            const teamProgressPercentSpan = document.querySelector('.team-effective-box div:last-child span:last-child');
+            if (teamProgressPercentSpan) teamProgressPercentSpan.innerText = `进度 ${teamProgressPercent.toFixed(1)}%`;
 
             // 渲染成员列表（前3个）
             renderMemberList(false);
@@ -526,6 +604,7 @@
         // 刷新数据
         function refreshData() {
             alert('数据已刷新（演示）');
+            // 实际可从App获取新数据并调用renderUserData
         }
 
         // 初始化
