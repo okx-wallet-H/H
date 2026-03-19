@@ -3,35 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>白底稳重 · 社区设计系统</title>
+  <title>白底稳重 · 墨绿主题 · 社区设计系统</title>
   <!-- 字体：Inter 可变 + Crimson Pro 衬线 -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap">
   <!-- Font Awesome 6 图标库 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ---------- 设计令牌 · 白底深蓝灰 ---------- */
+    /* ---------- 设计令牌 · 白底墨绿 ---------- */
     :root {
-      /* 纯白基底，深蓝灰主色 */
-      --bg-base: #ffffff;           /* 纯白背景 */
-      --bg-surface: #ffffff;        /* 表面纯白 */
+      /* 纯白基底，墨绿主色 */
+      --bg-base: #ffffff;
+      --bg-surface: #ffffff;
       --bg-glass: rgba(255, 255, 255, 0.8);
-      --border-light: #eaeef2;      /* 浅灰蓝边框 */
-      --border-medium: #d0d9e0;
+      --border-light: #e4ebe8;      /* 浅绿灰边框 */
+      --border-medium: #c2d0ca;
       
-      --text-primary: #1e2b3c;      /* 深蓝灰 */
-      --text-secondary: #4a5a6e;
-      --text-tertiary: #7b8b9f;
+      --text-primary: #1e3a2e;      /* 深墨绿 */
+      --text-secondary: #3b5a4c;
+      --text-tertiary: #6f8b7c;
       
-      --accent-100: #e9edf2;        /* 极浅灰蓝 */
-      --accent-300: #b8c5d4;
-      --accent-500: #2c3e50;        /* 主色：深蓝灰，稳重 */
-      --accent-700: #1a2a38;
+      --accent-100: #e6f0eb;        /* 极浅墨绿 */
+      --accent-300: #aec2b8;
+      --accent-500: #2c4a3e;        /* 主色：墨绿，稳重 */
+      --accent-700: #1f352b;
       
       --success: #2c7a5a;
       --warning: #b85e3a;
       --danger: #c24b4b;
       
-      /* 以下保持不变 (字体家族、尺寸、间距、圆角、阴影、过渡) */
+      /* 以下保持不变 */
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
       
@@ -100,7 +100,6 @@
       margin: 0 auto;
     }
 
-    /* 设计系统标题区 */
     .ds-header {
       margin-bottom: 3rem;
       text-align: center;
@@ -120,7 +119,6 @@
       margin: 0 auto;
     }
 
-    /* 网格布局：侧边导航 + 内容 */
     .ds-layout {
       display: grid;
       grid-template-columns: 200px 1fr;
@@ -165,7 +163,6 @@
       gap: 2.5rem;
     }
 
-    /* 章节卡片 */
     .section-card {
       background: var(--bg-surface);
       backdrop-filter: blur(8px);
@@ -186,7 +183,6 @@
       padding-left: var(--space-4);
     }
 
-    /* 字体展示区 */
     .font-demo {
       display: flex;
       flex-direction: column;
@@ -207,7 +203,6 @@
       font-weight: 500;
     }
 
-    /* 组件网格 */
     .component-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -215,7 +210,6 @@
       margin-top: var(--space-4);
     }
 
-    /* 卡片基础样式 */
     .card {
       background: white;
       border-radius: var(--radius-lg);
@@ -229,7 +223,6 @@
       transform: translateY(-2px);
     }
 
-    /* 帖子卡片 */
     .post-card {
       max-width: 340px;
     }
@@ -273,7 +266,6 @@
       font-size: var(--text-xs);
     }
 
-    /* 数据卡片 */
     .data-card {
       background: #ffffff;
       border-radius: var(--radius-lg);
@@ -294,7 +286,6 @@
       margin-top: var(--space-1);
     }
 
-    /* 按钮设计 */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -341,7 +332,6 @@
       border-color: var(--accent-500);
     }
 
-    /* 标签/徽章 */
     .badge {
       display: inline-block;
       padding: var(--space-1) var(--space-3);
@@ -357,7 +347,6 @@
       color: var(--success);
     }
 
-    /* 进度条 */
     .progress {
       width: 100%;
       height: 0.5rem;
@@ -371,7 +360,6 @@
       border-radius: var(--radius-full);
     }
 
-    /* 导航栏 */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -403,7 +391,6 @@
       color: var(--accent-700);
     }
 
-    /* 底部导航 (移动) */
     .bottom-nav {
       display: flex;
       justify-content: space-around;
@@ -437,7 +424,6 @@
       margin: var(--space-6) 0;
     }
 
-    /* 交互示例 */
     .like-btn {
       background: none;
       border: none;
@@ -459,7 +445,6 @@
       transform: scale(1.2);
     }
 
-    /* 模拟容器 */
     .phone-frame {
       max-width: 400px;
       margin: 0 auto;
@@ -474,12 +459,11 @@
 <body>
 <div class="container">
   <div class="ds-header">
-    <h1>白底稳重 · 社区设计系统</h1>
-    <p>纯白基底 · 深蓝灰主色 · 干净耐看</p>
+    <h1>白底稳重 · 墨绿主题 · 社区设计系统</h1>
+    <p>纯白基底 · 墨绿主色 · 自然沉静</p>
   </div>
 
   <div class="ds-layout">
-    <!-- 侧边导航 -->
     <nav class="ds-sidebar">
       <ul>
         <li><a href="#colors">🎨 色彩</a></li>
@@ -493,25 +477,23 @@
     </nav>
 
     <div class="ds-content">
-      <!-- 色彩 -->
       <section id="colors" class="section-card">
-        <h2 class="section-title">色彩系统 · 白底深蓝灰</h2>
+        <h2 class="section-title">色彩系统 · 白底墨绿</h2>
         <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-          <div style="width: 100px; height: 100px; background: var(--accent-500); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white; font-weight: 500;">主色 2c3e50</div>
-          <div style="width: 100px; height: 100px; background: var(--accent-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: var(--text-primary);">辅色 e9edf2</div>
-          <div style="width: 100px; height: 100px; background: var(--text-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">文字 1e2b3c</div>
+          <div style="width: 100px; height: 100px; background: var(--accent-500); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white; font-weight: 500;">主色 2c4a3e</div>
+          <div style="width: 100px; height: 100px; background: var(--accent-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: var(--text-primary);">辅色 e6f0eb</div>
+          <div style="width: 100px; height: 100px; background: var(--text-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">文字 1e3a2e</div>
           <div style="width: 100px; height: 100px; background: var(--text-secondary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">辅助文字</div>
         </div>
-        <p style="margin-top: 1rem; color: var(--text-secondary);">纯白背景，深蓝灰主色，干净稳重，层次分明</p>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">墨绿代表自然、沉静、可信赖，与纯白搭配干净稳重</p>
       </section>
 
-      <!-- 字体 -->
       <section id="typography" class="section-card">
         <h2 class="section-title">字体系统</h2>
         <div class="font-demo">
           <div class="font-row">
             <span class="font-tag">衬线标题 Crimson Pro</span>
-            <span style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--accent-700);">稳重大道</span>
+            <span style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--accent-700);">墨绿社区</span>
           </div>
           <div class="font-row">
             <span class="font-tag">正文 Inter Regular</span>
@@ -521,18 +503,12 @@
             <span class="font-tag">数字/标签 Inter Medium</span>
             <span style="font-family: var(--font-sans); font-weight: 500;">1.2k 点赞 · 348 评论</span>
           </div>
-          <div class="font-row">
-            <span class="font-tag">引用/说明</span>
-            <span style="font-family: var(--font-serif); font-style: italic;">— 干净、耐看</span>
-          </div>
         </div>
       </section>
 
-      <!-- 卡片 -->
       <section id="cards" class="section-card">
         <h2 class="section-title">卡片组件</h2>
         <div class="component-grid">
-          <!-- 帖子卡片 -->
           <div class="card post-card">
             <div class="post-header">
               <div class="avatar">M</div>
@@ -550,8 +526,6 @@
               <span><i class="fa-regular fa-eye"></i> 1.2k</span>
             </div>
           </div>
-
-          <!-- 数据卡片 -->
           <div class="data-card">
             <div class="data-value">1,286</div>
             <div class="data-label">今日活跃</div>
@@ -563,7 +537,6 @@
         </div>
       </section>
 
-      <!-- 按钮 -->
       <section id="buttons" class="section-card">
         <h2 class="section-title">按钮</h2>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
@@ -574,7 +547,6 @@
         </div>
       </section>
 
-      <!-- 数据组件 -->
       <section id="data" class="section-card">
         <h2 class="section-title">数据组件</h2>
         <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
@@ -592,7 +564,6 @@
         </div>
       </section>
 
-      <!-- 导航 -->
       <section id="navigation" class="section-card">
         <h2 class="section-title">导航栏示例</h2>
         <div style="background: var(--bg-glass); border-radius: var(--radius-xl); padding: 1px;">
@@ -618,7 +589,6 @@
         </div>
       </section>
 
-      <!-- 交互 -->
       <section id="interactions" class="section-card">
         <h2 class="section-title">微交互</h2>
         <div style="display: flex; gap: 2rem;">
@@ -645,18 +615,36 @@
         </div>
       </section>
 
-      <!-- 统一说明 -->
       <section class="section-card" style="background: var(--accent-100);">
-        <h2 class="section-title" style="border-left-color: var(--accent-700);">快速成型指南</h2>
-        <p style="margin-bottom: 1rem;">所有样式基于 CSS 变量，可一键替换主题。推荐搭配 <strong>Radix UI / Shadcn UI</strong> 使用，组件行为由库保证，样式用这套令牌覆盖。</p>
-        <pre style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: var(--radius-lg);">:root {<br>  --accent-500: #2c3e50;<br>  --font-serif: 'Crimson Pro', serif;<br>  ...<br>}</pre>
+        <h2 class="section-title" style="border-left-color: var(--accent-700);">快速切换其他稳重配色</h2>
+        <p style="margin-bottom: 1rem;">只需修改以下变量值，即可更换主题：</p>
+        <pre style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: var(--radius-lg);">
+/* 深蓝灰 */
+--accent-500: #2c3e50;
+--accent-100: #e9edf2;
+--text-primary: #1e2b3c;
+
+/* 墨绿 (当前) */
+--accent-500: #2c4a3e;
+--accent-100: #e6f0eb;
+--text-primary: #1e3a2e;
+
+/* 深褐 */
+--accent-500: #4a3e2c;
+--accent-100: #f0ebe6;
+--text-primary: #3a2e1e;
+
+/* 暗紫 */
+--accent-500: #3e2c4a;
+--accent-100: #ebe6f0;
+--text-primary: #2e1e3a;
+        </pre>
       </section>
     </div>
   </div>
 
-  <!-- 手机预览框（模拟实际效果） -->
   <div style="margin-top: 4rem;">
-    <h2 class="section-title" style="text-align: center;">📱 移动端预览 · 白底深蓝灰</h2>
+    <h2 class="section-title" style="text-align: center;">📱 移动端预览 · 墨绿主题</h2>
     <div class="phone-frame">
       <div style="padding: 1rem 1rem 0.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; font-size: 0.75rem;">
         <span>9:41</span><span><i class="fa-regular fa-signal"></i> 5G</span>
