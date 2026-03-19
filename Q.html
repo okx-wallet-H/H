@@ -402,7 +402,7 @@
             </div>
         </div>
 
-        <!-- 卡片1: 实时动态 -->
+        <!-- 卡片1: 实时动态 (价格跳动，K线真实) -->
         <div class="collapse-card card-first" id="cardLive">
             <div class="card-header" onclick="toggleCard('liveContent')">
                 <div class="header-row">
@@ -419,9 +419,9 @@
             </div>
             <div class="card-content" id="liveContent">
                 <div class="candlestick-container">
-                    <div class="chart-header">
+                    <div class="chart-header" id="chartHeader">
                         <span>H/USDT · 4h</span>
-                        <span>最高 0.128 / 最低 0.121</span>
+                        <span id="priceRange">最高 0.128 / 最低 0.121</span>
                     </div>
                     <div class="chart-grid">
                         <div class="candle" style="--h:0.6"><div class="candle-body green" style="--h:0.6"></div></div>
@@ -443,7 +443,7 @@
                 <div class="live-feed">
                     <div class="feed-header">
                         <span><i class="fas fa-sync-alt fa-spin"></i> 实时成交</span>
-                        <span>最新价格 0.124</span>
+                        <span id="latestPrice">最新价格 0.124</span>
                     </div>
                     <ul class="feed-list" id="feedList"></ul>
                 </div>
@@ -577,7 +577,7 @@
             </div>
         </div>
 
-        <!-- 卡片4: 活动规则 (表格形式，包含更新后的发放时间) -->
+        <!-- 卡片4: 活动规则 (表格形式) -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
                 <div class="header-row">
@@ -652,6 +652,11 @@
             }
         };
 
+        // 初始价格
+        let currentPrice = 0.124;
+        let basePrice = 0.124; // 用于涨跌幅计算
+
+        // 初始交易流数据
         let feedData = [
             { addr: '0x8f3...cB2', price: 0.1243, change: '+0.02%', vol: 12400, time: '30秒前' },
             { addr: '0x2a1...Df9', price: 0.1241, change: '-0.01%', vol: 8750, time: '2分钟前' },
@@ -788,31 +793,61 @@
             if (btn) btn.innerText = showAllMembers ? '收起成员' : '查看全部成员';
         }
 
+        // 更新H价格（数字跳动）
+        function updatePrice() {
+            // 随机波动在 -0.002 到 +0.002 之间
+            const change = (Math.random() * 0.004 - 0.002);
+            currentPrice = parseFloat((currentPrice + change).toFixed(4));
+            // 限制在合理区间，避免太离谱
+            if (currentPrice < 0.118) currentPrice = 0.118;
+            if (currentPrice > 0.130) currentPrice = 0.130;
+
+            // 更新卡片摘要价格
+            document.getElementById('hPrice').innerText = currentPrice.toFixed(3);
+
+            // 更新K线图价格区间（动态生成）
+            const high = (currentPrice * (1 + 0.02)).toFixed(3);
+            const low = (currentPrice * (1 - 0.02)).toFixed(3);
+            document.getElementById('priceRange').innerHTML = `最高 ${high} / 最低 ${low}`;
+
+            // 更新最新价格显示
+            document.getElementById('latestPrice').innerHTML = `最新价格 ${currentPrice.toFixed(3)}`;
+
+            // 可选：更新实时成交列表中的价格联动（新交易会使用最新价）
+        }
+
+        // 更新实时交易列表（更真实）
         function updateFeed() {
             const feedList = document.getElementById('feedList');
             if (!feedList) return;
-            const basePrice = 0.124 + Math.random() * 0.002 - 0.001;
-            const change = ((basePrice - 0.124) / 0.124 * 100).toFixed(2);
+
+            // 生成随机价格，围绕当前价格波动
+            const price = currentPrice + (Math.random() * 0.002 - 0.001);
+            const priceFixed = price.toFixed(4);
+            const change = ((price - basePrice) / basePrice * 100).toFixed(2);
             const changeClass = change >= 0 ? 'up' : 'down';
             const changeSign = change >= 0 ? '+' : '';
-            const newVol = Math.floor(Math.random() * 5000 + 3000);
-            const newAddr = '0x' + Math.random().toString(16).substring(2,8) + '...' + Math.random().toString(16).substring(2,5);
+            const vol = Math.floor(Math.random() * 8000 + 2000); // 随机交易量 2k-10k
+
+            const addr = '0x' + Math.random().toString(16).substring(2,8) + '...' + Math.random().toString(16).substring(2,5);
             const newItem = document.createElement('li');
             newItem.className = 'feed-item';
             newItem.innerHTML = `
-                <span class="feed-address">${newAddr}</span>
-                <span class="feed-price">${basePrice.toFixed(4)}</span>
+                <span class="feed-address">${addr}</span>
+                <span class="feed-price">${priceFixed}</span>
                 <span class="feed-change ${changeClass}">${changeSign}${change}%</span>
                 <span class="feed-time">刚刚</span>
             `;
             feedList.prepend(newItem);
-            while (feedList.children.length > 6) feedList.removeChild(feedList.lastElementChild);
+            while (feedList.children.length > 7) feedList.removeChild(feedList.lastElementChild);
         }
 
         function refreshData() { alert('数据已刷新'); renderUserData(); }
 
         window.onload = function() {
             renderUserData();
+
+            // 填充初始交易列表
             const feedList = document.getElementById('feedList');
             feedData.forEach(item => {
                 const li = document.createElement('li');
@@ -825,7 +860,12 @@
                 `;
                 feedList.appendChild(li);
             });
-            setInterval(updateFeed, 8000);
+
+            // 启动价格跳动（每秒更新）
+            setInterval(updatePrice, 2000);
+
+            // 启动实时交易更新（每5秒新增一笔）
+            setInterval(updateFeed, 5000);
         };
     </script>
 </body>
