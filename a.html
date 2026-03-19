@@ -1,380 +1,445 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>海豚经济模型 · 双向质押 · 移动精修版</title>
-    <style>
-        /* ----- 样式完全保留（与上一版相同，确保移动端舒适）----- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>字效交互 · 移动风格指南</title>
+  <style>
+    /* ----- 全局设计 —— 深色磨砂质感，适合APP背景 ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
 
-        body {
-            background: #f4f9fe;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.7;
-            color: #1a2f41;
-            padding: 18px 14px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: center;
-            letter-spacing: 0.02rem;
-            font-weight: 380;
-        }
+    body {
+      background: radial-gradient(circle at 30% 10%, #1b2635, #0b0f17);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
 
-        .container {
-            max-width: 700px;
-            width: 100%;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 42px 42px 42px 42px;
-            box-shadow: 0 28px 48px -20px rgba(13, 55, 80, 0.2), 0 6px 12px rgba(0,35,55,0.04);
-            padding: 32px 28px;
-            border: 1px solid rgba(145, 200, 230, 0.3);
-            backdrop-filter: blur(1px);
-        }
+    .container {
+      max-width: 1300px;
+      width: 100%;
+    }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(145deg, #0b4f6c, #1b7b9e, #389ec6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-            background-image: linear-gradient(to right, #1b7b9e, #1b7b9e 10px, transparent 10px);
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-            padding-left: 34px;
-            letter-spacing: -0.3px;
-            line-height: 1.2;
-            text-shadow: 0 2px 5px rgba(27,123,158,0.1);
-            position: relative;
-        }
+    /* 标题区域 */
+    .header {
+      margin-bottom: 3rem;
+      text-align: left;
+    }
 
-        h1::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, #1b7b9e, #b2d9f0, transparent);
-            border-radius: 3px;
-            margin-top: 12px;
-            margin-left: 34px;
-            opacity: 0.7;
-        }
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #ffffff 0%, #c0ccf0 90%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
 
-        .subtitle {
-            font-size: 1.06rem;
-            color: #497e9c;
-            margin-bottom: 36px;
-            font-style: italic;
-            border-bottom: 1px dashed #bed8f0;
-            padding-bottom: 16px;
-            margin-left: 44px;
-            margin-top: 6px;
-            font-weight: 360;
-        }
+    .subhead {
+      font-size: 1.2rem;
+      color: #9aa8c7;
+      margin-top: 0.5rem;
+      font-weight: 400;
+      border-left: 4px solid #4a80e5;
+      padding-left: 1.2rem;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(2px);
+    }
 
-        h2 {
-            font-size: 2.0rem;
-            font-weight: 590;
-            margin: 44px 0 20px 0;
-            background: linear-gradient(90deg, #e3f0fa 0%, #f2f9ff 90%);
-            padding: 12px 22px 12px 34px;
-            border-radius: 50px 18px 18px 50px;
-            color: #0a4f6e;
-            border-left: 6px solid #1b7b9e;
-            letter-spacing: -0.1px;
-            line-height: 1.3;
-            box-shadow: inset 1px 1px 4px rgba(255,255,255,0.9), inset -2px -2px 6px rgba(0,40,60,0.05);
-        }
+    /* 网格 —— 卡片式瀑布 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.8rem;
+      margin: 3rem 0 2.5rem;
+    }
 
-        h3 {
-            font-size: 1.55rem;
-            font-weight: 550;
-            margin: 32px 0 16px 0;
-            color: #13638a;
-            padding-left: 26px;
-            border-left: 4px solid #8fc8e7;
-            line-height: 1.4;
-            display: flex;
-            align-items: center;
-        }
+    /* 卡片通用样式 —— 玻璃质感，圆润 */
+    .card {
+      background: rgba(20, 28, 45, 0.7);
+      backdrop-filter: blur(10px) saturate(180%);
+      -webkit-backdrop-filter: blur(10px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 36px;
+      padding: 2rem 1.5rem 1.8rem;
+      box-shadow: 0 25px 40px -15px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255,255,255,0.06);
+      transition: transform 0.25s ease, border-color 0.2s, box-shadow 0.4s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: default;
+      -webkit-tap-highlight-color: transparent;  /* 移动端去除点击闪灰 */
+    }
 
-        h3::before {
-            content: "●";
-            color: #1f8bbf;
-            font-size: 1.3rem;
-            margin-right: 12px;
-            opacity: 0.8;
-        }
+    /* 卡片悬停/轻触时轻微抬起 (提升交互感) */
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 30px 50px -18px #000d1a, 0 0 0 1px rgba(100, 180, 255, 0.2) inset;
+    }
 
-        p {
-            margin-bottom: 1.4rem;
-            font-size: 1.1rem;
-            color: #1f3a50;
-            text-align: left;
-            line-height: 1.8;
-            word-break: break-word;
-            font-weight: 380;
-        }
+    /* 移动端点击反馈 (与悬停逻辑互补) */
+    .card:active {
+      transform: scale(0.98) translateY(-3px);
+      transition: transform 0.1s;
+    }
 
-        .highlight {
-            background: #f1f9ff;
-            border-radius: 28px;
-            padding: 22px 28px;
-            margin: 34px 0;
-            border: 1px solid #cde3f3;
-            box-shadow: 0 14px 24px -18px rgba(0,90,130,0.28), 0 0 0 1px rgba(255,255,255,0.6) inset;
-        }
+    /* 效果名称 (小标题) */
+    .effect-name {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      font-weight: 500;
+      color: #90a4d4;
+      background: rgba(10, 20, 35, 0.7);
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
 
-        .highlight strong {
-            color: #0b5f8a;
-            font-weight: 650;
-        }
+    /* 示例文本 — 巨大，展示字体效果 */
+    .sample-text {
+      font-size: clamp(3.2rem, 10vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0.5rem 0 0.8rem;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+      word-break: break-word;
+      width: 100%;
+      text-rendering: optimizeLegibility;
+    }
 
-        .card-note {
-            background: #fff9ea;
-            border-left: 8px solid #f0b34b;
-            padding: 22px 28px;
-            border-radius: 28px;
-            margin: 38px 0;
-            box-shadow: 0 14px 22px -18px rgba(200,130,30,0.25);
-        }
+    /* 描述文字 */
+    .effect-desc {
+      font-size: 0.95rem;
+      color: #b0c2e6;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.45rem 1.1rem;
+      border-radius: 60px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.04);
+      margin-top: 0.8rem;
+    }
 
-        .badge {
-            background: #146b8f;
-            color: white;
-            font-size: 0.76rem;
-            border-radius: 50px;
-            padding: 6px 18px 7px 18px;
-            display: inline-block;
-            margin-right: 16px;
-            letter-spacing: 0.6px;
-            font-weight: 540;
-            text-transform: uppercase;
-            box-shadow: 0 6px 12px -8px #0b4f6c;
-            border: 1px solid rgba(255,255,255,0.25);
-            vertical-align: middle;
-        }
+    /* ----- 每个卡片独特的字体效果 & 交互 (hover / active 双触发) ----- */
+    /* 为了让移动端点击也能看到变化，同时使用 :hover 和 :active */
 
-        ul, ol {
-            margin: 1.2rem 0 2rem 1.8rem;
-            padding-left: 0.5rem;
-        }
+    /* 卡片 1 — 重阴影 · 立体悬浮 */
+    .card-1 .sample-text {
+      color: #ffffff;
+      text-shadow: 4px 4px 0 #3f4e7a, 8px 8px 0 #1e2a44, 12px 12px 0 #0c1424;
+      transition: text-shadow 0.25s, color 0.2s;
+    }
+    .card-1:hover .sample-text,
+    .card-1:active .sample-text {
+      text-shadow: 2px 2px 0 #6688ee, 5px 5px 0 #3a58a0, 9px 9px 0 #1b2b55, 13px 13px 0 #0c162f;
+      color: #f0f5ff;
+    }
 
-        li {
-            margin-bottom: 0.9rem;
-            font-size: 1.08rem;
-            color: #1f3a50;
-            line-height: 1.75;
-            padding-left: 0.8rem;
-            border-left: 2px dotted #b8d6f0;
-        }
+    /* 卡片 2 — 渐变 · 流光 */
+    .card-2 .sample-text {
+      background: linear-gradient(135deg, #f7971e, #ffd200, #84fab0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 200% 200%;
+    }
+    .card-2:hover .sample-text,
+    .card-2:active .sample-text {
+      background: linear-gradient(145deg, #ff6a88, #ff99ac, #a1c4fd, #c2e9fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      background-size: 300% 300%;
+      filter: drop-shadow(0 0 9px rgba(255,200,100,0.6));
+    }
 
-        li::marker {
-            color: #1f7b9e;
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
+    /* 卡片 3 — 霓虹发光 */
+    .card-3 .sample-text {
+      color: #ffffff;
+      text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff44aa, 0 0 20px #ff2299, 0 0 30px #ff0080;
+    }
+    .card-3:hover .sample-text,
+    .card-3:active .sample-text {
+      text-shadow: 0 0 8px #ff99ee, 0 0 18px #ff66cc, 0 0 30px #ff33aa, 0 0 45px #ff0099, 0 0 60px #ff0066;
+      color: #ffe6ff;
+    }
 
-        .code-block {
-            background: #1e2e3c;
-            color: #e2f0ff;
-            padding: 22px 26px;
-            border-radius: 30px;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.94rem;
-            overflow-x: auto;
-            margin: 34px 0;
-            border: 1px solid #2b4a5e;
-            box-shadow: inset 0 4px 12px #0f1e28, 0 8px 14px -10px #10212b;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
+    /* 卡片 4 — 描边 · 镂空 */
+    .card-4 .sample-text {
+      color: transparent;
+      -webkit-text-stroke: 3px #57ccff;
+      text-stroke: 3px #57ccff;
+      font-weight: 800;
+    }
+    .card-4:hover .sample-text,
+    .card-4:active .sample-text {
+      -webkit-text-stroke: 2px #b3e6ff;
+      text-stroke: 2px #b3e6ff;
+      color: rgba(255, 255, 255, 0.15);  /* 微填充 */
+      text-shadow: 0 0 12px #57ccff;
+    }
 
-        .figure-placeholder {
-            background: #e2eff9;
-            border-radius: 36px;
-            padding: 34px 22px;
-            text-align: center;
-            color: #195d81;
-            border: 2px dashed #90bcdb;
-            margin: 38px 0;
-            font-weight: 520;
-            font-size: 1.1rem;
-            box-shadow: 0 12px 20px -16px #2a6990 inset;
-        }
+    /* 卡片 5 — 浮雕 / 压印 (深色背景上) */
+    .card-5 .sample-text {
+      color: #212c42;
+      text-shadow: -1px -1px 0 #6d7fa0, 1px 1px 0 #000000, 2px 2px 0 #10131e;
+    }
+    .card-5:hover .sample-text,
+    .card-5:active .sample-text {
+      color: #23304b;
+      text-shadow: -2px -2px 0 #9fb0d0, 2px 2px 0 #030407, 4px 4px 2px #000000;
+    }
 
-        .figure-placeholder::before {
-            content: "📊 图表展示区：";
-            font-weight: 670;
-            color: #0b4f6c;
-        }
+    /* 卡片 6 — 模糊 + 清晰交互 */
+    .card-6 .sample-text {
+      color: #eef5ff;
+      filter: blur(2px);
+      opacity: 0.9;
+      transition: filter 0.3s, opacity 0.2s;
+    }
+    .card-6:hover .sample-text,
+    .card-6:active .sample-text {
+      filter: blur(0);
+      opacity: 1;
+      text-shadow: 0 0 15px #99bbff;
+    }
 
-        hr {
-            border: none;
-            height: 2px;
-            background: linear-gradient(90deg, #cde0ee, #9bc2df, #cde0ee);
-            margin: 48px 0;
-            opacity: 0.6;
-            border-radius: 3px;
-        }
+    /* 卡片 7 — 金属拉丝 / 3D光泽 */
+    .card-7 .sample-text {
+      background: linear-gradient(135deg, #cfd9e6 0%, #e8edf5 30%, #9faec9 70%, #bec8dd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3), -1px -1px 2px rgba(255,255,255,0.2);
+    }
+    .card-7:hover .sample-text,
+    .card-7:active .sample-text {
+      background: linear-gradient(145deg, #f0f4fa, #cbd2e3, #b1bedc, #dbe2f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 4px 4px 8px #00000066, -2px -2px 4px #ffffff40;
+    }
 
-        footer {
-            margin-top: 56px;
-            text-align: left;
-            color: #58809b;
-            font-size: 0.97rem;
-            border-top: 2px solid #d1e2f0;
-            padding-top: 24px;
-            font-style: italic;
-            letter-spacing: 0.2px;
-            font-weight: 350;
-        }
+    /* 卡片 8 — 打字机 · 等宽 + 光标 (伪元素交互) */
+    .card-8 .sample-text {
+      font-family: 'Courier New', Courier, monospace;
+      color: #b7d0ff;
+      border-right: 3px solid #6d94dd;
+      padding-right: 5px;
+      animation: blinkCursor 1s infinite step-end;
+      letter-spacing: 1px;
+    }
+    @keyframes blinkCursor {
+      50% { border-color: transparent; }
+    }
+    .card-8:hover .sample-text,
+    .card-8:active .sample-text {
+      color: #ffffff;
+      border-right-color: #ffcc66;
+      animation: none;  /* 悬停时停止闪烁，字体加粗 */
+      font-weight: 700;
+      text-shadow: 0 0 6px #b7d0ff;
+    }
 
-        @media (max-width: 640px) {
-            body { padding: 12px 10px; }
-            .container { padding: 26px 20px; border-radius: 36px; }
-            h1 { font-size: 2.2rem; padding-left: 28px; background-image: linear-gradient(to right, #1b7b9e, #1b7b9e 8px, transparent 8px); }
-            h1::after { margin-left: 28px; width: 70px; }
-            .subtitle { margin-left: 36px; font-size: 0.98rem; }
-            h2 { font-size: 1.8rem; padding-left: 28px; border-left-width: 6px; margin: 38px 0 16px; }
-            h3 { font-size: 1.45rem; padding-left: 20px; }
-            p { font-size: 1.05rem; line-height: 1.75; }
-            ul, ol { margin-left: 1.2rem; }
-            li { font-size: 1.04rem; padding-left: 0.6rem; }
-            .badge { font-size: 0.7rem; padding: 5px 14px; }
-            .highlight, .card-note { padding: 18px 22px; border-radius: 24px; }
-        }
+    /* 卡片 9 — 手写 · 摇摆 */
+    .card-9 .sample-text {
+      font-family: 'Segoe Script', 'Brush Script MT', cursive;
+      font-weight: 400;
+      transform: rotate(-1deg);
+      text-shadow: 2px 2px 2px #2f4172;
+      transition: transform 0.2s, text-shadow 0.3s;
+    }
+    .card-9:hover .sample-text,
+    .card-9:active .sample-text {
+      transform: rotate(2deg) scale(1.08);
+      text-shadow: 6px 6px 8px #1f2e55, -2px -2px 4px #e0d9ff;
+      color: #ffe2a4;
+    }
 
-        @media (max-width: 420px) {
-            .container { padding: 22px 16px; }
-            h1 { font-size: 1.9rem; padding-left: 24px; background-image: linear-gradient(to right, #1b7b9e, #1b7b9e 6px, transparent 6px); }
-            h1::after { margin-left: 24px; height: 2px; }
-            h2 { font-size: 1.6rem; padding-left: 22px; }
-            h3 { font-size: 1.35rem; }
-            p { font-size: 1rem; }
-        }
+    /* 卡片 10 — 波浪下划线 / 特效 */
+    .card-10 .sample-text {
+      color: #d2e0ff;
+      text-decoration: underline wavy #6699ee 3px;
+      text-underline-offset: 12px;
+      transition: text-decoration-color 0.2s, text-underline-offset 0.2s, color 0.2s;
+    }
+    .card-10:hover .sample-text,
+    .card-10:active .sample-text {
+      color: #ffffff;
+      text-decoration-color: #ffaa66;
+      text-underline-offset: 18px;
+      text-decoration-thickness: 5px;
+      text-shadow: 0 4px 8px #224488;
+    }
 
-        ::selection { background: #c0e2f5; color: #07364b; }
-        .highlight:hover, .card-note:hover { transform: translateY(-2px); box-shadow: 0 20px 28px -18px #12597a; transition: 0.2s ease; }
-    </style>
+    /* 卡片 11 — 粗糙/颗粒质感 (用阴影模拟) */
+    .card-11 .sample-text {
+      color: #f0e9d8;
+      text-shadow: 2px 2px 0 #5b4949, 4px 4px 0 #3b2e2e, 1px -1px 0 #ffffbb;
+      opacity: 0.95;
+    }
+    .card-11:hover .sample-text,
+    .card-11:active .sample-text {
+      text-shadow: 3px 3px 0 #aa8866, 6px 6px 0 #5f4433, -1px -2px 0 #ffeeaa, 2px -1px 0 #ffeeaa;
+      color: #fff7e6;
+    }
+
+    /* 卡片 12 — 窄字距 + 宽字距 交互 */
+    .card-12 .sample-text {
+      color: #e7ecff;
+      letter-spacing: -2px;
+      font-weight: 700;
+      transition: letter-spacing 0.25s, text-shadow 0.2s;
+    }
+    .card-12:hover .sample-text,
+    .card-12:active .sample-text {
+      letter-spacing: 8px;
+      text-shadow: 0 0 10px #aaccff, 0 0 20px #5698f0;
+      color: #ffffff;
+    }
+
+    /* 页脚小提示 */
+    .footer-note {
+      text-align: center;
+      color: #6a7da0;
+      font-size: 0.95rem;
+      border-top: 1px dashed rgba(255,255,255,0.1);
+      padding-top: 2rem;
+      margin-top: 1rem;
+      letter-spacing: 0.5px;
+    }
+    .footer-note span {
+      background: #1b253b;
+      padding: 0.2rem 1rem;
+      border-radius: 60px;
+      backdrop-filter: blur(5px);
+    }
+
+    /* 微调移动端 */
+    @media (max-width: 550px) {
+      h1 { font-size: 2.1rem; }
+      .grid { gap: 1.2rem; }
+      .card { padding: 1.5rem 1rem; }
+      .sample-text { font-size: 3.2rem; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>🐬 海豚经济模型 · 核心解析</h1>
-    <div class="subtitle">逐段自然语言解读 — 联合曲线·双向质押·飞轮博弈</div>
-
-    <!-- 简介 + 联合曲线 (不变) -->
-    <h2>📌 简介 · 联合曲线与恒定乘积</h2>
-    <p><span class="badge">公平定价</span>海豚经济模型的内核是加密世界最基础的数学定价规则——<strong>联合曲线（Bonding Curve）</strong>。简单来说，它让代币的价格只与当前供应量有关：<strong>买入行为会使供应量增加，价格沿着曲线上升；卖出则供应减少，价格下降</strong>。整个过程完全由智能合约自动执行，没有人工报价，也没有订单簿，因此被公认为最透明、无争议的定价方式。</p>
-    <p>海豚代币 H 采用了最经典的 <strong>恒定乘积公式 x·y = k</strong>，这正是 Uniswap 自动做市商（AMM）的底层逻辑。在 Uniswap 池中，H 与 USDT 的储备量始终满足乘积为常数，任何交易都会改变储备量，进而改变价格。后文所有的价格跃升、飞轮效应都基于这一数学规则。</p>
-
-    <!-- 一、H代币基础经济模型 (不变) -->
-    <h2>🔷 一、H 代币的基础经济模型</h2>
-    <p><strong>总发行量 10 亿枚</strong>，固定不变，绝不增发。每笔链上交易征收 <strong>5% 的税费</strong>，这部分直接归入社区国库，用于生态发展和回购销毁。代币通过 <strong>X Layer 公平发射</strong>，初始流动性池 (LP) 锁死，确保无法撤池。应用场景目前聚焦于双向流动性挖矿和 OKX Boost 活动，另外还可获得 OKX 交易返佣 <strong>0.34%</strong>（基于交易额）。</p>
-    <p><strong>初始价格定为 0.00005 USDT</strong>，社区首次用 1 万 USDT 购买了 8 亿枚 H（早期社区轮），剩余的 2 亿枚 H 与 1 万 USDT 一起组成了 Uniswap 初始流动性池。这 8 亿枚由社区持有的 H，成为后续激励和战略储备。</p>
-
-    <!-- 二、首期流动性挖矿设计 (完全重写为双向质押) -->
-    <h2>⛏️ 二、首期双向流动性挖矿设计</h2>
-    
-    <h3>① 质押 USDT，收益 H 代币（池A）</h3>
-    <p>首个 USDT 质押池目标规模为 <strong>10 万 USDT</strong>，流动性部署在 Uniswap。用户质押 USDT 挖 H 代币，全程智能合约执行，<strong>无锁仓、无周期限制</strong>，随时可赎回。每日收益率在 <strong>0.5% ~ 1.2%</strong> 之间浮动，根据质押时长阶梯递增。收益以 H 代币形式发放，按当日 20 点 H/USDT 实时价格折算成等值 USDT 数量。</p>
-    <div class="highlight">
-        <p><strong>🌟 额外福利：早期永久性分红权</strong> —— 项目方发行了 10 万枚「分红代币」，代表早期建设者的权益，可以出售。在 USDT 质押池未达到 10 万 USDT 之前，每日收益以分红代币的形式发放；一旦满池，剩余的分红代币会根据权重自动分发给持有者。分红代币所在地址将永久享受智能合约自动分红的权利（分红来自两个质押池的部分收益）。</p>
+  <div class="container">
+    <div class="header">
+      <h1>字体效果交互<br>用于APP整体风格</h1>
+      <div class="subhead">悬停 · 点击 —— 每个卡片都藏有动态字效</div>
     </div>
 
-    <h3>② 质押 H，收益 USDT 代币（池B）</h3>
-    <p>第二个池为 H 质押池，目标规模 <strong>3 亿 H</strong>（约占社区库存的一部分）。用户质押 H 可获得 USDT 收益，同样无锁仓、无周期。每日 USDT 收益率也采用阶梯设计（0.5% ~ 1.2% 的 USDT 本位），收益直接以 USDT 发放，来源于社区国库（交易税和返佣）。每日晚 20 点根据质押的 H 份额比例分配国库中划拨的 USDT 奖励。</p>
-    <p><strong>质押收益阶梯（适用于两个池，以质押时长累计）</strong>：</p>
-    <ul>
-        <li><strong>第 1-7 天</strong>：日利率 0.5%</li>
-        <li><strong>第 8-15 天</strong>：日利率 0.6%</li>
-        <li><strong>第 16-30 天</strong>：日利率 0.8%</li>
-        <li><strong>第 31-60 天</strong>：日利率 1.0%</li>
-        <li><strong>61 天及以上</strong>：日利率 1.2%</li>
-    </ul>
-    <p>池A收益以 H 发放，池B收益以 USDT 发放，两者均以实时价格保证 USDT 本位价值，减少瞬时抛压。</p>
-
-    <!-- 三、OKX Boost 社区交易赛 (基本不变，调整描述) -->
-    <h2>🚀 三、OKX Boost 社区交易赛</h2>
-    <p><strong>触发条件</strong>：当 USDT 质押矿池（池A）达到 10 万 USDT 后，社区将把这 10 万 USDT 一次性通过 OKX Wallet DEX 买入 H 代币。这笔买入同时服务于：① 提供 Boost 交易赛的流动性；② 储备 H 用于支付池A后续的H收益；③ 增加交易深度，推动联合曲线价格上涨。</p>
-    <p><strong>价格跃升计算（基于联合曲线）</strong>：</p>
-    <ul>
-        <li>第一次买入：1 万 USDT 购入 8 亿 H（场外价格），剩余 2 亿 H + 1 万 USDT 组 LP，此时 Uniswap 池内价格为 0.00005 USDT。</li>
-        <li>第二次买入（社区 10 万 USDT 买入）：价格变为 <strong>0.0063 USDT</strong>，较初始价上涨 125 倍。</li>
-        <li>后续如果用户为参与池B而买入 H（例如再买入 10 万 USDT 等值的 H），价格将进一步推高至 <strong>0.0232 USDT</strong>，总涨幅 464 倍。</li>
-    </ul>
-    <p>这些数字严格遵循恒定乘积公式 x·y=k，可用模型计算器复现。</p>
-
-    <!-- 四、第一期质押挖矿的双重奖励机制 (重写) -->
-    <h2>🎯 四、第一期双向质押的双重奖励机制</h2>
-    <p><strong>第一重</strong>：质押 USDT 获得 H 代币（池A），享受阶梯收益。<strong>第二重</strong>：质押 H 获得 USDT 收益（池B），同时 H 本身可在 OKX 与 OKB/USDT 交易，参与 Boost 活动获得额外空投奖励。社区每日提供流动性，指导成员利用双池套利和欧易活动，赚取资本利得与空投。</p>
-    <div class="card-note">
-        <p>✨ <strong>为什么说增长飞轮初步形成？</strong> 早期用户手上没有 H 或 USDT，为了获取双重收益，就必须 <strong>① 买入 H 参与池B、② 买入 USDT 参与池A、③ 交易产生交易量、④ 获得收益后复投或参与欧易空投</strong>。四个动作循环，持续推动买盘和交易量，联合曲线保证净买盘推动价格上涨。</p>
+    <!-- 卡片网格 · 12种字体交互 -->
+    <div class="grid">
+      <!-- 1. 立体重影 -->
+      <div class="card card-1">
+        <span class="effect-name">立体偏移</span>
+        <div class="sample-text">SHADOW</div>
+        <span class="effect-desc">悬停增强3D层次</span>
+      </div>
+      <!-- 2. 渐变流光 -->
+      <div class="card card-2">
+        <span class="effect-name">渐变流动</span>
+        <div class="sample-text">GRADIENT</div>
+        <span class="effect-desc">轻触改变色调</span>
+      </div>
+      <!-- 3. 霓虹光效 -->
+      <div class="card card-3">
+        <span class="effect-name">霓虹光</span>
+        <div class="sample-text">NEON</div>
+        <span class="effect-desc">光晕扩散收缩</span>
+      </div>
+      <!-- 4. 描边镂空 -->
+      <div class="card card-4">
+        <span class="effect-name">描边/镂空</span>
+        <div class="sample-text">STROKE</div>
+        <span class="effect-desc">描边加粗+发光</span>
+      </div>
+      <!-- 5. 浮雕压印 -->
+      <div class="card card-5">
+        <span class="effect-name">浮雕/压印</span>
+        <div class="sample-text">EMBOSS</div>
+        <span class="effect-desc">凹陷与凸起切换</span>
+      </div>
+      <!-- 6. 模糊变清晰 -->
+      <div class="card card-6">
+        <span class="effect-name">模糊对焦</span>
+        <div class="sample-text">BLUR</div>
+        <span class="effect-desc">悬停即清晰</span>
+      </div>
+      <!-- 7. 金属质感 -->
+      <div class="card card-7">
+        <span class="effect-name">金属拉丝</span>
+        <div class="sample-text">METAL</div>
+        <span class="effect-desc">光泽流动</span>
+      </div>
+      <!-- 8. 打字机风格 -->
+      <div class="card card-8">
+        <span class="effect-name">打字机</span>
+        <div class="sample-text">TYPE</div>
+        <span class="effect-desc">光标·悬停加粗</span>
+      </div>
+      <!-- 9. 手写摇曳 -->
+      <div class="card card-9">
+        <span class="effect-name">手写体</span>
+        <div class="sample-text">Cursive</div>
+        <span class="effect-desc">悬停摇摆+阴影</span>
+      </div>
+      <!-- 10. 波浪下划线 -->
+      <div class="card card-10">
+        <span class="effect-name">波浪线</span>
+        <div class="sample-text">WAVY</div>
+        <span class="effect-desc">下划线上浮</span>
+      </div>
+      <!-- 11. 颗粒粗糙 -->
+      <div class="card card-11">
+        <span class="effect-name">粗糙颗粒</span>
+        <div class="sample-text">GRIT</div>
+        <span class="effect-desc">阴影置换</span>
+      </div>
+      <!-- 12. 字距爆发 -->
+      <div class="card card-12">
+        <span class="effect-name">字距变化</span>
+        <div class="sample-text">SPACING</div>
+        <span class="effect-desc">密集→宽松</span>
+      </div>
     </div>
 
-    <!-- 五、飞轮效应形成与数据验证 (重新推演) -->
-    <h2>⚙️ 五、飞轮效应形成与数据验证</h2>
-    <p>在联合曲线下，任何净买盘都会推高价格。池A和池B的参与都需要先买入对应资产：池A需要 USDT，池B需要 H。假设池A满额 10 万 USDT，池B初始质押 3 亿 H（对应初始价值约 15000 USDT，但价格很快上涨）。每日系统支付：池A每日支付约等值 1000 USDT 的 H，池B每日支付 1000 USDT（来自国库），合计 2000 USDT 等值。</p>
-    <p><strong>国库收入爆发</strong>：用户为参与双池而买入：用户买入 10 万 U 进入池A + 社区买入 10 万 U 推动 Boost + 用户买入 H 进入池B（假设产生 10 万 U 交易量） ≈ 30 万 U 交易量。5% 交易税产生 1.5 万 USDT，加上 OKX 返佣 300000×0.34% = 1020 USDT，国库单日收入可超 1.6 万 USDT。国库每日拨付 1000 USDT 用于池B奖励，剩余资金用于回购销毁。</p>
-    <p><strong>价格飞升路径</strong>：</p>
-    <ul>
-        <li>0.00005 → 0.0063 （+125倍）</li>
-        <li>0.0063 → 0.0232 （+2.68倍）</li>
-        <li><strong>总计 464 倍</strong>。早期建设者手中的分红代币将永久享受每一期分红的资本利得，飞轮加速。</li>
-    </ul>
-
-    <!-- 六、资产分布透明化与抛压逻辑 (调整数字) -->
-    <h2>📊 六、资产分布透明化与抛压逻辑</h2>
-    <p>社区辅助 App 数据中心实时展示资产明细。</p>
-    <div class="figure-placeholder">此处为社区数据中心展示图 — 实时持仓、国库、双池数据</div>
-
-    <h3>📈 经济状态推演</h3>
-    <ul>
-        <li><strong>社区持币</strong>：8 亿（早期）+ 1.826 亿 = 9.826 亿，划拨 3 亿进池B（H质押池）后，社区实际持有 6.826 亿。</li>
-        <li><strong>池A（USDT质押池）</strong>：10 万 USDT，每日产生 H 收益；<strong>池B（H质押池）</strong>：3 亿 H 质押，每日产生 USDT 收益。</li>
-        <li><strong>每日支付速度</strong>：池A每日支付 H 数量 ≈ 1000 / 当前价格；池B每日支付 USDT 1000。国库每日收入远高于 1000，且 H 的支付从 3 亿池中消耗，可支付数年，抛压被时间稀释。</li>
-    </ul>
-
-    <h3>❓ 如何解决抛压？</h3>
-    <p><strong>官方解答</strong>：① 大部分 H 在国库、多签地址和池B质押中，散户手中币量有限，不存在巨量抛压。② 国库收入超过 1000 USDT 时，智能合约自动<strong>回购 300 USDT 等值的 H 并销毁</strong>，通缩机制。③ 早期筹码集中且大多锁定或质押，短期抛压可控。</p>
-
-    <!-- 七、天然的协调策略 (更新闭环) -->
-    <h2>🔄 七、天然的协调策略 · 互相增益 · 海豚模式</h2>
-    <p>多向赋能的飞轮结构：</p>
-    <ul>
-        <li><strong>H 币交易</strong> → 产生 5% 税点 → 进入社区国库。</li>
-        <li><strong>Boost 交易赛</strong> → 产生 OKX 返佣 0.34% → 归集国库。</li>
-        <li><strong>用户行为</strong>：质押 USDT 获得 H（池A），质押 H 获得 USDT（池B）→ 卖出部分收益 → 复投或参与欧易空投 → 继续推动交易量。</li>
-        <li><strong>社区/项目方</strong>：规划模型、对接欧易、发行代币，持续注入权益。</li>
-    </ul>
-    <p>早期用户滋养社区，国库回购、分红反哺用户，形成<strong>海豚双向飞轮</strong>。</p>
-
-    <!-- 八、模型计算器 (不变) -->
-    <h2>🧮 八、模型计算器 · 随时验证</h2>
-    <p>海豚经济模型提供了一个公开的模型计算器，任何人都可以输入买入或卖出的金额，实时查看 H 代币的新价格、新供应量、交易对池变化。无论是 1 USDT 还是 10 万 USDT，都能按照恒定乘积公式模拟出经济影响，确保模型的公开、透明、可验证。这也正是联合曲线最大的魅力：一切规则皆数学，一切结果可计算。</p>
-
-    <!-- 附：关键细节再解析 (微调分红代币描述) -->
-    <hr>
-    <h2>📎 附：原文关键细节再解析</h2>
-    <p><strong>关于分红代币的发放</strong>：在池A（USDT质押池）未满 10 万 USDT 时，每日收益以分红代币发放；满池后剩余分红代币按权重分发，之后分红代币自动享受每期分红（包括双池的部分收益），相当于永久股份，可出售。</p>
-    <p><strong>关于「社区首发持8亿」</strong>：这 8 亿枚 H 由社区早期贡献者持有，作为战略库存，用于池B激励、合作或智能合约逐步释放，避免二级冲击。</p>
-    <p><strong>关于多签地址</strong>：国库及主要持币地址均为多签，增强安全性，杜绝单点作恶。</p>
-    <p><strong>回购销毁机制</strong>：国库 USDT 余额超过 1000 时，自动触发回购 300 USDT 等值的 H 并销毁，内置通缩阀门。</p>
-
-    <!-- 结语 (不变) -->
-    <div class="highlight" style="background: #e0f0fa;">
-        <p style="font-size: 1.25rem; font-weight: 420; margin-bottom: 0; color: #0a3c55;">🐬 海豚经济模型的核心在于利用数学规则（联合曲线）将各方利益拧成一股绳：交易越多，国库越强；国库越强，回购越多；双向质押让用户更灵活，飞轮效应更显著。所有规则上链、开源、可计算，是「代码即法律」的典型实践。</p>
+    <div class="footer-note">
+      <span>✨ 点击/悬停卡片 — 每个字体效果都带有动态交互，适合APP设计探索 ✨</span>
     </div>
+  </div>
 
-    <footer>⚡ 本解析基于《海豚经济模型核心解析》文档重构，加入双向质押机制，保留全部核心逻辑。供社区学习参考。</footer>
-</div>
+  <!-- 极简JS：确保移动端触摸时也能触发:active样式（已用css处理）同时可增加一点触感 -->
+  <script>
+    (function() {
+      // 让所有卡片在移动端触摸时有更明显的类切换（辅助:active）
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.addEventListener('touchstart', function(e) {
+          // 无需额外操作，css :active已经生效，为了防止页面滚动时干扰，可加一点防误触
+        }, { passive: true });
+      });
+      // 说明：设计上 hover 和 active 共用效果，移动端点击会立刻看到字体变化。
+    })();
+  </script>
 </body>
 </html>
