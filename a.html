@@ -1,390 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📊 抽奖名单 · 完整数据分析报告</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-        }
-        body {
-            background: #f4f7fb;
-            margin: 0;
-            padding: 2rem 1rem;
-            color: #1e293b;
-        }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.1);
-            padding: 2rem 1.5rem;
-        }
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 0 0 0.25rem 0;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: inline-block;
-        }
-        .subhead {
-            color: #64748b;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        .badge {
-            background: #e6f0ff;
-            color: #1e4fd9;
-            padding: 0.4rem 1rem;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-        .kpi-card {
-            background: #f8fafc;
-            border-radius: 1.5rem;
-            padding: 1.5rem 1rem;
-            text-align: center;
-            border: 1px solid #e9eef3;
-            box-shadow: 0 4px 6px -2px rgba(0,0,0,0.02);
-        }
-        .kpi-number {
-            font-size: 2.8rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: #0f172a;
-        }
-        .kpi-label {
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #475569;
-        }
-        .kpi-note {
-            font-size: 0.8rem;
-            color: #64748b;
-            margin-top: 0.5rem;
-        }
-        .section-title {
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin: 2rem 0 1rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .section-title span {
-            background: #2563eb10;
-            padding: 0.4rem 1rem;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: 400;
-            color: #2563eb;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 1.2rem;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-            margin-bottom: 2rem;
-        }
-        th {
-            background: #f1f5f9;
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: #334155;
-            padding: 1rem 1rem;
-            text-align: left;
-        }
-        td {
-            padding: 0.9rem 1rem;
-            border-bottom: 1px solid #edf2f7;
-            color: #1e293b;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        .bar-chart {
-            background: #dbeafe;
-            border-radius: 40px;
-            height: 24px;
-            width: 100%;
-            position: relative;
-            min-width: 120px;
-        }
-        .bar-fill {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            height: 24px;
-            border-radius: 40px;
-            width: 0%;
-            transition: width 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 8px;
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .text-muted {
-            color: #64748b;
-        }
-        .team-tag {
-            display: inline-block;
-            background: #eef2ff;
-            color: #4f46e5;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
-            border-radius: 30px;
-            font-weight: 500;
-            margin-right: 0.4rem;
-        }
-        .rank-table td:first-child {
-            font-weight: 600;
-            color: #2563eb;
-            width: 50px;
-        }
-        .footer-note {
-            background: #f1f4f9;
-            border-radius: 1.2rem;
-            padding: 1.5rem;
-            font-size: 0.95rem;
-            color: #2c3e50;
-            margin-top: 2rem;
-            border: 1px solid #d9e2ef;
-        }
-        .trend-mini {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .date-sort {
-            font-family: monospace;
-        }
-        @media (max-width: 600px) {
-            .kpi-number { font-size: 2rem; }
-            td, th { padding: 0.75rem 0.5rem; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海豚舰队 · Boost Pro</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:Inter;
+    background:linear-gradient(180deg,#f7f5ff 0%,#ffffff 60%);
+    color:#1e1e2f;
+}
+
+/* 顶部 */
+.hero{
+    padding:2rem 1.5rem;
+    text-align:center;
+}
+.hero h1{font-size:1.8rem;color:#4a3a8c;}
+.hero p{color:#7a6bb0;font-size:0.9rem;margin-top:5px;}
+
+/* 资产模块 */
+.top-stats{
+    display:flex;
+    gap:12px;
+    padding:0 1.5rem;
+}
+.stat-box{
+    flex:1;
+    background:rgba(255,255,255,0.75);
+    backdrop-filter:blur(10px);
+    border-radius:18px;
+    padding:1rem;
+    border:1px solid rgba(120,100,255,0.2);
+}
+.big{
+    font-size:1.5rem;
+    font-weight:600;
+}
+.green{color:#16c784;}
+
+/* 卡片 */
+.container{padding:1.5rem;}
+.card{
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:blur(10px);
+    border-radius:22px;
+    padding:1rem;
+    margin-bottom:1.2rem;
+    border:1px solid rgba(120,100,255,0.2);
+}
+
+/* 按钮 */
+.btn{
+    width:100%;
+    padding:0.9rem;
+    border:none;
+    border-radius:40px;
+    background:linear-gradient(135deg,#6b4eff,#9f7bff);
+    color:#fff;
+    font-weight:600;
+    margin-top:10px;
+    box-shadow:0 10px 25px rgba(107,78,255,0.4);
+}
+
+/* K线 */
+.chart{
+    width:100%;
+    height:220px;
+    border:none;
+    border-radius:16px;
+}
+
+/* 动态 */
+.feed div{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    font-size:0.85rem;
+}
+
+/* FOMO */
+.fomo{
+    background:#fff5f5;
+    color:#ff4d6d;
+    padding:0.7rem;
+    border-radius:12px;
+    text-align:center;
+    font-size:0.85rem;
+    margin-top:10px;
+}
+
+/* toast */
+.toast{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#000;
+    color:#fff;
+    padding:10px 20px;
+    border-radius:20px;
+    font-size:0.8rem;
+}
+</style>
 </head>
+
 <body>
-<div class="container">
-    <h1>🎲 锦鲤·抽奖名单分析</h1>
-    <div class="subhead">
-        <span>📅 2024.02.16 – 2024.03.15 · 共23个抽奖日</span>
-        <span class="badge">⚡ 基于原始数据逐日统计</span>
-    </div>
 
-    <!-- KPI 卡片 -->
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="kpi-number">23</div>
-            <div class="kpi-label">抽奖天数</div>
-            <div class="kpi-note">2月16日 ~ 3月15日</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-number">1,295</div>
-            <div class="kpi-label">总参与人次</div>
-            <div class="kpi-note">每人每日计为1人次</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-number">56.3</div>
-            <div class="kpi-label">日均人数</div>
-            <div class="kpi-note">≈ 56人/天</div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-number">~145</div>
-            <div class="kpi-label">独立参与者</div>
-            <div class="kpi-note">去重估算 (精确值见下文)</div>
-        </div>
-    </div>
+<div class="hero">
+    <h1>OKX Boost 收益计划</h1>
+    <p>海豚社区协同策略 · 资产增值系统</p>
+</div>
 
-    <!-- 每日参与人数 + 迷你条形图 -->
-    <div class="section-title">
-        📆 每日参与人数 <span>按时间顺序</span>
+<div class="top-stats">
+    <div class="stat-box">
+        <div>总资产</div>
+        <div class="big">$12,450</div>
     </div>
-    <table>
-        <thead>
-            <tr><th>日期</th><th>人数</th><th>趋势</th><th>占峰值比例</th></tr>
-        </thead>
-        <tbody id="daily-table-body">
-            <!-- 数据通过js注入 (也可静态硬编码, 但为了方便调整, 用js生成) -->
-        </tbody>
-    </table>
-
-    <!-- 高频参与者 Top 20 (基于原始文本统计) -->
-    <div class="section-title">
-        🔥 高频参与者 TOP20 <span>出现天数 (共23天)</span>
-    </div>
-    <table class="rank-table">
-        <thead><tr><th>#</th><th>参与者标识 (原始昵称/ID)</th><th>出现天数</th><th>频次占比</th></tr></thead>
-        <tbody>
-            <tr><td>1</td><td>锦鲤团队-蔡永财+14779689</td><td>23</td><td>100%</td></tr>
-            <tr><td>2</td><td>锦鲤–孙芳–Lp</td><td>22</td><td>95.7%</td></tr>
-            <tr><td>3</td><td>锦鲤团队～兰</td><td>22</td><td>95.7%</td></tr>
-            <tr><td>4</td><td>锦鲤团队~吴兴艳~【LP】</td><td>22</td><td>95.7%</td></tr>
-            <tr><td>5</td><td>梁秀华</td><td>21</td><td>91.3%</td></tr>
-            <tr><td>6</td><td>王海兰</td><td>20</td><td>87.0%</td></tr>
-            <tr><td>7</td><td>兰兰姐</td><td>20</td><td>87.0%</td></tr>
-            <tr><td>8</td><td>许艳芳</td><td>19</td><td>82.6%</td></tr>
-            <tr><td>9</td><td>袁宗华</td><td>19</td><td>82.6%</td></tr>
-            <tr><td>10</td><td>胡志明</td><td>18</td><td>78.3%</td></tr>
-            <tr><td>11</td><td>刘慧玲</td><td>18</td><td>78.3%</td></tr>
-            <tr><td>12</td><td>梁粟</td><td>18</td><td>78.3%</td></tr>
-            <tr><td>13</td><td>锦鲤团队～武</td><td>17</td><td>73.9%</td></tr>
-            <tr><td>14</td><td>锦鲤——郭亮梅——LP</td><td>17</td><td>73.9%</td></tr>
-            <tr><td>15</td><td>H | 李子杰</td><td>16</td><td>69.6%</td></tr>
-            <tr><td>16</td><td>王敬博</td><td>16</td><td>69.6%</td></tr>
-            <tr><td>17</td><td>康纪贵</td><td>15</td><td>65.2%</td></tr>
-            <tr><td>18</td><td>丫丫</td><td>15</td><td>65.2%</td></tr>
-            <tr><td>19</td><td>凤</td><td>14</td><td>60.9%</td></tr>
-            <tr><td>20</td><td>沐枫</td><td>14</td><td>60.9%</td></tr>
-        </tbody>
-    </table>
-    <div class="text-muted" style="margin-top: -1.5rem; margin-bottom: 2rem;">* 基于23个抽奖日逐条记录统计，部分昵称因格式差异单独计数，高频者大多每日参与。</div>
-
-    <!-- 团队分布 & 去重分析 -->
-    <div style="display: flex; flex-wrap: wrap; gap: 2rem; margin-bottom: 2rem;">
-        <!-- 左侧 团队占比 -->
-        <div style="flex: 1 1 260px;">
-            <div class="section-title" style="margin-top: 0;">🧩 团队归属分布</div>
-            <table style="width: 100%;">
-                <thead><tr><th>团队/类别</th><th>估算占比</th><th>代表成员</th></tr></thead>
-                <tbody>
-                    <tr><td>🐟 锦鲤团队</td><td>~62%</td><td>蔡永财、孙芳、吴兴艳、兰、郭亮梅…</td></tr>
-                    <tr><td>🐱 琪琪团队</td><td>~23%</td><td>豪哥、康康、16281854、34169541、小林…</td></tr>
-                    <tr><td>🌟 聚心团队</td><td>~5%</td><td>飘雪、锦辰47162981</td></tr>
-                    <tr><td>🧪 协豚组</td><td>~2%</td><td>应蓉-53344958</td></tr>
-                    <tr><td>👤 独立/其他</td><td>~8%</td><td>梁秀华、袁宗华、丫丫、凤、沐枫等</td></tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- 右侧 去重详情 -->
-        <div style="flex: 2 1 400px;">
-            <div class="section-title" style="margin-top: 0;">📇 去重参与者统计</div>
-            <table>
-                <thead><tr><th>项目</th><th>数量</th><th>备注</th></tr></thead>
-                <tbody>
-                    <tr><td>原始条目总数</td><td>1295</td><td>23天合计人次</td></tr>
-                    <tr><td>独立姓名/ID数</td><td>≈145</td><td>基于高频+低频去重估算，实际唯一标识约140~150人</td></tr>
-                    <tr><td>参与≥10天的人数</td><td>约38人</td><td>稳定核心参与者</td></tr>
-                    <tr><td>参与仅1天的人数</td><td>约25人</td><td>多为零星加入</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 额外洞察：日期分布/极值 -->
-    <div class="footer-note">
-        <strong>📌 核心洞察</strong><br>
-        • 单日参与人数最高为 <strong>2月24日 (66人)</strong>，最低为 <strong>3月2日 (29人)</strong>，极差达37人。<br>
-        • 锦鲤团队几乎每天占据名单一半以上，蔡永财、孙芳等为全勤标兵。<br>
-        • 琪琪团队在2月下旬开始稳定出现，3月后参与度提升。<br>
-        • 存在部分昵称相似但写法不同的参与者 (如带LP、H、数字ID等)，实际去重后人数约145左右。<br>
-        • 每日参与人数在50~60之间波动，3月2日低谷可能因活动安排或统计缺失。
-    </div>
-
-    <!-- 脚注 -->
-    <div style="margin-top: 2rem; font-size: 0.8rem; color: #94a3b8; text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 1.5rem;">
-        数据分析基于《抽奖名单.xlsx》 Sheet1 原始数据 · 共23个抽奖日 · 生成于 2026年3月18日
+    <div class="stat-box">
+        <div>累计收益</div>
+        <div class="big green" id="reward">1284</div>
     </div>
 </div>
 
-<!-- 用JS动态填充每日表格，保证排序准确且包含条形图 -->
+<div class="container">
+
+    <div class="card">
+        <iframe class="chart"
+        src="https://s.tradingview.com/widgetembed/?symbol=OKX:BTCUSDT&interval=240">
+        </iframe>
+    </div>
+
+    <div class="card">
+        <div>实时成交</div>
+        <div class="feed" id="feed"></div>
+    </div>
+
+    <div class="card">
+        <div>我的收益进度</div>
+        <div id="progress">8450 / 10000 USDT</div>
+        <button class="btn" onclick="trade()">前往交易</button>
+    </div>
+
+    <div class="fomo">
+        🔥 今日已有 1,284 人加入，团队收益 +84,230 H
+    </div>
+
+</div>
+
 <script>
-    (function() {
-        // 严格按照时间顺序排列的日期数据
-        const dailyData = [
-            { date: '2.16', count: 54 },
-            { date: '2.17', count: 60 },
-            { date: '2.18', count: 59 },
-            { date: '2.22', count: 44 },
-            { date: '2.23', count: 56 },
-            { date: '2.24', count: 66 },
-            { date: '2.25', count: 60 },
-            { date: '2.26', count: 61 },
-            { date: '2.27', count: 55 },
-            { date: '3.1', count: 58 },    // 注意3.1在3.2之前
-            { date: '3.2', count: 29 },
-            { date: '3.3', count: 58 },
-            { date: '3.4', count: 52 },
-            { date: '3.5', count: 53 },
-            { date: '3.6', count: 49 },
-            { date: '3.7', count: 55 },
-            { date: '3.8', count: 61 },
-            { date: '3.9', count: 60 },
-            { date: '3.11', count: 64 },
-            { date: '3.12', count: 56 },
-            { date: '3.13', count: 63 },
-            { date: '3.14', count: 62 },
-            { date: '3.15', count: 60 }
-        ];
+function toast(msg){
+    const t=document.createElement('div');
+    t.className='toast';
+    t.innerText=msg;
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),2000);
+}
 
-        const maxCount = 66; // 峰值 2.24
+function trade(){
+    toast('跳转交易中...');
+}
 
-        const tbody = document.getElementById('daily-table-body');
-        if (!tbody) return;
+/* 动态数字 */
+function animate(){
+    let el=document.getElementById('reward');
+    let val=parseInt(el.innerText);
+    val+=Math.floor(Math.random()*5);
+    el.innerText=val;
+}
+setInterval(animate,2000);
 
-        dailyData.forEach(item => {
-            const row = document.createElement('tr');
-            const percent = (item.count / maxCount * 100).toFixed(1);
-
-            // 日期
-            const cellDate = document.createElement('td');
-            cellDate.textContent = item.date;
-            cellDate.style.fontWeight = '500';
-            // 人数
-            const cellCount = document.createElement('td');
-            cellCount.textContent = item.count;
-            cellCount.style.fontWeight = '600';
-            // 趋势条形图
-            const cellBar = document.createElement('td');
-            cellBar.style.minWidth = '180px';
-            const barDiv = document.createElement('div');
-            barDiv.className = 'bar-chart';
-            const fillDiv = document.createElement('div');
-            fillDiv.className = 'bar-fill';
-            fillDiv.style.width = percent + '%';
-            fillDiv.textContent = item.count;  // 条形内显示人数
-            barDiv.appendChild(fillDiv);
-            cellBar.appendChild(barDiv);
-
-            // 比例列
-            const cellPct = document.createElement('td');
-            cellPct.textContent = percent + '%';
-            cellPct.className = 'text-muted';
-
-            row.appendChild(cellDate);
-            row.appendChild(cellCount);
-            row.appendChild(cellBar);
-            row.appendChild(cellPct);
-
-            tbody.appendChild(row);
-        });
-    })();
+/* 模拟成交 */
+function updateFeed(){
+    const feed=document.getElementById('feed');
+    const price=(0.124+Math.random()*0.002).toFixed(4);
+    const item=document.createElement('div');
+    item.innerHTML=`<span>0x${Math.random().toString(16).slice(2,6)}...</span><span>${price}</span>`;
+    feed.prepend(item);
+    if(feed.children.length>6) feed.removeChild(feed.lastChild);
+}
+setInterval(updateFeed,3000);
 </script>
 
-<!-- 注：独立参与者145为合理估算值，基于所有日期名单的去重预估，因数据量大无法在此精确逐条列出，但高频排名已展示核心成员。 -->
 </body>
 </html>
