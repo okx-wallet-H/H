@@ -6,7 +6,7 @@
     <title>海豚舰队 · 团队助力计划</title>
     <!-- Font Awesome 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Google Font: Inter 细线条 -->
+    <!-- Google Font: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -92,7 +92,7 @@
             background: #e5dcff;
         }
 
-        /* 卡片样式：靠边，内边距减小 */
+        /* 卡片样式：统一内边距 */
         .collapse-card {
             background: #ffffff;
             border-radius: 28px;
@@ -106,11 +106,10 @@
             border-color: #b3a0ff;
         }
 
-        /* 第一个卡片上方间距 */
         .card-first { margin-top: 0.8rem; }
 
         .card-header {
-            padding: 1.2rem 1rem; /* 减小左右内边距 */
+            padding: 1.2rem 1rem;
             cursor: pointer;
             display: flex;
             flex-direction: column;
@@ -152,19 +151,20 @@
             background: #f2edff;
         }
 
-        /* 摘要行 - 数据靠边 */
+        /* 摘要行 - 统一高度 */
         .summary-row {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             gap: 16px 20px;
-            margin-left: 46px; /* 与图标对齐 */
+            margin-left: 46px;
             font-size: 1rem;
             color: #4a3a8c;
             background: #f9f6ff;
             padding: 0.6rem 1rem;
             border-radius: 30px;
             border: 1px solid #e0d6ff;
+            min-height: 3.2rem; /* 确保高度一致 */
         }
         .summary-item {
             display: flex;
@@ -178,14 +178,14 @@
         .summary-item .value {
             font-weight: 600;
             color: #6b4eff;
-            font-size: 1.1rem; /* 稍大 */
+            font-size: 1.1rem;
         }
 
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out;
-            padding: 0 1rem; /* 减小左右内边距 */
+            padding: 0 1rem;
         }
         .card-content.expanded {
             max-height: 1500px;
@@ -289,28 +289,7 @@
 
         .footer-note { text-align:center; color:#a394cc; font-size:0.8rem; margin:2rem 0; }
 
-        /* 规则卡片内新增数据行 */
-        .rule-stats {
-            display: flex;
-            justify-content: space-between;
-            background: #f9f6ff;
-            border-radius: 24px;
-            padding: 0.8rem 1rem;
-            margin: 0.5rem 0 1rem 0;
-            border: 1px solid #e0d6ff;
-        }
-        .rule-stat-item {
-            text-align: center;
-        }
-        .rule-stat-label {
-            font-size: 0.7rem;
-            color: #8a7ab3;
-        }
-        .rule-stat-value {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #6b4eff;
-        }
+        /* 规则卡片内新增数据行（折叠后已由summary-row展示，此处无需额外） */
     </style>
 </head>
 <body>
@@ -508,7 +487,7 @@
             </div>
         </div>
 
-        <!-- 规则卡片 (新增个人和团队本期交易量) -->
+        <!-- 卡片4: 活动规则 (带个人/团队摘要行，确保高度一致) -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
                 <div class="header-row">
@@ -518,21 +497,13 @@
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
                 </div>
-                <div class="summary-row" style="visibility: hidden; height: 1px; padding: 0; margin:0;"></div>
+                <!-- 摘要行显示个人和团队本期交易量，与其他卡片统一高度 -->
+                <div class="summary-row">
+                    <div class="summary-item"><span class="label">个人</span><span class="value" id="ruleUserTotalSummary">8,450</span></div>
+                    <div class="summary-item"><span class="label">团队</span><span class="value" id="ruleTeamWeightedSummary">128.4k</span></div>
+                </div>
             </div>
             <div class="card-content" id="ruleContent">
-                <!-- 新增个人和团队本期交易量 -->
-                <div class="rule-stats">
-                    <div class="rule-stat-item">
-                        <div class="rule-stat-label">我的本期交易</div>
-                        <div class="rule-stat-value" id="ruleUserTotal">8,450 USDC</div>
-                    </div>
-                    <div class="rule-stat-item">
-                        <div class="rule-stat-label">团队贡献值</div>
-                        <div class="rule-stat-value" id="ruleTeamWeighted">128.4k USDT</div>
-                    </div>
-                </div>
-
                 <div style="padding:0.5rem 0;">
                     <h4 style="color:#6b4eff; margin:1rem 0 0.5rem;">🎁 个人交易奖励</h4>
                     <ul style="padding-left:1.2rem; font-size:0.9rem; color:#4a3a8c; line-height:1.6;">
@@ -663,9 +634,9 @@
             document.getElementById('teamWeightedDetail').innerText = userData.team.weightedVolume.toLocaleString();
             document.getElementById('teamWeightedDisplay').innerText = userData.team.weightedVolume.toLocaleString();
 
-            // 规则卡片内新增数据
-            document.getElementById('ruleUserTotal').innerText = userData.totalVolume.toLocaleString() + ' USDC';
-            document.getElementById('ruleTeamWeighted').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k USDT';
+            // 规则卡片摘要行数据
+            document.getElementById('ruleUserTotalSummary').innerText = userData.totalVolume.toLocaleString();
+            document.getElementById('ruleTeamWeightedSummary').innerText = (userData.team.weightedVolume/1000).toFixed(1) + 'k';
 
             let teamReward = 0, teamTierText = '', teamProgressPercent = 0, teamStatusText = '';
             if (userData.team.weightedVolume >= 100000) {
