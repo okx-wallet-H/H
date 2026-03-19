@@ -45,11 +45,6 @@
             letter-spacing:-0.02em;
         }
         .title-main p { color:#6f5ea0; font-weight:400; font-size:1rem; }
-        .activity-date {
-            text-align:center; font-size:0.85rem; color:#6f5ea0;
-            background:#f0ebff; padding:0.3rem 1rem; border-radius:30px;
-            width:fit-content; margin:0.5rem auto 0 auto;
-        }
 
         .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
 
@@ -250,6 +245,28 @@
         .legend-item { display: flex; align-items: center; gap:4px; }
         .legend-color { width:12px; height:12px; border-radius:4px; }
 
+        /* 迷你趋势图（团队近7日） */
+        .trend-container {
+            background: #f9f6ff;
+            border-radius: 24px;
+            padding: 1rem;
+            margin: 1.2rem 0;
+            border: 1px solid #e0d6ff;
+        }
+        .trend-header {
+            display: flex; justify-content: space-between; margin-bottom: 0.8rem;
+            color:#6f5ea0; font-weight:500;
+        }
+        .trend-bars {
+            display: flex; align-items: flex-end; justify-content: space-between; height: 60px; gap: 6px;
+        }
+        .trend-bar {
+            flex:1; background: #6b4eff; border-radius: 6px 6px 0 0; height: calc(100% * var(--h)); min-height:4px;
+            transition: height 0.2s;
+        }
+        .trend-bar.medium { background: #b3a0ff; }
+        .trend-bar.low { background: #d0c0ff; }
+
         .personal-reward-card {
             background:#f2edff; border-radius:24px; padding:1.2rem; margin:1.2rem 0;
             border:1px solid #d0c0ff;
@@ -313,9 +330,7 @@
                 <h1>团队助力计划</h1>
                 <p>邀请好友，团队交易额外奖励</p>
             </div>
-            <div class="activity-date">
-                <i class="far fa-calendar-alt"></i> 4月1日 — 4月15日 (UTC+8)
-            </div>
+            <!-- 活动时间已移除 -->
         </div>
     </div>
 
@@ -395,19 +410,19 @@
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
-                <!-- 日历模块 -->
+                <!-- 日历模块 (当月1日到昨日) -->
                 <div class="calendar-container">
                     <div class="calendar-header">
-                        <span><i class="far fa-calendar-alt"></i> 四月交易日历</span>
-                        <span style="font-size:0.8rem;">活动期 4.1-4.15</span>
+                        <span><i class="far fa-calendar-alt"></i> 本月交易日历</span>
+                        <span style="font-size:0.8rem;">单位: USDC</span>
                     </div>
                     <div class="calendar-grid">
                         <!-- 星期缩写 -->
                         <div class="weekday">一</div><div class="weekday">二</div><div class="weekday">三</div><div class="weekday">四</div><div class="weekday">五</div><div class="weekday">六</div><div class="weekday">日</div>
-                        <!-- 日期格子：1-15日，部分高亮模拟交易量 -->
+                        <!-- 日期格子：1-15日，部分高亮模拟交易量，实际应由后端数据生成 -->
                         <div class="calendar-day low">1</div><div class="calendar-day">2</div><div class="calendar-day medium">3</div><div class="calendar-day low">4</div><div class="calendar-day">5</div><div class="calendar-day">6</div><div class="calendar-day low">7</div>
                         <div class="calendar-day medium">8</div><div class="calendar-day high">9</div><div class="calendar-day high">10</div><div class="calendar-day medium">11</div><div class="calendar-day low">12</div><div class="calendar-day">13</div><div class="calendar-day low">14</div><div class="calendar-day medium">15</div>
-                        <!-- 剩余日期占位空白 (可留空) -->
+                        <!-- 剩余日期留白 -->
                         <div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div><div class="calendar-day" style="background:transparent;"></div>
                     </div>
                     <div class="calendar-legend">
@@ -444,7 +459,7 @@
             </div>
         </div>
 
-        <!-- 卡片3: 我的团队 -->
+        <!-- 卡片3: 我的团队 (含近7日趋势图) -->
         <div class="collapse-card" id="cardTeam">
             <div class="card-header" onclick="toggleCard('teamContent')">
                 <div class="header-row">
@@ -473,6 +488,26 @@
                     <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#8a7ab3;">
                         <span id="teamTierDisplay">当前档位: 100,000 USDT (1%)</span>
                         <span id="teamProgressText">已达标</span>
+                    </div>
+                </div>
+
+                <!-- 近7日团队贡献趋势 -->
+                <div class="trend-container">
+                    <div class="trend-header">
+                        <span><i class="fas fa-chart-line"></i> 近7日团队贡献趋势</span>
+                        <span style="font-size:0.8rem;">单位: USDT</span>
+                    </div>
+                    <div class="trend-bars">
+                        <div class="trend-bar low" style="--h:0.3"></div>
+                        <div class="trend-bar medium" style="--h:0.5"></div>
+                        <div class="trend-bar" style="--h:0.7"></div>
+                        <div class="trend-bar high" style="--h:0.9"></div>
+                        <div class="trend-bar high" style="--h:0.8"></div>
+                        <div class="trend-bar medium" style="--h:0.6"></div>
+                        <div class="trend-bar" style="--h:0.4"></div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; margin-top:0.5rem; font-size:0.7rem; color:#8a7ab3;">
+                        <span>4/9</span><span>4/10</span><span>4/11</span><span>4/12</span><span>4/13</span><span>4/14</span><span>今日</span>
                     </div>
                 </div>
 
