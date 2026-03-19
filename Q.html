@@ -60,20 +60,20 @@
         /* 容器 */
         .container { max-width:600px; margin:0 auto; padding:0 1.5rem; }
 
-        /* 可折叠卡片通用样式 */
+        /* 可折叠卡片通用样式 - 优化版 */
         .collapse-card {
-            background: rgba(12, 30, 50, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid #29a5ff40;
-            border-radius: 32px;
+            background: rgba(16, 34, 54, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 160, 255, 0.3);
+            border-radius: 36px;
             margin-bottom: 1.2rem;
-            box-shadow: 0 8px 20px #0000004d;
+            box-shadow: 0 15px 30px -12px #000000b3, 0 0 0 1px rgba(0, 255, 255, 0.1) inset;
             transition: all 0.2s;
         }
-        .collapse-card:hover { border-color: #00bbff; }
+        .collapse-card:hover { border-color: #00bbff; transform: translateY(-2px); }
 
         .card-header {
-            padding: 1.2rem 1.2rem;
+            padding: 1.4rem 1.4rem;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -83,145 +83,178 @@
         .card-header-left {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         .card-header-left i {
-            font-size: 1.6rem;
-            color: #00c8ff;
-            width: 32px;
+            font-size: 1.8rem;
+            color: #00d0ff;
+            width: 36px;
             text-align: center;
+            filter: drop-shadow(0 0 5px #00a6ff);
         }
         .card-header-left .title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            color: #b7ecff;
+            color: #e2f0ff;
+            letter-spacing: -0.3px;
         }
         .card-header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
         .summary-stats {
             display: flex;
-            gap: 15px;
+            gap: 16px;
             font-size: 0.9rem;
-            color: #ffecaa;
+            background: rgba(0, 40, 70, 0.5);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #29a5ff40;
         }
-        .summary-stats span { font-weight: 600; color: #fff; margin-left: 4px; }
+        .summary-stats span { font-weight: 600; color: #ffecaa; margin-left: 4px; }
         .expand-icon {
-            font-size: 1.2rem;
-            color: #6ec3ff;
+            font-size: 1.4rem;
+            color: #8ed0ff;
             transition: transform 0.3s;
+            background: rgba(0, 100, 200, 0.3);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
         .card-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease-out;
-            padding: 0 1.2rem;
+            padding: 0 1.4rem;
         }
         .card-content.expanded {
-            max-height: 1000px; /* 足够展示所有内容 */
-            padding-bottom: 1.2rem;
+            max-height: 1500px; /* 足够展示所有内容 */
+            padding-bottom: 1.4rem;
         }
 
-        /* K线图模拟 */
-        .kline-sim {
+        /* K线图模拟 - 美化 */
+        .kline-container {
             background: #0f2842;
-            border-radius: 24px;
-            padding: 0.8rem;
+            border-radius: 28px;
+            padding: 1rem;
             margin: 0.5rem 0 1rem;
+            border: 1px solid #2d9eff;
+        }
+        .kline-title {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+            color: #b0e0ff;
+        }
+        .kline-bars {
             display: flex;
             align-items: flex-end;
             justify-content: space-between;
-            height: 80px;
+            height: 100px;
+            gap: 4px;
         }
         .kline-bar {
-            width: 8px;
+            flex: 1;
             background: #00c8ff;
-            border-radius: 4px 4px 0 0;
+            border-radius: 6px 6px 0 0;
             height: calc(100% * var(--h));
             min-height: 4px;
+            transition: height 0.2s;
         }
         .kline-bar.red { background: #ff5e5e; }
 
         /* 实时交易流 */
-        .live-feed { margin: 0.5rem 0; }
+        .live-feed { margin: 1rem 0; }
+        .feed-header { display:flex; align-items:center; gap:8px; color:#a0d0ff; font-weight:500; margin-bottom:0.5rem; }
         .feed-list { list-style:none; }
         .feed-item {
-            display:flex; align-items:center; justify-content:space-between; padding:0.5rem 0;
+            display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0;
             border-bottom:1px solid #1f5a85; font-size:0.9rem;
         }
         .feed-item:last-child { border-bottom:none; }
-        .feed-address { font-family:monospace; background:#102c44; padding:0.2rem 0.8rem; border-radius:30px; }
+        .feed-address { font-family:monospace; background:#102c44; padding:0.3rem 1rem; border-radius:30px; }
         .feed-volume { color:#7ff0b0; font-weight:600; }
         .feed-time { color:#94b4d4; font-size:0.7rem; }
 
-        /* 个人数据卡片内布局 */
+        /* 个人数据卡片内布局 - 优化 */
         .stats-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:0.8rem; margin:1rem 0; }
         .stat-card {
-            background:rgba(10,30,50,0.7); border:1px solid #29a5ff40;
-            border-radius:20px; padding:1rem; box-shadow:0 4px 10px #0000004d;
+            background:rgba(0, 35, 65, 0.7); border:1px solid #29a5ff40;
+            border-radius:24px; padding:1.2rem; box-shadow:0 4px 12px #0000004d;
         }
-        .stat-label { font-size:0.8rem; color:#b0e0ff; margin-bottom:4px; }
-        .stat-value { font-size:1.4rem; font-weight:700; color:white; }
+        .stat-label { font-size:0.75rem; color:#b0e0ff; margin-bottom:4px; display:flex; align-items:center; gap:4px; }
+        .stat-value { font-size:1.6rem; font-weight:700; color:white; line-height:1.2; }
+        .stat-sub { font-size:0.7rem; color:#a0c0ff; margin-top:2px; }
 
         .personal-reward-card {
-            background: #00497e40; border-radius: 20px; padding: 1rem; margin: 1rem 0;
+            background: #003d66; border-radius: 28px; padding: 1.2rem; margin: 1rem 0;
             border: 1px solid #3fa2ff;
         }
-        .personal-reward-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem; }
-        .personal-reward-label { color:#b0ecff; }
-        .personal-reward-value { font-size:1.4rem; font-weight:700; color:#ffd966; }
-        .next-tier { font-size:0.8rem; color:#a0d0ff; }
+        .personal-reward-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
+        .personal-reward-label { color:#b0ecff; font-size:0.9rem; }
+        .personal-reward-value { font-size:1.8rem; font-weight:700; color:#ffd966; }
+        .next-tier { font-size:0.8rem; color:#a0d0ff; background:#002a55; padding:0.3rem 1rem; border-radius:30px; }
 
-        .progress-bar-container { width:100%; height:8px; background:#1f3f60; border-radius:8px; margin:0.5rem 0; }
-        .progress-bar-fill { height:100%; background:linear-gradient(90deg, #00c6ff, #0072ff); border-radius:8px; width:0%; transition:width 0.3s; }
+        .progress-bar-container { width:100%; height:10px; background:#1f3f60; border-radius:10px; margin:0.8rem 0; overflow:hidden; }
+        .progress-bar-fill { height:100%; background:linear-gradient(90deg, #00c6ff, #0072ff); border-radius:10px; width:0%; transition:width 0.3s; }
 
         .personal-row {
-            display:flex; justify-content:space-around; background:rgba(0,40,70,0.5);
-            border-radius:40px; padding:0.6rem; margin:1rem 0; border:1px solid #0077ff;
+            display:flex; justify-content:space-around; background:rgba(0, 30, 60, 0.7);
+            border-radius:40px; padding:0.8rem; margin:1rem 0; border:1px solid #0077ff;
         }
         .rank-item { text-align:center; }
         .rank-label { font-size:0.65rem; color:#9ac7ff; }
-        .rank-number { font-size:1rem; font-weight:700; color:#ffecaa; }
+        .rank-number { font-size:1.1rem; font-weight:700; color:#ffecaa; }
 
         .team-stats-row {
-            display:flex; justify-content:space-between; background:#00497e40; border-radius:24px;
-            padding:0.8rem; margin:1rem 0; border:1px solid #3fa2ff;
+            display:flex; justify-content:space-between; background:#003e6b; border-radius:28px;
+            padding:1rem; margin:1rem 0; border:1px solid #3fa2ff;
         }
         .team-stat-item { text-align:center; flex:1; }
-        .team-stat-label { font-size:0.7rem; color:#b0daff; }
-        .team-stat-value { font-size:1.2rem; font-weight:700; color:#ffecaa; }
+        .team-stat-label { font-size:0.7rem; color:#b0daff; display:flex; align-items:center; justify-content:center; gap:3px; }
+        .team-stat-value { font-size:1.4rem; font-weight:700; color:#ffecaa; }
 
         .team-effective-box {
-            background:#002a55; border-radius:20px; padding:1rem; margin:1rem 0;
-            border:1px solid #3fa2ff;
+            background:#00335e; border-radius:28px; padding:1.2rem; margin:1rem 0;
+            border:1px solid #4db8ff;
         }
         .team-effective-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
-        .team-effective-label { color:#b0ecff; }
-        .team-effective-value { font-size:1.4rem; font-weight:700; color:#ffecaa; margin-left:10px; }
+        .team-effective-label { color:#b0ecff; font-size:0.9rem; }
+        .team-effective-value { font-size:1.8rem; font-weight:700; color:#ffecaa; margin-left:10px; }
         .team-effective-unit { font-size:0.8rem; color:#99ccff; }
 
-        .member-list { margin:0.5rem 0; }
-        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.6rem 0; border-bottom:1px solid #1f5275; }
-        .member-info { display:flex; align-items:center; gap:10px; }
+        .member-list { margin:1rem 0; }
+        .member-item { display:flex; align-items:center; justify-content:space-between; padding:0.7rem 0; border-bottom:1px solid #1f5a85; }
+        .member-info { display:flex; align-items:center; gap:12px; }
         .member-level { background:#0059a3; border-radius:20px; padding:0.2rem 1rem; font-size:0.7rem; font-weight:600; }
-        .member-address { font-family:monospace; font-size:0.8rem; }
+        .member-address { font-family:monospace; font-size:0.85rem; }
 
         .team-reward-card {
-            background:#00335e; border-radius:20px; padding:1rem; margin:1rem 0;
+            background:#00497e; border-radius:28px; padding:1.2rem; margin:1.2rem 0;
             border:2px dashed #4db8ff; text-align:center;
         }
-        .team-reward-amount { font-size:1.8rem; font-weight:800; color:#ffd966; }
+        .team-reward-amount { font-size:2rem; font-weight:800; color:#ffd966; }
 
         .btn-small {
-            background: #00497e; border:none; color:white; padding:0.6rem 1rem;
-            border-radius:30px; font-size:0.9rem; width:100%; margin:0.5rem 0; cursor:pointer;
+            background: #00497e; border:none; color:white; padding:0.7rem 1rem;
+            border-radius:40px; font-size:0.95rem; width:100%; margin:0.5rem 0; cursor:pointer;
+            font-weight:600; border:1px solid #3fa2ff; transition:0.2s;
         }
-        .btn-primary-small { background:linear-gradient(145deg, #00a86b, #007755); }
+        .btn-small:hover { background:#0059a3; }
+        .btn-primary-small { background:linear-gradient(145deg, #00a86b, #007755); border-color:#7ff0b0; }
+
+        .info-icon {
+            display:inline-flex; background:#1f5a85; width:18px; height:18px; border-radius:50%;
+            font-size:0.6rem; align-items:center; justify-content:center; margin-left:5px; cursor:help;
+            border:1px solid #4db8ff;
+        }
 
         .footer-note { text-align:center; color:#6c8db0; font-size:0.8rem; margin:2rem 0; }
-        .info-icon { display:inline-flex; background:#1f5a85; width:16px; height:16px; border-radius:50%; font-size:0.6rem; align-items:center; justify-content:center; margin-left:5px; cursor:help; }
     </style>
 </head>
 <body>
@@ -248,8 +281,8 @@
         <div class="collapse-card" id="unbindPrompt" style="display: none; background:#004d80; border-color:#ffaa33;">
             <div style="display:flex; align-items:center; gap:15px; padding:1rem;">
                 <i class="fas fa-link" style="font-size:2rem; color:#ffaa33;"></i>
-                <span>绑定OKX钱包，立即参与活动</span>
-                <button style="background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1rem; border-radius:30px; margin-left:auto; cursor:pointer;" onclick="alert('唤起绑定流程')">立即绑定</button>
+                <span style="flex:1;">绑定OKX钱包，立即参与活动</span>
+                <button style="background:#ffaa33; border:none; color:#000; font-weight:600; padding:0.5rem 1.2rem; border-radius:40px; cursor:pointer;" onclick="alert('唤起绑定流程')">立即绑定</button>
             </div>
         </div>
 
@@ -258,33 +291,40 @@
             <div class="card-header" onclick="toggleCard('liveContent')">
                 <div class="card-header-left">
                     <i class="fas fa-chart-line"></i>
-                    <span class="title">实时交易动态</span>
+                    <span class="title">实时动态</span>
                 </div>
                 <div class="card-header-right">
                     <div class="summary-stats">
-                        <span>H价 <span id="hPrice">$0.124</span></span>
+                        <span>H <span id="hPrice">0.124</span></span>
                         <span>24h <span id="hChange" style="color:#7ff0b0;">+2.3%</span></span>
                     </div>
                     <i class="fas fa-chevron-down expand-icon" id="liveIcon"></i>
                 </div>
             </div>
             <div class="card-content" id="liveContent">
-                <!-- 模拟K线图 -->
-                <div class="kline-sim">
-                    <div class="kline-bar" style="--h:0.6"></div>
-                    <div class="kline-bar red" style="--h:0.3"></div>
-                    <div class="kline-bar" style="--h:0.8"></div>
-                    <div class="kline-bar red" style="--h:0.4"></div>
-                    <div class="kline-bar" style="--h:0.7"></div>
-                    <div class="kline-bar" style="--h:0.5"></div>
-                    <div class="kline-bar red" style="--h:0.2"></div>
-                    <div class="kline-bar" style="--h:0.9"></div>
-                    <div class="kline-bar" style="--h:0.6"></div>
-                    <div class="kline-bar red" style="--h:0.3"></div>
-                    <div class="kline-bar" style="--h:0.7"></div>
+                <!-- K线模拟 -->
+                <div class="kline-container">
+                    <div class="kline-title">
+                        <span>H/USDT (4h)</span>
+                        <span>Vol 2.45M</span>
+                    </div>
+                    <div class="kline-bars">
+                        <div class="kline-bar" style="--h:0.6"></div>
+                        <div class="kline-bar red" style="--h:0.3"></div>
+                        <div class="kline-bar" style="--h:0.8"></div>
+                        <div class="kline-bar red" style="--h:0.4"></div>
+                        <div class="kline-bar" style="--h:0.7"></div>
+                        <div class="kline-bar" style="--h:0.5"></div>
+                        <div class="kline-bar red" style="--h:0.2"></div>
+                        <div class="kline-bar" style="--h:0.9"></div>
+                        <div class="kline-bar" style="--h:0.6"></div>
+                        <div class="kline-bar red" style="--h:0.3"></div>
+                        <div class="kline-bar" style="--h:0.7"></div>
+                    </div>
                 </div>
                 <!-- 实时交易列表 -->
                 <div class="live-feed">
+                    <div class="feed-header"><i class="fas fa-sync-alt fa-spin"></i> 最新成交</div>
                     <ul class="feed-list" id="feedList"></ul>
                 </div>
             </div>
@@ -306,7 +346,7 @@
                 </div>
             </div>
             <div class="card-content" id="myTradeContent">
-                <!-- 详细内容 -->
+                <!-- 详细数据 -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-label"><i class="fas fa-user"></i> 今日交易量</div>
@@ -414,12 +454,12 @@
             </div>
         </div>
 
-        <!-- 底部折叠规则（与卡片风格一致） -->
+        <!-- 底部折叠规则卡片 -->
         <div class="collapse-card">
             <div class="card-header" onclick="toggleCard('ruleContent')">
                 <div class="card-header-left">
                     <i class="fas fa-file-alt"></i>
-                    <span class="title">活动规则与奖励</span>
+                    <span class="title">活动规则</span>
                 </div>
                 <i class="fas fa-chevron-down expand-icon" id="ruleIcon"></i>
             </div>
@@ -523,7 +563,7 @@
         function renderUserData() {
             // 绑定状态
             if (!userData.walletBound) {
-                document.getElementById('unbindPrompt').style.display = 'flex';
+                document.getElementById('unbindPrompt').style.display = 'block';
             } else {
                 document.getElementById('unbindPrompt').style.display = 'none';
             }
