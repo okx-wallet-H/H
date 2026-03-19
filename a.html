@@ -1,546 +1,707 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>APP 风格 · 字体与交互规范</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>稳重·优雅社区设计系统</title>
+  <!-- 字体：Inter 可变 + Crimson Pro 衬线 (用于提升稳重感) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap">
+  <!-- Font Awesome 6 图标库 (用于辅助展示) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ----- 全局设计 —— 深色背景，突出可交互元素 ----- */
+    /* ---------- 设计令牌 ---------- */
+    :root {
+      /* 色彩：稳重柔和的中性色 + 深沉点缀 */
+      --bg-base: #f8f7f4;        /* 暖白基底 */
+      --bg-surface: #ffffffec;    /* 表面色，略带透明 */
+      --bg-glass: rgba(255, 255, 255, 0.6);
+      --border-light: rgba(0, 0, 0, 0.06);
+      --border-medium: rgba(0, 0, 0, 0.1);
+      
+      --text-primary: #1e1e1e;    /* 几乎黑色 */
+      --text-secondary: #5a5a5a;
+      --text-tertiary: #8a8a8a;
+      
+      --accent-100: #ece7e1;      /* 温暖米色 */
+      --accent-300: #d4cdc0;
+      --accent-500: #a3917e;      /* 主色调：灰褐，稳重 */
+      --accent-700: #6b5b4b;
+      
+      --success: #2e7d5e;
+      --warning: #b36b4b;
+      --danger: #c64b4b;
+      
+      /* 字体家族 */
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+      
+      /* 字体尺寸 (基于rem) */
+      --text-xs: 0.75rem;    /* 12px */
+      --text-sm: 0.875rem;   /* 14px */
+      --text-base: 1rem;     /* 16px */
+      --text-md: 1.125rem;   /* 18px */
+      --text-lg: 1.25rem;    /* 20px */
+      --text-xl: 1.5rem;     /* 24px */
+      --text-2xl: 2rem;      /* 32px */
+      
+      /* 字重 */
+      --font-light: 300;
+      --font-regular: 400;
+      --font-medium: 500;
+      --font-semibold: 600;
+      --font-bold: 700;
+      
+      /* 行高 */
+      --leading-tight: 1.2;
+      --leading-normal: 1.5;
+      --leading-relaxed: 1.7;
+      
+      /* 间距 (8的倍数，但加入6的倍数为细腻) */
+      --space-1: 0.25rem;   /* 4px */
+      --space-2: 0.5rem;    /* 8px */
+      --space-3: 0.75rem;   /* 12px */
+      --space-4: 1rem;      /* 16px */
+      --space-5: 1.25rem;   /* 20px */
+      --space-6: 1.5rem;    /* 24px */
+      --space-8: 2rem;      /* 32px */
+      --space-10: 2.5rem;   /* 40px */
+      --space-12: 3rem;     /* 48px */
+      
+      /* 圆角：大部分偏大，柔和 */
+      --radius-sm: 0.5rem;   /* 8px */
+      --radius-md: 0.75rem;  /* 12px */
+      --radius-lg: 1.25rem;  /* 20px */
+      --radius-xl: 1.75rem;  /* 28px */
+      --radius-full: 9999px;
+      
+      /* 阴影：细腻，有层次 */
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
+      --shadow-md: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
+      --shadow-lg: 0 20px 30px -10px rgba(0,0,0,0.08), 0 8px 15px rgba(0,0,0,0.03);
+      --shadow-xl: 0 30px 40px -15px rgba(0,0,0,0.1);
+      --shadow-glass: 0 10px 30px -10px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.6);
+      
+      /* 过渡 */
+      --transition-fast: 200ms ease;
+      --transition-base: 300ms cubic-bezier(0.2, 0, 0, 1);
+    }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background: #0c111f;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 2rem 1.2rem;
+      background-color: var(--bg-base);
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      line-height: var(--leading-normal);
+      padding: 2rem 1rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    .spec-container {
-      max-width: 1280px;
-      width: 100%;
-      background: rgba(15, 22, 36, 0.8);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 48px;
-      padding: 2.5rem 2.2rem;
-      box-shadow: 0 40px 60px -20px #000000, inset 0 1px 2px rgba(255,255,255,0.05);
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
-    /* 页内标题 */
-    .master-title {
-      font-size: 2.8rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      background: linear-gradient(145deg, #f0f4ff, #b0c6ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 0.5rem;
-    }
-    .master-desc {
-      font-size: 1.2rem;
-      color: #92a5cc;
+    /* 设计系统标题区 */
+    .ds-header {
       margin-bottom: 3rem;
-      border-left: 4px solid #4f8cff;
-      padding-left: 1.2rem;
+      text-align: center;
+    }
+    .ds-header h1 {
+      font-family: var(--font-serif);
+      font-size: var(--text-2xl);
+      font-weight: 600;
+      color: var(--accent-700);
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-2);
+    }
+    .ds-header p {
+      font-size: var(--text-md);
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    /* 区块卡片通用 */
-    .section {
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 36px;
-      padding: 2rem 2rem;
-      margin-bottom: 2.8rem;
-      border: 1px solid rgba(255,255,255,0.04);
-      backdrop-filter: blur(8px);
-      transition: border-color 0.2s;
+    /* 网格布局：侧边导航 + 内容 */
+    .ds-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 2rem;
     }
-    .section:hover {
-      border-color: rgba(120, 180, 255, 0.2);
+    .ds-sidebar {
+      position: sticky;
+      top: 2rem;
+      align-self: start;
+      background: var(--bg-glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-glass);
+      padding: var(--space-6) var(--space-4);
+    }
+    .ds-sidebar ul {
+      list-style: none;
+    }
+    .ds-sidebar li {
+      margin-bottom: var(--space-2);
+    }
+    .ds-sidebar a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: var(--font-medium);
+      padding: var(--space-2) var(--space-3);
+      display: block;
+      border-radius: var(--radius-full);
+      transition: all var(--transition-fast);
+      font-size: var(--text-sm);
+    }
+    .ds-sidebar a:hover {
+      background: var(--accent-100);
+      color: var(--accent-700);
+    }
+
+    .ds-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* 章节卡片 */
+    .section-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-8);
     }
 
     .section-title {
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: -0.01em;
-      margin-bottom: 1.5rem;
-      display: flex;
-      align-items: center;
-    }
-    .section-title span {
-      background: #2d3d60;
-      border-radius: 60px;
-      padding: 0.2rem 1rem;
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: #b7d0ff;
-      margin-left: 1rem;
-      border: 1px solid #4466aa;
+      font-family: var(--font-serif);
+      font-size: var(--text-xl);
+      font-weight: 600;
+      color: var(--accent-700);
+      margin-bottom: var(--space-6);
+      border-left: 4px solid var(--accent-500);
+      padding-left: var(--space-4);
     }
 
-    /* ---------- 1. 菜单栏演示 ---------- */
-    .menu-bar-demo {
-      background: rgba(25, 35, 55, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 60px;
-      padding: 0.8rem 1.5rem;
+    /* 字体展示区 */
+    .font-demo {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 20px -5px #03060b;
+      flex-direction: column;
+      gap: var(--space-4);
     }
-    .menu-left, .menu-right {
+    .font-row {
       display: flex;
-      gap: 1.5rem;
-      align-items: center;
+      align-items: baseline;
+      gap: var(--space-4);
+      flex-wrap: wrap;
     }
-    .menu-item {
-      color: #d3e0ff;
-      font-size: 1rem;  /* 菜单栏字体 16px */
+    .font-tag {
+      background: var(--accent-100);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      color: var(--accent-700);
       font-weight: 500;
-      padding: 0.4rem 0.8rem;
-      border-radius: 40px;
-      transition: all 0.2s ease;
-      cursor: default;
-      background: transparent;
-      border: 1px solid transparent;
-    }
-    .menu-item:hover {
-      background: rgba(80, 130, 255, 0.15);
-      border-color: rgba(80, 130, 255, 0.5);
-      color: white;
-      transform: translateY(-1px);
-    }
-    .menu-item:active {
-      background: rgba(50, 100, 230, 0.3);
-      transform: scale(0.96);
-    }
-    .menu-logo {
-      font-weight: 700;
-      font-size: 1.3rem;
-      background: linear-gradient(145deg, #aaccff, #ffffff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-right: 0.5rem;
-    }
-    .badge {
-      font-size: 0.8rem;
-      background: #315599;
-      padding: 0.2rem 0.8rem;
-      border-radius: 30px;
-      color: white;
-      margin-left: 0.5rem;
-      border: 1px solid #4f7fff;
-    }
-    .menu-desc {
-      color: #90a5d0;
-      font-size: 0.85rem;
-      margin-top: 1rem;
-      text-align: center;
-      letter-spacing: 0.3px;
     }
 
-    /* ---------- 2. 标题层级 ---------- */
-    .type-grid {
+    /* 组件网格 */
+    .component-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 2rem;
-      margin: 1rem 0 0.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--space-6);
+      margin-top: var(--space-4);
     }
-    .type-item {
-      background: rgba(0,0,0,0.3);
-      border-radius: 28px;
-      padding: 1.6rem 1.5rem;
-      border: 1px solid #2b3850;
-      transition: border 0.2s, box-shadow 0.2s;
+
+    /* 卡片基础样式 */
+    .card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-5);
+      transition: box-shadow var(--transition-fast), transform var(--transition-fast);
     }
-    .type-item:hover {
-      border-color: #5c87d9;
-      box-shadow: 0 6px 12px -8px #3870ff;
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
-    .type-sample {
-      margin-bottom: 0.8rem;
+
+    /* 帖子卡片 */
+    .post-card {
+      max-width: 340px;
     }
-    .h1-sample {
-      font-size: 2.5rem;  /* 40px */
-      font-weight: 700;
-      color: #fff;
+    .post-header {
+      display: flex;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);  /* 有机方形，稳重 */
+      background: var(--accent-300);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: var(--text-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .user-info h4 {
+      font-size: var(--text-md);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .user-info span {
+      font-size: var(--text-sm);
+      color: var(--text-tertiary);
+    }
+    .post-content {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+      line-height: var(--leading-relaxed);
+      margin-bottom: var(--space-4);
+    }
+    .post-stats {
+      display: flex;
+      gap: var(--space-5);
+      color: var(--text-tertiary);
+      font-size: var(--text-xs);
+    }
+
+    /* 数据卡片 (稳重) */
+    .data-card {
+      background: linear-gradient(145deg, #ffffff, #fafaf8);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      text-align: center;
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+    }
+    .data-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--accent-700);
       line-height: 1.2;
     }
-    .h2-sample {
-      font-size: 2rem;    /* 32px */
-      font-weight: 600;
-      color: #f0f5ff;
-    }
-    .h3-sample {
-      font-size: 1.6rem;  /* 25.6px */
-      font-weight: 600;
-      color: #eef3ff;
-    }
-    .subtitle-sample {
-      font-size: 1.2rem;  /* 19px */
-      font-weight: 500;
-      color: #c7d6ff;
-      letter-spacing: 0.3px;
-    }
-    .body-sample {
-      font-size: 1rem;    /* 16px */
-      font-weight: 400;
-      color: #b2c6f0;
-      line-height: 1.5;
-    }
-    .type-meta {
-      font-size: 0.8rem;
-      color: #8ba2d9;
-      background: #1d2a44;
-      display: inline-block;
-      padding: 0.2rem 1rem;
-      border-radius: 30px;
-      border: 1px solid #3b5080;
+    .data-label {
+      font-size: var(--text-sm);
+      color: var(--text-tertiary);
+      margin-top: var(--space-1);
     }
 
-    /* ---------- 3. 按钮交互 ---------- */
-    .buttons-showcase {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
-      align-items: center;
-      justify-content: flex-start;
-    }
-    .btn-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      min-width: 150px;
-    }
-    .btn-label {
-      color: #8ba0cc;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+    /* 按钮设计 */
     .btn {
-      padding: 0.8rem 2rem;
-      border-radius: 60px;
-      font-size: 1rem;  /* 16px */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
       font-weight: 500;
-      border: none;
-      cursor: default;
-      transition: all 0.2s ease;
-      background: transparent;
-      text-align: center;
-      border: 2px solid transparent;
+      font-family: var(--font-sans);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background: white;
+      color: var(--text-primary);
+      border-color: var(--border-medium);
+      box-shadow: var(--shadow-sm);
     }
-    /* 主要按钮 */
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--accent-300);
+    }
+    .btn:active {
+      transform: translateY(1px);
+      box-shadow: var(--shadow-sm);
+    }
     .btn-primary {
-      background: #2f5bdb;
+      background: var(--accent-500);
+      border-color: var(--accent-500);
       color: white;
-      box-shadow: 0 6px 14px rgba(0, 65, 200, 0.4);
     }
     .btn-primary:hover {
-      background: #4470f0;
-      transform: translateY(-3px);
-      box-shadow: 0 12px 20px -8px #1e47a0;
+      background: var(--accent-700);
+      border-color: var(--accent-700);
     }
-    .btn-primary:active {
-      background: #1a3d9e;
-      transform: translateY(2px) scale(0.97);
-      box-shadow: 0 2px 8px #0f2a6b;
-    }
-    /* 次要按钮 */
-    .btn-secondary {
+    .btn-outline {
       background: transparent;
-      border: 2px solid #527ad6;
-      color: #b8d0ff;
+      border-color: var(--accent-500);
+      color: var(--accent-700);
     }
-    .btn-secondary:hover {
-      background: rgba(70, 120, 255, 0.1);
-      border-color: #89abff;
-      color: white;
-    }
-    .btn-secondary:active {
-      background: rgba(30, 80, 200, 0.3);
-      transform: scale(0.96);
-      border-color: #a0bcff;
-    }
-    /* 文本按钮 */
-    .btn-text {
-      background: transparent;
-      color: #9bb6ff;
-      border: none;
-      box-shadow: none;
-      padding: 0.5rem 1rem;
-    }
-    .btn-text:hover {
-      background: rgba(255,255,255,0.05);
-      color: #ffffff;
-      text-decoration: underline;
-    }
-    .btn-text:active {
-      background: rgba(0, 0, 0, 0.3);
-      transform: scale(0.94);
-    }
-    /* 禁用按钮 */
-    .btn-disabled {
-      background: #2b3850;
-      color: #6b7fa0;
-      pointer-events: none;
-      opacity: 0.5;
-      border: none;
+    .btn-outline:hover {
+      background: var(--accent-100);
+      border-color: var(--accent-500);
     }
 
-    /* ---------- 4. 边框交互（卡片、输入框） ---------- */
-    .border-demo {
+    /* 标签/徽章 */
+    .badge {
+      display: inline-block;
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      background: var(--accent-100);
+      color: var(--accent-700);
+      border: 1px solid var(--border-light);
+    }
+    .badge-success {
+      background: #e4f3ed;
+      color: var(--success);
+    }
+
+    /* 进度条 */
+    .progress {
+      width: 100%;
+      height: 0.5rem;
+      background: var(--accent-100);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--accent-500);
+      border-radius: var(--radius-full);
+    }
+
+    /* 导航栏 */
+    .navbar {
       display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
-      margin-top: 1.5rem;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3) var(--space-6);
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
     }
-    .card-border {
-      background: #111b2c;
-      border-radius: 32px;
-      padding: 2rem 2rem 1.8rem;
-      width: 220px;
-      border: 2px solid #2c3d60;
-      transition: border 0.2s, box-shadow 0.2s, transform 0.2s;
-      box-shadow: 0 10px 18px -10px #000;
-    }
-    .card-border:hover {
-      border-color: #6080dd;
-      transform: translateY(-4px);
-      box-shadow: 0 22px 30px -16px #284080;
-    }
-    .card-border:active {
-      transform: scale(0.98) translateY(-2px);
-      border-color: #aac5ff;
-    }
-    .card-title {
-      font-size: 1.4rem;
+    .logo {
+      font-family: var(--font-serif);
+      font-size: var(--text-lg);
       font-weight: 600;
-      color: #dbe6ff;
-      margin-bottom: 0.6rem;
+      color: var(--accent-700);
     }
-    .card-desc {
-      font-size: 0.9rem;
-      color: #a0b5dd;
+    .nav-links {
+      display: flex;
+      gap: var(--space-6);
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+      transition: color var(--transition-fast);
+    }
+    .nav-links a:hover {
+      color: var(--accent-700);
     }
 
-    /* 输入框边框交互 */
-    .input-demo {
+    /* 底部导航 (移动) */
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      padding: var(--space-3) var(--space-4);
+      background: var(--bg-glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-light);
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    }
+    .nav-item {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      min-width: 250px;
+      align-items: center;
+      gap: var(--space-1);
+      color: var(--text-tertiary);
+      font-size: var(--text-xs);
+      transition: color var(--transition-fast);
+      cursor: pointer;
     }
-    .input-field {
-      background: rgba(0, 0, 0, 0.3);
-      border: 2px solid #35476b;
-      border-radius: 40px;
-      padding: 0.9rem 1.5rem;
-      font-size: 1rem;
-      color: #f0f4ff;
-      outline: none;
-      transition: border 0.2s, box-shadow 0.2s;
+    .nav-item i {
+      font-size: 1.3rem;
     }
-    .input-field:hover {
-      border-color: #6d90e0;
-    }
-    .input-field:focus {
-      border-color: #4f8cff;
-      box-shadow: 0 0 0 4px rgba(70, 130, 255, 0.3);
-    }
-    .input-label {
-      font-size: 0.9rem;
-      color: #b0c8ff;
-      margin-bottom: -0.5rem;
-      margin-left: 0.8rem;
-    }
-
-    /* 列表项 / 标签边框 */
-    .chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .chip {
-      background: #1a253b;
-      border: 1.5px solid #3f5280;
-      border-radius: 50px;
-      padding: 0.4rem 1.2rem;
-      font-size: 0.9rem;
-      color: #ccdcff;
-      transition: all 0.15s;
-    }
-    .chip:hover {
-      background: #263a60;
-      border-color: #809fff;
-      color: white;
-      transform: scale(1.02);
-    }
-    .chip:active {
-      background: #10223f;
-      transform: scale(0.96);
-    }
-
-    /* 辅助文字 */
-    .note-text {
-      font-size: 0.85rem;
-      color: #768bb8;
-      margin-top: 1.5rem;
-      border-top: 1px dashed #334十五;
-      padding-top: 1.2rem;
-      text-align: center;
+    .nav-item.active {
+      color: var(--accent-700);
     }
 
     hr {
-      border: 0.5px solid #25324b;
-      margin: 1.8rem 0;
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin: var(--space-6) 0;
+    }
+
+    /* 交互示例 */
+    .like-btn {
+      background: none;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--text-tertiary);
+      font-size: var(--text-sm);
+      cursor: pointer;
+      transition: color var(--transition-fast), transform 0.15s;
+    }
+    .like-btn:hover {
+      color: var(--danger);
+    }
+    .like-btn.active {
+      color: var(--danger);
+    }
+    .like-btn:active {
+      transform: scale(1.2);
+    }
+
+    /* 模拟容器 */
+    .phone-frame {
+      max-width: 400px;
+      margin: 0 auto;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: white;
+      box-shadow: var(--shadow-xl);
     }
   </style>
 </head>
 <body>
-  <div class="spec-container">
-    <div class="master-title">APP 设计语言</div>
-    <div class="master-desc">字体层级 · 按钮状态 · 边框交互 —— 完整风格指南</div>
+<div class="container">
+  <div class="ds-header">
+    <h1>稳重 · 优雅社区设计系统</h1>
+    <p>暖白基底 · 灰褐点缀 · 细腻玻璃 · 有机形态</p>
+  </div>
 
-    <!-- 1. 菜单栏演示 -->
-    <div class="section">
-      <div class="section-title">菜单栏 / 导航栏 <span>字重500, 16px</span></div>
-      <div class="menu-bar-demo">
-        <div class="menu-left">
-          <div class="menu-logo">🍏 Style</div>
-          <div class="menu-item">首页</div>
-          <div class="menu-item">探索</div>
-          <div class="menu-item">资料库</div>
-        </div>
-        <div class="menu-right">
-          <div class="menu-item">通知</div>
-          <div class="menu-item">个人</div>
-          <div class="badge">新</div>
-        </div>
-      </div>
-      <div class="menu-desc">悬停/点击菜单项 → 背景/边框变化。字体16px, 活跃态有微交互</div>
-    </div>
+  <div class="ds-layout">
+    <!-- 侧边导航 -->
+    <nav class="ds-sidebar">
+      <ul>
+        <li><a href="#colors">🎨 色彩</a></li>
+        <li><a href="#typography">🔤 字体</a></li>
+        <li><a href="#cards">🃏 卡片</a></li>
+        <li><a href="#buttons">🔘 按钮</a></li>
+        <li><a href="#data">📊 数据组件</a></li>
+        <li><a href="#navigation">🧭 导航</a></li>
+        <li><a href="#interactions">✨ 交互</a></li>
+      </ul>
+    </nav>
 
-    <!-- 2. 标题层级 -->
-    <div class="section">
-      <div class="section-title">标题 · 副标题 · 正文 <span>字号/字重规范</span></div>
-      <div class="type-grid">
-        <div class="type-item">
-          <div class="type-sample h1-sample">H1 大标题</div>
-          <div class="type-meta">2.5rem (40px) · 700</div>
+    <div class="ds-content">
+      <!-- 色彩 -->
+      <section id="colors" class="section-card">
+        <h2 class="section-title">色彩系统</h2>
+        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
+          <div style="width: 100px; height: 100px; background: var(--accent-500); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white; font-weight: 500;">主色 a3917e</div>
+          <div style="width: 100px; height: 100px; background: var(--accent-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: var(--text-primary);">辅色 ece7e1</div>
+          <div style="width: 100px; height: 100px; background: var(--text-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">文字 1e1e1e</div>
+          <div style="width: 100px; height: 100px; background: var(--text-secondary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">辅助文字</div>
         </div>
-        <div class="type-item">
-          <div class="type-sample h2-sample">H2 章节</div>
-          <div class="type-meta">2rem (32px) · 600</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample h3-sample">H3 卡片</div>
-          <div class="type-meta">1.6rem (26px) · 600</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample subtitle-sample">小标题</div>
-          <div class="type-meta">1.2rem (19px) · 500</div>
-        </div>
-        <div class="type-item">
-          <div class="type-sample body-sample">正文内容 用于说明文字、段落等，字重400，行距舒适。</div>
-          <div class="type-meta">1rem (16px) · 400</div>
-        </div>
-      </div>
-      <div class="note-text">每个层级卡片悬停时有边框高亮反馈，可应用于列表或区块</div>
-    </div>
+        <p class="text-secondary" style="margin-top: 1rem;">主色灰褐，稳重低调；辅以暖白，层次分明</p>
+      </section>
 
-    <!-- 3. 按钮交互 -->
-    <div class="section">
-      <div class="section-title">按钮 · 交互状态 <span>默认/悬停/点击/禁用</span></div>
-      <div class="buttons-showcase">
-        <div class="btn-group">
-          <div class="btn-label">主要按钮</div>
-          <div class="btn btn-primary">确认操作</div>
-          <div class="btn btn-primary" style="pointer-events: none; opacity:0.6;">禁用状态</div>
-        </div>
-        <div class="btn-group">
-          <div class="btn-label">次要按钮</div>
-          <div class="btn btn-secondary">取消</div>
-          <div class="btn btn-secondary">更多选项</div>
-        </div>
-        <div class="btn-group">
-          <div class="btn-label">文本按钮</div>
-          <div class="btn btn-text">查看详情</div>
-          <div class="btn btn-text">帮助</div>
-        </div>
-      </div>
-      <div class="note-text">悬停观察变化：主按钮上浮，次按钮边框变色，文本按钮加下划线。点击有轻微缩放。</div>
-    </div>
-
-    <!-- 4. 边框交互 (卡片 / 输入框 / 标签) -->
-    <div class="section">
-      <div class="section-title">边框 · 卡片 · 输入框 <span>悬停/聚焦反馈</span></div>
-      <div class="border-demo">
-        <!-- 卡片 -->
-        <div class="card-border">
-          <div class="card-title">卡片标题</div>
-          <div class="card-desc">悬停时边框变色、轻微上浮。点击缩放效果。字体：标题1.4rem，描述0.9rem</div>
-        </div>
-        <!-- 输入框组 -->
-        <div class="input-demo">
-          <div class="input-label">用户名</div>
-          <input class="input-field" type="text" placeholder="悬停/聚焦" value="交互边框" readonly disabled> 
-          <!-- disabled 防止实际输入，仅展示 -->
-          <div class="input-label" style="margin-top:0.5rem;">密码</div>
-          <input class="input-field" type="text" placeholder="聚焦时发光" value="hover效果" readonly>
-        </div>
-        <!-- 标签/ chips -->
-        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-          <div class="btn-label">标签 / 筛选框</div>
-          <div class="chip-list">
-            <span class="chip">生活</span>
-            <span class="chip">科技</span>
-            <span class="chip">设计</span>
-            <span class="chip">交互</span>
+      <!-- 字体 -->
+      <section id="typography" class="section-card">
+        <h2 class="section-title">字体系统</h2>
+        <div class="font-demo">
+          <div class="font-row">
+            <span class="font-tag">衬线标题 Crimson Pro</span>
+            <span style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--accent-700);">稳重社区</span>
           </div>
-          <div style="color:#7d95c9; font-size:0.8rem; margin-top:1rem;">标签悬停边框变色+轻微放大</div>
+          <div class="font-row">
+            <span class="font-tag">正文 Inter Regular</span>
+            <span style="font-family: var(--font-sans); font-weight: 400;">记录生活中的每一份质感，与邻里分享温和的日常。</span>
+          </div>
+          <div class="font-row">
+            <span class="font-tag">数字/标签 Inter Medium</span>
+            <span style="font-family: var(--font-sans); font-weight: 500;">1.2k 点赞 · 348 评论</span>
+          </div>
+          <div class="font-row">
+            <span class="font-tag">引用/说明</span>
+            <span style="font-family: var(--font-serif); font-style: italic;">— 沉稳不失温度</span>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- 5. 补充：列表项分割线 / 更多边框 -->
-    <div class="section">
-      <div class="section-title">列表项 · 分割线交互</div>
-      <div style="background: #0f1a2b; border-radius: 30px; padding: 1rem 0;">
-        <div style="display: flex; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid #2e3f5e; transition: background 0.2s; cursor: default;" class="menu-item" style="border-radius:0;">
-          <span>消息通知</span>
-          <span style="color:#6b8bdf;">开启</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 1rem 2rem; border-bottom: 1px solid #2e3f5e; transition: background 0.2s; cursor: default;" class="menu-item" style="border-radius:0;">
-          <span>深色模式</span>
-          <span style="color:#6b8bdf;">自动</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; padding: 1rem 2rem; transition: background 0.2s; cursor: default;" class="menu-item" style="border-radius:0;">
-          <span>版本更新</span>
-          <span style="color:#6b8bdf;">v2.3.0</span>
-        </div>
-      </div>
-      <div class="note-text">列表项悬停时背景轻微变化，分割线保持半透明。字体为16px正文。</div>
-    </div>
+      <!-- 卡片 -->
+      <section id="cards" class="section-card">
+        <h2 class="section-title">卡片组件</h2>
+        <div class="component-grid">
+          <!-- 帖子卡片 -->
+          <div class="card post-card">
+            <div class="post-header">
+              <div class="avatar">M</div>
+              <div class="user-info">
+                <h4>mira.eth</h4>
+                <span>2小时前 · 摄影</span>
+              </div>
+            </div>
+            <div class="post-content">
+              傍晚的玻璃折射率刚刚好 🌆 用手机记录下了这一刻。
+            </div>
+            <div class="post-stats">
+              <span><i class="fa-regular fa-heart"></i> 24</span>
+              <span><i class="fa-regular fa-comment"></i> 8</span>
+              <span><i class="fa-regular fa-eye"></i> 1.2k</span>
+            </div>
+          </div>
 
-    <!-- 汇总说明 -->
-    <hr>
-    <div style="display: flex; justify-content: space-between; color: #5b73a5; font-size: 0.9rem; padding: 0.5rem;">
-      <span>菜单栏:16px · 标题层级:40/32/26/19/16 · 按钮文字:16px · 标签:14px</span>
-      <span>交互: 边框/背景/缩放/阴影</span>
+          <!-- 数据卡片 -->
+          <div class="data-card">
+            <div class="data-value">1,286</div>
+            <div class="data-label">今日活跃</div>
+          </div>
+          <div class="data-card">
+            <div class="data-value">48</div>
+            <div class="data-label">新帖</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 按钮 -->
+      <section id="buttons" class="section-card">
+        <h2 class="section-title">按钮</h2>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <button class="btn btn-primary">主要操作</button>
+          <button class="btn btn-outline">次要按钮</button>
+          <button class="btn"><i class="fa-regular fa-heart"></i> 点赞</button>
+          <button class="btn btn-icon"><i class="fa-regular fa-bookmark"></i></button>
+        </div>
+      </section>
+
+      <!-- 数据组件 -->
+      <section id="data" class="section-card">
+        <h2 class="section-title">数据组件</h2>
+        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+          <div>
+            <span class="badge">精华</span>
+            <span class="badge badge-success">官方</span>
+          </div>
+          <div style="width: 200px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="font-size: 0.875rem;">完成度</span>
+              <span style="font-size: 0.875rem; color: var(--accent-700);">60%</span>
+            </div>
+            <div class="progress"><div class="progress-bar" style="width:60%"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 导航 -->
+      <section id="navigation" class="section-card">
+        <h2 class="section-title">导航栏示例</h2>
+        <div style="background: var(--bg-glass); border-radius: var(--radius-xl); padding: 1px;">
+          <div class="navbar">
+            <span class="logo">Vibe</span>
+            <div class="nav-links">
+              <a href="#">首页</a>
+              <a href="#">发现</a>
+              <a href="#">动态</a>
+            </div>
+            <div style="display: flex; gap: 1rem;">
+              <i class="fa-regular fa-bell"></i>
+              <i class="fa-regular fa-user"></i>
+            </div>
+          </div>
+          <div class="bottom-nav">
+            <div class="nav-item active"><i class="fa-solid fa-house"></i><span>首页</span></div>
+            <div class="nav-item"><i class="fa-regular fa-compass"></i><span>发现</span></div>
+            <div class="nav-item"><i class="fa-regular fa-square-plus"></i><span>发布</span></div>
+            <div class="nav-item"><i class="fa-regular fa-bell"></i><span>通知</span></div>
+            <div class="nav-item"><i class="fa-regular fa-user"></i><span>我的</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 交互 -->
+      <section id="interactions" class="section-card">
+        <h2 class="section-title">微交互</h2>
+        <div style="display: flex; gap: 2rem;">
+          <button class="like-btn" id="likeDemo"><i class="fa-regular fa-heart"></i> <span>28</span></button>
+          <script>
+            document.getElementById('likeDemo')?.addEventListener('click', function(e) {
+              e.preventDefault();
+              this.classList.toggle('active');
+              const icon = this.querySelector('i');
+              const span = this.querySelector('span');
+              let count = parseInt(span.innerText);
+              if (this.classList.contains('active')) {
+                icon.className = 'fa-solid fa-heart';
+                span.innerText = count + 1;
+              } else {
+                icon.className = 'fa-regular fa-heart';
+                span.innerText = count - 1;
+              }
+              this.style.transform = 'scale(1.2)';
+              setTimeout(() => this.style.transform = '', 150);
+            });
+          </script>
+          <div style="width: 24px; height: 24px; border: 2px solid var(--accent-100); border-top-color: var(--accent-500); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+        </div>
+      </section>
+
+      <!-- 统一说明 -->
+      <section class="section-card" style="background: var(--accent-100);">
+        <h2 class="section-title" style="border-left-color: var(--accent-700);">快速成型指南</h2>
+        <p style="margin-bottom: 1rem;">所有样式基于 CSS 变量，可一键替换主题。推荐搭配 <strong>Radix UI / Shadcn UI</strong> 使用，组件行为由库保证，样式用这套令牌覆盖。</p>
+        <pre style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: var(--radius-lg);">:root {<br>  --accent-500: #a3917e;<br>  --font-serif: 'Crimson Pro', serif;<br>  ...<br>}</pre>
+      </section>
     </div>
   </div>
+
+  <!-- 手机预览框（模拟实际效果） -->
+  <div style="margin-top: 4rem;">
+    <h2 class="section-title" style="text-align: center;">📱 移动端预览</h2>
+    <div class="phone-frame">
+      <!-- 状态栏略 -->
+      <div style="padding: 1rem 1rem 0.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; font-size: 0.75rem;">
+        <span>9:41</span><span><i class="fa-regular fa-signal"></i> 5G</span>
+      </div>
+      <div class="navbar" style="border-radius: 0;">
+        <span class="logo">Vibe</span>
+        <div><i class="fa-regular fa-bell"></i></div>
+      </div>
+      <div style="padding: 1rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
+          <div class="data-card" style="padding: 0.75rem;"><div class="data-value">1.2k</div><div class="data-label">活跃</div></div>
+          <div class="data-card" style="padding: 0.75rem;"><div class="data-value">48</div><div class="data-label">新帖</div></div>
+        </div>
+        <div class="card" style="margin-bottom: 1rem;">
+          <div class="post-header">
+            <div class="avatar" style="width: 40px; height: 40px;">J</div>
+            <div><h4 style="font-size: 1rem;">junyao</h4><span style="font-size: 0.75rem;">5h ago</span></div>
+          </div>
+          <p style="font-size: 0.875rem;">社区活动参与度 60%</p>
+          <div class="progress" style="margin: 0.75rem 0;"><div class="progress-bar" style="width:60%"></div></div>
+          <div style="display: flex; gap: 1rem; margin-top: 0.75rem;">
+            <button class="like-btn" style="font-size: 0.875rem;"><i class="fa-regular fa-heart"></i> 56</button>
+            <span><i class="fa-regular fa-comment"></i> 12</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width: 100%;">发布动态</button>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item active"><i class="fa-solid fa-house"></i><span>首页</span></div>
+        <div class="nav-item"><i class="fa-regular fa-compass"></i><span>发现</span></div>
+        <div class="nav-item"><i class="fa-regular fa-square-plus"></i><span>发布</span></div>
+        <div class="nav-item"><i class="fa-regular fa-bell"></i><span>通知</span></div>
+        <div class="nav-item"><i class="fa-regular fa-user"></i><span>我的</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style> @keyframes spin { to { transform: rotate(360deg); } } </style>
 </body>
 </html>
