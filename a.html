@@ -1,707 +1,394 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>稳重·优雅社区设计系统</title>
-  <!-- 字体：Inter 可变 + Crimson Pro 衬线 (用于提升稳重感) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap">
-  <!-- Font Awesome 6 图标库 (用于辅助展示) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    /* ---------- 设计令牌 ---------- */
-    :root {
-      /* 色彩：稳重柔和的中性色 + 深沉点缀 */
-      --bg-base: #f8f7f4;        /* 暖白基底 */
-      --bg-surface: #ffffffec;    /* 表面色，略带透明 */
-      --bg-glass: rgba(255, 255, 255, 0.6);
-      --border-light: rgba(0, 0, 0, 0.06);
-      --border-medium: rgba(0, 0, 0, 0.1);
-      
-      --text-primary: #1e1e1e;    /* 几乎黑色 */
-      --text-secondary: #5a5a5a;
-      --text-tertiary: #8a8a8a;
-      
-      --accent-100: #ece7e1;      /* 温暖米色 */
-      --accent-300: #d4cdc0;
-      --accent-500: #a3917e;      /* 主色调：灰褐，稳重 */
-      --accent-700: #6b5b4b;
-      
-      --success: #2e7d5e;
-      --warning: #b36b4b;
-      --danger: #c64b4b;
-      
-      /* 字体家族 */
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      --font-serif: 'Crimson Pro', Georgia, 'Times New Roman', serif;
-      
-      /* 字体尺寸 (基于rem) */
-      --text-xs: 0.75rem;    /* 12px */
-      --text-sm: 0.875rem;   /* 14px */
-      --text-base: 1rem;     /* 16px */
-      --text-md: 1.125rem;   /* 18px */
-      --text-lg: 1.25rem;    /* 20px */
-      --text-xl: 1.5rem;     /* 24px */
-      --text-2xl: 2rem;      /* 32px */
-      
-      /* 字重 */
-      --font-light: 300;
-      --font-regular: 400;
-      --font-medium: 500;
-      --font-semibold: 600;
-      --font-bold: 700;
-      
-      /* 行高 */
-      --leading-tight: 1.2;
-      --leading-normal: 1.5;
-      --leading-relaxed: 1.7;
-      
-      /* 间距 (8的倍数，但加入6的倍数为细腻) */
-      --space-1: 0.25rem;   /* 4px */
-      --space-2: 0.5rem;    /* 8px */
-      --space-3: 0.75rem;   /* 12px */
-      --space-4: 1rem;      /* 16px */
-      --space-5: 1.25rem;   /* 20px */
-      --space-6: 1.5rem;    /* 24px */
-      --space-8: 2rem;      /* 32px */
-      --space-10: 2.5rem;   /* 40px */
-      --space-12: 3rem;     /* 48px */
-      
-      /* 圆角：大部分偏大，柔和 */
-      --radius-sm: 0.5rem;   /* 8px */
-      --radius-md: 0.75rem;  /* 12px */
-      --radius-lg: 1.25rem;  /* 20px */
-      --radius-xl: 1.75rem;  /* 28px */
-      --radius-full: 9999px;
-      
-      /* 阴影：细腻，有层次 */
-      --shadow-sm: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
-      --shadow-md: 0 8px 20px rgba(0,0,0,0.03), 0 2px 6px rgba(0,0,0,0.05);
-      --shadow-lg: 0 20px 30px -10px rgba(0,0,0,0.08), 0 8px 15px rgba(0,0,0,0.03);
-      --shadow-xl: 0 30px 40px -15px rgba(0,0,0,0.1);
-      --shadow-glass: 0 10px 30px -10px rgba(0,0,0,0.05), inset 0 1px 1px rgba(255,255,255,0.6);
-      
-      /* 过渡 */
-      --transition-fast: 200ms ease;
-      --transition-base: 300ms cubic-bezier(0.2, 0, 0, 1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>海豚社区经济模型 · 治理提案草案</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+        body {
+            background: #f5f0ff;   /* 浅紫背景衬托白色卡片 */
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #1f1a2e;
+            padding: 2rem 1rem;
+        }
 
-    body {
-      background-color: var(--bg-base);
-      font-family: var(--font-sans);
-      color: var(--text-primary);
-      line-height: var(--leading-normal);
-      padding: 2rem 1rem;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+        /* 主容器：白色卡片 + 优雅阴影 */
+        .proposal-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(98, 54, 255, 0.12);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
+        /* 紫色装饰头 */
+        .hero {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            padding: 2rem 2rem 1.8rem;
+            color: white;
+        }
 
-    /* 设计系统标题区 */
-    .ds-header {
-      margin-bottom: 3rem;
-      text-align: center;
-    }
-    .ds-header h1 {
-      font-family: var(--font-serif);
-      font-size: var(--text-2xl);
-      font-weight: 600;
-      color: var(--accent-700);
-      letter-spacing: -0.01em;
-      margin-bottom: var(--space-2);
-    }
-    .ds-header p {
-      font-size: var(--text-md);
-      color: var(--text-secondary);
-      max-width: 600px;
-      margin: 0 auto;
-    }
+        .hero h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
 
-    /* 网格布局：侧边导航 + 内容 */
-    .ds-layout {
-      display: grid;
-      grid-template-columns: 200px 1fr;
-      gap: 2rem;
-    }
-    .ds-sidebar {
-      position: sticky;
-      top: 2rem;
-      align-self: start;
-      background: var(--bg-glass);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-glass);
-      padding: var(--space-6) var(--space-4);
-    }
-    .ds-sidebar ul {
-      list-style: none;
-    }
-    .ds-sidebar li {
-      margin-bottom: var(--space-2);
-    }
-    .ds-sidebar a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-weight: var(--font-medium);
-      padding: var(--space-2) var(--space-3);
-      display: block;
-      border-radius: var(--radius-full);
-      transition: all var(--transition-fast);
-      font-size: var(--text-sm);
-    }
-    .ds-sidebar a:hover {
-      background: var(--accent-100);
-      color: var(--accent-700);
-    }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
 
-    .ds-content {
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.75rem;
+            max-width: 85%;
+        }
 
-    /* 章节卡片 */
-    .section-card {
-      background: var(--bg-surface);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-lg);
-      padding: var(--space-8);
-    }
+        /* 内容区域 */
+        .content {
+            padding: 2rem 2rem 2.5rem;
+        }
 
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: var(--text-xl);
-      font-weight: 600;
-      color: var(--accent-700);
-      margin-bottom: var(--space-6);
-      border-left: 4px solid var(--accent-500);
-      padding-left: var(--space-4);
-    }
+        /* 章节标题 */
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #e9d5ff;
+            color: #4c1d95;
+            display: inline-block;
+        }
 
-    /* 字体展示区 */
-    .font-demo {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-    }
-    .font-row {
-      display: flex;
-      align-items: baseline;
-      gap: var(--space-4);
-      flex-wrap: wrap;
-    }
-    .font-tag {
-      background: var(--accent-100);
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      color: var(--accent-700);
-      font-weight: 500;
-    }
+        .section-sub {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+            color: #5b21b6;
+        }
 
-    /* 组件网格 */
-    .component-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: var(--space-6);
-      margin-top: var(--space-4);
-    }
+        /* 数据卡片网格 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
 
-    /* 卡片基础样式 */
-    .card {
-      background: white;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      padding: var(--space-5);
-      transition: box-shadow var(--transition-fast), transform var(--transition-fast);
-    }
-    .card:hover {
-      box-shadow: var(--shadow-md);
-      transform: translateY(-2px);
-    }
+        .stat-card {
+            background: #faf9fe;
+            border-radius: 1.5rem;
+            padding: 1.2rem;
+            border: 1px solid #ede9fe;
+            transition: all 0.2s;
+        }
 
-    /* 帖子卡片 */
-    .post-card {
-      max-width: 340px;
-    }
-    .post-header {
-      display: flex;
-      gap: var(--space-3);
-      margin-bottom: var(--space-4);
-    }
-    .avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: var(--radius-lg);  /* 有机方形，稳重 */
-      background: var(--accent-300);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
-      font-size: var(--text-lg);
-      box-shadow: var(--shadow-sm);
-    }
-    .user-info h4 {
-      font-size: var(--text-md);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .user-info span {
-      font-size: var(--text-sm);
-      color: var(--text-tertiary);
-    }
-    .post-content {
-      color: var(--text-secondary);
-      font-size: var(--text-sm);
-      line-height: var(--leading-relaxed);
-      margin-bottom: var(--space-4);
-    }
-    .post-stats {
-      display: flex;
-      gap: var(--space-5);
-      color: var(--text-tertiary);
-      font-size: var(--text-xs);
-    }
+        .stat-card h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #6b21a5;
+            margin-bottom: 0.5rem;
+        }
 
-    /* 数据卡片 (稳重) */
-    .data-card {
-      background: linear-gradient(145deg, #ffffff, #fafaf8);
-      border-radius: var(--radius-lg);
-      padding: var(--space-5);
-      text-align: center;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-    }
-    .data-value {
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--accent-700);
-      line-height: 1.2;
-    }
-    .data-label {
-      font-size: var(--text-sm);
-      color: var(--text-tertiary);
-      margin-top: var(--space-1);
-    }
+        .stat-number {
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #1f1a2e;
+            line-height: 1.2;
+        }
 
-    /* 按钮设计 */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2);
-      padding: 0.625rem 1.25rem;
-      border-radius: var(--radius-full);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      font-family: var(--font-sans);
-      border: 1px solid transparent;
-      cursor: pointer;
-      transition: all var(--transition-fast);
-      background: white;
-      color: var(--text-primary);
-      border-color: var(--border-medium);
-      box-shadow: var(--shadow-sm);
-    }
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--accent-300);
-    }
-    .btn:active {
-      transform: translateY(1px);
-      box-shadow: var(--shadow-sm);
-    }
-    .btn-primary {
-      background: var(--accent-500);
-      border-color: var(--accent-500);
-      color: white;
-    }
-    .btn-primary:hover {
-      background: var(--accent-700);
-      border-color: var(--accent-700);
-    }
-    .btn-outline {
-      background: transparent;
-      border-color: var(--accent-500);
-      color: var(--accent-700);
-    }
-    .btn-outline:hover {
-      background: var(--accent-100);
-      border-color: var(--accent-500);
-    }
+        .stat-desc {
+            font-size: 0.8rem;
+            color: #4b5563;
+            margin-top: 0.3rem;
+        }
 
-    /* 标签/徽章 */
-    .badge {
-      display: inline-block;
-      padding: var(--space-1) var(--space-3);
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      font-weight: 500;
-      background: var(--accent-100);
-      color: var(--accent-700);
-      border: 1px solid var(--border-light);
-    }
-    .badge-success {
-      background: #e4f3ed;
-      color: var(--success);
-    }
+        /* 表格样式 */
+        .mechanic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            background: #ffffff;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
 
-    /* 进度条 */
-    .progress {
-      width: 100%;
-      height: 0.5rem;
-      background: var(--accent-100);
-      border-radius: var(--radius-full);
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      background: var(--accent-500);
-      border-radius: var(--radius-full);
-    }
+        .mechanic-table th {
+            background: #f3e8ff;
+            color: #4c1d95;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.9rem;
+        }
 
-    /* 导航栏 */
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--space-3) var(--space-6);
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border-light);
-      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    }
-    .logo {
-      font-family: var(--font-serif);
-      font-size: var(--text-lg);
-      font-weight: 600;
-      color: var(--accent-700);
-    }
-    .nav-links {
-      display: flex;
-      gap: var(--space-6);
-    }
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-size: var(--text-sm);
-      transition: color var(--transition-fast);
-    }
-    .nav-links a:hover {
-      color: var(--accent-700);
-    }
+        .mechanic-table td {
+            border-bottom: 1px solid #ede9fe;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
 
-    /* 底部导航 (移动) */
-    .bottom-nav {
-      display: flex;
-      justify-content: space-around;
-      padding: var(--space-3) var(--space-4);
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid var(--border-light);
-      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
-    }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: var(--space-1);
-      color: var(--text-tertiary);
-      font-size: var(--text-xs);
-      transition: color var(--transition-fast);
-      cursor: pointer;
-    }
-    .nav-item i {
-      font-size: 1.3rem;
-    }
-    .nav-item.active {
-      color: var(--accent-700);
-    }
+        .mechanic-table tr:last-child td {
+            border-bottom: none;
+        }
 
-    hr {
-      border: none;
-      border-top: 1px solid var(--border-light);
-      margin: var(--space-6) 0;
-    }
+        /* 利率阶梯 */
+        .rate-steps {
+            background: #fef9ff;
+            border-radius: 1rem;
+            padding: 1rem 1.2rem;
+            border-left: 5px solid #a855f7;
+            margin: 1rem 0;
+        }
 
-    /* 交互示例 */
-    .like-btn {
-      background: none;
-      border: none;
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      color: var(--text-tertiary);
-      font-size: var(--text-sm);
-      cursor: pointer;
-      transition: color var(--transition-fast), transform 0.15s;
-    }
-    .like-btn:hover {
-      color: var(--danger);
-    }
-    .like-btn.active {
-      color: var(--danger);
-    }
-    .like-btn:active {
-      transform: scale(1.2);
-    }
+        .rate-steps p {
+            margin: 0.4rem 0;
+            font-size: 0.9rem;
+        }
 
-    /* 模拟容器 */
-    .phone-frame {
-      max-width: 400px;
-      margin: 0 auto;
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      background: white;
-      box-shadow: var(--shadow-xl);
-    }
-  </style>
+        /* Q&A 折叠卡片风格 */
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .qa-item {
+            background: #ffffff;
+            border-radius: 1rem;
+            border: 1px solid #e9d5ff;
+            transition: all 0.1s;
+        }
+
+        .qa-question {
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 1rem 1.2rem;
+            background: #faf7ff;
+            border-radius: 1rem 1rem 0 0;
+            color: #5b21b6;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ede9fe;
+        }
+
+        .qa-question span:first-child::before {
+            content: "❓ ";
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .qa-answer {
+            padding: 1rem 1.2rem 1.2rem 2rem;
+            font-size: 0.95rem;
+            color: #2d2a3e;
+            background: #ffffff;
+            border-radius: 0 0 1rem 1rem;
+            line-height: 1.5;
+        }
+
+        /* 紫色高亮 */
+        .highlight {
+            background: #f3e8ff;
+            padding: 0.1rem 0.3rem;
+            border-radius: 8px;
+            font-weight: 500;
+            color: #6d28d9;
+        }
+
+        .footnote {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #ddd6fe;
+            font-size: 0.8rem;
+            color: #5b6e8c;
+            text-align: center;
+        }
+
+        @media (max-width: 680px) {
+            .content {
+                padding: 1.2rem;
+            }
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .stat-number {
+                font-size: 1.5rem;
+            }
+        }
+
+        button, .fake-link {
+            background: none;
+            border: none;
+        }
+
+        .purple-badge {
+            background-color: #ede9fe;
+            color: #5b21b6;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="ds-header">
-    <h1>稳重 · 优雅社区设计系统</h1>
-    <p>暖白基底 · 灰褐点缀 · 细腻玻璃 · 有机形态</p>
-  </div>
-
-  <div class="ds-layout">
-    <!-- 侧边导航 -->
-    <nav class="ds-sidebar">
-      <ul>
-        <li><a href="#colors">🎨 色彩</a></li>
-        <li><a href="#typography">🔤 字体</a></li>
-        <li><a href="#cards">🃏 卡片</a></li>
-        <li><a href="#buttons">🔘 按钮</a></li>
-        <li><a href="#data">📊 数据组件</a></li>
-        <li><a href="#navigation">🧭 导航</a></li>
-        <li><a href="#interactions">✨ 交互</a></li>
-      </ul>
-    </nav>
-
-    <div class="ds-content">
-      <!-- 色彩 -->
-      <section id="colors" class="section-card">
-        <h2 class="section-title">色彩系统</h2>
-        <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
-          <div style="width: 100px; height: 100px; background: var(--accent-500); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white; font-weight: 500;">主色 a3917e</div>
-          <div style="width: 100px; height: 100px; background: var(--accent-100); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: var(--text-primary);">辅色 ece7e1</div>
-          <div style="width: 100px; height: 100px; background: var(--text-primary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">文字 1e1e1e</div>
-          <div style="width: 100px; height: 100px; background: var(--text-secondary); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); display: flex; align-items: flex-end; padding: 0.5rem; color: white;">辅助文字</div>
-        </div>
-        <p class="text-secondary" style="margin-top: 1rem;">主色灰褐，稳重低调；辅以暖白，层次分明</p>
-      </section>
-
-      <!-- 字体 -->
-      <section id="typography" class="section-card">
-        <h2 class="section-title">字体系统</h2>
-        <div class="font-demo">
-          <div class="font-row">
-            <span class="font-tag">衬线标题 Crimson Pro</span>
-            <span style="font-family: var(--font-serif); font-size: 2rem; font-weight: 600; color: var(--accent-700);">稳重社区</span>
-          </div>
-          <div class="font-row">
-            <span class="font-tag">正文 Inter Regular</span>
-            <span style="font-family: var(--font-sans); font-weight: 400;">记录生活中的每一份质感，与邻里分享温和的日常。</span>
-          </div>
-          <div class="font-row">
-            <span class="font-tag">数字/标签 Inter Medium</span>
-            <span style="font-family: var(--font-sans); font-weight: 500;">1.2k 点赞 · 348 评论</span>
-          </div>
-          <div class="font-row">
-            <span class="font-tag">引用/说明</span>
-            <span style="font-family: var(--font-serif); font-style: italic;">— 沉稳不失温度</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- 卡片 -->
-      <section id="cards" class="section-card">
-        <h2 class="section-title">卡片组件</h2>
-        <div class="component-grid">
-          <!-- 帖子卡片 -->
-          <div class="card post-card">
-            <div class="post-header">
-              <div class="avatar">M</div>
-              <div class="user-info">
-                <h4>mira.eth</h4>
-                <span>2小时前 · 摄影</span>
-              </div>
-            </div>
-            <div class="post-content">
-              傍晚的玻璃折射率刚刚好 🌆 用手机记录下了这一刻。
-            </div>
-            <div class="post-stats">
-              <span><i class="fa-regular fa-heart"></i> 24</span>
-              <span><i class="fa-regular fa-comment"></i> 8</span>
-              <span><i class="fa-regular fa-eye"></i> 1.2k</span>
-            </div>
-          </div>
-
-          <!-- 数据卡片 -->
-          <div class="data-card">
-            <div class="data-value">1,286</div>
-            <div class="data-label">今日活跃</div>
-          </div>
-          <div class="data-card">
-            <div class="data-value">48</div>
-            <div class="data-label">新帖</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 按钮 -->
-      <section id="buttons" class="section-card">
-        <h2 class="section-title">按钮</h2>
-        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn btn-primary">主要操作</button>
-          <button class="btn btn-outline">次要按钮</button>
-          <button class="btn"><i class="fa-regular fa-heart"></i> 点赞</button>
-          <button class="btn btn-icon"><i class="fa-regular fa-bookmark"></i></button>
-        </div>
-      </section>
-
-      <!-- 数据组件 -->
-      <section id="data" class="section-card">
-        <h2 class="section-title">数据组件</h2>
-        <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-          <div>
-            <span class="badge">精华</span>
-            <span class="badge badge-success">官方</span>
-          </div>
-          <div style="width: 200px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-              <span style="font-size: 0.875rem;">完成度</span>
-              <span style="font-size: 0.875rem; color: var(--accent-700);">60%</span>
-            </div>
-            <div class="progress"><div class="progress-bar" style="width:60%"></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 导航 -->
-      <section id="navigation" class="section-card">
-        <h2 class="section-title">导航栏示例</h2>
-        <div style="background: var(--bg-glass); border-radius: var(--radius-xl); padding: 1px;">
-          <div class="navbar">
-            <span class="logo">Vibe</span>
-            <div class="nav-links">
-              <a href="#">首页</a>
-              <a href="#">发现</a>
-              <a href="#">动态</a>
-            </div>
-            <div style="display: flex; gap: 1rem;">
-              <i class="fa-regular fa-bell"></i>
-              <i class="fa-regular fa-user"></i>
-            </div>
-          </div>
-          <div class="bottom-nav">
-            <div class="nav-item active"><i class="fa-solid fa-house"></i><span>首页</span></div>
-            <div class="nav-item"><i class="fa-regular fa-compass"></i><span>发现</span></div>
-            <div class="nav-item"><i class="fa-regular fa-square-plus"></i><span>发布</span></div>
-            <div class="nav-item"><i class="fa-regular fa-bell"></i><span>通知</span></div>
-            <div class="nav-item"><i class="fa-regular fa-user"></i><span>我的</span></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 交互 -->
-      <section id="interactions" class="section-card">
-        <h2 class="section-title">微交互</h2>
-        <div style="display: flex; gap: 2rem;">
-          <button class="like-btn" id="likeDemo"><i class="fa-regular fa-heart"></i> <span>28</span></button>
-          <script>
-            document.getElementById('likeDemo')?.addEventListener('click', function(e) {
-              e.preventDefault();
-              this.classList.toggle('active');
-              const icon = this.querySelector('i');
-              const span = this.querySelector('span');
-              let count = parseInt(span.innerText);
-              if (this.classList.contains('active')) {
-                icon.className = 'fa-solid fa-heart';
-                span.innerText = count + 1;
-              } else {
-                icon.className = 'fa-regular fa-heart';
-                span.innerText = count - 1;
-              }
-              this.style.transform = 'scale(1.2)';
-              setTimeout(() => this.style.transform = '', 150);
-            });
-          </script>
-          <div style="width: 24px; height: 24px; border: 2px solid var(--accent-100); border-top-color: var(--accent-500); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
-        </div>
-      </section>
-
-      <!-- 统一说明 -->
-      <section class="section-card" style="background: var(--accent-100);">
-        <h2 class="section-title" style="border-left-color: var(--accent-700);">快速成型指南</h2>
-        <p style="margin-bottom: 1rem;">所有样式基于 CSS 变量，可一键替换主题。推荐搭配 <strong>Radix UI / Shadcn UI</strong> 使用，组件行为由库保证，样式用这套令牌覆盖。</p>
-        <pre style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: var(--radius-lg);">:root {<br>  --accent-500: #a3917e;<br>  --font-serif: 'Crimson Pro', serif;<br>  ...<br>}</pre>
-      </section>
+<div class="proposal-container">
+    <div class="hero">
+        <h1>🐬 海豚社区 · 经济模型治理提案</h1>
+        <div class="badge">草案 v1.0 | 2026年3月</div>
+        <p>基于公平发射、税收反哺、双池质押与社区做市的可持续飞轮。本提案旨在建立透明、稳健的社区驱动经济，所有参数由多签共同治理。</p>
     </div>
-  </div>
+    <div class="content">
+        <!-- 核心数据快照 -->
+        <div class="section-title">📊 模型底层数据</div>
+        <div class="stats-grid">
+            <div class="stat-card"><h3>代币 H 总量</h3><div class="stat-number">1,000,000,000</div><div class="stat-desc">100%公平发射，无增发</div></div>
+            <div class="stat-card"><h3>社区多签持仓</h3><div class="stat-number">~9.8 亿 H</div><div class="stat-desc">做市、激励储备，不参与质押</div></div>
+            <div class="stat-card"><h3>流通 H 总量</h3><div class="stat-number">≈ 2000 万 H</div><div class="stat-desc">流动性池 + 外部地址</div></div>
+            <div class="stat-card"><h3>流动性池深度</h3><div class="stat-number">U 10.5万 + H 1905万</div><div class="stat-desc">恒定乘积 AMM，价格≈0.0055 U/H</div></div>
+            <div class="stat-card"><h3>国库初始 U</h3><div class="stat-number">5,500 U</div><div class="stat-desc">来自社区购买税收，未来持续累积</div></div>
+            <div class="stat-card"><h3>交易税（买卖）</h3><div class="stat-number">5%</div><div class="stat-desc">全额进入国库，支撑质押收益</div></div>
+        </div>
 
-  <!-- 手机预览框（模拟实际效果） -->
-  <div style="margin-top: 4rem;">
-    <h2 class="section-title" style="text-align: center;">📱 移动端预览</h2>
-    <div class="phone-frame">
-      <!-- 状态栏略 -->
-      <div style="padding: 1rem 1rem 0.5rem; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; font-size: 0.75rem;">
-        <span>9:41</span><span><i class="fa-regular fa-signal"></i> 5G</span>
-      </div>
-      <div class="navbar" style="border-radius: 0;">
-        <span class="logo">Vibe</span>
-        <div><i class="fa-regular fa-bell"></i></div>
-      </div>
-      <div style="padding: 1rem;">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem;">
-          <div class="data-card" style="padding: 0.75rem;"><div class="data-value">1.2k</div><div class="data-label">活跃</div></div>
-          <div class="data-card" style="padding: 0.75rem;"><div class="data-value">48</div><div class="data-label">新帖</div></div>
+        <!-- 双池质押核心机制 -->
+        <div class="section-title">💰 双池质押机制（核心玩法）</div>
+        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+            <div class="stat-card" style="border-top: 4px solid #8b5cf6;">
+                <h3>🔐 质押 H → 得 U</h3>
+                <div class="stat-desc" style="margin: 0.5rem 0;">收益来源于国库（税收），阶梯利率，按日发放。</div>
+                <div class="rate-steps" style="background:#f9f5ff; margin:0.8rem 0;">
+                    <p><strong>📈 阶梯日利率</strong></p>
+                    <p>▪ 1–7天：0.5% &nbsp;▪ 8–16天：0.6% &nbsp;▪ 17–30天：0.7%</p>
+                    <p>▪ 31–60天：0.8% &nbsp;▪ ≥61天：1.0%</p>
+                </div>
+                <div><span class="purple-badge">随时解除</span> <span class="purple-badge">24h到账防套利</span></div>
+            </div>
+            <div class="stat-card" style="border-top: 4px solid #a855f7;">
+                <h3>🏦 质押 U → 得 H</h3>
+                <div class="stat-desc" style="margin: 0.5rem 0;">收益从社区划拨的<span class="highlight">1亿H奖励池</span>支出，固定日利率。</div>
+                <div class="rate-steps" style="background:#f9f5ff; margin:0.8rem 0;">
+                    <p>✨ 固定日利率：<strong>0.5%</strong>（以U价值计，每日按H价格折算发放H）</p>
+                    <p>📦 奖励池总量：<strong>100,000,000 H</strong>（多签专户）</p>
+                </div>
+                <div><span class="purple-badge">随存随取</span> <span class="purple-badge">次日到账</span> <span class="purple-badge">防闪贷套利</span></div>
+            </div>
         </div>
-        <div class="card" style="margin-bottom: 1rem;">
-          <div class="post-header">
-            <div class="avatar" style="width: 40px; height: 40px;">J</div>
-            <div><h4 style="font-size: 1rem;">junyao</h4><span style="font-size: 0.75rem;">5h ago</span></div>
-          </div>
-          <p style="font-size: 0.875rem;">社区活动参与度 60%</p>
-          <div class="progress" style="margin: 0.75rem 0;"><div class="progress-bar" style="width:60%"></div></div>
-          <div style="display: flex; gap: 1rem; margin-top: 0.75rem;">
-            <button class="like-btn" style="font-size: 0.875rem;"><i class="fa-regular fa-heart"></i> 56</button>
-            <span><i class="fa-regular fa-comment"></i> 12</span>
-          </div>
+
+        <!-- 关键规则说明 -->
+        <div class="section-title">⚙️ 经济飞轮 & 国库平衡</div>
+        <table class="mechanic-table">
+            <thead><tr><th>变量</th><th>说明</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>🏛️ 国库收入</td><td>买卖总额 × 5% 交易税（U），全部自动归集国库。</td></tr>
+                <tr><td>💸 国库支出</td><td>每日20:00按当时H价格发放“质押H得U”收益，实时扣除。</td></tr>
+                <tr><td>🔄 平衡条件</td><td>日均交易额 ×5% ≥ 质押H总量 × 价格 × 平均日利率，模型即可永续。</td></tr>
+                <tr><td>📉 流通上限</td><td>可质押H最多≈2000万，因此最大日支出可控（约<1000U/天），交易活跃后国库稳健。</td></tr>
+            </tbody>
+        </table>
+
+        <!-- 做市储备 & 价格干预 -->
+        <div class="section-title">🛡️ 社区做市储备（价格稳定基石）</div>
+        <p style="margin-bottom: 0.5rem;">社区多签独立管理<span class="highlight">“做市储备U”</span>，资金来源于低买高卖的差价利润，<strong>不与国库混用</strong>。核心使命：平抑H价格波动，保护质押用户资产。</p>
+        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); margin-top: 0.8rem;">
+            <div class="stat-card"><h3>📈 价格过高 >0.007 U/H</h3><div class="stat-desc">储备卖出H → 增加供给 → 降温</div></div>
+            <div class="stat-card"><h3>📉 价格过低 <0.004 U/H</h3><div class="stat-desc">储备买入H → 托底 → 恢复信心</div></div>
+            <div class="stat-card"><h3>🎯 稳定区间</h3><div class="stat-desc">0.0045 – 0.0065 U/H 内不主动干预，让市场自发交易。</div></div>
         </div>
-        <button class="btn btn-primary" style="width: 100%;">发布动态</button>
-      </div>
-      <div class="bottom-nav">
-        <div class="nav-item active"><i class="fa-solid fa-house"></i><span>首页</span></div>
-        <div class="nav-item"><i class="fa-regular fa-compass"></i><span>发现</span></div>
-        <div class="nav-item"><i class="fa-regular fa-square-plus"></i><span>发布</span></div>
-        <div class="nav-item"><i class="fa-regular fa-bell"></i><span>通知</span></div>
-        <div class="nav-item"><i class="fa-regular fa-user"></i><span>我的</span></div>
-      </div>
+        <p style="font-size:0.85rem; background:#faf5ff; padding:0.5rem 1rem; border-radius: 20px;">💡 每次做市买卖同样产生5%交易税，反向为国库贡献收入，形成健康闭环。</p>
+
+        <!-- 治理结构多签 -->
+        <div class="section-title">🗳️ 多签治理 & 透明度</div>
+        <p>所有关键参数由社区多签钱包（≥3/5 签名）共同决策，任何操作链上可查，社区信息面板实时展示：</p>
+        <ul style="margin: 0.8rem 0 1rem 1.5rem;">
+            <li>国库实时余额、每日收支流水</li>
+            <li>做市储备余额及历史干预记录</li>
+            <li>质押池总量、平均利率、收益发放明细</li>
+            <li>H实时价格、流动性池深度、总交易量</li>
+        </ul>
+        <div class="purple-badge" style="font-size:0.9rem;">🔐 多签可调整：质押利率、干预阈值、奖励池补充、临时熔断机制</div>
+
+        <!-- 防套利机制说明 -->
+        <div class="section-title">⛓️ 防套利 & 安全性设计</div>
+        <p>▪ <strong>解除质押24小时到账</strong>：避免瞬时价格波动闪贷攻击，保证质押系统公平。<br>
+        ▪ <strong>交易税归国库</strong>：任何买卖行为都贡献生态，抑制高频恶意刷量。<br>
+        ▪ <strong>质押U奖励池独立</strong>：1亿H由多签划拨，不依赖国库流动性，风险隔离。<br>
+        ▪ <strong>智能合约审计</strong>：上线前将经知名审计机构审计，代码开源。</p>
+
+        <!-- 正式 Q&A 区域（让普通用户看懂）-->
+        <div class="section-title">📢 常见问题 Q&A （大白话版）</div>
+        <div class="qa-list">
+            <div class="qa-item"><div class="qa-question"><span>这个模式能长久吗？会不会崩盘？</span><span>🔽</span></div><div class="qa-answer">只要社区每天有1.5–2万U左右的交易量，国库收入就能覆盖所有质押支出，可以长期健康运行。如果短期交易量不足，多签会临时降低利率或启用储备缓冲，不会突然归零。而且流通质押H最多2000万，上限可控。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>质押H和质押U哪个更赚？</span><span>🔽</span></div><div class="qa-answer">看你对H价格的态度。如果看好H未来涨价，质押U得H可以攒更多H；如果希望稳定赚U，就质押H得U。两个池子可以同时参与，灵活配置。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>为什么解除质押要等24小时？</span><span>🔽</span></div><div class="qa-answer">为了防止有人利用短暂的价格波动反复质押套利（比如价格瞬间拉高就解除跑路）。24小时延迟能保护国库和其他长期质押用户的利益，让投机者无利可图。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>社区做市会不会操纵价格割韭菜？</span><span>🔽</span></div><div class="qa-answer">不会。做市储备的唯一任务是稳定价格，所有操作公开透明，利润留在储备池继续用于护盘。多签成员来自社区代表，任何异常操作都会被社区监督。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>我质押的资金安全吗？</span><span>🔽</span></div><div class="qa-answer">质押合约经过审计，多签管理储备资产。但任何DeFi都存在智能合约风险，建议分散资产，不要投入超过承受能力的资金。我们也会设立紧急暂停功能保障用户基本安全。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>AI助手之前讨论时数据算错了，怎么办？</span><span>🔽</span></div><div class="qa-answer">AI在复杂计算中可能出错，最终模型参数以社区多签发布的正式公告和链上数据为准。如果你发现任何疑问，欢迎去社区电报群直接向管理员核实，我们也会不断完善信息面板。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>质押U奖励池的1亿H用完了怎么办？</span><span>🔽</span></div><div class="qa-answer">如果奖励池即将耗尽，多签将发起社区提案，决定是否从多签持仓中再划拨一部分H补充，或者调整U质押利率。一切由社区共识决定，保证透明。</div></div>
+        </div>
+
+        <!-- 治理草案摘要 -->
+        <div class="section-title">📜 治理草案重点</div>
+        <div style="background: #fbfaff; border-radius: 1rem; padding: 1rem 1.5rem; margin: 1rem 0;">
+            <p><strong>1. 多签委员会：</strong> 由5位早期贡献者/节点代表组成，重大决策需至少3人签名，逐步过渡到社区选举。<br>
+            <strong>2. 参数调整流程：</strong> 任何人可发起论坛讨论 → 多签评估影响 → 链上投票执行（利率/阈值/奖励池等）。<br>
+            <strong>3. 紧急熔断：</strong> 极端行情或合约漏洞时，多签可暂停质押收益发放或暂停质押功能，待风险排除后恢复。<br>
+            <strong>4. 定期公示：</strong> 每周发布国库收支报告、做市记录、质押数据，社区仪表盘实时可查。</p>
+        </div>
+
+        <!-- 最终脚注 -->
+        <div class="footnote">
+            ⚡ 本提案草案基于2026年3月社区多签讨论整理，所有规则以最终链上执行为准。<br>
+            海豚社区 · 共建 | 透明 | 可持续
+        </div>
     </div>
-  </div>
 </div>
 
-<style> @keyframes spin { to { transform: rotate(360deg); } } </style>
+<script>
+    // 为 Q&A 添加折叠/展开交互（默认展开全部，但为了清爽可折叠，但提案可全部展示，也添加可点击收起效果）
+    const qaItems = document.querySelectorAll('.qa-item');
+    qaItems.forEach(item => {
+        const questionDiv = item.querySelector('.qa-question');
+        const answerDiv = item.querySelector('.qa-answer');
+        // 初始全部展开，增加点击折叠功能
+        questionDiv.style.cursor = 'pointer';
+        questionDiv.addEventListener('click', () => {
+            if (answerDiv.style.display === 'none') {
+                answerDiv.style.display = 'block';
+                questionDiv.querySelector('span:last-child').innerHTML = '🔽';
+            } else {
+                answerDiv.style.display = 'none';
+                questionDiv.querySelector('span:last-child').innerHTML = '🔼';
+            }
+        });
+    });
+</script>
 </body>
 </html>
