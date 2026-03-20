@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>紫萃 · 链上赚币 | 手机质押</title>
-    <!-- 字体：Inter 干净现代 -->
+    <title>紫萃 · 链上赚币 | U收益焦点</title>
+    <!-- 字体：Inter 现代 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 免费图标库 -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -18,7 +18,7 @@
         }
 
         body {
-            background-color: #F5F0FA;  /* 极浅紫背景 */
+            background-color: #F5F0FA;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             color: #1E103B;
             line-height: 1.4;
@@ -29,17 +29,16 @@
             padding: 1rem 1rem 2rem;
         }
 
-        /* 手机容器 限制最大宽度，模拟卡片式滚动 */
         .container {
             max-width: 420px;
             width: 100%;
             margin: 0 auto;
         }
 
-        /* ----- 动态标题 (保留金紫渐变，线条适配小屏) ----- */
+        /* 动态标题 (保留原效果) */
         .dynamic-header {
             text-align: center;
-            margin-bottom: 1.8rem;
+            margin-bottom: 1.5rem;
             position: relative;
             padding: 1.8rem 0 0.8rem 0;
         }
@@ -135,7 +134,7 @@
             100% { right: 100%; opacity: 0; }
         }
 
-        /* ----- 卡片设计：纯白基底，柔和紫影，大圆角 ----- */
+        /* 卡片设计 */
         .card {
             background: #FFFFFF;
             border-radius: 32px;
@@ -143,82 +142,79 @@
             margin-bottom: 1.2rem;
             box-shadow: 0 12px 28px -8px rgba(138, 94, 191, 0.2), 0 4px 8px rgba(0,0,0,0.02);
             border: 1px solid rgba(201, 173, 247, 0.2);
-            transition: transform 0.1s ease, box-shadow 0.2s;
+            transition: transform 0.1s ease;
         }
 
-        .card:active {
-            transform: scale(0.99);
-            box-shadow: 0 8px 18px -6px rgba(138, 94, 191, 0.3);
+        /* ----- 顶部 U 收益焦点卡片 ----- */
+        .u-focus-card {
+            background: linear-gradient(145deg, #FFFFFF, #F9F4FF);
+            text-align: center;
+            padding: 2rem 1.2rem;
         }
-
-        /* 集成数据卡片 —— 三行数据整齐排列 */
-        .stats-compact {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .stat-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 0.8rem;
-            border-bottom: 1px solid #F0E8FF;
-        }
-        .stat-row:last-of-type {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .stat-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            background: #F1EAFF;
-            border-radius: 50%;
+        .u-label {
+            color: #7A6A9F;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #8C5CD6;
-            font-size: 1.2rem;
-            border: 1px solid #E2D3FF;
+            gap: 4px;
+            margin-bottom: 0.5rem;
         }
-        .stat-info h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #4F3A7A;
-            letter-spacing: 0.2px;
-            margin-bottom: 2px;
-        }
-        .stat-info .sub {
+        .u-tag {
+            background: #9F7AEA;
+            color: white;
+            border-radius: 40px;
+            padding: 0.2rem 0.6rem;
             font-size: 0.7rem;
-            color: #9B87C0;
+            font-weight: 600;
         }
-        .stat-value {
-            text-align: right;
-        }
-        .stat-main {
-            font-size: 1.5rem;
-            font-weight: 700;
+        .u-value {
+            font-size: 3.8rem;
+            font-weight: 800;
             color: #281A45;
-            line-height: 1.2;
+            line-height: 1;
+            margin-bottom: 0.2rem;
         }
-        .stat-main small {
-            font-size: 0.8rem;
+        .u-value small {
+            font-size: 1.5rem;
             font-weight: 500;
             color: #9B87C0;
-            margin-left: 4px;
         }
-        .stat-value .sub {
+        .u-usd {
+            color: #9F7AEA;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+        .stats-mini-row {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            border-top: 1px solid #F0E8FF;
+            padding-top: 1.2rem;
+        }
+        .stat-mini {
+            text-align: center;
+        }
+        .stat-mini .label {
             font-size: 0.7rem;
             color: #9B87C0;
+            margin-bottom: 4px;
+        }
+        .stat-mini .number {
+            font-weight: 700;
+            color: #4F3A7A;
+            font-size: 1.1rem;
+        }
+        .stat-mini .number small {
+            font-size: 0.7rem;
+            color: #9B87C0;
+            font-weight: 400;
         }
 
-        /* 紫色大按钮 (触摸友好) */
+        /* 按钮 */
         .btn-primary {
             background: linear-gradient(145deg, #9F7AEA, #7B4ED0);
             border: none;
@@ -229,38 +225,91 @@
             color: white;
             width: 100%;
             cursor: pointer;
-            transition: all 0.15s ease;
-            box-shadow: 0 12px 24px -12px #7B4ED0, 0 4px 8px rgba(123, 78, 208, 0.2);
+            box-shadow: 0 12px 24px -12px #7B4ED0;
             border: 1px solid rgba(255,255,255,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            margin-bottom: 1.2rem;
+            transition: all 0.15s;
             -webkit-tap-highlight-color: transparent;
         }
         .btn-primary:active {
-            background: linear-gradient(145deg, #8F6AD0, #6B3EB8);
             transform: scale(0.97);
-            box-shadow: 0 8px 16px -10px #6B3EB8;
+            background: linear-gradient(145deg, #8F6AD0, #6B3EB8);
         }
 
-        /* 质押卡片 */
+        /* 当前质押卡片 (包含新数据组) */
         .stake-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 1.2rem;
+            margin-bottom: 1rem;
         }
         .stake-label {
             font-size: 0.9rem;
             font-weight: 600;
             color: #7A6A9F;
-            letter-spacing: 0.3px;
         }
         .stake-amount {
             font-size: 2rem;
             font-weight: 700;
             color: #281A45;
+        }
+
+        /* 新数据组：质押天数+进度条+当前利率 */
+        .stake-meta {
+            background: #F8F4FF;
+            border-radius: 28px;
+            padding: 1.2rem;
+            margin: 1rem 0 1.2rem;
+            border: 1px solid #E2D3FF;
+        }
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+        }
+        .meta-item {
+            flex: 1;
+        }
+        .meta-label {
+            font-size: 0.7rem;
+            color: #9B87C0;
+            margin-bottom: 4px;
+        }
+        .meta-value {
+            font-weight: 700;
+            color: #281A45;
+            font-size: 1.2rem;
+        }
+        .meta-value small {
+            font-size: 0.8rem;
+            color: #9F7AEA;
+            font-weight: 600;
+        }
+        .progress-section {
+            margin-top: 0.5rem;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            color: #7A6A9F;
+            margin-bottom: 4px;
+        }
+        .progress-bar-bg {
+            background: #E2D3FF;
+            height: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #9F7AEA, #B185DB);
+            height: 100%;
+            width: 75%; /* 示例进度 45/60 = 75% */
+            border-radius: 20px;
         }
 
         .stake-box {
@@ -271,11 +320,6 @@
             align-items: center;
             border: 1px solid #E2D3FF;
             margin: 1rem 0 1rem;
-            transition: border 0.2s;
-        }
-        .stake-box:focus-within {
-            border-color: #9F7AEA;
-            box-shadow: 0 0 0 3px rgba(159,122,234,0.15);
         }
         .stake-input {
             background: transparent;
@@ -287,11 +331,9 @@
             min-width: 100px;
             outline: none;
             padding: 0.8rem 0;
-            font-family: 'Inter', monospace;
         }
         .stake-input::placeholder {
             color: #C9B9ED;
-            font-weight: 400;
         }
         .max-hint {
             color: #9F7AEA;
@@ -300,7 +342,6 @@
             background: #F0E8FF;
             padding: 6px 14px;
             border-radius: 40px;
-            white-space: nowrap;
             font-weight: 600;
             border: 1px solid #D9C9FF;
         }
@@ -314,13 +355,10 @@
             cursor: pointer;
             font-size: 1rem;
             box-shadow: 0 6px 12px -6px #7B4ED0;
-            transition: 0.1s;
             white-space: nowrap;
-            border: 1px solid rgba(255,255,255,0.2);
         }
         .stake-btn:active {
             transform: scale(0.96);
-            background: linear-gradient(145deg, #8F6AD0, #6B3EB8);
         }
 
         .available-info {
@@ -333,7 +371,7 @@
             border-radius: 40px;
         }
 
-        /* 阶梯收益表格 — 两列优雅展示 */
+        /* 阶梯收益表格 (两列) */
         .tier-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -362,7 +400,6 @@
             border-radius: 40px;
             font-size: 0.8rem;
             border: 1px solid #E2D3FF;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
         .rule-note {
             font-size: 0.75rem;
@@ -444,18 +481,14 @@
             margin-top: 1.8rem;
             color: #B6A6D9;
             font-size: 0.75rem;
-            font-weight: 400;
         }
 
-        /* 微间距调整 */
-        .mt-1 { margin-top: 0.5rem; }
-        .mb-2 { margin-bottom: 1.2rem; }
         i { color: #9F7AEA; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 动态标题 (金黄色大字 + 流动线条) -->
+        <!-- 动态标题 -->
         <div class="dynamic-header">
             <div class="gold-title">
                 <span>链</span><span>上</span><span>赚</span><span>币</span>
@@ -476,66 +509,61 @@
             </div>
         </div>
 
-        <!-- 数据整合卡片 (总锁仓/已领取/待领取) 排版整洁 -->
-        <div class="card">
-            <div class="stats-compact">
-                <!-- 总锁仓 H -->
-                <div class="stat-row">
-                    <div class="stat-left">
-                        <div class="stat-icon"><i class="fas fa-lock"></i></div>
-                        <div class="stat-info">
-                            <h4>总锁仓价值 <span style="color:#8C5CD6; font-weight:600;">H</span></h4>
-                            <div class="sub">全网质押</div>
-                        </div>
-                    </div>
-                    <div class="stat-value">
-                        <div class="stat-main">2,845,192 <small>H</small></div>
-                        <div class="sub">≈ $1.82M</div>
-                    </div>
+        <!-- 顶部焦点：待领取 U (大号) -->
+        <div class="card u-focus-card">
+            <div class="u-label">
+                <i class="fas fa-clock"></i> 待领取收益 <span class="u-tag">U</span>
+            </div>
+            <div class="u-value">836.24 <small>U</small></div>
+            <div class="u-usd">≈ $552.00</div>
+            <div class="stats-mini-row">
+                <div class="stat-mini">
+                    <div class="label">总锁仓 H</div>
+                    <div class="number">2.84M <small>H</small></div>
                 </div>
-                <!-- 已领取收益 U -->
-                <div class="stat-row">
-                    <div class="stat-left">
-                        <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
-                        <div class="stat-info">
-                            <h4>已领取收益 <span style="color:#8C5CD6;">U</span></h4>
-                            <div class="sub">历史累计</div>
-                        </div>
-                    </div>
-                    <div class="stat-value">
-                        <div class="stat-main">12,438.52 <small>U</small></div>
-                        <div class="sub">≈ $8,210</div>
-                    </div>
-                </div>
-                <!-- 待领取收益 U -->
-                <div class="stat-row">
-                    <div class="stat-left">
-                        <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                        <div class="stat-info">
-                            <h4>待领取收益 <span style="color:#8C5CD6;">U</span></h4>
-                            <div class="sub">今日20:00发放</div>
-                        </div>
-                    </div>
-                    <div class="stat-value">
-                        <div class="stat-main">836.24 <small>U</small></div>
-                        <div class="sub">≈ $552</div>
-                    </div>
+                <div class="stat-mini">
+                    <div class="label">已领取 U</div>
+                    <div class="number">12.4k <small>U</small></div>
                 </div>
             </div>
         </div>
 
-        <!-- 立即领取按钮 (大，醒目) -->
-        <button class="btn-primary mb-2">
+        <!-- 立即领取按钮 -->
+        <button class="btn-primary">
             <i class="fas fa-hand-holding-heart"></i> 立即领取
         </button>
 
-        <!-- 当前质押卡片 -->
+        <!-- 当前质押卡片 (含新数据组) -->
         <div class="card">
             <div class="stake-header">
                 <span class="stake-label"><i class="fas fa-coins"></i> 当前质押 H</span>
                 <span class="stake-amount">45,200 <span style="font-size:1rem;">H</span></span>
             </div>
 
+            <!-- 新增数据组：质押天数/进度条/当前利率 -->
+            <div class="stake-meta">
+                <div class="meta-row">
+                    <div class="meta-item">
+                        <div class="meta-label">已质押天数</div>
+                        <div class="meta-value">45 <small>天</small></div>
+                    </div>
+                    <div class="meta-item" style="text-align: right;">
+                        <div class="meta-label">当前利率</div>
+                        <div class="meta-value">0.8% <small>每日</small></div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-label">
+                        <span>周期进度 45/60 天</span>
+                        <span>75%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 质押输入框 -->
             <div class="stake-box">
                 <input type="text" class="stake-input" placeholder="0.0 H" value="1,500">
                 <span class="max-hint">可质押 12.8k H</span>
@@ -616,26 +644,20 @@
             </div>
         </div>
 
-        <!-- 底部安全脚注 -->
         <div class="footer-note">
             <i class="fas fa-shield-check"></i> 紫荆安全审计 · 收益自动发放
         </div>
     </div>
 
-    <!-- 简单交互反馈 (模拟点击) -->
     <script>
         (function() {
             const claimBtn = document.querySelector('.btn-primary');
             const stakeBtn = document.querySelector('.stake-btn');
             if (claimBtn) {
-                claimBtn.addEventListener('click', () => {
-                    alert('领取模拟：836.24 U 将转入钱包');
-                });
+                claimBtn.addEventListener('click', () => alert('领取模拟：836.24 U 将转入钱包'));
             }
             if (stakeBtn) {
-                stakeBtn.addEventListener('click', () => {
-                    alert('质押模拟：已提交请求');
-                });
+                stakeBtn.addEventListener('click', () => alert('质押模拟：已提交请求'));
             }
         })();
     </script>
