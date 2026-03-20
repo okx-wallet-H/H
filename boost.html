@@ -1,536 +1,731 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>H代币 · 手机面板2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>实时代币数据看板 | 动态价格涨幅展示</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: linear-gradient(145deg, #f0f4fa 0%, #e9eefa 100%);
+            background: linear-gradient(145deg, #0B0F1C 0%, #0A0E1A 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            padding: 20px 16px;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .phone-frame {
-            max-width: 420px;
+        /* 主卡片容器 */
+        .dashboard {
+            max-width: 500px;
             width: 100%;
-            background: rgba(255,255,255,0.6);
+            margin: 0 auto;
+        }
+
+        /* 玻璃质感卡片 */
+        .token-card {
+            background: rgba(20, 26, 42, 0.75);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 48px;
-            box-shadow: 0 30px 60px rgba(0, 15, 40, 0.25), 0 0 0 1px rgba(255,255,255,0.5) inset;
-            padding: 24px 20px;
+            border-radius: 56px;
+            border: 1px solid rgba(72, 85, 120, 0.3);
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            padding: 28px 24px 32px;
+            transition: all 0.2s ease;
         }
 
-        .container {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        /* 头部 */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 8px;
-        }
-        .hero h1 {
-            font-size: 36px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #162b5e, #1f3f8c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .hero h1 span {
-            background: #3a57e8;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 4px 14px;
-            border-radius: 40px;
-            background: linear-gradient(145deg, #3a57e8, #1f3f9e);
-            box-shadow: 0 4px 8px rgba(58,87,232,0.3);
-            -webkit-text-fill-color: white;
-        }
-        .subhead {
-            font-size: 16px;
-            color: #3b4d78;
-            background: rgba(255,255,255,0.7);
-            padding: 12px 18px;
-            border-radius: 28px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.9);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.02);
-            line-height: 1.4;
-        }
-
-        /* 卡片通用 */
-        .card {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 32px;
-            padding: 20px 18px;
-            box-shadow: 0 15px 30px -10px rgba(0,25,60,0.15), 0 1px 2px rgba(0,0,0,0.05);
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #102a4c;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 18px;
-            letter-spacing: -0.3px;
-        }
-        .card-title .badge {
-            background: #e1e9fc;
-            color: #1f3a7a;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 30px;
-            margin-left: auto;
-        }
-
-        /* 多签网格 */
-        .multisig-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .multisig-item {
-            background: white;
-            border-radius: 24px;
-            padding: 14px 16px;
+        /* 币种头部 */
+        .token-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border: 1px solid #eef2f9;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-            transition: 0.15s;
-        }
-        .multisig-left {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .multisig-name {
-            font-weight: 700;
-            color: #1c2e5a;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .multisig-name .icon {
-            font-size: 18px;
-        }
-        .multisig-address {
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            font-size: 12px;
-            color: #6270a0;
-            background: #f2f6ff;
-            padding: 4px 8px;
-            border-radius: 20px;
-            display: inline-block;
-            width: fit-content;
-        }
-        .multisig-balance {
-            font-weight: 700;
-            color: #102a4c;
-            font-size: 16px;
-            text-align: right;
-        }
-        .multisig-balance small {
-            font-size: 12px;
-            color: #7a8bb9;
-            font-weight: 400;
-            margin-left: 4px;
-        }
-
-        /* 数据网格 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            margin-bottom: 28px;
+            flex-wrap: wrap;
             gap: 12px;
-            margin: 8px 0 4px;
-        }
-        .stat-cell {
-            background: white;
-            border-radius: 24px;
-            padding: 18px 12px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(58,87,232,0.05);
-            border: 1px solid #eef2fa;
-        }
-        .stat-value {
-            font-size: 24px;
-            font-weight: 800;
-            color: #132b50;
-            line-height: 1.2;
-        }
-        .stat-unit {
-            font-size: 14px;
-            color: #6277af;
-            margin-left: 4px;
-            font-weight: 400;
-        }
-        .stat-label {
-            font-size: 13px;
-            color: #5a6e9e;
-            margin-top: 6px;
-            letter-spacing: 0.2px;
         }
 
-        /* 质押双卡 */
-        .dual-stake {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .stake-card {
-            background: linear-gradient(145deg, #ffffff, #f9fcff);
-            border-radius: 28px;
-            padding: 18px;
-            border: 1px solid #dbe5ff;
-        }
-        .stake-title {
-            font-weight: 700;
-            font-size: 18px;
-            color: #15306b;
-            margin-bottom: 10px;
+        .token-info {
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-        .stake-desc {
-            color: #2b3f6e;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 12px;
-        }
-        .stake-extra {
-            background: #eef3ff;
-            border-radius: 20px;
-            padding: 10px 14px;
-            font-size: 13px;
-            color: #1d355e;
-        }
-
-        /* 做市与干预组合 */
-        .twin-cards {
-            display: flex;
-            flex-direction: column;
             gap: 14px;
         }
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .info-row:last-child {
-            border-bottom: none;
-        }
-        .info-label {
-            color: #50648c;
-            font-size: 15px;
-        }
-        .info-value {
-            font-weight: 600;
-            color: #102a4c;
-            text-align: right;
-            max-width: 60%;
-        }
 
-        /* 健康阈值卡片 */
-        .threshold-card {
-            background: linear-gradient(115deg, #eaf3fa, #f2f8ff);
-            border-radius: 28px;
-            padding: 18px;
-            border: 1px solid #bfd6ff;
-        }
-        .threshold-item {
+        .token-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 14px;
+            justify-content: center;
+            font-size: 30px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 6px 12px -6px rgba(0, 0, 0, 0.3);
         }
-        .threshold-label {
+
+        .token-name {
             font-weight: 600;
-            color: #1e3a6b;
-            font-size: 15px;
+            font-size: 1.7rem;
+            letter-spacing: -0.3px;
+            color: #F1F5F9;
         }
-        .threshold-badges {
+
+        .token-symbol {
+            font-size: 0.9rem;
+            color: #8E9AB0;
+            margin-left: 6px;
+            font-weight: 500;
+        }
+
+        /* 选择器 */
+        .selector {
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 44px;
+            padding: 4px;
             display: flex;
             gap: 6px;
-        }
-        .badge-green {
-            background: #2ecc71;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .badge-yellow {
-            background: #f39c12;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .badge-red {
-            background: #e74c3c;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .threshold-note {
-            font-size: 13px;
-            color: #2f4b7c;
-            margin-top: 12px;
-            background: rgba(255,255,255,0.7);
-            padding: 10px;
-            border-radius: 18px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* 合约地址条 */
-        .contract-bar {
-            background: #132b50;
+        .coin-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 20px;
             border-radius: 40px;
-            padding: 14px 20px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-            font-size: 14px;
-            margin-top: 8px;
-            box-shadow: 0 10px 20px rgba(0,30,70,0.4);
-        }
-        .contract-code {
-            background: rgba(255,255,255,0.2);
-            padding: 5px 14px;
-            border-radius: 40px;
-            font-family: monospace;
+            font-size: 0.9rem;
             font-weight: 600;
+            color: #A0A9BF;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            font-family: inherit;
+        }
+
+        .coin-btn.active {
+            background: #2E3A5E;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 价格区域 */
+        .price-section {
+            margin: 24px 0 20px;
+            text-align: center;
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            color: #7E89A3;
+            margin-bottom: 12px;
+        }
+
+        .price-wrapper {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .current-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            font-family: 'Inter', 'SF Mono', monospace;
+            letter-spacing: -1px;
+            color: #F8FAFF;
+            transition: all 0.12s ease-out;
+            display: inline-block;
+            background: linear-gradient(135deg, #FFFFFF, #C0CFEC);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .currency {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #9AA4BF;
+        }
+
+        /* 涨幅区域 */
+        .change-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 8px 18px;
+            border-radius: 60px;
+            margin-top: 16px;
+            backdrop-filter: blur(4px);
+            transition: all 0.2s;
+        }
+
+        .change-value {
+            font-weight: 700;
+            font-size: 1.2rem;
             letter-spacing: 0.5px;
         }
-        .tax-badge {
-            background: #f4b740;
-            padding: 5px 14px;
-            border-radius: 40px;
-            color: #132b50;
+
+        .change-arrow {
+            font-size: 1rem;
             font-weight: 700;
         }
 
-        .footer {
-            font-size: 12px;
-            color: #6e85b5;
-            text-align: center;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px dashed rgba(100,120,180,0.3);
+        .positive {
+            color: #2ECC71;
+        }
+
+        .negative {
+            color: #E74C3C;
+        }
+
+        /* 闪烁动画 (涨跌高亮) */
+        @keyframes flash-green {
+            0% { background-color: rgba(46, 204, 113, 0); text-shadow: 0 0 0 rgba(46, 204, 113, 0);}
+            50% { background-color: rgba(46, 204, 113, 0.35); text-shadow: 0 0 8px rgba(46, 204, 113, 0.6);}
+            100% { background-color: rgba(46, 204, 113, 0); text-shadow: 0 0 0 rgba(46, 204, 113, 0);}
+        }
+
+        @keyframes flash-red {
+            0% { background-color: rgba(231, 76, 60, 0); text-shadow: 0 0 0 rgba(231, 76, 60, 0);}
+            50% { background-color: rgba(231, 76, 60, 0.35); text-shadow: 0 0 8px rgba(231, 76, 60, 0.6);}
+            100% { background-color: rgba(231, 76, 60, 0); text-shadow: 0 0 0 rgba(231, 76, 60, 0);}
+        }
+
+        .price-flash-up {
+            animation: flash-green 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .price-flash-down {
+            animation: flash-red 0.35s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .change-flash {
+            animation: pulse-bg 0.28s ease-out;
+        }
+
+        @keyframes pulse-bg {
+            0% { opacity: 0.6; transform: scale(1); background: rgba(46, 204, 113, 0.3);}
+            100% { opacity: 1; transform: scale(1); background: rgba(0,0,0,0.35);}
+        }
+
+        /* 额外信息 */
+        .meta-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 28px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(72, 85, 120, 0.4);
+            font-size: 0.7rem;
+            color: #7B86A2;
+        }
+
+        .update-time {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-badge {
+            background: rgba(0, 0, 0, 0.45);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .simulation-badge {
+            background: rgba(231, 76, 60, 0.2);
+            color: #FF9F8D;
+        }
+
+        .real-badge {
+            background: rgba(46, 204, 113, 0.2);
+            color: #7FEEA3;
+        }
+
+        /* 简易价格走势示意 (装饰 + 实时动态光效) */
+        .trend-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin: 20px 0 8px;
+            height: 28px;
+            align-items: flex-end;
+        }
+
+        .trend-bar {
+            width: 8px;
+            background: #2E3A5E;
+            border-radius: 4px;
+            transition: height 0.2s ease, background 0.2s;
+        }
+
+        button {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .token-card {
+                padding: 22px 18px 28px;
+                border-radius: 44px;
+            }
+            .current-price {
+                font-size: 2.6rem;
+            }
+            .token-name {
+                font-size: 1.4rem;
+            }
+            .coin-btn {
+                padding: 6px 14px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="phone-frame">
-        <div class="container">
-            <!-- 头部 -->
-            <div class="hero">
-                <h1>
-                    H ⚡
-                    <span>多签5/7</span>
-                </h1>
-                <div class="subhead">
-                    公平发射 · 双质押 · 国库做市 · OKX Boost · 社区金库
+<div class="dashboard">
+    <div class="token-card">
+        <!-- 币种头部 + 选择器 -->
+        <div class="token-header">
+            <div class="token-info">
+                <div class="token-icon" id="tokenIcon">₿</div>
+                <div>
+                    <span class="token-name" id="tokenName">Bitcoin</span>
+                    <span class="token-symbol" id="tokenSymbol">BTC</span>
                 </div>
             </div>
-
-            <!-- 多签地址 (列表风格) -->
-            <div class="card">
-                <div class="card-title">
-                    🏛️ 多签地址 <span class="badge">社区共管</span>
-                </div>
-                <div class="multisig-grid">
-                    <div class="multisig-item">
-                        <div class="multisig-left">
-                            <span class="multisig-name"><span class="icon">🏦</span> 社区金库</span>
-                            <span class="multisig-address">0x7C3a...F2e1</span>
-                        </div>
-                        <div class="multisig-balance">682.6M <small>H</small></div>
-                    </div>
-                    <div class="multisig-item">
-                        <div class="multisig-left">
-                            <span class="multisig-name"><span class="icon">💰</span> 国库多签</span>
-                            <span class="multisig-address">0xB8d2...A4f9</span>
-                        </div>
-                        <div class="multisig-balance">0 <small>U</small></div>
-                    </div>
-                    <div class="multisig-item">
-                        <div class="multisig-left">
-                            <span class="multisig-name"><span class="icon">🎁</span> 奖励池</span>
-                            <span class="multisig-address">0xEf5a...C3b7</span>
-                        </div>
-                        <div class="multisig-balance">300M <small>H</small></div>
-                    </div>
-                    <div class="multisig-item">
-                        <div class="multisig-left">
-                            <span class="multisig-name"><span class="icon">💧</span> 流动性池</span>
-                            <span class="multisig-address">0x9D1b...E7f2</span>
-                        </div>
-                        <div class="multisig-balance">18.18M H / 110k U</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 核心数据网格 -->
-            <div class="card">
-                <div class="card-title">
-                    📊 核心数据 (初始参考)
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-cell"><span class="stat-value">0.00605</span><span class="stat-unit">U</span><div class="stat-label">H价格</div></div>
-                    <div class="stat-cell"><span class="stat-value">18.18M</span><span class="stat-unit">H</span><div class="stat-label">池子H</div></div>
-                    <div class="stat-cell"><span class="stat-value">110k</span><span class="stat-unit">U</span><div class="stat-label">池子U</div></div>
-                    <div class="stat-cell"><span class="stat-value">2.0e12</span><div class="stat-label">K值</div></div>
-                    <div class="stat-cell"><span class="stat-value">300M</span><span class="stat-unit">H</span><div class="stat-label">奖励池</div></div>
-                    <div class="stat-cell"><span class="stat-value">0</span><span class="stat-unit">U</span><div class="stat-label">国库U</div></div>
-                    <div class="stat-cell"><span class="stat-value">682.6M</span><span class="stat-unit">H</span><div class="stat-label">社区持币</div></div>
-                    <div class="stat-cell"><span class="stat-value">1B</span><span class="stat-unit">H</span><div class="stat-label">总发行</div></div>
-                </div>
-            </div>
-
-            <!-- 双质押模型 -->
-            <div class="card">
-                <div class="card-title">
-                    🔒 双质押模型
-                </div>
-                <div class="dual-stake">
-                    <div class="stake-card">
-                        <div class="stake-title">
-                            <span>🔹 质押 H → U</span>
-                        </div>
-                        <div class="stake-desc">
-                            日收益 0.02%~0.03% (年化~11%)。国库支付，来源：5%交易税+做市利润。
-                        </div>
-                        <div class="stake-extra">
-                            无锁仓，解质押24h到账
-                        </div>
-                    </div>
-                    <div class="stake-card">
-                        <div class="stake-title">
-                            <span>🔸 质押 U → H</span>
-                        </div>
-                        <div class="stake-desc">
-                            日收益 0.02%~0.03% (年化~11%)。奖励池支付，质押U直接进入国库。
-                        </div>
-                        <div class="stake-extra">
-                            初始奖励池3亿H，国库回购补充
-                        </div>
-                    </div>
-                </div>
-                <div style="background: #d9e9ff; border-radius: 28px; padding: 16px; margin-top: 16px;">
-                    <span style="font-weight: 700;">✨ OKX Boost交易赛：</span> 交易H达量获空投(新币/H)，不耗国库，同时产生5%税收。
-                </div>
-            </div>
-
-            <!-- 国库做市 + 社区干预 组合卡片 -->
-            <div class="twin-cards">
-                <div class="card">
-                    <div class="card-title">
-                        📈 国库做市 <span class="badge">平滑波动</span>
-                    </div>
-                    <div class="info-row"><span class="info-label">价格区间</span><span class="info-value">±15% (0.0051–0.0069U)</span></div>
-                    <div class="info-row"><span class="info-label">超买</span><span class="info-value">国库卖出H</span></div>
-                    <div class="info-row"><span class="info-label">超卖</span><span class="info-value">国库买入H</span></div>
-                    <div class="info-row"><span class="info-label">利润归</span><span class="info-value">国库多签</span></div>
-                    <div class="info-row"><span class="info-label">做市资金</span><span class="info-value">国库U30% + 社区可拨H</span></div>
-                </div>
-                <div class="card">
-                    <div class="card-title">
-                        🛡️ 社区金库干预 <span class="badge">极端保护</span>
-                    </div>
-                    <div class="info-row"><span class="info-label">触发1</span><span class="info-value">价格跌破P_min 50%</span></div>
-                    <div class="info-row"><span class="info-label">触发2</span><span class="info-value">价格涨超P_max 100%</span></div>
-                    <div class="info-row"><span class="info-label">触发3</span><span class="info-value">国库/奖励池<7天支出</span></div>
-                    <div class="info-row"><span class="info-label">干预方式</span><span class="info-value">多签投票买卖/注资</span></div>
-                    <div class="info-row"><span class="info-label">公示</span><span class="info-value">操作前24h公告</span></div>
-                </div>
-            </div>
-
-            <!-- 健康阈值卡 -->
-            <div class="threshold-card">
-                <div style="font-weight: 700; font-size: 17px; color: #102a4c; margin-bottom: 14px;">⚖️ 健康阈值 · 自动调节</div>
-                <div class="threshold-item">
-                    <span class="threshold-label">国库U/30d支出</span>
-                    <div class="threshold-badges">
-                        <span class="badge-green">≥1.5</span>
-                        <span class="badge-yellow">1.0~1.5</span>
-                        <span class="badge-red">&lt;1.0</span>
-                    </div>
-                </div>
-                <div class="threshold-item">
-                    <span class="threshold-label">奖励池H/30d支出</span>
-                    <div class="threshold-badges">
-                        <span class="badge-green">≥1.5</span>
-                        <span class="badge-yellow">1.0~1.5</span>
-                        <span class="badge-red">&lt;1.0</span>
-                    </div>
-                </div>
-                <div class="threshold-item">
-                    <span class="threshold-label">日均交易量V</span>
-                    <div class="threshold-badges">
-                        <span class="badge-green">≥100万U</span>
-                        <span class="badge-yellow">50~100万</span>
-                        <span class="badge-red">&lt;50万</span>
-                    </div>
-                </div>
-                <div class="threshold-note">
-                    ⚙️ 黄/红阈值自动调收益/暂停，多签可投票改参。
-                </div>
-            </div>
-
-            <!-- 合约信息条 -->
-            <div class="contract-bar">
-                <span>合约</span>
-                <span class="contract-code">0x4b5f...3e2a</span>
-                <span class="tax-badge">5% 税</span>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 8px; color: #4765a0; font-weight: 500; font-size: 13px;">
-                <span>🔹 总供应 1,000,000,000 H</span>
-                <span>🔸 多签 5/7</span>
-            </div>
-
-            <!-- footer -->
-            <div class="footer">
-                ⭐ 数据为初始参考 · 链上实时更新 · 多签透明可查
+            <div class="selector" id="coinSelector">
+                <button data-id="bitcoin" data-name="Bitcoin" data-symbol="BTC" data-icon="₿" class="coin-btn active">BTC</button>
+                <button data-id="ethereum" data-name="Ethereum" data-symbol="ETH" data-icon="Ξ" class="coin-btn">ETH</button>
+                <button data-id="solana" data-name="Solana" data-symbol="SOL" data-icon="◎" class="coin-btn">SOL</button>
             </div>
         </div>
+
+        <!-- 价格展示区 -->
+        <div class="price-section">
+            <div class="price-label">实时价格</div>
+            <div class="price-wrapper">
+                <span class="current-price" id="priceValue">—</span>
+                <span class="currency">USD</span>
+            </div>
+            <div class="change-badge" id="changeBadge">
+                <span class="change-arrow" id="changeArrow">⬤</span>
+                <span class="change-value" id="changePercent">0.00%</span>
+            </div>
+        </div>
+
+        <!-- 微型趋势条 (实时动态, 展示最近5次价格相对变化) -->
+        <div class="trend-indicator" id="trendBars">
+            <div class="trend-bar" style="height: 8px;"></div>
+            <div class="trend-bar" style="height: 12px;"></div>
+            <div class="trend-bar" style="height: 6px;"></div>
+            <div class="trend-bar" style="height: 14px;"></div>
+            <div class="trend-bar" style="height: 10px;"></div>
+        </div>
+
+        <!-- 元信息: 最后更新 & 数据来源模式 -->
+        <div class="meta-info">
+            <div class="update-time">
+                <span>🕒</span>
+                <span id="lastUpdate">等待数据...</span>
+            </div>
+            <div class="status-badge" id="sourceBadge">加载中</div>
+        </div>
     </div>
+</div>
+
+<script>
+    // ---------- 全局配置 ----------
+    let activeCoinId = 'bitcoin';       // coinGecko id
+    let activeCoinName = 'Bitcoin';
+    let activeSymbol = 'BTC';
+    let activeIcon = '₿';
+    
+    let currentPrice = null;            // 当前最新价格
+    let previousPrice = null;           // 用于触发闪动
+    let previousChangePercent = null;    // 用于涨跌幅区域闪动
+    
+    let timerInterval = null;
+    let isSimulationMode = false;        // 是否降级模拟模式
+    let retryCount = 0;
+    
+    // 趋势条数据 (存储最近5次价格变动比例)
+    let priceHistory = [];               // 存储最近5个价格点 (用于趋势条)
+    const MAX_HISTORY = 5;
+    
+    // DOM 元素
+    const priceEl = document.getElementById('priceValue');
+    const changePercentEl = document.getElementById('changePercent');
+    const changeArrowEl = document.getElementById('changeArrow');
+    const changeBadge = document.getElementById('changeBadge');
+    const lastUpdateEl = document.getElementById('lastUpdate');
+    const sourceBadge = document.getElementById('sourceBadge');
+    const tokenNameEl = document.getElementById('tokenName');
+    const tokenSymbolEl = document.getElementById('tokenSymbol');
+    const tokenIconEl = document.getElementById('tokenIcon');
+    const trendContainer = document.getElementById('trendBars');
+    
+    // ---------- 辅助函数 ----------
+    function formatNumber(num) {
+        if (num === null || isNaN(num)) return '—';
+        // 根据数值大小决定小数位数
+        if (num < 0.01) return num.toFixed(6);
+        if (num < 1) return num.toFixed(4);
+        if (num < 100) return num.toFixed(2);
+        return num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    
+    // 更新趋势条 (基于最近价格变动幅度映射高度)
+    function updateTrendBars() {
+        if (!priceHistory.length || priceHistory.length < 2) {
+            // 默认随机柔和样式
+            const bars = trendContainer.querySelectorAll('.trend-bar');
+            if (bars.length === MAX_HISTORY) {
+                for (let i = 0; i < MAX_HISTORY; i++) {
+                    const randomHeight = 6 + Math.random() * 18;
+                    bars[i].style.height = `${randomHeight}px`;
+                    bars[i].style.background = "#3E4A6E";
+                }
+            }
+            return;
+        }
+        
+        // 取最近priceHistory的变动率作为高度参考 (最高20px, 最低5px)
+        const bars = trendContainer.querySelectorAll('.trend-bar');
+        const len = priceHistory.length;
+        for (let i = 0; i < MAX_HISTORY; i++) {
+            const idx = len - MAX_HISTORY + i;
+            if (idx >= 0 && idx < len) {
+                let priceVal = priceHistory[idx];
+                if (priceVal && currentPrice && currentPrice > 0) {
+                    let ratio = priceVal / currentPrice;
+                    let changeAbs = Math.abs(ratio - 1) * 100; // 变动幅度 %
+                    let height = Math.min(24, Math.max(6, changeAbs * 1.2 + 5));
+                    bars[i].style.height = `${height}px`;
+                    // 涨跌颜色: 如果当前价格相比历史点涨，给浅绿倾向
+                    if (priceVal < currentPrice) bars[i].style.background = "#2ECC71";
+                    else if (priceVal > currentPrice) bars[i].style.background = "#E74C3C";
+                    else bars[i].style.background = "#6C7A9A";
+                } else {
+                    bars[i].style.height = '8px';
+                    bars[i].style.background = "#4A567A";
+                }
+            } else {
+                bars[i].style.height = '8px';
+                bars[i].style.background = "#3C4668";
+            }
+        }
+    }
+    
+    // 记录价格用于趋势
+    function recordPriceForTrend(price) {
+        if (price === null || isNaN(price)) return;
+        priceHistory.push(price);
+        if (priceHistory.length > MAX_HISTORY) priceHistory.shift();
+        updateTrendBars();
+    }
+    
+    // 触发价格闪动 (涨/跌)
+    function flashPriceAnimation(isUp) {
+        if (!priceEl) return;
+        priceEl.classList.remove('price-flash-up', 'price-flash-down');
+        void priceEl.offsetWidth; // 强制重绘
+        if (isUp === true) {
+            priceEl.classList.add('price-flash-up');
+        } else if (isUp === false) {
+            priceEl.classList.add('price-flash-down');
+        }
+        setTimeout(() => {
+            priceEl.classList.remove('price-flash-up', 'price-flash-down');
+        }, 350);
+    }
+    
+    // 触发涨跌幅badge 闪动
+    function flashChangeBadge() {
+        if (!changeBadge) return;
+        changeBadge.classList.add('change-flash');
+        setTimeout(() => {
+            changeBadge.classList.remove('change-flash');
+        }, 280);
+    }
+    
+    // 更新界面上的价格和涨跌幅 (并处理视觉反馈)
+    function updateUI(price, percentChange24h, isRealData) {
+        if (price === null || isNaN(price)) return;
+        
+        // 处理价格变动闪动
+        if (previousPrice !== null && previousPrice !== price) {
+            const isPriceUp = price > previousPrice;
+            flashPriceAnimation(isPriceUp);
+        }
+        // 更新价格显示
+        priceEl.innerText = formatNumber(price);
+        
+        // 处理涨跌幅变化闪动 & 样式
+        let changeNum = (percentChange24h !== null && !isNaN(percentChange24h)) ? percentChange24h : 0;
+        let changeFormatted = (changeNum > 0 ? '+' : '') + changeNum.toFixed(2) + '%';
+        changePercentEl.innerText = changeFormatted;
+        
+        // 箭头和颜色
+        if (changeNum > 0) {
+            changeArrowEl.innerHTML = '▲';
+            changePercentEl.classList.add('positive');
+            changePercentEl.classList.remove('negative');
+            changeArrowEl.classList.add('positive');
+            changeArrowEl.classList.remove('negative');
+        } else if (changeNum < 0) {
+            changeArrowEl.innerHTML = '▼';
+            changePercentEl.classList.add('negative');
+            changePercentEl.classList.remove('positive');
+            changeArrowEl.classList.add('negative');
+            changeArrowEl.classList.remove('positive');
+        } else {
+            changeArrowEl.innerHTML = '●';
+            changePercentEl.classList.remove('positive', 'negative');
+            changeArrowEl.classList.remove('positive', 'negative');
+        }
+        
+        // 如果涨跌幅数值和上一次不同，闪动一下badge
+        if (previousChangePercent !== null && previousChangePercent !== changeNum) {
+            flashChangeBadge();
+        }
+        
+        // 记录用于下一次对比
+        previousPrice = price;
+        previousChangePercent = changeNum;
+        
+        // 记录价格历史，更新趋势条
+        recordPriceForTrend(price);
+        
+        // 更新时间戳
+        const now = new Date();
+        const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+        lastUpdateEl.innerText = `更新于 ${timeStr}`;
+        
+        // 数据模式标记
+        if (isRealData) {
+            sourceBadge.innerText = '实时数据 (CoinGecko)';
+            sourceBadge.classList.add('real-badge');
+            sourceBadge.classList.remove('simulation-badge');
+        } else {
+            sourceBadge.innerText = '模拟演示模式 (动态)';
+            sourceBadge.classList.add('simulation-badge');
+            sourceBadge.classList.remove('real-badge');
+        }
+    }
+    
+    // 从 CoinGecko 获取真实数据
+    async function fetchRealPrice(coinId) {
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinId}&vs_currencies=usd&include_24hr_change=true`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            if (data && data[coinId]) {
+                const usdPrice = data[coinId].usd;
+                let change24h = data[coinId].usd_24h_change;
+                if (change24h === undefined || change24h === null) change24h = 0;
+                if (usdPrice !== undefined && usdPrice !== null) {
+                    // 成功获取真实数据，关闭模拟模式
+                    if (isSimulationMode) isSimulationMode = false;
+                    retryCount = 0;
+                    return { price: usdPrice, change24h: change24h, success: true };
+                }
+            }
+            throw new Error('Invalid data structure');
+        } catch (error) {
+            console.warn(`真实API请求失败: ${error.message}`);
+            return { success: false };
+        }
+    }
+    
+    // 模拟数据生成 (动态随机漂移，产生实时变动视觉效果)
+    let lastSimulatedPrice = null;
+    let lastSimulatedChange = null;
+    
+    function generateSimulatedData(coinId) {
+        // 为不同币种设置基准价格范围，让切换时有真实感
+        const basePrices = {
+            bitcoin: 68500,
+            ethereum: 3250,
+            solana: 168
+        };
+        let basePrice = basePrices[coinId] || 100;
+        
+        if (lastSimulatedPrice === null) {
+            // 如果之前没有模拟价格，基于真实/基准初始化
+            if (currentPrice !== null && !isNaN(currentPrice) && currentPrice > 0) {
+                lastSimulatedPrice = currentPrice;
+            } else {
+                lastSimulatedPrice = basePrice;
+            }
+            if (lastSimulatedChange === null) lastSimulatedChange = (Math.random() * 8) - 4;
+        }
+        
+        // 随机波动幅度 (-1.5% ~ +1.8%) 产生明显实时变动
+        let volatility = (Math.random() - 0.48) * 0.038;
+        let newPrice = lastSimulatedPrice * (1 + volatility);
+        // 限制价格不会过于离谱
+        newPrice = Math.max(basePrice * 0.5, Math.min(basePrice * 3, newPrice));
+        
+        // 模拟24h涨跌幅: 基于新价格相对于昨日收盘价的随意策略，让展示一直变动
+        // 为了视觉动态，每次随机漂移一些，并确保涨跌幅和价格趋势正相关
+        let priceChangePercent = ((newPrice - lastSimulatedPrice) / lastSimulatedPrice) * 100;
+        // 模拟累积漂移效果，使得24h变动持续变化，更生动
+        let drift = (Math.random() - 0.5) * 0.8;
+        let newChange24h = (lastSimulatedChange || 0) + priceChangePercent * 0.12 + drift;
+        // 限制涨跌幅范围 -35% ~ +45%
+        newChange24h = Math.min(45, Math.max(-35, newChange24h));
+        
+        lastSimulatedPrice = newPrice;
+        lastSimulatedChange = newChange24h;
+        
+        return { price: newPrice, change24h: newChange24h };
+    }
+    
+    // 核心更新任务: 尝试真实API，失败则用模拟模式 (保证永远有动态)
+    async function refreshPriceData() {
+        if (!activeCoinId) return;
+        
+        // 尝试真实API
+        const realResult = await fetchRealPrice(activeCoinId);
+        if (realResult.success && realResult.price > 0) {
+            // 真实数据可用
+            if (isSimulationMode) {
+                isSimulationMode = false;
+                // 重置模拟缓存，避免下次模拟错乱
+                lastSimulatedPrice = null;
+                lastSimulatedChange = null;
+            }
+            // 更新全局当前价格
+            currentPrice = realResult.price;
+            updateUI(currentPrice, realResult.change24h, true);
+        } else {
+            // 真实API失败，启用模拟模式
+            if (!isSimulationMode) {
+                console.log("切换到模拟实时变动模式，确保展示效果");
+                isSimulationMode = true;
+                // 若之前有真实价格，以此为基准开始模拟
+                if (currentPrice !== null && !isNaN(currentPrice)) {
+                    lastSimulatedPrice = currentPrice;
+                    lastSimulatedChange = previousChangePercent !== null ? previousChangePercent : 0;
+                } else {
+                    // 完全无数据，用默认基准
+                    const baseFake = { bitcoin: 68200, ethereum: 3210, solana: 165 };
+                    lastSimulatedPrice = baseFake[activeCoinId] || 100;
+                    lastSimulatedChange = (Math.random() * 6) - 3;
+                }
+            }
+            // 生成模拟动态数据
+            const simData = generateSimulatedData(activeCoinId);
+            currentPrice = simData.price;
+            updateUI(currentPrice, simData.change24h, false);
+        }
+    }
+    
+    // 重置状态 (切换币种时)
+    function resetForNewCoin(coinId, name, symbol, icon) {
+        activeCoinId = coinId;
+        activeCoinName = name;
+        activeSymbol = symbol;
+        activeIcon = icon;
+        
+        // 更新UI文本
+        tokenNameEl.innerText = activeCoinName;
+        tokenSymbolEl.innerText = activeSymbol;
+        tokenIconEl.innerText = activeIcon;
+        
+        // 重置内部状态
+        previousPrice = null;
+        previousChangePercent = null;
+        currentPrice = null;
+        priceHistory = [];
+        // 重置模拟缓存
+        lastSimulatedPrice = null;
+        lastSimulatedChange = null;
+        isSimulationMode = false;
+        
+        // 清空显示占位
+        priceEl.innerText = '—';
+        changePercentEl.innerText = '0.00%';
+        changeArrowEl.innerHTML = '⬤';
+        changePercentEl.classList.remove('positive', 'negative');
+        changeArrowEl.classList.remove('positive', 'negative');
+        lastUpdateEl.innerText = '获取数据中...';
+        sourceBadge.innerText = '连接中';
+        // 重置趋势条为默认柔和条
+        const bars = trendContainer.querySelectorAll('.trend-bar');
+        for (let i = 0; i < bars.length; i++) {
+            bars[i].style.height = `${6 + i * 2}px`;
+            bars[i].style.background = "#4A567A";
+        }
+        
+        // 立即拉取一次数据
+        refreshPriceData().catch(e => console.warn);
+    }
+    
+    // 定时器循环
+    function startPolling() {
+        if (timerInterval) clearInterval(timerInterval);
+        // 每3.2秒刷新一次，保证实时变动感
+        timerInterval = setInterval(() => {
+            refreshPriceData().catch(err => {
+                console.warn("轮询出错", err);
+                // 出错后若没启用模拟模式，强制一次模拟更新
+                if (!isSimulationMode && currentPrice !== null) {
+                    isSimulationMode = true;
+                    refreshPriceData();
+                }
+            });
+        }, 3200);
+    }
+    
+    // 绑定币种切换事件
+    function bindCoinSelector() {
+        const btns = document.querySelectorAll('.coin-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const id = btn.getAttribute('data-id');
+                const name = btn.getAttribute('data-name');
+                const symbol = btn.getAttribute('data-symbol');
+                const icon = btn.getAttribute('data-icon');
+                if (!id) return;
+                // 更新active样式
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // 重置定时器过程中避免冲突
+                if (timerInterval) clearInterval(timerInterval);
+                resetForNewCoin(id, name, symbol, icon);
+                startPolling();
+            });
+        });
+    }
+    
+    // 初始化
+    function init() {
+        bindCoinSelector();
+        // 初始加载比特币数据
+        resetForNewCoin('bitcoin', 'Bitcoin', 'BTC', '₿');
+        startPolling();
+        // 额外增加窗口失焦时不做额外操作，保持刷新
+    }
+    
+    init();
+</script>
 </body>
 </html>
