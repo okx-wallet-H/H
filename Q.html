@@ -2,13 +2,13 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>紫萃 · 链上赚币 | 智能质押</title>
-    <!-- 优雅字体：Inter 为主，标题加衬线提升高级感 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>紫萃 · 链上赚币 | 手机质押</title>
+    <!-- 字体：Inter 干净现代 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (免费) 用于图标 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 免费图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -18,53 +18,53 @@
         }
 
         body {
-            background-color: #F8F9FF;  /* 极浅紫白背景 */
-            font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-            color: #1A1033;             /* 深紫灰主文字 */
-            line-height: 1.5;
-            padding: 2.5rem 1.5rem;
+            background-color: #F5F0FA;  /* 极浅紫背景 */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1E103B;
+            line-height: 1.4;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 1rem 1rem 2rem;
         }
 
+        /* 手机容器 限制最大宽度，模拟卡片式滚动 */
         .container {
-            max-width: 800px;            /* 稍宽，更舒展 */
+            max-width: 420px;
             width: 100%;
             margin: 0 auto;
         }
 
-        /* ----- 顶部动态标题（保留金色，但增加深紫阴影适应白底） ----- */
+        /* ----- 动态标题 (保留金紫渐变，线条适配小屏) ----- */
         .dynamic-header {
             text-align: center;
-            margin-bottom: 3rem;          /* 增加底部间距 */
+            margin-bottom: 1.8rem;
             position: relative;
-            padding: 2rem 0 1.2rem 0;
+            padding: 1.8rem 0 0.8rem 0;
         }
 
         .gold-title {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            font-size: 3.2rem;            /* 稍大更醒目 */
+            gap: 0.2rem;
+            font-size: 2.8rem;
             font-weight: 800;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             position: relative;
             z-index: 5;
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
         }
 
         .gold-title span {
-            background: linear-gradient(145deg, #C89F3C 0%, #E9C46A 30%, #F3D779 60%, #E9C46A 80%, #C89F3C 100%);
+            background: linear-gradient(145deg, #B28B3C 0%, #E9C46A 40%, #F7DE8A 70%, #E9C46A 90%, #B28B3C 100%);
             background-size: 250% auto;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             animation: shine 5s linear infinite;
-            text-shadow: 0 4px 12px rgba(106, 13, 173, 0.25), 0 0 0 1px rgba(255, 215, 0, 0.2); /* 紫晕 */
-            padding: 0 2px;
+            text-shadow: 0 4px 12px rgba(128, 90, 213, 0.3);
+            padding: 0 1px;
         }
 
         @keyframes shine {
@@ -72,7 +72,6 @@
             100% { background-position: 200% center; }
         }
 
-        /* 流动线条 — 紫金渐变，在白底上更细腻 */
         .flow-lines {
             position: absolute;
             top: 0;
@@ -81,7 +80,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
-            opacity: 0.7;
+            opacity: 0.5;
         }
 
         .line-group {
@@ -89,7 +88,7 @@
             width: 100%;
             left: 0;
             height: 3px;
-            background: rgba(155, 93, 229, 0.1); /* 浅紫底纹 */
+            background: rgba(159, 122, 234, 0.1);
             overflow: hidden;
             border-radius: 3px;
         }
@@ -101,28 +100,27 @@
         .flow-line {
             position: absolute;
             height: 100%;
-            width: 30%;                    /* 稍短更优雅 */
-            background: linear-gradient(90deg, transparent, #B983FF, #C19AFF, #B983FF, transparent);
+            width: 30%;
+            background: linear-gradient(90deg, transparent, #B185DB, #CBA4FF, #B185DB, transparent);
             filter: blur(2px);
-            animation: flowHorizontal 4s ease-in-out infinite;
             opacity: 0.9;
             border-radius: 100%;
         }
 
         .line-left {
             left: -30%;
-            animation: flowLeftToRight 4.5s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+            animation: flowLeftToRight 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
         .line-right {
             right: -30%;
-            animation: flowRightToLeft 4.5s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+            animation: flowRightToLeft 4.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        .line-group-2 .line-left { animation-delay: 0.6s; }
-        .line-group-2 .line-right { animation-delay: 0.6s; }
-        .line-group-3 .line-left { animation-delay: 1.2s; }
-        .line-group-3 .line-right { animation-delay: 1.2s; }
+        .line-group-2 .line-left { animation-delay: 0.5s; }
+        .line-group-2 .line-right { animation-delay: 0.5s; }
+        .line-group-3 .line-left { animation-delay: 1s; }
+        .line-group-3 .line-right { animation-delay: 1s; }
 
         @keyframes flowLeftToRight {
             0% { left: -30%; opacity: 0.2; }
@@ -130,7 +128,6 @@
             70% { opacity: 1; }
             100% { left: 100%; opacity: 0; }
         }
-
         @keyframes flowRightToLeft {
             0% { right: -30%; opacity: 0.2; }
             30% { opacity: 1; }
@@ -138,190 +135,170 @@
             100% { right: 100%; opacity: 0; }
         }
 
-        /* 链/币 两字额外强调 (保留金色动态，但加紫色衬边) */
-        .gold-title .chain-char {
-            background: linear-gradient(145deg, #F6E5A0, #E9B741, #F7D44A);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            font-weight: 900;
-            text-shadow: 0 0 12px #9F7AEA;
-        }
-
-        /* ----- 卡片样式 (纯白基底，紫边，大圆角，大阴影) ----- */
+        /* ----- 卡片设计：纯白基底，柔和紫影，大圆角 ----- */
         .card {
             background: #FFFFFF;
-            border-radius: 40px;
-            padding: 2rem 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 20px 35px -12px rgba(128, 90, 213, 0.18), 0 4px 12px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(159, 122, 234, 0.2);
-            transition: box-shadow 0.25s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 28px 40px -15px rgba(128, 90, 213, 0.25);
-        }
-
-        /* 数值与标签 - 更讲究的字重与间距 */
-        .value-highlight {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #2D1B48;       /* 深紫 */
-            letter-spacing: -0.02em;
-            line-height: 1.2;
-        }
-
-        .label-md {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #7A6A9F;       /* 中紫色 */
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .u-tag {
-            background: #F1EAFF;
-            border-radius: 40px;
-            padding: 0.25rem 0.8rem;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #7B4ED0;
-            border: 1px solid #D9C9FF;
-            margin-left: 8px;
-            letter-spacing: 0.3px;
-        }
-
-        /* 三列数据卡片 (浅紫底，白卡内嵌) */
-        .stats-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 2rem;
-        }
-
-        .stat-item {
-            flex: 1 1 0;
-            min-width: 140px;
-            background: #F5F0FF;    /* 浅紫色背景 */
             border-radius: 32px;
             padding: 1.5rem 1.2rem;
-            border: 1px solid #E5D9FF;
-            box-shadow: inset 0 2px 4px rgba(255,255,255,0.8), 0 8px 12px -8px rgba(128,90,213,0.2);
+            margin-bottom: 1.2rem;
+            box-shadow: 0 12px 28px -8px rgba(138, 94, 191, 0.2), 0 4px 8px rgba(0,0,0,0.02);
+            border: 1px solid rgba(201, 173, 247, 0.2);
+            transition: transform 0.1s ease, box-shadow 0.2s;
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #6B4E9E;
-            margin-bottom: 0.5rem;
+        .card:active {
+            transform: scale(0.99);
+            box-shadow: 0 8px 18px -6px rgba(138, 94, 191, 0.3);
+        }
+
+        /* 集成数据卡片 —— 三行数据整齐排列 */
+        .stats-compact {
             display: flex;
-            align-items: center;
-            gap: 4px;
-            letter-spacing: 0.3px;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1.1;
-            color: #321E59;
-            word-break: break-word;
-        }
-
-        .stat-sub {
-            font-size: 0.75rem;
-            color: #9579C9;
-            margin-top: 6px;
-            font-weight: 400;
-        }
-
-        /* 按钮风格 — 紫色渐变，精致圆角 */
-        .btn {
-            background: linear-gradient(135deg, #9F7AEA, #7B4ED0);
-            border: none;
-            border-radius: 60px;
-            padding: 0.9rem 2.4rem;
-            font-weight: 600;
-            font-size: 1rem;
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 12px 24px -10px #9F7AEA, 0 4px 8px rgba(123, 78, 208, 0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            letter-spacing: 0.3px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-outline {
-            background: white;
-            border: 2px solid #D6C2FF;
-            color: #7B4ED0;
-            box-shadow: none;
-            padding: 0.7rem 1.8rem;
-        }
-
-        .btn-outline:hover {
-            background: #F5F0FF;
-            border-color: #9F7AEA;
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .flex-row {
+        .stat-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #F0E8FF;
+        }
+        .stat-row:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
         }
 
-        /* 质押操作区域 (更精致) */
+        .stat-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            background: #F1EAFF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8C5CD6;
+            font-size: 1.2rem;
+            border: 1px solid #E2D3FF;
+        }
+        .stat-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4F3A7A;
+            letter-spacing: 0.2px;
+            margin-bottom: 2px;
+        }
+        .stat-info .sub {
+            font-size: 0.7rem;
+            color: #9B87C0;
+        }
+        .stat-value {
+            text-align: right;
+        }
+        .stat-main {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #281A45;
+            line-height: 1.2;
+        }
+        .stat-main small {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #9B87C0;
+            margin-left: 4px;
+        }
+        .stat-value .sub {
+            font-size: 0.7rem;
+            color: #9B87C0;
+        }
+
+        /* 紫色大按钮 (触摸友好) */
+        .btn-primary {
+            background: linear-gradient(145deg, #9F7AEA, #7B4ED0);
+            border: none;
+            border-radius: 60px;
+            padding: 1rem 1.8rem;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            box-shadow: 0 12px 24px -12px #7B4ED0, 0 4px 8px rgba(123, 78, 208, 0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-primary:active {
+            background: linear-gradient(145deg, #8F6AD0, #6B3EB8);
+            transform: scale(0.97);
+            box-shadow: 0 8px 16px -10px #6B3EB8;
+        }
+
+        /* 质押卡片 */
+        .stake-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+        .stake-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #7A6A9F;
+            letter-spacing: 0.3px;
+        }
+        .stake-amount {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #281A45;
+        }
+
         .stake-box {
             background: #F8F4FF;
             border-radius: 60px;
-            padding: 0.4rem 0.4rem 0.4rem 2rem;
+            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
             display: flex;
             align-items: center;
             border: 1px solid #E2D3FF;
-            margin: 1.5rem 0 1rem 0;
-            transition: border-color 0.2s;
+            margin: 1rem 0 1rem;
+            transition: border 0.2s;
         }
         .stake-box:focus-within {
             border-color: #9F7AEA;
-            box-shadow: 0 0 0 3px rgba(159,122,234,0.2);
+            box-shadow: 0 0 0 3px rgba(159,122,234,0.15);
         }
-
         .stake-input {
             background: transparent;
             border: none;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 500;
-            color: #2D1B48;
+            color: #281A45;
             flex: 1;
-            min-width: 160px;
+            min-width: 100px;
             outline: none;
-            padding: 1rem 0;
+            padding: 0.8rem 0;
             font-family: 'Inter', monospace;
         }
         .stake-input::placeholder {
             color: #C9B9ED;
-            font-weight: 300;
+            font-weight: 400;
         }
         .max-hint {
             color: #9F7AEA;
             font-size: 0.8rem;
-            margin-right: 16px;
+            margin-right: 12px;
             background: #F0E8FF;
-            padding: 6px 16px;
+            padding: 6px 14px;
             border-radius: 40px;
             white-space: nowrap;
             font-weight: 600;
@@ -331,76 +308,80 @@
             background: linear-gradient(145deg, #9F7AEA, #7B4ED0);
             border: none;
             border-radius: 60px;
-            padding: 0.9rem 2.4rem;
+            padding: 0.8rem 1.8rem;
             font-weight: 600;
             color: white;
             cursor: pointer;
-            transition: 0.2s;
-            white-space: nowrap;
             font-size: 1rem;
             box-shadow: 0 6px 12px -6px #7B4ED0;
+            transition: 0.1s;
+            white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .stake-btn:active {
+            transform: scale(0.96);
+            background: linear-gradient(145deg, #8F6AD0, #6B3EB8);
         }
 
-        /* 智能阶梯收益表格 — 干净利落 */
+        .available-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #6F5A97;
+            background: #F5F0FF;
+            padding: 0.8rem 1rem;
+            border-radius: 40px;
+        }
+
+        /* 阶梯收益表格 — 两列优雅展示 */
         .tier-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px 24px;
-            margin-top: 1.5rem;
-            background: #FBF9FF;
-            border-radius: 32px;
-            padding: 1.8rem 2rem;
-            border: 1px solid #F0E5FF;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+            margin: 1.2rem 0 0.8rem;
         }
-
         .tier-item {
+            background: #F9F5FF;
+            border-radius: 24px;
+            padding: 0.8rem 0.8rem 0.8rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #F0E5FF;
+            border: 1px solid #EDE2FF;
         }
-        .tier-item:last-child, .tier-item:nth-last-child(2) {
-            border-bottom: none;  /* 最后两行（如果两列最后一项） */
-        }
-
         .tier-days {
+            font-size: 0.8rem;
             font-weight: 500;
-            color: #5A4A7A;
-            font-size: 0.95rem;
+            color: #4F3A7A;
         }
-
         .tier-rate {
             font-weight: 700;
             color: #7B4ED0;
-            background: #F2EAFF;
-            padding: 5px 16px;
+            background: white;
+            padding: 4px 12px;
             border-radius: 40px;
-            font-size: 0.9rem;
-            border: 1px solid #E1D0FF;
-        }
-
-        .note-small {
             font-size: 0.8rem;
-            color: #897BB0;
-            margin-top: 1.2rem;
-            border-top: 1px dashed #E2D3FF;
-            padding-top: 1.2rem;
+            border: 1px solid #E2D3FF;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        .rule-note {
+            font-size: 0.75rem;
+            color: #9B87C0;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed #E2D3FF;
         }
 
-        /* 账单动态列表 — 优雅分割 */
-        .bill-list {
-            margin-top: 0.8rem;
-        }
+        /* 账单动态列表 */
         .bill-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid #F1E8FF;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid #F0E8FF;
         }
         .bill-item:last-child {
             border-bottom: none;
@@ -408,7 +389,7 @@
         .bill-left {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
         .bill-icon {
             width: 44px;
@@ -424,67 +405,60 @@
         }
         .bill-info h4 {
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             margin-bottom: 4px;
-            color: #2D1B48;
+            color: #281A45;
         }
         .bill-info p {
-            font-size: 0.75rem;
-            color: #9A89B9;
-            letter-spacing: 0.2px;
+            font-size: 0.7rem;
+            color: #9B87C0;
         }
         .bill-amount {
             font-weight: 700;
             color: #4A2C7A;
             background: #F5F0FF;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 40px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             border: 1px solid #E2D3FF;
         }
         .bill-amount small {
             font-weight: 400;
-            font-size: 0.7rem;
-            color: #9A89B9;
-            margin-right: 4px;
+            font-size: 0.65rem;
+            color: #9B87C0;
+            margin-right: 3px;
         }
-
         .badge-success {
-            background: #E1F0E8;
-            color: #3C7A5A;
+            background: #E4F0EA;
+            color: #2C6A4C;
             border-radius: 30px;
             padding: 2px 8px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             border: 1px solid #A0D8C0;
-            margin-left: 8px;
+            margin-left: 6px;
         }
 
         .footer-note {
             text-align: center;
-            margin-top: 2.5rem;
+            margin-top: 1.8rem;
             color: #B6A6D9;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 400;
-            letter-spacing: 0.3px;
         }
 
-        /* 一些细节微调 */
-        i {
-            color: #9F7AEA;
-        }
-        hr {
-            border: 1px solid #F0E8FF;
-            margin: 1rem 0;
-        }
+        /* 微间距调整 */
+        .mt-1 { margin-top: 0.5rem; }
+        .mb-2 { margin-bottom: 1.2rem; }
+        i { color: #9F7AEA; }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 动态头部：金黄色大字 + 紫金流动线条 -->
+        <!-- 动态标题 (金黄色大字 + 流动线条) -->
         <div class="dynamic-header">
             <div class="gold-title">
-                <span>链</span><span class="chain-char">上</span><span>赚</span><span class="chain-char">币</span>
+                <span>链</span><span>上</span><span>赚</span><span>币</span>
             </div>
             <div class="flow-lines">
                 <div class="line-group line-group-1">
@@ -502,73 +476,101 @@
             </div>
         </div>
 
-        <!-- 总锁仓价值 / 已领取 / 待领取 三列 (紫色主题) -->
-        <div class="stats-row">
-            <div class="stat-item">
-                <div class="stat-label"><i class="fas fa-lock"></i> 总锁仓价值 <span style="margin-left: auto;">H</span></div>
-                <div class="stat-number">2,845,192 <span style="font-size:1.2rem;">H</span></div>
-                <div class="stat-sub">≈ $1,824,110</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label"><i class="fas fa-arrow-down"></i> 已领取收益 <span class="u-tag">U</span></div>
-                <div class="stat-number">12,438.52 <span style="font-size:1.2rem;">U</span></div>
-                <div class="stat-sub">历史累计</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-label"><i class="fas fa-clock"></i> 待领取收益 <span class="u-tag">U</span></div>
-                <div class="stat-number">836.24 <span style="font-size:1.2rem;">U</span></div>
-                <div class="stat-sub">今日20:00 发放</div>
-            </div>
-        </div>
-
-        <!-- 立即领取行 + 辅助信息 -->
-        <div class="flex-row" style="margin-bottom: 2rem;">
-            <button class="btn"><i class="fas fa-hand-holding-heart"></i> 立即领取</button>
-            <span style="color:#7A6A9F; font-size:0.9rem; background: #F2EAFF; padding: 0.4rem 1.5rem; border-radius: 40px;">
-                <i class="far fa-calendar-alt"></i> 待领取 836.24 U
-            </span>
-        </div>
-
-        <!-- 当前质押 + 操作卡片 -->
+        <!-- 数据整合卡片 (总锁仓/已领取/待领取) 排版整洁 -->
         <div class="card">
-            <div class="flex-row" style="margin-bottom: 0.5rem;">
-                <span class="label-md"><i class="fas fa-coins"></i> 当前质押 H</span>
-                <span class="value-highlight">45,200 <span style="font-size:1.4rem;">H</span></span>
+            <div class="stats-compact">
+                <!-- 总锁仓 H -->
+                <div class="stat-row">
+                    <div class="stat-left">
+                        <div class="stat-icon"><i class="fas fa-lock"></i></div>
+                        <div class="stat-info">
+                            <h4>总锁仓价值 <span style="color:#8C5CD6; font-weight:600;">H</span></h4>
+                            <div class="sub">全网质押</div>
+                        </div>
+                    </div>
+                    <div class="stat-value">
+                        <div class="stat-main">2,845,192 <small>H</small></div>
+                        <div class="sub">≈ $1.82M</div>
+                    </div>
+                </div>
+                <!-- 已领取收益 U -->
+                <div class="stat-row">
+                    <div class="stat-left">
+                        <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
+                        <div class="stat-info">
+                            <h4>已领取收益 <span style="color:#8C5CD6;">U</span></h4>
+                            <div class="sub">历史累计</div>
+                        </div>
+                    </div>
+                    <div class="stat-value">
+                        <div class="stat-main">12,438.52 <small>U</small></div>
+                        <div class="sub">≈ $8,210</div>
+                    </div>
+                </div>
+                <!-- 待领取收益 U -->
+                <div class="stat-row">
+                    <div class="stat-left">
+                        <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                        <div class="stat-info">
+                            <h4>待领取收益 <span style="color:#8C5CD6;">U</span></h4>
+                            <div class="sub">今日20:00发放</div>
+                        </div>
+                    </div>
+                    <div class="stat-value">
+                        <div class="stat-main">836.24 <small>U</small></div>
+                        <div class="sub">≈ $552</div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <!-- 立即领取按钮 (大，醒目) -->
+        <button class="btn-primary mb-2">
+            <i class="fas fa-hand-holding-heart"></i> 立即领取
+        </button>
+
+        <!-- 当前质押卡片 -->
+        <div class="card">
+            <div class="stake-header">
+                <span class="stake-label"><i class="fas fa-coins"></i> 当前质押 H</span>
+                <span class="stake-amount">45,200 <span style="font-size:1rem;">H</span></span>
+            </div>
+
             <div class="stake-box">
                 <input type="text" class="stake-input" placeholder="0.0 H" value="1,500">
-                <span class="max-hint">可质押 12,800 H</span>
+                <span class="max-hint">可质押 12.8k H</span>
                 <button class="stake-btn">质押</button>
             </div>
-            <div class="flex-row" style="margin-top: 0.8rem;">
-                <span class="label-md"><i class="far fa-clock"></i> 当前可质押 H</span>
-                <span style="font-weight: 600; color:#4A2C7A;">12,800 H <span style="color:#9F7AEA; font-weight:400;">(≈ $8,200)</span></span>
+
+            <div class="available-info">
+                <span><i class="far fa-clock"></i> 当前可质押 H</span>
+                <span><strong>12,800 H</strong> <span style="color:#9F7AEA;">(≈ $8,200)</span></span>
             </div>
         </div>
 
-        <!-- 智能阶梯收益规则 (完全对照需求) -->
-        <div class="card" style="padding-bottom: 1.8rem;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                <i class="fas fa-chart-gantt" style="font-size: 1.4rem;"></i>
-                <h3 style="font-weight: 700; font-size: 1.4rem; color: #321E59;">智能阶梯收益规则</h3>
+        <!-- 智能阶梯收益规则 -->
+        <div class="card">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                <i class="fas fa-chart-gantt" style="font-size: 1.2rem;"></i>
+                <h3 style="font-weight: 700; font-size: 1.2rem; color:#281A45;">阶梯收益规则</h3>
             </div>
             <div class="tier-grid">
-                <div class="tier-item"><span class="tier-days">质押一至七天</span><span class="tier-rate">每日 0.5%</span></div>
-                <div class="tier-item"><span class="tier-days">质押八至16天</span><span class="tier-rate">每日 0.6%</span></div>
-                <div class="tier-item"><span class="tier-days">质押17至30天</span><span class="tier-rate">每日 0.7%</span></div>
-                <div class="tier-item"><span class="tier-days">质押31天至60天</span><span class="tier-rate">每日 0.8%</span></div>
-                <div class="tier-item" style="grid-column: span 2;"><span class="tier-days">质押61天以上</span><span class="tier-rate">每日 1.0%</span></div>
+                <div class="tier-item"><span class="tier-days">1-7天</span><span class="tier-rate">0.5%</span></div>
+                <div class="tier-item"><span class="tier-days">8-16天</span><span class="tier-rate">0.6%</span></div>
+                <div class="tier-item"><span class="tier-days">17-30天</span><span class="tier-rate">0.7%</span></div>
+                <div class="tier-item"><span class="tier-days">31-60天</span><span class="tier-rate">0.8%</span></div>
+                <div class="tier-item" style="grid-column: span 2;"><span class="tier-days">61天以上</span><span class="tier-rate">1.0%</span></div>
             </div>
-            <div class="note-small">
-                <i class="fas fa-info-circle"></i> 每日20点发放收益，根据质押时H的总价值 × 对应阶段利率，发放U收益。利率随质押时长自动提升。
+            <div class="rule-note">
+                <i class="fas fa-info-circle"></i> 每日20点发放U收益，利率随质押天数自动提升
             </div>
         </div>
 
-        <!-- 账单动态 (紫色调列表) -->
-        <div class="card" style="padding-bottom: 1rem;">
-            <div class="flex-row" style="margin-bottom: 1rem;">
-                <h3 style="font-weight: 700; font-size: 1.4rem; color: #321E59;"><i class="fas fa-receipt" style="margin-right: 12px;"></i>账单动态</h3>
-                <span style="color: #9F7AEA; font-size:0.9rem; background:#F5F0FF; padding: 0.3rem 1.2rem; border-radius: 30px;">最新 <i class="fas fa-arrow-right"></i></span>
+        <!-- 账单动态 -->
+        <div class="card">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.2rem;">
+                <h3 style="font-weight: 700; font-size: 1.2rem; color:#281A45;"><i class="fas fa-receipt"></i> 账单动态</h3>
+                <span style="color:#9F7AEA; font-size:0.75rem; background:#F5F0FF; padding:0.3rem 1rem; border-radius:30px;">近三日</span>
             </div>
             <div class="bill-list">
                 <div class="bill-item">
@@ -586,7 +588,7 @@
                         <div class="bill-icon"><i class="fas fa-lock"></i></div>
                         <div class="bill-info">
                             <h4>质押 H</h4>
-                            <p>2025-03-19 14:22 · 周期45天</p>
+                            <p>2025-03-19 · 周期45天</p>
                         </div>
                     </div>
                     <div class="bill-amount"><small>H</small> 5,000</div>
@@ -595,8 +597,8 @@
                     <div class="bill-left">
                         <div class="bill-icon"><i class="fas fa-gem"></i></div>
                         <div class="bill-info">
-                            <h4>阶梯升级 (17~30天 0.7%)</h4>
-                            <p>2025-03-18 系统自动</p>
+                            <h4>阶梯升级 <span style="color:#7B4ED0;">0.7%</span></h4>
+                            <p>2025-03-18 自动</p>
                         </div>
                     </div>
                     <div class="bill-amount"><small>⚡</small> +0.1%</div>
@@ -614,19 +616,27 @@
             </div>
         </div>
 
-        <!-- 底部脚注 符合整体风格 -->
+        <!-- 底部安全脚注 -->
         <div class="footer-note">
-            <i class="fas fa-shield-check"></i> 紫荆安全审计 · 合约可信 · 收益自动发放
+            <i class="fas fa-shield-check"></i> 紫荆安全审计 · 收益自动发放
         </div>
     </div>
 
-    <!-- 微小交互 (仅模拟) -->
+    <!-- 简单交互反馈 (模拟点击) -->
     <script>
-        (function(){
+        (function() {
+            const claimBtn = document.querySelector('.btn-primary');
             const stakeBtn = document.querySelector('.stake-btn');
-            const claimBtn = document.querySelector('.btn');
-            if(stakeBtn) stakeBtn.addEventListener('click', ()=> alert('质押请求已提交 (演示界面)'));
-            if(claimBtn) claimBtn.addEventListener('click', ()=> alert('领取 836.24 U 至钱包 (模拟)'));
+            if (claimBtn) {
+                claimBtn.addEventListener('click', () => {
+                    alert('领取模拟：836.24 U 将转入钱包');
+                });
+            }
+            if (stakeBtn) {
+                stakeBtn.addEventListener('click', () => {
+                    alert('质押模拟：已提交请求');
+                });
+            }
         })();
     </script>
 </body>
