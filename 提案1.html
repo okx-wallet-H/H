@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>海豚社区 · 经济模型治理提案</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f2edff;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #1e1a2f;
+            padding: 20px 16px 48px;
+        }
+
+        /* 主容器 */
+        .proposal {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(98, 54, 255, 0.2);
+            overflow: hidden;
+        }
+
+        /* 紫色渐变头部 */
+        .hero {
+            background: linear-gradient(135deg, #6c2bd9 0%, #9b4dff 100%);
+            padding: 28px 24px 24px;
+            color: white;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(4px);
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        .hero p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 12px;
+        }
+
+        /* 内容区 */
+        .content {
+            padding: 24px 20px 32px;
+        }
+
+        /* 章节标题 */
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 28px 0 12px 0;
+            padding-left: 6px;
+            border-left: 5px solid #9b4dff;
+            color: #2d1b69;
+        }
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .card-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 16px 0 24px;
+        }
+        .stat-card {
+            background: #fefbff;
+            border-radius: 24px;
+            padding: 16px;
+            border: 1px solid #e9dcff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .stat-card h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: #7c3aed;
+            margin-bottom: 8px;
+        }
+        .stat-number {
+            font-size: 1.9rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #1a102f;
+        }
+        .stat-desc {
+            font-size: 0.8rem;
+            color: #4a4a6a;
+            margin-top: 6px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 16px 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .info-table th {
+            background: #f5edff;
+            padding: 12px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #4c1d95;
+            font-size: 0.8rem;
+        }
+        .info-table td {
+            padding: 12px 12px;
+            border-bottom: 1px solid #ede5ff;
+            font-size: 0.85rem;
+            vertical-align: top;
+        }
+
+        .rate-box {
+            background: #faf6ff;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            border-left: 4px solid #a855f7;
+        }
+        .rate-box p {
+            margin: 6px 0;
+            font-size: 0.85rem;
+        }
+
+        .highlight {
+            background: #ede9fe;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #5b21b6;
+            display: inline-block;
+            font-size: 0.75rem;
+        }
+
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0 24px;
+        }
+        .qa-item {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #e9dcff;
+            overflow: hidden;
+        }
+        .qa-question {
+            background: #fefbff;
+            padding: 14px 18px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #4c1d95;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #ede5ff;
+        }
+        .qa-question span:first-child::before {
+            content: "❓ ";
+            margin-right: 6px;
+        }
+        .qa-answer {
+            padding: 14px 18px;
+            font-size: 0.88rem;
+            color: #2d2a44;
+            line-height: 1.45;
+            background: white;
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #7b6b9e;
+            border-top: 1px solid #ede5ff;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .content {
+                padding: 20px 16px;
+            }
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .stat-number {
+                font-size: 1.5rem;
+            }
+        }
+
+        button, .fake-button {
+            background: none;
+            border: none;
+        }
+        .purple-tag {
+            background: #ede9fe;
+            color: #5b21b6;
+            border-radius: 40px;
+            padding: 2px 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+<div class="proposal">
+    <div class="hero">
+        <h1>🐬 海豚社区</h1>
+        <div class="badge">正式治理提案 #001</div>
+        <p>经济模型 · 双池质押 · 社区做市<br>多签共治 · 透明可持续</p>
+    </div>
+    <div class="content">
+        <!-- 摘要数据 -->
+        <div class="section-title">📊 模型核心数据</div>
+        <div class="card-grid">
+            <div class="stat-card"><h3>代币 H 总量</h3><div class="stat-number">1,000,000,000</div><div class="stat-desc">100%公平发射 · 永不增发</div></div>
+            <div class="stat-card"><h3>社区多签持仓</h3><div class="stat-number">~9.8 亿 H</div><div class="stat-desc">用于做市、生态激励，不参与质押</div></div>
+            <div class="stat-card"><h3>流通 H 总量</h3><div class="stat-number">≈ 2000 万 H</div><div class="stat-desc">流动性池 + 外部地址，质押上限天然可控</div></div>
+            <div class="stat-card"><h3>流动性池</h3><div class="stat-number">U 10.5万 + H 1905万</div><div class="stat-desc">恒定乘积 AMM，当前价格≈0.0055 U/H</div></div>
+            <div class="stat-card"><h3>交易税（买卖）</h3><div class="stat-number">5%</div><div class="stat-desc">全额进入国库，支撑质押收益</div></div>
+            <div class="stat-card"><h3>国库初始资金</h3><div class="stat-number">5,500 U</div><div class="stat-desc">来自社区早期购买税收</div></div>
+        </div>
+
+        <!-- 双池质押机制 -->
+        <div class="section-title">💰 双池质押机制</div>
+        <div class="card-grid">
+            <div class="stat-card" style="border-top: 4px solid #8b5cf6;">
+                <h3>🔐 质押 H → 得 U</h3>
+                <div class="stat-desc">收益来源于国库（交易税），阶梯利率按日发放。</div>
+                <div class="rate-box">
+                    <p><strong>📈 阶梯日利率</strong><br>
+                    1–7天：0.5% &nbsp; 8–16天：0.6%<br>
+                    17–30天：0.7% &nbsp; 31–60天：0.8%<br>
+                    ≥61天：<strong>1.0%</strong></p>
+                </div>
+                <div><span class="purple-tag">随存随取</span><span class="purple-tag">24h到账防套利</span></div>
+            </div>
+            <div class="stat-card" style="border-top: 4px solid #a855f7;">
+                <h3>🏦 质押 U → 得 H</h3>
+                <div class="stat-desc">收益从社区划拨的<span class="highlight">1亿H专属奖励池</span>支出，固定日利率。</div>
+                <div class="rate-box">
+                    <p>✨ 固定日利率：<strong>0.5%</strong>（以U价值计，每日按H价格折算发放H）</p>
+                    <p>📦 奖励池总量：<strong>100,000,000 H</strong>（多签专户管理）</p>
+                </div>
+                <div><span class="purple-tag">随存随取</span><span class="purple-tag">次日到账</span><span class="purple-tag">防闪贷套利</span></div>
+            </div>
+        </div>
+
+        <!-- 国库平衡模型 -->
+        <div class="section-title">⚙️ 国库可持续飞轮</div>
+        <table class="info-table">
+            <tr><th>国库收入</th><td>每日买卖总额 × 5% 交易税 (U)</td></tr>
+            <tr><th>国库支出</th><td>每日20:00按H价格发放“质押H得U”收益</td></tr>
+            <tr><th>平衡条件</th><td>日均交易额 ×5% ≥ 质押H总量 × 价格 × 平均日利率 → 国库永续</td></tr>
+            <tr><th>流通上限保护</th><td>可质押H最多约2000万，最大日支出可控，交易活跃即可稳健运行</td></tr>
+        </table>
+
+        <!-- 做市储备 + 价格干预 -->
+        <div class="section-title">🛡️ 社区做市储备</div>
+        <p style="margin-bottom: 10px;">由多签独立管理，资金来源为低买高卖利润，<strong>不与国库混用</strong>。使命：平抑H价格波动，保护质押用户资产。</p>
+        <div class="card-grid" style="gap: 12px;">
+            <div class="stat-card"><h3>📈 价格过高 >0.007 U/H</h3><div class="stat-desc">储备卖出H → 增加供给 → 降温</div></div>
+            <div class="stat-card"><h3>📉 价格过低 <0.004 U/H</h3><div class="stat-desc">储备买入H → 托底 → 恢复信心</div></div>
+            <div class="stat-card"><h3>🎯 稳定区间</h3><div class="stat-desc">0.0045 – 0.0065 U/H 内让市场自发交易</div></div>
+        </div>
+        <div class="highlight" style="display: block; margin: 12px 0; text-align: center;">💡 做市买卖同样产生5%交易税，为国库贡献收入，形成健康闭环</div>
+
+        <!-- 多签治理 -->
+        <div class="section-title">🗳️ 多签治理 · 全透明</div>
+        <p>所有关键参数由社区多签钱包（≥3/5签名）决策，链上可查。社区信息面板实时展示：</p>
+        <ul style="margin: 12px 0 12px 20px; font-size: 0.85rem;">
+            <li>国库余额、每日收支流水</li>
+            <li>做市储备余额及历史干预记录</li>
+            <li>质押池总量、平均利率、收益明细</li>
+            <li>H实时价格、流动性池深度、总交易量</li>
+        </ul>
+        <div class="purple-tag" style="background:#ede9fe; padding:6px 12px; border-radius: 60px;">🔐 多签可调整：质押利率、干预阈值、奖励池补充、临时熔断机制</div>
+
+        <!-- 防套利与安全 -->
+        <div class="section-title">⛓️ 防套利 & 安全性</div>
+        <ul style="margin: 12px 0 12px 20px; font-size: 0.85rem;">
+            <li><strong>解除质押24小时到账</strong>：避免闪贷攻击，保障系统公平。</li>
+            <li><strong>交易税归国库</strong>：任何买卖都为生态贡献，抑制刷量。</li>
+            <li><strong>质押U奖励池独立</strong>：1亿H由多签划拨，风险隔离。</li>
+            <li><strong>智能合约审计</strong>：上线前由知名机构审计，代码开源。</li>
+        </ul>
+
+        <!-- Q&A 大白话版 -->
+        <div class="section-title">📢 常见问题 (Q&A)</div>
+        <div class="qa-list">
+            <div class="qa-item"><div class="qa-question"><span>这个模式能长久吗？会不会崩盘？</span><span>🔽</span></div><div class="qa-answer">只要社区日均交易额达到1.5–2万U，国库收入就能覆盖质押支出，长期健康运行。质押H总量上限仅2000万，支出可控。若短期交易量不足，多签会临时降低利率或启用储备缓冲。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>质押H和质押U哪个更划算？</span><span>🔽</span></div><div class="qa-answer">看好H未来升值 → 质押U得H；希望获得稳定U收益 → 质押H得U。两个池子可同时参与，灵活配置。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>为什么解除质押要等24小时？</span><span>🔽</span></div><div class="qa-answer">防止有人利用瞬时价格波动反复质押套利，保护长期质押者和国库利益。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>社区做市会不会操纵价格割韭菜？</span><span>🔽</span></div><div class="qa-answer">做市储备唯一目的是稳定价格，所有操作公开透明，利润留存用于后续护盘，多签成员受社区监督。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>我的质押资金安全吗？</span><span>🔽</span></div><div class="qa-answer">质押合约经审计，多签管理储备资产。但DeFi均有智能合约风险，请分散资产、理性参与。社区设有紧急暂停功能保障用户基本安全。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>质押U奖励池的1亿H用完了怎么办？</span><span>🔽</span></div><div class="qa-answer">多签将发起社区提案，决定是否从多签持仓中补充或调整U质押利率，确保奖励持续。</div></div>
+            <div class="qa-item"><div class="qa-question"><span>AI讨论时数据算错了，以谁为准？</span><span>🔽</span></div><div class="qa-answer">最终模型参数以社区多签发布的正式公告和链上数据为准。如有疑问，欢迎到社区群向管理员核实。</div></div>
+        </div>
+
+        <!-- 治理流程摘要 -->
+        <div class="section-title">📜 提案执行与迭代</div>
+        <div style="background: #fef9ff; border-radius: 24px; padding: 16px; margin: 16px 0;">
+            <p><strong>1. 多签委员会</strong>：5位核心贡献者/节点代表，重大决策≥3人签名，未来过渡到社区选举。<br>
+            <strong>2. 参数调整流程</strong>：论坛讨论 → 多签评估 → 链上投票执行。<br>
+            <strong>3. 紧急熔断</strong>：极端行情或合约风险时，多签可暂停质押收益发放或质押功能。<br>
+            <strong>4. 定期公示</strong>：每周发布国库报告、做市记录、质押数据，社区面板实时可查。</p>
+        </div>
+
+        <div class="footer-note">
+            🐬 海豚社区 · 共建 | 透明 | 可持续<br>
+            本提案基于2026年3月多签共识起草，正式生效后链上执行。
+        </div>
+    </div>
+</div>
+
+<script>
+    // 为移动端Q&A添加折叠交互（默认全部展开，点击可折叠）
+    const qaItems = document.querySelectorAll('.qa-item');
+    qaItems.forEach(item => {
+        const qDiv = item.querySelector('.qa-question');
+        const aDiv = item.querySelector('.qa-answer');
+        qDiv.style.cursor = 'pointer';
+        qDiv.addEventListener('click', () => {
+            const isVisible = aDiv.style.display !== 'none';
+            if (isVisible) {
+                aDiv.style.display = 'none';
+                qDiv.querySelector('span:last-child').innerHTML = '🔼';
+            } else {
+                aDiv.style.display = 'block';
+                qDiv.querySelector('span:last-child').innerHTML = '🔽';
+            }
+        });
+    });
+</script>
+</body>
+</html>
