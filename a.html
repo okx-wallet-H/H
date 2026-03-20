@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>海豚社区 · 经济模型治理提案</title>
+    <title>海豚社区 · 信息面板</title>
     <style>
         * {
             margin: 0;
@@ -12,351 +12,473 @@
         }
 
         body {
-            background: #f2edff;
-            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-            line-height: 1.5;
+            background: #f0ebff;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 20px 16px 40px;
             color: #1e1a2f;
-            padding: 20px 16px 48px;
         }
 
-        /* 主容器 */
-        .proposal {
+        .dashboard {
             max-width: 600px;
             margin: 0 auto;
-            background: #ffffff;
-            border-radius: 32px;
-            box-shadow: 0 20px 35px -12px rgba(98, 54, 255, 0.2);
-            overflow: hidden;
         }
 
-        /* 紫色渐变头部 */
-        .hero {
-            background: linear-gradient(135deg, #6c2bd9 0%, #9b4dff 100%);
-            padding: 28px 24px 24px;
-            color: white;
+        /* 头部 */
+        .header {
             text-align: center;
+            margin-bottom: 20px;
         }
-        .hero h1 {
-            font-size: 1.9rem;
+        .header h1 {
+            font-size: 1.8rem;
             font-weight: 700;
+            background: linear-gradient(135deg, #6c2bd9, #9b4dff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
             letter-spacing: -0.3px;
-            margin-bottom: 8px;
         }
-        .hero .badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(4px);
-            padding: 6px 14px;
-            border-radius: 60px;
+        .header p {
             font-size: 0.75rem;
-            font-weight: 500;
-            margin-top: 10px;
+            color: #5b4b8c;
+            margin-top: 4px;
         }
-        .hero p {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 12px;
-        }
-
-        /* 内容区 */
-        .content {
-            padding: 24px 20px 32px;
+        .last-update {
+            font-size: 0.7rem;
+            background: #ede9fe;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-top: 8px;
         }
 
-        /* 章节标题 */
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 28px 0 12px 0;
-            padding-left: 6px;
-            border-left: 5px solid #9b4dff;
-            color: #2d1b69;
+        /* 卡片通用样式 */
+        .card {
+            background: white;
+            border-radius: 28px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 20px rgba(98, 54, 255, 0.08);
+            border: 1px solid #ede5ff;
+            transition: all 0.2s;
         }
-        .section-title:first-of-type {
-            margin-top: 0;
-        }
-
-        .card-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin: 16px 0 24px;
-        }
-        .stat-card {
-            background: #fefbff;
-            border-radius: 24px;
-            padding: 16px;
-            border: 1px solid #e9dcff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
-        }
-        .stat-card h3 {
-            font-size: 0.8rem;
+        .card-title {
+            font-size: 0.75rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             font-weight: 600;
             color: #7c3aed;
-            margin-bottom: 8px;
-        }
-        .stat-number {
-            font-size: 1.9rem;
-            font-weight: 800;
-            line-height: 1.2;
-            color: #1a102f;
-        }
-        .stat-desc {
-            font-size: 0.8rem;
-            color: #4a4a6a;
-            margin-top: 6px;
-        }
-
-        .info-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #ffffff;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 16px 0;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-        }
-        .info-table th {
-            background: #f5edff;
-            padding: 12px 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #4c1d95;
-            font-size: 0.8rem;
-        }
-        .info-table td {
-            padding: 12px 12px;
-            border-bottom: 1px solid #ede5ff;
-            font-size: 0.85rem;
-            vertical-align: top;
-        }
-
-        .rate-box {
-            background: #faf6ff;
-            border-radius: 20px;
-            padding: 12px 16px;
-            margin: 12px 0;
-            border-left: 4px solid #a855f7;
-        }
-        .rate-box p {
-            margin: 6px 0;
-            font-size: 0.85rem;
-        }
-
-        .highlight {
-            background: #ede9fe;
-            padding: 2px 8px;
-            border-radius: 20px;
-            font-weight: 500;
-            color: #5b21b6;
-            display: inline-block;
-            font-size: 0.75rem;
-        }
-
-        .qa-list {
+            margin-bottom: 12px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .metric-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
             gap: 12px;
-            margin: 20px 0 24px;
         }
-        .qa-item {
-            background: #ffffff;
-            border-radius: 20px;
-            border: 1px solid #e9dcff;
-            overflow: hidden;
-        }
-        .qa-question {
+        .metric-item {
+            flex: 1;
+            min-width: 100px;
             background: #fefbff;
-            padding: 14px 18px;
-            font-weight: 700;
-            font-size: 0.95rem;
+            border-radius: 20px;
+            padding: 12px;
+            text-align: center;
+        }
+        .metric-label {
+            font-size: 0.7rem;
+            color: #6b5b8e;
+        }
+        .metric-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #2d1b69;
+            line-height: 1.2;
+            margin-top: 4px;
+            word-break: break-word;
+        }
+        .trend {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            color: #10b981;
+        }
+        .trend.down {
+            color: #ef4444;
+        }
+        hr {
+            margin: 16px 0;
+            border: none;
+            height: 1px;
+            background: #ede5ff;
+        }
+        .address-badge {
+            background: #f5f0ff;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            font-family: monospace;
+            word-break: break-all;
             color: #4c1d95;
+        }
+        .btn-refresh {
+            background: #7c3aed;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+        .btn-refresh:hover {
+            background: #5b21b6;
+            transform: scale(0.98);
+        }
+        .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            border-bottom: 1px solid #ede5ff;
         }
-        .qa-question span:first-child::before {
-            content: "❓ ";
-            margin-right: 6px;
-        }
-        .qa-answer {
-            padding: 14px 18px;
-            font-size: 0.88rem;
-            color: #2d2a44;
-            line-height: 1.45;
-            background: white;
-        }
-
-        .footer-note {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #7b6b9e;
-            border-top: 1px solid #ede5ff;
-            padding-top: 20px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 480px) {
-            .content {
-                padding: 20px 16px;
-            }
-            .hero h1 {
-                font-size: 1.6rem;
-            }
-            .stat-number {
-                font-size: 1.5rem;
-            }
-        }
-
-        button, .fake-button {
-            background: none;
-            border: none;
-        }
-        .purple-tag {
+        .progress-bar {
             background: #ede9fe;
-            color: #5b21b6;
-            border-radius: 40px;
-            padding: 2px 10px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-right: 6px;
+            border-radius: 20px;
+            height: 8px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            background: #9b4dff;
+            width: 0%;
+            height: 8px;
+            border-radius: 20px;
+        }
+        @media (max-width: 480px) {
+            .metric-value {
+                font-size: 1.3rem;
+            }
+            .card {
+                padding: 14px;
+            }
+        }
+        .mini-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 40px;
+            margin-top: 12px;
+        }
+        .bar {
+            background: #cbbaff;
+            flex: 1;
+            border-radius: 4px;
+            transition: height 0.3s;
         }
     </style>
 </head>
 <body>
-<div class="proposal">
-    <div class="hero">
-        <h1>🐬 海豚社区</h1>
-        <div class="badge">正式治理提案 #001</div>
-        <p>经济模型 · 双池质押 · 社区做市<br>多签共治 · 透明可持续</p>
+<div class="dashboard">
+    <div class="header">
+        <h1>🐬 海豚社区 · 信息面板</h1>
+        <p>实时国库 · 质押数据 · 做市储备 | 透明公开</p>
+        <div class="last-update" id="updateTime">更新于 --:--:--</div>
     </div>
-    <div class="content">
-        <!-- 摘要数据 -->
-        <div class="section-title">📊 模型核心数据</div>
-        <div class="card-grid">
-            <div class="stat-card"><h3>代币 H 总量</h3><div class="stat-number">1,000,000,000</div><div class="stat-desc">100%公平发射 · 永不增发</div></div>
-            <div class="stat-card"><h3>社区多签持仓</h3><div class="stat-number">~9.8 亿 H</div><div class="stat-desc">用于做市、生态激励，不参与质押</div></div>
-            <div class="stat-card"><h3>流通 H 总量</h3><div class="stat-number">≈ 2000 万 H</div><div class="stat-desc">流动性池 + 外部地址，质押上限天然可控</div></div>
-            <div class="stat-card"><h3>流动性池</h3><div class="stat-number">U 10.5万 + H 1905万</div><div class="stat-desc">恒定乘积 AMM，当前价格≈0.0055 U/H</div></div>
-            <div class="stat-card"><h3>交易税（买卖）</h3><div class="stat-number">5%</div><div class="stat-desc">全额进入国库，支撑质押收益</div></div>
-            <div class="stat-card"><h3>国库初始资金</h3><div class="stat-number">5,500 U</div><div class="stat-desc">来自社区早期购买税收</div></div>
-        </div>
 
-        <!-- 双池质押机制 -->
-        <div class="section-title">💰 双池质押机制</div>
-        <div class="card-grid">
-            <div class="stat-card" style="border-top: 4px solid #8b5cf6;">
-                <h3>🔐 质押 H → 得 U</h3>
-                <div class="stat-desc">收益来源于国库（交易税），阶梯利率按日发放。</div>
-                <div class="rate-box">
-                    <p><strong>📈 阶梯日利率</strong><br>
-                    1–7天：0.5% &nbsp; 8–16天：0.6%<br>
-                    17–30天：0.7% &nbsp; 31–60天：0.8%<br>
-                    ≥61天：<strong>1.0%</strong></p>
-                </div>
-                <div><span class="purple-tag">随存随取</span><span class="purple-tag">24h到账防套利</span></div>
+    <!-- 核心指标卡片 -->
+    <div class="card">
+        <div class="card-title">💰 国库 & 做市储备</div>
+        <div class="metric-grid">
+            <div class="metric-item">
+                <div class="metric-label">国库余额 (U)</div>
+                <div class="metric-value" id="treasury">--</div>
+                <div class="trend" id="treasuryTrend">今日+0 U</div>
             </div>
-            <div class="stat-card" style="border-top: 4px solid #a855f7;">
-                <h3>🏦 质押 U → 得 H</h3>
-                <div class="stat-desc">收益从社区划拨的<span class="highlight">1亿H专属奖励池</span>支出，固定日利率。</div>
-                <div class="rate-box">
-                    <p>✨ 固定日利率：<strong>0.5%</strong>（以U价值计，每日按H价格折算发放H）</p>
-                    <p>📦 奖励池总量：<strong>100,000,000 H</strong>（多签专户管理）</p>
-                </div>
-                <div><span class="purple-tag">随存随取</span><span class="purple-tag">次日到账</span><span class="purple-tag">防闪贷套利</span></div>
+            <div class="metric-item">
+                <div class="metric-label">做市储备 (U)</div>
+                <div class="metric-value" id="mmReserve">--</div>
+                <div class="trend" id="mmTrend">--</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">H 奖励池剩余</div>
+                <div class="metric-value" id="rewardPool">--</div>
+                <div class="trend">质押U奖励池</div>
             </div>
         </div>
-
-        <!-- 国库平衡模型 -->
-        <div class="section-title">⚙️ 国库可持续飞轮</div>
-        <table class="info-table">
-            <tr><th>国库收入</th><td>每日买卖总额 × 5% 交易税 (U)</td></tr>
-            <tr><th>国库支出</th><td>每日20:00按H价格发放“质押H得U”收益</td></tr>
-            <tr><th>平衡条件</th><td>日均交易额 ×5% ≥ 质押H总量 × 价格 × 平均日利率 → 国库永续</td></tr>
-            <tr><th>流通上限保护</th><td>可质押H最多约2000万，最大日支出可控，交易活跃即可稳健运行</td></tr>
-        </table>
-
-        <!-- 做市储备 + 价格干预 -->
-        <div class="section-title">🛡️ 社区做市储备</div>
-        <p style="margin-bottom: 10px;">由多签独立管理，资金来源为低买高卖利润，<strong>不与国库混用</strong>。使命：平抑H价格波动，保护质押用户资产。</p>
-        <div class="card-grid" style="gap: 12px;">
-            <div class="stat-card"><h3>📈 价格过高 >0.007 U/H</h3><div class="stat-desc">储备卖出H → 增加供给 → 降温</div></div>
-            <div class="stat-card"><h3>📉 价格过低 <0.004 U/H</h3><div class="stat-desc">储备买入H → 托底 → 恢复信心</div></div>
-            <div class="stat-card"><h3>🎯 稳定区间</h3><div class="stat-desc">0.0045 – 0.0065 U/H 内让市场自发交易</div></div>
+        <div class="flex-between" style="margin-top: 8px;">
+            <span style="font-size:0.7rem;">今日税收收入</span>
+            <span id="dailyTax" style="font-weight:700;">0 U</span>
         </div>
-        <div class="highlight" style="display: block; margin: 12px 0; text-align: center;">💡 做市买卖同样产生5%交易税，为国库贡献收入，形成健康闭环</div>
+    </div>
 
-        <!-- 多签治理 -->
-        <div class="section-title">🗳️ 多签治理 · 全透明</div>
-        <p>所有关键参数由社区多签钱包（≥3/5签名）决策，链上可查。社区信息面板实时展示：</p>
-        <ul style="margin: 12px 0 12px 20px; font-size: 0.85rem;">
-            <li>国库余额、每日收支流水</li>
-            <li>做市储备余额及历史干预记录</li>
-            <li>质押池总量、平均利率、收益明细</li>
-            <li>H实时价格、流动性池深度、总交易量</li>
-        </ul>
-        <div class="purple-tag" style="background:#ede9fe; padding:6px 12px; border-radius: 60px;">🔐 多签可调整：质押利率、干预阈值、奖励池补充、临时熔断机制</div>
-
-        <!-- 防套利与安全 -->
-        <div class="section-title">⛓️ 防套利 & 安全性</div>
-        <ul style="margin: 12px 0 12px 20px; font-size: 0.85rem;">
-            <li><strong>解除质押24小时到账</strong>：避免闪贷攻击，保障系统公平。</li>
-            <li><strong>交易税归国库</strong>：任何买卖都为生态贡献，抑制刷量。</li>
-            <li><strong>质押U奖励池独立</strong>：1亿H由多签划拨，风险隔离。</li>
-            <li><strong>智能合约审计</strong>：上线前由知名机构审计，代码开源。</li>
-        </ul>
-
-        <!-- Q&A 大白话版 -->
-        <div class="section-title">📢 常见问题 (Q&A)</div>
-        <div class="qa-list">
-            <div class="qa-item"><div class="qa-question"><span>这个模式能长久吗？会不会崩盘？</span><span>🔽</span></div><div class="qa-answer">只要社区日均交易额达到1.5–2万U，国库收入就能覆盖质押支出，长期健康运行。质押H总量上限仅2000万，支出可控。若短期交易量不足，多签会临时降低利率或启用储备缓冲。</div></div>
-            <div class="qa-item"><div class="qa-question"><span>质押H和质押U哪个更划算？</span><span>🔽</span></div><div class="qa-answer">看好H未来升值 → 质押U得H；希望获得稳定U收益 → 质押H得U。两个池子可同时参与，灵活配置。</div></div>
-            <div class="qa-item"><div class="qa-question"><span>为什么解除质押要等24小时？</span><span>🔽</span></div><div class="qa-answer">防止有人利用瞬时价格波动反复质押套利，保护长期质押者和国库利益。</div></div>
-            <div class="qa-item"><div class="qa-question"><span>社区做市会不会操纵价格割韭菜？</span><span>🔽</span></div><div class="qa-answer">做市储备唯一目的是稳定价格，所有操作公开透明，利润留存用于后续护盘，多签成员受社区监督。</div></div>
-            <div class="qa-item"><div class="qa-question"><span>我的质押资金安全吗？</span><span>🔽</span></div><div class="qa-answer">质押合约经审计，多签管理储备资产。但DeFi均有智能合约风险，请分散资产、理性参与。社区设有紧急暂停功能保障用户基本安全。</div></div>
-            <div class="qa-item"><div class="qa-question"><span>质押U奖励池的1亿H用完了怎么办？</span><span>🔽</span></div><div class="qa-answer">多签将发起社区提案，决定是否从多签持仓中补充或调整U质押利率，确保奖励持续。</div></div>
-            <div class="qa-item"><div class="qa-question"><span>AI讨论时数据算错了，以谁为准？</span><span>🔽</span></div><div class="qa-answer">最终模型参数以社区多签发布的正式公告和链上数据为准。如有疑问，欢迎到社区群向管理员核实。</div></div>
+    <!-- 价格与流动性 -->
+    <div class="card">
+        <div class="card-title">📈 市场数据</div>
+        <div class="metric-grid">
+            <div class="metric-item">
+                <div class="metric-label">H 实时价格</div>
+                <div class="metric-value" id="hPrice">--</div>
+                <div class="trend" id="priceChange24h">24h +0%</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">流动性池 U</div>
+                <div class="metric-value" id="poolU">--</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">流动性池 H</div>
+                <div class="metric-value" id="poolH">--</div>
+            </div>
         </div>
-
-        <!-- 治理流程摘要 -->
-        <div class="section-title">📜 提案执行与迭代</div>
-        <div style="background: #fef9ff; border-radius: 24px; padding: 16px; margin: 16px 0;">
-            <p><strong>1. 多签委员会</strong>：5位核心贡献者/节点代表，重大决策≥3人签名，未来过渡到社区选举。<br>
-            <strong>2. 参数调整流程</strong>：论坛讨论 → 多签评估 → 链上投票执行。<br>
-            <strong>3. 紧急熔断</strong>：极端行情或合约风险时，多签可暂停质押收益发放或质押功能。<br>
-            <strong>4. 定期公示</strong>：每周发布国库报告、做市记录、质押数据，社区面板实时可查。</p>
+        <div class="mini-chart" id="priceChartBars"></div>
+        <div class="flex-between" style="margin-top: 12px;">
+            <span>24h 交易量</span>
+            <span id="dailyVolume" style="font-weight:700;">0 U</span>
         </div>
+    </div>
 
-        <div class="footer-note">
-            🐬 海豚社区 · 共建 | 透明 | 可持续<br>
-            本提案基于2026年3月多签共识起草，正式生效后链上执行。
+    <!-- 双池质押 -->
+    <div class="card">
+        <div class="card-title">🔐 质押池状态</div>
+        <div class="metric-grid">
+            <div class="metric-item">
+                <div class="metric-label">质押 H 总量</div>
+                <div class="metric-value" id="stakedH">--</div>
+                <div class="trend">平均利率 0.7% /天</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-label">质押 U 总量</div>
+                <div class="metric-value" id="stakedU">--</div>
+                <div class="trend">固定利率 0.5% /天</div>
+            </div>
         </div>
+        <div class="progress-bar" style="margin-top: 8px;">
+            <div class="progress-fill" id="stakeHRatio" style="width:0%"></div>
+        </div>
+        <div class="flex-between" style="font-size:0.7rem;">
+            <span>H质押占比上限 (流通2000万H)</span>
+            <span id="stakeHPercent">0%</span>
+        </div>
+        <hr>
+        <div class="flex-between">
+            <span>🗳️ 质押U奖励池消耗</span>
+            <span id="rewardPoolUsed">0%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="rewardPoolFill" style="width:0%"></div>
+        </div>
+    </div>
+
+    <!-- 多签地址分布 -->
+    <div class="card">
+        <div class="card-title">🏦 社区多签地址（分散管理）</div>
+        <div style="font-size:0.75rem; margin-bottom: 12px;">主储备 · 做市专用 · 生态激励 · 治理金库 · 备用</div>
+        <div class="metric-grid" style="gap: 8px;">
+            <div class="metric-item" style="flex:1; min-width:80px;"><div class="metric-label">主储备</div><div class="metric-value" style="font-size:1rem;" id="mainReserve">--</div></div>
+            <div class="metric-item" style="flex:1; min-width:80px;"><div class="metric-label">做市专用</div><div class="metric-value" style="font-size:1rem;" id="mmAddrH">--</div></div>
+            <div class="metric-item" style="flex:1; min-width:80px;"><div class="metric-label">生态激励</div><div class="metric-value" style="font-size:1rem;" id="ecoAddrH">--</div></div>
+        </div>
+        <div class="metric-grid" style="margin-top: 6px;">
+            <div class="metric-item" style="flex:1;"><div class="metric-label">治理金库</div><div class="metric-value" style="font-size:1rem;" id="govAddrH">--</div></div>
+            <div class="metric-item" style="flex:1;"><div class="metric-label">备用缓冲</div><div class="metric-value" style="font-size:1rem;" id="backupAddrH">--</div></div>
+        </div>
+        <div class="address-badge" style="margin-top: 12px; text-align: center;">所有地址由同一多签组（≥3/5）管理 · 链上可查</div>
+    </div>
+
+    <button class="btn-refresh" id="refreshBtn">🔄 刷新数据 (模拟实时)</button>
+    <div style="text-align: center; font-size: 0.65rem; margin-top: 12px; color: #8a78b0;">
+        数据基于链上模拟，每30秒自动刷新 | 海豚社区 · 透明面板
     </div>
 </div>
 
 <script>
-    // 为移动端Q&A添加折叠交互（默认全部展开，点击可折叠）
-    const qaItems = document.querySelectorAll('.qa-item');
-    qaItems.forEach(item => {
-        const qDiv = item.querySelector('.qa-question');
-        const aDiv = item.querySelector('.qa-answer');
-        qDiv.style.cursor = 'pointer';
-        qDiv.addEventListener('click', () => {
-            const isVisible = aDiv.style.display !== 'none';
-            if (isVisible) {
-                aDiv.style.display = 'none';
-                qDiv.querySelector('span:last-child').innerHTML = '🔼';
-            } else {
-                aDiv.style.display = 'block';
-                qDiv.querySelector('span:last-child').innerHTML = '🔽';
-            }
+    // 模拟动态数据（符合经济模型设定）
+    let currentData = {
+        treasury: 12580,          // U
+        mmReserve: 21500,         // 做市储备U
+        rewardPoolH: 100000000,   // H奖励池剩余
+        dailyTax: 342,
+        hPrice: 0.00552,
+        poolU: 105000,
+        poolH: 19047619,
+        dailyVolume: 18500,
+        stakedH: 7200000,
+        stakedU: 28500,
+        // 多签地址分布 (单位: H)
+        mainReserve: 700000000,
+        mmAddrH: 120000000,
+        ecoAddrH: 100000000,
+        govAddrH: 80000000,
+        backupAddrH: 30000000,
+    };
+
+    // 辅助函数格式化数字
+    function formatNumber(num, decimals = 0) {
+        if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+        if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+        return num.toFixed(decimals);
+    }
+    function formatCurrency(num) {
+        return num.toFixed(2) + ' U';
+    }
+    function formatPrice(price) {
+        return price.toFixed(6) + ' U/H';
+    }
+
+    // 更新所有UI
+    function updateUI() {
+        // 国库 & 做市
+        document.getElementById('treasury').innerText = formatCurrency(currentData.treasury);
+        document.getElementById('mmReserve').innerText = formatCurrency(currentData.mmReserve);
+        document.getElementById('rewardPool').innerText = formatNumber(currentData.rewardPoolH, 0) + ' H';
+        document.getElementById('dailyTax').innerText = formatCurrency(currentData.dailyTax);
+        // 趋势简单模拟（相对上次变化，需要存储上次值）
+        // 存储trend简易
+        if (typeof window.lastTreasury !== 'undefined') {
+            let diff = currentData.treasury - window.lastTreasury;
+            let trendEl = document.getElementById('treasuryTrend');
+            if (diff >= 0) trendEl.innerHTML = `今日+${diff.toFixed(2)} U`;
+            else trendEl.innerHTML = `今日${diff.toFixed(2)} U`;
+        } else {
+            document.getElementById('treasuryTrend').innerHTML = '今日+0 U';
+        }
+        // 做市储备趋势
+        if (typeof window.lastMM !== 'undefined') {
+            let diffMM = currentData.mmReserve - window.lastMM;
+            let mmTrendEl = document.getElementById('mmTrend');
+            if (diffMM >= 0) mmTrendEl.innerHTML = `今日+${diffMM.toFixed(2)} U`;
+            else mmTrendEl.innerHTML = `今日${diffMM.toFixed(2)} U`;
+        } else {
+            document.getElementById('mmTrend').innerHTML = '今日+0 U';
+        }
+
+        // 价格与池子
+        document.getElementById('hPrice').innerText = formatPrice(currentData.hPrice);
+        document.getElementById('poolU').innerText = formatCurrency(currentData.poolU);
+        document.getElementById('poolH').innerText = formatNumber(currentData.poolH, 0);
+        document.getElementById('dailyVolume').innerText = formatCurrency(currentData.dailyVolume);
+        // 模拟价格变化百分比
+        let priceChange = ((currentData.hPrice - 0.0055) / 0.0055 * 100).toFixed(2);
+        let changeEl = document.getElementById('priceChange24h');
+        if (priceChange >= 0) changeEl.innerHTML = `24h +${priceChange}%`;
+        else changeEl.innerHTML = `24h ${priceChange}%`;
+        if (priceChange < 0) changeEl.classList.add('down');
+        else changeEl.classList.remove('down');
+
+        // 质押数据
+        document.getElementById('stakedH').innerText = formatNumber(currentData.stakedH, 0) + ' H';
+        document.getElementById('stakedU').innerText = formatCurrency(currentData.stakedU);
+        let totalCirculateH = 20000000; // 流通H上限约2000万
+        let stakeHPercent = (currentData.stakedH / totalCirculateH * 100).toFixed(1);
+        document.getElementById('stakeHRatio').style.width = Math.min(100, (currentData.stakedH / totalCirculateH * 100)) + '%';
+        document.getElementById('stakeHPercent').innerText = stakeHPercent + '%';
+        // 奖励池消耗
+        let initialPool = 100000000;
+        let usedPercent = ((initialPool - currentData.rewardPoolH) / initialPool * 100).toFixed(1);
+        document.getElementById('rewardPoolUsed').innerText = usedPercent + '%';
+        document.getElementById('rewardPoolFill').style.width = usedPercent + '%';
+
+        // 多签地址分布 (单位H)
+        document.getElementById('mainReserve').innerText = formatNumber(currentData.mainReserve,0) + ' H';
+        document.getElementById('mmAddrH').innerText = formatNumber(currentData.mmAddrH,0) + ' H';
+        document.getElementById('ecoAddrH').innerText = formatNumber(currentData.ecoAddrH,0) + ' H';
+        document.getElementById('govAddrH').innerText = formatNumber(currentData.govAddrH,0) + ' H';
+        document.getElementById('backupAddrH').innerText = formatNumber(currentData.backupAddrH,0) + ' H';
+
+        // 迷你价格走势图 (模拟最近7个价格点)
+        renderPriceBars();
+
+        // 更新时间
+        let now = new Date();
+        document.getElementById('updateTime').innerHTML = `更新于 ${now.toLocaleTimeString()}`;
+        // 存储上一次值
+        window.lastTreasury = currentData.treasury;
+        window.lastMM = currentData.mmReserve;
+    }
+
+    // 随机波动模拟（符合经济模型范围，轻微漂移）
+    function simulateTick() {
+        // 国库变化：每日税收 + 少量质押支出（简化模拟）
+        let newTax = 300 + Math.random() * 200;
+        let treasuryOut = (currentData.stakedH * currentData.hPrice * 0.007) * (0.5 + Math.random() * 0.5); // 模拟质押支出
+        let treasuryChange = newTax - treasuryOut;
+        currentData.treasury = Math.max(2000, currentData.treasury + treasuryChange * 0.2); // 平滑变动，不剧烈
+        currentData.dailyTax = Math.floor(newTax);
+        // 做市储备轻微增长（做市利润）
+        let mmProfit = (Math.random() * 80) + 20;
+        currentData.mmReserve += mmProfit;
+        currentData.mmReserve = Math.max(10000, currentData.mmReserve);
+        // 价格根据池子模拟轻微波动，但保持与池子联动（基于恒定乘积简化）
+        let tradeImpact = (Math.random() - 0.5) * 0.0003;
+        currentData.hPrice = Math.max(0.0045, Math.min(0.0072, currentData.hPrice + tradeImpact));
+        // 更新池子U/H维持乘积恒定（k=2e12）
+        let k = 2e12;
+        let newPoolU = currentData.poolU;
+        let newPoolH = k / newPoolU;
+        currentData.poolH = newPoolH;
+        // 每日交易量波动
+        currentData.dailyVolume = 15000 + Math.random() * 10000;
+        // 质押量微变化（新用户质押/解除）
+        let stakeDeltaH = (Math.random() - 0.5) * 200000;
+        currentData.stakedH = Math.max(0, Math.min(20000000, currentData.stakedH + stakeDeltaH));
+        let stakeDeltaU = (Math.random() - 0.5) * 1500;
+        currentData.stakedU = Math.max(0, currentData.stakedU + stakeDeltaU);
+        // 奖励池消耗: 质押U每日收益支出
+        let rewardConsume = currentData.stakedU * 0.005 / currentData.hPrice;
+        currentData.rewardPoolH = Math.max(0, currentData.rewardPoolH - rewardConsume * 0.3); // 模拟部分发放
+        // 多签地址保持不变（主要展示分布），但可做微小调整模拟划拨？保持稳定即可
+        // 但为了演示动态，可微调生态激励地址余额减少（用于活动）
+        if (Math.random() < 0.3) {
+            let spend = Math.random() * 500000;
+            currentData.ecoAddrH = Math.max(90000000, currentData.ecoAddrH - spend);
+        }
+        updateUI();
+    }
+
+    // 迷你柱状图模拟近24h价格趋势
+    function renderPriceBars() {
+        let container = document.getElementById('priceChartBars');
+        if (!container) return;
+        // 生成随机相对高度
+        let heights = [];
+        let basePrice = currentData.hPrice;
+        for (let i = 0; i < 12; i++) {
+            let factor = 0.8 + Math.random() * 0.6;
+            heights.push(factor);
+        }
+        container.innerHTML = '';
+        heights.forEach(h => {
+            let bar = document.createElement('div');
+            bar.className = 'bar';
+            let heightPercent = Math.min(40, Math.max(12, h * 30));
+            bar.style.height = heightPercent + 'px';
+            container.appendChild(bar);
         });
+    }
+
+    // 自动刷新定时器
+    let interval;
+    function startAutoRefresh() {
+        if (interval) clearInterval(interval);
+        interval = setInterval(() => {
+            simulateTick();
+        }, 30000);
+    }
+    // 手动刷新
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+        simulateTick();
     });
+
+    // 初始化
+    function init() {
+        updateUI();
+        startAutoRefresh();
+        // 立即再模拟一次让数据更生动
+        setTimeout(() => simulateTick(), 500);
+    }
+    init();
 </script>
 </body>
 </html>
