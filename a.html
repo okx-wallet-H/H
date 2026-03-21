@@ -14,6 +14,8 @@
             --glass-bg: rgba(255, 255, 255, 0.72);
             --glass-border: rgba(255, 255, 255, 0.85);
             --card-shadow: 0 24px 48px -12px rgba(45, 21, 100, 0.12);
+            --accent-gold: #F59E0B;
+            --accent-teal: #14B8A6;
         }
 
         * {
@@ -96,7 +98,7 @@
             }
         }
 
-        /* 高级卡片 */
+        /* 卡片样式 */
         .card {
             background: var(--glass-bg);
             backdrop-filter: blur(24px);
@@ -109,16 +111,21 @@
             transition: transform 0.2s ease;
         }
 
-        .section-title {
+        /* 板块标题（位于卡片外部） */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+        .section-header h3 {
             font-size: 1.1rem;
             font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             color: #2D1B69;
+            letter-spacing: -0.3px;
         }
-        .section-title a {
+        .section-header a {
             font-size: 0.8rem;
             font-weight: 600;
             color: var(--primary);
@@ -128,7 +135,7 @@
             border-radius: 40px;
             transition: all 0.2s;
         }
-        .section-title a:active {
+        .section-header a:active {
             background: rgba(124, 58, 237, 0.2);
         }
 
@@ -187,19 +194,21 @@
             font-weight: 800;
             text-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
         }
-        .trend-line {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 5px;
-            height: 38px;
+
+        /* K线图容器 */
+        .kline-canvas {
+            width: 100%;
+            height: 80px;
             margin-top: 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            padding: 4px;
         }
-        .trend-line span {
-            width: 5px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 3px;
-            transition: height 0.3s;
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 12px;
         }
 
         /* 质押卡片（上下排列） */
@@ -228,6 +237,16 @@
             font-size: 0.7rem;
             font-weight: 700;
             color: var(--primary);
+        }
+        .threshold-badge {
+            background: linear-gradient(90deg, #F59E0B, #FCD34D);
+            color: #2D1B69;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-top: 8px;
         }
         .input-group {
             background: rgba(255, 255, 255, 0.9);
@@ -440,19 +459,21 @@
         <div class="card price-hero">
             <div class="metric-label">H Token 实时价格</div>
             <div class="metric-value">0.00552 U</div>
-            <div class="trend-line" id="priceTrendHome"></div>
+            <div class="kline-canvas">
+                <canvas id="priceKline" width="500" height="80" style="width:100%; height:100%;"></canvas>
+            </div>
             <div class="flex-between" style="margin-top: 8px;">
                 <span class="badge" style="background: rgba(255,255,255,0.2); color:white;">+2.34%</span>
                 <span style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">24h 交易量 1.85万 U</span>
             </div>
         </div>
 
-        <!-- 社区数据板块 -->
+        <!-- 社区数据板块（标题在外） -->
+        <div class="section-header">
+            <h3>社区数据</h3>
+            <span class="badge">实时更新</span>
+        </div>
         <div class="card">
-            <div class="section-title">
-                <span>📊 社区数据</span>
-                <span class="badge">实时更新</span>
-            </div>
             <div class="stats-grid">
                 <div class="metric-card"><div class="metric-label">国库余额</div><div class="metric-value">1.26万 U</div></div>
                 <div class="metric-card"><div class="metric-label">奖励池</div><div class="metric-value">9230万 H</div></div>
@@ -463,10 +484,14 @@
             </div>
         </div>
 
-        <!-- 质押生息：上下排列 -->
+        <!-- 质押生息：标题在外，上下排列 -->
+        <div class="section-header">
+            <h3>质押生息</h3>
+            <a href="#" class="pageLink" data-page="stake">详情 →</a>
+        </div>
         <div class="stake-block">
             <div class="stake-header">
-                <span class="stake-title">🔐 质押 H → 得 U</span>
+                <span class="stake-title">质押 H → 得 U</span>
                 <span class="stake-rate">阶梯 0.5% ~ 1.0%</span>
             </div>
             <div class="input-group">
@@ -486,7 +511,7 @@
 
         <div class="stake-block">
             <div class="stake-header">
-                <span class="stake-title">💰 质押 U → 得 H</span>
+                <span class="stake-title">质押 U → 得 H</span>
                 <span class="stake-rate">固定 0.5% /天</span>
             </div>
             <div class="input-group">
@@ -505,31 +530,29 @@
         </div>
 
         <!-- 热门代币横向滑动 -->
+        <div class="section-header">
+            <h3>热门代币</h3>
+            <a href="#" id="moreTokensBtn">更多 →</a>
+        </div>
         <div class="card">
-            <div class="section-title">
-                <span>🔥 热门代币</span>
-                <a href="#" id="moreTokensBtn">更多 →</a>
-            </div>
-            <div class="scroll-x" id="hotTokensList">
-                <!-- 动态生成 -->
-            </div>
+            <div class="scroll-x" id="hotTokensList"></div>
         </div>
 
-        <!-- 常用工具网格（12个） -->
+        <!-- 常用工具网格 -->
+        <div class="section-header">
+            <h3>常用工具</h3>
+            <span class="badge">快捷访问</span>
+        </div>
         <div class="card">
-            <div class="section-title">
-                <span>🛠️ 常用工具</span>
-                <span class="badge">快捷访问</span>
-            </div>
             <div class="tools-grid" id="toolsGrid"></div>
         </div>
 
         <!-- 社区聊天入口 -->
+        <div class="section-header">
+            <h3>社区聊天</h3>
+            <a href="#" class="pageLink" data-page="im">进入 →</a>
+        </div>
         <div class="card">
-            <div class="section-title">
-                <span>💬 社区聊天</span>
-                <a href="#" class="pageLink" data-page="im">进入 →</a>
-            </div>
             <div class="chat-item" data-room="hall">
                 <div class="chat-avatar">🐬</div>
                 <div style="flex:1;">
@@ -564,7 +587,10 @@
         </div>
 
         <div class="card">
-            <div class="section-title"><span>🔥 质押 H 赚取 U</span><span class="badge">年化高达 36%</span></div>
+            <div class="stake-header">
+                <span class="stake-title">质押 H 赚取 U</span>
+                <span class="stake-rate">年化高达 36%</span>
+            </div>
             <div class="step-bar-container" style="background: rgba(255,255,255,0.4); border-radius: 24px; padding: 16px; margin-bottom: 16px;">
                 <div class="flex-between"><span style="font-size:0.8rem; font-weight:600;">阶梯日利率机制</span><span class="badge" style="background:var(--primary); color:white;">越久越高</span></div>
                 <div style="display: flex; height: 8px; background: rgba(124,58,237,0.1); border-radius: 8px; margin: 12px 0;">
@@ -582,18 +608,23 @@
             <div class="flex-between" style="margin-bottom:16px; font-size:0.75rem;"><span>可用余额: 125,000 H</span><span>预计日收益: ~0.00 U</span></div>
             <button class="btn-gradient">确认质押</button>
             <div class="flex-between mt-2"><span style="font-weight:500;">待领收益: 24.50 U</span><button class="btn-outline">提取收益</button></div>
+            <div class="threshold-badge">⏱️ 当前阈值 157 天 → 享受最高利率 1.0%</div>
         </div>
 
         <div class="card">
-            <div class="section-title"><span>💎 质押 U 赚取 H</span><span class="badge">固定日利率 0.5%</span></div>
+            <div class="stake-header">
+                <span class="stake-title">质押 U 赚取 H</span>
+                <span class="stake-rate">固定日利率 0.5%</span>
+            </div>
             <div class="input-group"><input type="number" placeholder="输入质押 U 数量"><span>MAX</span></div>
             <button class="btn-gradient">确认质押</button>
             <div class="flex-between mt-2"><span style="font-weight:500;">待领收益: 6.2 H</span><button class="btn-outline">提取收益</button></div>
+            <div class="threshold-badge">📈 当前锁定 157 天，已获得最高利率奖励</div>
             <div class="text-center mt-2" style="font-size:0.7rem; color:var(--text-muted);">解除质押 24h 到账 · 收益手动领取</div>
         </div>
     </div>
 
-    <!-- 交易赛页面 -->
+    <!-- 交易赛页面（与之前相同，无需改动标题样式） -->
     <div id="contestPage" class="page">
         <div class="text-center" style="margin-bottom: 24px;">
             <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">海豚交易赛</h1>
@@ -610,7 +641,7 @@
         </div>
 
         <div class="card">
-            <div class="section-title"><span>📊 实时排行榜</span><span class="badge">距结束 12 天</span></div>
+            <div class="flex-between" style="margin-bottom: 12px;"><span style="font-weight:700;">📊 实时排行榜</span><span class="badge">距结束 12 天</span></div>
             <div class="chat-item" style="border-left: 4px solid #F59E0B;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥇</span> 0x71...c4e2 <span class="badge" style="margin-left:8px;">团队+5%</span></div><span>12.5万 U</span></div></div>
             <div class="chat-item" style="border-left: 4px solid #9CA3AF;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥈</span> 0x3f...a1b9</div><span>8.9万 U</span></div></div>
             <div class="chat-item" style="border-left: 4px solid #B45309;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥉</span> 0x92...d7f5</div><span>6.7万 U</span></div></div>
@@ -618,15 +649,15 @@
         </div>
 
         <div class="card">
-            <div class="section-title"><span>👥 团队战绩</span><span class="badge">奖励加成</span></div>
-            <div class="flex-between"><span>团队总交易量</span><span><strong>42.3万 U</strong></span></div>
+            <div class="flex-between"><span style="font-weight:700;">👥 团队战绩</span><span class="badge">奖励加成</span></div>
+            <div class="flex-between mt-2"><span>团队总交易量</span><span><strong>42.3万 U</strong></span></div>
             <div class="flex-between mt-2"><span>个人奖励预估</span><span><strong>325 H</strong></span></div>
             <div class="flex-between mt-2"><span>团队奖励预估</span><span><strong>1,200 H</strong></span></div>
             <div class="badge mt-2" style="background: var(--primary); color:white; display:inline-block;">🎁 个人前100名瓜分50万H，团队额外加成5%</div>
         </div>
 
         <div class="card">
-            <div class="section-title">📜 规则与 FAQ</div>
+            <div class="flex-between"><span style="font-weight:700;">📜 规则与 FAQ</span></div>
             <details><summary>📌 活动规则</summary><p style="margin-top:8px;">时间：2026.4.1-4.30，统计 H 代币在 Uniswap 上的交易量（买入+卖出），排名前100名瓜分50万H奖励池，团队业绩额外加成。</p></details>
             <details><summary>🏅 团队奖励机制</summary><p style="margin-top:8px;">一级团队交易量贡献5%加成，二级团队2%加成，最终奖励叠加至个人总奖励。</p></details>
             <details><summary>❓ 奖励发放时间</summary><p style="margin-top:8px;">活动结束后7个工作日内发放至钱包。</p></details>
@@ -672,7 +703,7 @@
         </div>
 
         <div class="card">
-            <div class="section-title"><span>💰 资产列表</span><span style="font-size:1.2rem; cursor:pointer;" id="settingsBtn">⚙️</span></div>
+            <div class="flex-between"><span style="font-weight:700;">💰 资产列表</span><span style="font-size:1.2rem; cursor:pointer;" id="settingsBtn">⚙️</span></div>
             <div class="chat-item" style="justify-content: space-between;"><div><div class="flex-between"><span style="font-weight:800;">H Token</span><span style="font-size:0.7rem; margin-left:8px;">+2.34%</span></div><div style="font-size:0.8rem;">125,000 H</div></div><div style="font-weight:700;">$690.00</div></div>
             <div class="chat-item" style="justify-content: space-between;"><div><div class="flex-between"><span style="font-weight:800;">BNB</span><span style="font-size:0.7rem; margin-left:8px;">+1.20%</span></div><div style="font-size:0.8rem;">0.85 BNB</div></div><div style="font-weight:700;">$497.42</div></div>
             <div class="chat-item" style="justify-content: space-between;"><div><div class="flex-between"><span style="font-weight:800;">USDT</span><span style="font-size:0.7rem;">0.00%</span></div><div style="font-size:0.8rem;">11,262.58 USDT</div></div><div style="font-weight:700;">$11,262.58</div></div>
@@ -744,20 +775,60 @@
         toolsGrid.appendChild(div);
     });
 
-    // 动态价格趋势线
-    function updateTrendLine() {
-        const container = document.getElementById('priceTrendHome');
-        if (!container) return;
-        container.innerHTML = '';
-        for (let i = 0; i < 12; i++) {
-            let height = 8 + Math.random() * 20;
-            let span = document.createElement('span');
-            span.style.height = height + 'px';
-            container.appendChild(span);
+    // 模拟真实K线图（绘制阴线阳线）
+    function drawKline(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        // 生成模拟K线数据（最近30根）
+        const data = [];
+        let price = 0.0055;
+        for (let i = 0; i < 30; i++) {
+            let change = (Math.random() - 0.5) * 0.0004;
+            let open = price;
+            let close = price + change;
+            let high = Math.max(open, close) + Math.random() * 0.0002;
+            let low = Math.min(open, close) - Math.random() * 0.0002;
+            data.push({ open, high, low, close, time: i });
+            price = close;
         }
+
+        const barWidth = (width / data.length) * 0.7;
+        const startX = 5;
+        const yScale = height / (Math.max(...data.map(d => d.high)) - Math.min(...data.map(d => d.low)));
+        const minPrice = Math.min(...data.map(d => d.low));
+
+        ctx.clearRect(0, 0, width, height);
+        data.forEach((d, i) => {
+            const x = startX + i * (width / data.length);
+            const openY = height - (d.open - minPrice) * yScale;
+            const closeY = height - (d.close - minPrice) * yScale;
+            const highY = height - (d.high - minPrice) * yScale;
+            const lowY = height - (d.low - minPrice) * yScale;
+            const isRise = d.close >= d.open;
+
+            ctx.beginPath();
+            ctx.moveTo(x + barWidth / 2, highY);
+            ctx.lineTo(x + barWidth / 2, lowY);
+            ctx.strokeStyle = isRise ? '#10B981' : '#EF4444';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            const rectX = x + (barWidth / 2) - barWidth / 2.5;
+            const rectHeight = Math.abs(closeY - openY);
+            const rectY = isRise ? closeY : openY;
+            ctx.fillStyle = isRise ? '#10B981' : '#EF4444';
+            ctx.fillRect(rectX, rectY, barWidth / 1.2, rectHeight || 1);
+        });
     }
-    updateTrendLine();
-    setInterval(updateTrendLine, 4000);
+
+    drawKline('priceKline');
+    window.addEventListener('resize', () => drawKline('priceKline'));
 
     // 模拟按钮交互
     const buttons = [
