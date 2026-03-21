@@ -17,9 +17,7 @@
         }
 
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -28,223 +26,121 @@
             font-family: 'SF Pro Display', 'Inter', system-ui, -apple-system, sans-serif;
             color: var(--text-main);
             padding: 24px 16px 120px;
-            overflow-x: hidden;
-            position: relative;
+            overflow-x: hidden; position: relative;
         }
 
         /* 氛围光弥散背景 */
         .ambient-bg {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: -1;
-            overflow: hidden;
-            background: #F4F0FF;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1; overflow: hidden; background: #F4F0FF;
         }
         .ambient-bg::before, .ambient-bg::after {
-            content: '';
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 10s ease-in-out infinite alternate;
+            content: ''; position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; animation: float 10s ease-in-out infinite alternate;
         }
-        .ambient-bg::before {
-            width: 300px; height: 300px;
-            background: rgba(124, 58, 237, 0.3);
-            top: -100px; left: -100px;
-        }
-        .ambient-bg::after {
-            width: 250px; height: 250px;
-            background: rgba(16, 185, 129, 0.15);
-            bottom: 20%; right: -50px;
-            animation-delay: -5s;
-        }
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.1); }
-        }
+        .ambient-bg::before { width: 300px; height: 300px; background: rgba(124, 58, 237, 0.3); top: -100px; left: -100px; }
+        .ambient-bg::after { width: 250px; height: 250px; background: rgba(16, 185, 129, 0.15); bottom: 20%; right: -50px; animation-delay: -5s; }
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(30px, 50px) scale(1.1); } }
 
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+        .container { max-width: 500px; margin: 0 auto; }
 
         /* 页面切换动画 */
-        .page {
-            display: none;
-            animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        .page { display: none; animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .page.active { display: block; }
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 玻璃态高级卡片 */
         .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: var(--card-shadow);
-            transition: transform 0.3s ease;
+            background: var(--glass-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border); border-radius: 28px; padding: 24px; margin-bottom: 20px;
+            box-shadow: var(--card-shadow); transition: transform 0.3s ease;
         }
 
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #2D1B69;
-        }
-        .section-title a {
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--primary);
-            text-decoration: none;
-            background: rgba(124, 58, 237, 0.1);
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
+        /* 标题与排版 */
+        .header-title { text-align: center; margin-bottom: 32px; margin-top: 12px; }
+        .header-title h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
+        .text-gradient { background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .section-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; color: #2D1B69; }
+        .section-title a { font-size: 0.8rem; font-weight: 600; color: var(--primary); text-decoration: none; background: rgba(124, 58, 237, 0.1); padding: 4px 12px; border-radius: 20px; }
 
-        /* 图标包装器，降低 Emoji 廉价感 */
+        /* 图标包装器 */
         .icon-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px; height: 32px;
-            background: rgba(255,255,255,0.8);
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            margin-right: 8px;
-            font-size: 1.1rem;
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; background: rgba(255,255,255,0.8);
+            border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); margin-right: 8px; font-size: 1.1rem;
         }
 
-        /* 仪表盘 */
-        .stats-grid { display: flex; gap: 12px; margin-bottom: 12px; }
-        .metric-card {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            padding: 16px 12px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.6);
+        /* 列表项与徽章 */
+        .list-item {
+            background: rgba(255,255,255,0.5); border-radius: 20px; padding: 16px; margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,0.6); transition: background 0.2s;
         }
-        .metric-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-        .metric-value { font-size: 1.4rem; font-weight: 800; color: #2D1B69; font-family: 'SF Pro Display', sans-serif; letter-spacing: -0.5px; }
-        
-        /* 核心价格卡片 */
+        .list-item:active { background: rgba(255,255,255,0.8); }
+        .badge { background: #F3E8FF; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+        /* 核心渐变高亮卡片 */
         .price-center {
-            background: linear-gradient(135deg, #2D1B69, #7C3AED);
-            border: none;
-            box-shadow: 0 16px 32px rgba(124, 58, 237, 0.3);
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #2D1B69, #7C3AED); border: none; box-shadow: 0 16px 32px rgba(124, 58, 237, 0.3);
+            position: relative; overflow: hidden;
         }
         .price-center::after {
-            content: '';
-            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
-            opacity: 0.5;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%); opacity: 0.5; pointer-events: none;
         }
-        .price-center .metric-label { color: rgba(255,255,255,0.7); }
-        .price-center .metric-value { color: white; font-size: 1.8rem; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        
-        .trend-line { display: flex; justify-content: center; align-items: flex-end; gap: 5px; height: 36px; margin-top: 12px; z-index: 1; position: relative; }
-        .trend-line span { width: 4px; background: rgba(255,255,255,0.9); border-radius: 4px; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(255,255,255,0.4); }
+        .price-center .metric-label { color: rgba(255,255,255,0.7); font-size: 0.8rem; font-weight: 600; }
+        .price-center .metric-value { color: white; font-size: 1.8rem; font-weight: 800; text-shadow: 0 2px 10px rgba(0,0,0,0.2); margin-top: 4px; font-family: 'SF Pro Display', sans-serif;}
+
+        /* 网格数据 */
+        .stats-grid { display: flex; gap: 12px; margin-bottom: 12px; }
+        .metric-card { flex: 1; background: rgba(255, 255, 255, 0.5); border-radius: 20px; padding: 16px 12px; text-align: center; border: 1px solid rgba(255,255,255,0.6); }
+        .metric-label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+        .metric-value { font-size: 1.2rem; font-weight: 800; color: #2D1B69; }
 
         /* 输入与按钮 */
         .input-group {
-            background: rgba(255,255,255,0.8);
-            border-radius: 16px;
-            padding: 12px 16px;
-            display: flex; align-items: center; justify-content: space-between;
-            margin: 12px 0;
-            border: 1px solid rgba(0,0,0,0.03);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            background: rgba(255,255,255,0.8); border-radius: 16px; padding: 12px 16px;
+            display: flex; align-items: center; justify-content: space-between; margin: 12px 0;
+            border: 1px solid rgba(0,0,0,0.03); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
         }
-        .input-group input { background: transparent; border: none; font-size: 1rem; font-weight: 600; outline: none; width: 70%; }
-        
+        .input-group input { background: transparent; border: none; font-size: 1.1rem; font-weight: 600; outline: none; width: 70%; }
         .btn-sm {
-            background: rgba(124, 58, 237, 0.1); color: var(--primary);
-            border: none; padding: 10px 18px; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
+            background: rgba(124, 58, 237, 0.1); color: var(--primary); border: none; padding: 10px 18px;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s;
         }
-        .btn-sm:active { transform: scale(0.95); background: rgba(124, 58, 237, 0.2); }
-        
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            border: none; border-radius: 20px; padding: 16px;
-            font-weight: 700; color: white; width: 100%; font-size: 1.1rem;
-            box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3); cursor: pointer;
-            transition: all 0.2s;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); border: none; border-radius: 20px;
+            padding: 16px; font-weight: 700; color: white; width: 100%; font-size: 1.1rem; box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3); cursor: pointer; transition: all 0.2s;
         }
         .btn-primary:active { transform: scale(0.98); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2); }
 
-        /* 横向滚动代币卡片 */
-        .scroll-x {
-            display: flex; overflow-x: auto; gap: 16px; padding-bottom: 12px; scrollbar-width: none;
-        }
-        .scroll-x::-webkit-scrollbar { display: none; }
-        .token-card {
-            flex: 0 0 120px; background: rgba(255, 255, 255, 0.6);
-            border-radius: 24px; padding: 16px; text-align: center;
-            border: 1px solid rgba(255,255,255,0.8);
-        }
-
-        /* 悬浮底部导航 (Floating Dock) */
+        /* 悬浮底部导航 */
         .bottom-nav {
-            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-            width: calc(100% - 32px); max-width: 400px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            border-radius: 40px;
-            display: flex; justify-content: space-between; padding: 12px 24px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            z-index: 100;
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 400px;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(32px); -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 40px; display: flex; justify-content: space-between; padding: 12px 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08); z-index: 100;
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; gap: 6px;
-            font-size: 0.7rem; color: var(--text-muted); cursor: pointer; font-weight: 600;
-            position: relative;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--text-muted); cursor: pointer; font-weight: 600; position: relative; }
         .nav-icon { font-size: 1.4rem; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); filter: grayscale(100%) opacity(0.6); }
         .nav-item.active .nav-icon { transform: translateY(-4px) scale(1.1); filter: none; }
         .nav-item.active span { color: var(--primary); }
-        .nav-item::after {
-            content: ''; position: absolute; bottom: -6px; width: 4px; height: 4px;
-            background: var(--primary); border-radius: 50%; opacity: 0; transition: opacity 0.3s;
-        }
+        .nav-item::after { content: ''; position: absolute; bottom: -6px; width: 4px; height: 4px; background: var(--primary); border-radius: 50%; opacity: 0; transition: opacity 0.3s; }
         .nav-item.active::after { opacity: 1; }
 
-        /* 其他结构优化 */
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .text-gradient { background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .badge { background: #F3E8FF; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-        
-        /* 列表项重构 */
-        .list-item {
-            background: rgba(255,255,255,0.5); border-radius: 20px; padding: 16px;
-            margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
-            border: 1px solid rgba(255,255,255,0.6); transition: background 0.2s;
-        }
-        .list-item:active { background: rgba(255,255,255,0.8); }
+        /* 特殊模块：质押阶梯线 */
+        .step-bar-container { background: rgba(255,255,255,0.4); border-radius: 20px; padding: 16px; margin: 16px 0; }
+        .step-bar { display: flex; height: 8px; background: rgba(124,58,237,0.1); border-radius: 8px; overflow: hidden; margin: 12px 0; }
+        .step-segment { flex: 1; transition: background 0.3s; }
+        .step-segment.highlight { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+        .rate-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-align: center; }
+
+        /* 特殊模块：走势动态线 */
+        .trend-line { display: flex; justify-content: center; align-items: flex-end; gap: 5px; height: 36px; margin-top: 12px; z-index: 1; position: relative; }
+        .trend-line span { width: 4px; background: rgba(255,255,255,0.9); border-radius: 4px; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 8px rgba(255,255,255,0.4); }
 
         /* 工具网格 */
         .tools-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 12px; }
-        .tool-card {
-            display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: #4A4A68;
-        }
+        .tool-card { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 600; color: #4A4A68; }
         .tool-card .icon-box { margin: 0; width: 48px; height: 48px; font-size: 1.4rem; border-radius: 16px; }
-
-        .header-title { text-align: center; margin-bottom: 32px; margin-top: 12px; }
-        .header-title h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; }
     </style>
 </head>
 <body>
@@ -258,24 +154,20 @@
         </div>
 
         <div class="card">
-            <div class="metric-card price-center" style="margin-bottom: 16px;">
+            <div class="metric-card price-center" style="margin-bottom: 16px; padding: 24px;">
                 <div class="metric-label">H Token 实时价格</div>
                 <div class="metric-value">0.00552 U</div>
                 <div class="trend-line" id="priceTrend"></div>
-                <div style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; color:white; font-size:0.8rem; font-weight:600;" id="priceChange">+2.34%</div>
+                <div style="position:absolute; top:20px; right:20px; background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px; color:white; font-size:0.8rem; font-weight:600;">+2.34%</div>
             </div>
             <div class="stats-grid">
-                <div class="metric-card"><div class="metric-label">国库余额</div><div class="metric-value" style="font-size:1.1rem;">1.26万 U</div></div>
-                <div class="metric-card"><div class="metric-label">奖励池 (H)</div><div class="metric-value" style="font-size:1.1rem;">9230万</div></div>
-                <div class="metric-card"><div class="metric-label">24h 交易量</div><div class="metric-value" style="font-size:1.1rem;">1.85万</div></div>
+                <div class="metric-card"><div class="metric-label">国库余额</div><div class="metric-value">1.26万 U</div></div>
+                <div class="metric-card"><div class="metric-label">奖励池 (H)</div><div class="metric-value">9230万</div></div>
             </div>
         </div>
 
         <div class="card">
-            <div class="section-title">
-                <div><span class="icon-box">💎</span> 质押生息</div>
-                <a href="#" class="pageLink" data-page="stake">详情 →</a>
-            </div>
+            <div class="section-title"><div><span class="icon-box">💎</span> 质押生息</div><a href="#" class="pageLink" data-page="stake">详情 →</a></div>
             <div class="stats-grid">
                 <div class="metric-card" style="text-align: left; padding: 20px;">
                     <div style="font-weight:700; margin-bottom:12px;">质押 H → U</div>
@@ -288,60 +180,211 @@
                     <button class="btn-primary" style="padding:12px; font-size:1rem; border-radius:16px;">立即质押</button>
                 </div>
             </div>
-            <div class="flex-between" style="background: rgba(255,255,255,0.4); padding: 12px 16px; border-radius: 16px; margin-top: 12px;">
-                <span style="font-size:0.85rem; font-weight:600;">收益: <span style="color:var(--primary);">24.5 U + 6.2 H</span></span>
-                <button class="btn-sm">一键领取</button>
-            </div>
         </div>
 
         <div class="card">
             <div class="section-title"><div><span class="icon-box">🛠️</span> 探索生态</div></div>
             <div class="tools-grid" id="toolsGrid"></div>
         </div>
+    </div>
+
+    <div id="stakePage" class="page">
+        <div class="header-title">
+            <h1 class="text-gradient">质押矩阵</h1>
+            <p style="color: var(--text-muted); font-weight: 500; margin-top: 4px;">锁定资产，稳健获取网络收益</p>
+        </div>
+
+        <div class="card price-center" style="padding: 24px;">
+            <div class="metric-label">全网总质押价值 (TVL)</div>
+            <div class="metric-value">$ 1,425,800.00</div>
+            <div class="flex-between" style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 16px;">
+                <div><div class="metric-label">H质押池</div><div style="color:white; font-weight:700; margin-top:4px;">720万 H</div></div>
+                <div><div class="metric-label">U质押池</div><div style="color:white; font-weight:700; margin-top:4px;">2.85万 U</div></div>
+            </div>
+        </div>
 
         <div class="card">
-            <div class="section-title"><div><span class="icon-box">💬</span> 热门频道</div><a href="#" class="pageLink" data-page="im">进入 →</a></div>
-            <div class="list-item">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div class="icon-box" style="width:40px; height:40px; font-size:1.5rem; background:#E0E7FF;">🐬</div>
-                    <div>
-                        <div style="font-weight:700;">海豚大厅</div>
-                        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">AI: 今晚8点交易赛开始</div>
+            <div class="section-title"><div><span class="icon-box">🔥</span> 质押 H 赚取 U</div><span class="badge">年化高达 36%</span></div>
+            
+            <div class="step-bar-container">
+                <div class="flex-between" style="margin-bottom:8px;"><span style="font-size:0.8rem; font-weight:600; color:#2D1B69;">阶梯日利率机制</span><span class="badge" style="background:var(--primary); color:white;">越久越高</span></div>
+                <div class="step-bar">
+                    <div class="step-segment highlight"></div>
+                    <div class="step-segment highlight" style="opacity:0.8"></div>
+                    <div class="step-segment"></div>
+                    <div class="step-segment"></div>
+                    <div class="step-segment"></div>
+                </div>
+                <div class="rate-label">
+                    <span>1-7d<br><span style="color:#2D1B69;">0.5%</span></span>
+                    <span>8-16d<br><span style="color:#2D1B69;">0.6%</span></span>
+                    <span>17-30d<br>0.7%</span>
+                    <span>31-60d<br>0.8%</span>
+                    <span>≥61d<br>1.0%</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="number" placeholder="输入质押 H 数量">
+                <span style="font-weight:700; color:var(--text-muted);">MAX</span>
+            </div>
+            <div class="flex-between" style="margin-bottom:16px; font-size:0.8rem; color:var(--text-muted); font-weight:500;">
+                <span>可用余额: 125,000 H</span>
+                <span>预计日收益: ~0.00 U</span>
+            </div>
+            <button class="btn-primary">确认质押</button>
+            
+            <div class="list-item" style="margin-top:20px; margin-bottom:0;">
+                <div>
+                    <div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">待领收益</div>
+                    <div style="font-size:1.2rem; font-weight:800; color:#2D1B69; margin-top:4px;">24.50 U</div>
+                </div>
+                <button class="btn-sm" style="background:white; border:1px solid #E2E8F0;">提取</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="contestPage" class="page">
+        <div class="header-title">
+            <h1 class="text-gradient">海豚交易赛</h1>
+            <p style="color: var(--text-muted); font-weight: 500; margin-top: 4px;">交易即荣耀 · 共赢未来</p>
+        </div>
+
+        <div class="card price-center" style="padding: 24px;">
+            <div class="metric-label">🔥 赛事总奖池</div>
+            <div class="metric-value">500,000 H</div>
+            <div class="flex-between" style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 16px;">
+                <div><div class="metric-label">我的排名</div><div style="color:white; font-weight:700; margin-top:4px;">#23</div></div>
+                <div><div class="metric-label">我的交易量</div><div style="color:white; font-weight:700; margin-top:4px;">12,500 U</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><div><span class="icon-box">📊</span> 实时排行榜</div><span class="badge">距结束 12 天</span></div>
+            <div class="list-item" style="border-left: 4px solid #F59E0B;">
+                <div class="flex-between" style="width:100%;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="font-size:1.5rem; font-weight:800;">🥇</span>
+                        <div><div style="font-weight:700; font-family:monospace;">0x71...c4e2</div><div style="font-size:0.75rem; color:var(--text-muted);">Team 加成 5%</div></div>
+                    </div>
+                    <div style="font-weight:800; color:#2D1B69;">12.5万 U</div>
+                </div>
+            </div>
+            <div class="list-item" style="border-left: 4px solid #9CA3AF;">
+                <div class="flex-between" style="width:100%;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="font-size:1.5rem; font-weight:800;">🥈</span>
+                        <div style="font-weight:700; font-family:monospace;">0x3f...a1b9</div>
+                    </div>
+                    <div style="font-weight:800; color:#2D1B69;">8.9万 U</div>
+                </div>
+            </div>
+            <div class="list-item" style="border-left: 4px solid #B45309;">
+                <div class="flex-between" style="width:100%;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="font-size:1.5rem; font-weight:800;">🥉</span>
+                        <div style="font-weight:700; font-family:monospace;">0x92...d7f5</div>
+                    </div>
+                    <div style="font-weight:800; color:#2D1B69;">6.7万 U</div>
+                </div>
+            </div>
+            
+            <div class="list-item" style="background: linear-gradient(to right, rgba(124,58,237,0.1), transparent); border-color:var(--primary); margin-top:20px;">
+                <div class="flex-between" style="width:100%;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="font-size:1rem; font-weight:800; color:var(--primary); width:24px; text-align:center;">23</span>
+                        <div><div style="font-weight:700; color:var(--primary);">我的位置</div><div style="font-size:0.75rem; color:var(--text-muted);">差1,280 U进前20</div></div>
+                    </div>
+                    <div style="font-weight:800; color:var(--primary);">1.2万 U</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="imPage" class="page">
+        <div class="header-title"><h1 class="text-gradient">消息中心</h1></div>
+        <div class="card" style="padding: 16px;">
+            <div class="input-group" style="margin-top:0; border-radius: 20px; background: rgba(255,255,255,0.6);"><span style="color:var(--text-muted); margin-right:8px;">🔍</span><input type="text" placeholder="搜索群组或聊天" style="width:100%;"></div>
+            
+            <div class="list-item" style="margin-top:16px;">
+                <div style="display:flex; align-items:center; gap:16px; width:100%;">
+                    <div class="icon-box" style="width:48px; height:48px; font-size:1.8rem; background:#E0E7FF; border-radius:16px;">🐬</div>
+                    <div style="flex:1;">
+                        <div class="flex-between"><div style="font-weight:700; font-size:1.1rem;">海豚官方大厅</div><span style="font-size:0.75rem; color:var(--text-muted);">14:20</span></div>
+                        <div class="flex-between" style="margin-top:4px;"><div style="font-size:0.85rem; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px;">AI 助手: 今晚8点交易赛准时开启，记得参与！</div><span class="badge" style="background:#EF4444; color:white;">12</span></div>
                     </div>
                 </div>
-                <span class="badge">12条</span>
             </div>
             <div class="list-item">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <div class="icon-box" style="width:40px; height:40px; font-size:1.5rem; background:#FCE7F3;">🔥</div>
-                    <div>
-                        <div style="font-weight:700;">交易赛交流群</div>
-                        <div style="font-size:0.8rem; color:var(--text-muted); margin-top:2px;">大神们准备冲刺了！</div>
+                <div style="display:flex; align-items:center; gap:16px; width:100%;">
+                    <div class="icon-box" style="width:48px; height:48px; font-size:1.8rem; background:#FCE7F3; border-radius:16px;">💎</div>
+                    <div style="flex:1;">
+                        <div class="flex-between"><div style="font-weight:700; font-size:1.1rem;">质押高收益交流群</div><span style="font-size:0.75rem; color:var(--text-muted);">昨天</span></div>
+                        <div class="flex-between" style="margin-top:4px;"><div style="font-size:0.85rem; color:var(--text-muted);">小海豚: 最近的阶梯利率怎么算？</div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <div style="display:flex; align-items:center; gap:16px; width:100%;">
+                    <div class="icon-box" style="width:48px; height:48px; font-size:1.8rem; background:#F3E8FF; border-radius:16px;">🤖</div>
+                    <div style="flex:1;">
+                        <div class="flex-between"><div style="font-weight:700; font-size:1.1rem;">AI 专属客服小豚</div><span style="font-size:0.75rem; color:var(--text-muted);">周二</span></div>
+                        <div class="flex-between" style="margin-top:4px;"><div style="font-size:0.85rem; color:var(--text-muted);">问我任何关于社区规则的问题哦～</div></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="stakePage" class="page"><div class="header-title"><h1 class="text-gradient">质押矩阵</h1></div><div class="card"><div class="section-title">模块开发中...</div></div></div>
-    <div id="contestPage" class="page"><div class="header-title"><h1 class="text-gradient">海豚交易赛</h1></div><div class="card"><div class="section-title">模块开发中...</div></div></div>
-    <div id="imPage" class="page"><div class="header-title"><h1 class="text-gradient">消息中心</h1></div><div class="card"><div class="section-title">模块开发中...</div></div></div>
     <div id="walletPage" class="page">
-        <div class="header-title"><h1 class="text-gradient">我的数字钱包</h1></div>
-        <div class="card price-center">
+        <div class="header-title">
+            <h1 class="text-gradient">我的数字钱包</h1>
+            <p style="color: var(--text-muted); font-weight: 500; margin-top: 4px;">去中心化资产管理中心</p>
+        </div>
+
+        <div class="card price-center" style="padding: 24px;">
             <div class="metric-label">总资产折合 (USD)</div>
-            <div class="metric-value" style="font-size:2.2rem; margin-top:8px;">$ 12,450.00</div>
+            <div class="metric-value" style="font-size:2.4rem; margin-top:8px;">$ 12,450.00</div>
             <div class="flex-between" style="margin-top: 24px; color:white; font-size:0.9rem;">
-                <span>0x71C...e4c2</span>
-                <span style="background:rgba(255,255,255,0.2); padding:4px 12px; border-radius:20px;">BNB Chain</span>
+                <span style="font-family:monospace; background:rgba(0,0,0,0.2); padding:6px 12px; border-radius:12px;">0x71C...e4c2 📋</span>
+                <span style="background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:12px; font-weight:600;">BNB Chain ▼</span>
             </div>
         </div>
+
         <div class="card">
             <div class="tools-grid" style="margin-top:0;">
-                <div class="tool-card"><div class="icon-box">📥</div>充币</div>
-                <div class="tool-card"><div class="icon-box">📤</div>提币</div>
-                <div class="tool-card"><div class="icon-box">🔄</div>交易</div>
-                <div class="tool-card"><div class="icon-box">💳</div>买币</div>
+                <div class="tool-card"><div class="icon-box" style="background:#F3E8FF; color:var(--primary);">📥</div>充币</div>
+                <div class="tool-card"><div class="icon-box" style="background:#F3E8FF; color:var(--primary);">📤</div>提币</div>
+                <div class="tool-card"><div class="icon-box" style="background:#F3E8FF; color:var(--primary);">🔄</div>交易</div>
+                <div class="tool-card"><div class="icon-box" style="background:#F3E8FF; color:var(--primary);">💳</div>买币</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><div><span class="icon-box">💰</span> 资产列表</div><span style="font-size:1.2rem; cursor:pointer;">⚙️</span></div>
+            
+            <div class="list-item" style="padding: 16px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="icon-box" style="border-radius:50%; font-weight:800; color:white; background:linear-gradient(135deg, #7C3AED, #9B4DFF);">H</div>
+                    <div><div style="font-weight:800; font-size:1.1rem; color:#2D1B69;">125,000</div><div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">H Token</div></div>
+                </div>
+                <div style="text-align:right;"><div style="font-weight:700;">$ 690.00</div><div style="font-size:0.75rem; color:#10B981;">+2.34%</div></div>
+            </div>
+
+            <div class="list-item" style="padding: 16px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="icon-box" style="border-radius:50%; font-weight:800; color:white; background:#F3BA2F;">B</div>
+                    <div><div style="font-weight:800; font-size:1.1rem; color:#2D1B69;">0.85</div><div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">BNB</div></div>
+                </div>
+                <div style="text-align:right;"><div style="font-weight:700;">$ 497.42</div><div style="font-size:0.75rem; color:#10B981;">+1.20%</div></div>
+            </div>
+
+            <div class="list-item" style="padding: 16px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="icon-box" style="border-radius:50%; font-weight:800; color:white; background:#26A17B;">U</div>
+                    <div><div style="font-weight:800; font-size:1.1rem; color:#2D1B69;">11,262.58</div><div style="font-size:0.8rem; color:var(--text-muted); font-weight:600;">USDT</div></div>
+                </div>
+                <div style="text-align:right;"><div style="font-weight:700;">$ 11,262.58</div><div style="font-size:0.75rem; color:var(--text-muted);">0.00%</div></div>
             </div>
         </div>
     </div>
@@ -385,7 +428,7 @@
         toolsGrid.appendChild(div);
     });
 
-    // 动态涨跌线条 (算法优化使其看起来更像均衡波形)
+    // 动态价格走势线
     function updateTrendLine() {
         const container = document.getElementById('priceTrend');
         if (!container) return;
