@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>海豚社区 · 信息面板</title>
+    <title>海豚社区 · 设计示例</title>
     <style>
         * {
             margin: 0;
@@ -12,473 +12,326 @@
         }
 
         body {
-            background: #f0ebff;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            padding: 20px 16px 40px;
-            color: #1e1a2f;
+            background: #F8F5FF;
+            font-family: system-ui, -apple-system, 'Inter', 'Segoe UI', Roboto, Helvetica, sans-serif;
+            color: #1E1A2F;
+            padding: 20px 16px 32px;
         }
 
-        .dashboard {
-            max-width: 600px;
+        /* 深色模式支持 */
+        @media (prefers-color-scheme: dark) {
+            body.dark-mode {
+                background: #0C0A1A;
+            }
+            .dark-mode .card {
+                background: #16122A;
+                border-color: #2A2545;
+            }
+            .dark-mode .metric-card {
+                background: #1E1A32;
+            }
+            .dark-mode .nav-item span {
+                color: #A9A3CE;
+            }
+        }
+
+        .container {
+            max-width: 500px;
             margin: 0 auto;
-        }
-
-        /* 头部 */
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #6c2bd9, #9b4dff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-            letter-spacing: -0.3px;
-        }
-        .header p {
-            font-size: 0.75rem;
-            color: #5b4b8c;
-            margin-top: 4px;
-        }
-        .last-update {
-            font-size: 0.7rem;
-            background: #ede9fe;
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 40px;
-            margin-top: 8px;
         }
 
         /* 卡片通用样式 */
         .card {
-            background: white;
+            background: #FFFFFF;
             border-radius: 28px;
-            padding: 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 20px rgba(98, 54, 255, 0.08);
-            border: 1px solid #ede5ff;
-            transition: all 0.2s;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 24px rgba(98, 54, 255, 0.08);
+            border: 1px solid #F0E9FF;
+            transition: all 0.2s ease;
         }
-        .card-title {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+
+        /* 标题 */
+        .section-title {
+            font-size: 1.2rem;
             font-weight: 600;
-            color: #7c3aed;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            color: #2D1B69;
         }
-        .metric-grid {
+        .section-title i {
+            font-size: 1.3rem;
+        }
+
+        /* 数据卡片网格 */
+        .stats-grid {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
             gap: 12px;
+            margin-bottom: 8px;
         }
-        .metric-item {
+        .metric-card {
             flex: 1;
-            min-width: 100px;
-            background: #fefbff;
+            background: #FEFBFF;
             border-radius: 20px;
-            padding: 12px;
+            padding: 14px 12px;
             text-align: center;
+            border: 1px solid #EDE5FF;
         }
         .metric-label {
             font-size: 0.7rem;
-            color: #6b5b8e;
+            font-weight: 500;
+            text-transform: uppercase;
+            color: #8B7AB8;
+            letter-spacing: 0.5px;
         }
         .metric-value {
             font-size: 1.6rem;
-            font-weight: 800;
-            color: #2d1b69;
+            font-weight: 700;
+            color: #4C1D95;
             line-height: 1.2;
-            margin-top: 4px;
-            word-break: break-word;
+            margin-top: 6px;
+            font-family: 'JetBrains Mono', monospace;
         }
-        .trend {
+        .metric-change {
             font-size: 0.7rem;
-            margin-top: 4px;
-            color: #10b981;
+            margin-top: 6px;
+            color: #10B981;
         }
-        .trend.down {
-            color: #ef4444;
+
+        /* 双池卡片 */
+        .pool-card {
+            background: linear-gradient(135deg, #FEFBFF 0%, #F9F5FF 100%);
+            border-radius: 24px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #E9DCFF;
         }
-        hr {
-            margin: 16px 0;
-            border: none;
-            height: 1px;
-            background: #ede5ff;
+        .pool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
         }
-        .address-badge {
-            background: #f5f0ff;
+        .pool-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #7C3AED;
+        }
+        .pool-rate {
+            background: #EDE9FE;
+            padding: 4px 12px;
             border-radius: 40px;
-            padding: 6px 12px;
             font-size: 0.7rem;
-            font-family: monospace;
-            word-break: break-all;
-            color: #4c1d95;
-        }
-        .btn-refresh {
-            background: #7c3aed;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            border-radius: 60px;
-            color: white;
             font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.2s;
-            margin-top: 8px;
+            color: #5B21B6;
         }
-        .btn-refresh:hover {
-            background: #5b21b6;
-            transform: scale(0.98);
+        .pool-stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            font-size: 0.8rem;
+            color: #5B4B8C;
+        }
+        .input-group {
+            background: white;
+            border-radius: 60px;
+            border: 1px solid #E9DCFF;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+        }
+        .input-group input {
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            outline: none;
+            width: 70%;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #7C3AED 0%, #9B4DFF 100%);
+            border: none;
+            border-radius: 60px;
+            padding: 14px;
+            font-weight: 600;
+            color: white;
+            width: 100%;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.96);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid #F0E9FF;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 20px 24px;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 28px 28px 0 0;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.7rem;
+            color: #A19BC5;
+            transition: color 0.1s;
+        }
+        .nav-item.active {
+            color: #7C3AED;
+            font-weight: 500;
+        }
+        .nav-icon {
+            font-size: 1.5rem;
+        }
+
+        /* 邀请码区域 */
+        .invite-box {
+            background: #F3EFFF;
+            border-radius: 60px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+
+        /* 排行榜简约行 */
+        .rank-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #F0E9FF;
+            font-size: 0.85rem;
+        }
+
+        /* 其他 */
+        .text-purple {
+            color: #7C3AED;
+        }
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+        .mt-4 {
+            margin-top: 16px;
         }
         .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .progress-bar {
-            background: #ede9fe;
-            border-radius: 20px;
-            height: 8px;
-            width: 100%;
-            margin: 10px 0;
-        }
-        .progress-fill {
-            background: #9b4dff;
-            width: 0%;
-            height: 8px;
-            border-radius: 20px;
-        }
-        @media (max-width: 480px) {
-            .metric-value {
-                font-size: 1.3rem;
-            }
-            .card {
-                padding: 14px;
-            }
-        }
-        .mini-chart {
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            height: 40px;
-            margin-top: 12px;
-        }
-        .bar {
-            background: #cbbaff;
-            flex: 1;
-            border-radius: 4px;
-            transition: height 0.3s;
-        }
     </style>
 </head>
 <body>
-<div class="dashboard">
-    <div class="header">
-        <h1>🐬 海豚社区 · 信息面板</h1>
-        <p>实时国库 · 质押数据 · 做市储备 | 透明公开</p>
-        <div class="last-update" id="updateTime">更新于 --:--:--</div>
+<div class="container">
+    <!-- 头部简单信息 -->
+    <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #6C2BD9, #9B4DFF); background-clip: text; -webkit-background-clip: text; color: transparent;">海豚社区</h1>
+        <p style="color: #6C63A0;">透明 · 公平 · 可持续</p>
     </div>
 
-    <!-- 核心指标卡片 -->
+    <!-- 核心数据卡片 -->
     <div class="card">
-        <div class="card-title">💰 国库 & 做市储备</div>
-        <div class="metric-grid">
-            <div class="metric-item">
-                <div class="metric-label">国库余额 (U)</div>
-                <div class="metric-value" id="treasury">--</div>
-                <div class="trend" id="treasuryTrend">今日+0 U</div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-label">做市储备 (U)</div>
-                <div class="metric-value" id="mmReserve">--</div>
-                <div class="trend" id="mmTrend">--</div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-label">H 奖励池剩余</div>
-                <div class="metric-value" id="rewardPool">--</div>
-                <div class="trend">质押U奖励池</div>
-            </div>
+        <div class="section-title">📊 实时仪表盘</div>
+        <div class="stats-grid">
+            <div class="metric-card"><div class="metric-label">国库余额</div><div class="metric-value">12,580 U</div><div class="metric-change">+342 今日</div></div>
+            <div class="metric-card"><div class="metric-label">做市储备</div><div class="metric-value">21,500 U</div><div class="metric-change">+128 今日</div></div>
+            <div class="metric-card"><div class="metric-label">H 价格</div><div class="metric-value">0.00552 U</div><div class="metric-change">+2.3%</div></div>
         </div>
-        <div class="flex-between" style="margin-top: 8px;">
-            <span style="font-size:0.7rem;">今日税收收入</span>
-            <span id="dailyTax" style="font-weight:700;">0 U</span>
+        <div class="stats-grid">
+            <div class="metric-card"><div class="metric-label">质押 H 总量</div><div class="metric-value">7.2M H</div></div>
+            <div class="metric-card"><div class="metric-label">质押 U 总量</div><div class="metric-value">28,500 U</div></div>
+            <div class="metric-card"><div class="metric-label">24h 交易量</div><div class="metric-value">18.5K U</div></div>
         </div>
     </div>
 
-    <!-- 价格与流动性 -->
+    <!-- 双池质押模块 -->
+    <div class="card" style="padding-bottom: 8px;">
+        <div class="section-title">💎 质押生息</div>
+        <div class="pool-card">
+            <div class="pool-header"><span class="pool-name">质押 H → 得 U</span><span class="pool-rate">阶梯利率 0.5%~1.0%</span></div>
+            <div class="pool-stats"><span>个人质押: 12,500 H</span><span>待领收益: 24.5 U</span></div>
+            <div class="input-group"><input type="text" placeholder="质押 H 数量" value="1000"><span>H</span></div>
+            <button class="btn-primary">立即质押</button>
+            <div class="flex-between" style="margin-top: 12px;"><span style="font-size:0.7rem;">解除质押 24h 到账</span><button style="background: none; color:#7C3AED; font-size:0.75rem;">领取收益</button></div>
+        </div>
+        <div class="pool-card">
+            <div class="pool-header"><span class="pool-name">质押 U → 得 H</span><span class="pool-rate">固定日利率 0.5%</span></div>
+            <div class="pool-stats"><span>个人质押: 1,200 U</span><span>待领收益: 6.2 H</span></div>
+            <div class="input-group"><input type="text" placeholder="质押 U 数量" value="500"><span>U</span></div>
+            <button class="btn-primary">立即质押</button>
+            <div style="font-size:0.7rem; margin-top: 8px;">奖励池剩余: 92.3M H</div>
+        </div>
+    </div>
+
+    <!-- 交易赛精简预览 -->
     <div class="card">
-        <div class="card-title">📈 市场数据</div>
-        <div class="metric-grid">
-            <div class="metric-item">
-                <div class="metric-label">H 实时价格</div>
-                <div class="metric-value" id="hPrice">--</div>
-                <div class="trend" id="priceChange24h">24h +0%</div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-label">流动性池 U</div>
-                <div class="metric-value" id="poolU">--</div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-label">流动性池 H</div>
-                <div class="metric-value" id="poolH">--</div>
-            </div>
-        </div>
-        <div class="mini-chart" id="priceChartBars"></div>
-        <div class="flex-between" style="margin-top: 12px;">
-            <span>24h 交易量</span>
-            <span id="dailyVolume" style="font-weight:700;">0 U</span>
-        </div>
+        <div class="flex-between"><div class="section-title">🏆 交易赛 · 实时排行</div><span style="font-size:0.7rem; background:#EDE9FE; padding:4px 12px; border-radius:40px;">第1期 · 进行中</span></div>
+        <div class="rank-row"><span>🥇 0x71...c4e2</span><span style="font-weight:700;">125,430 U</span></div>
+        <div class="rank-row"><span>🥈 0x3f...a1b9</span><span>89,200 U</span></div>
+        <div class="rank-row"><span>🥉 0x92...d7f5</span><span>67,880 U</span></div>
+        <div class="rank-row"><span>4. 0x1c...f3a2</span><span>41,230 U</span></div>
+        <div class="rank-row" style="border-bottom: none; background: #F9F5FF; border-radius: 40px; margin-top: 8px;"><span>🔥 我的排名: 第23名</span><span>交易量 5,270 U</span></div>
+        <button class="btn-primary" style="margin-top: 16px; background: #4C1D95;">查看完整排行榜 & 规则</button>
     </div>
 
-    <!-- 双池质押 -->
+    <!-- 邀请好友模块 -->
     <div class="card">
-        <div class="card-title">🔐 质押池状态</div>
-        <div class="metric-grid">
-            <div class="metric-item">
-                <div class="metric-label">质押 H 总量</div>
-                <div class="metric-value" id="stakedH">--</div>
-                <div class="trend">平均利率 0.7% /天</div>
-            </div>
-            <div class="metric-item">
-                <div class="metric-label">质押 U 总量</div>
-                <div class="metric-value" id="stakedU">--</div>
-                <div class="trend">固定利率 0.5% /天</div>
-            </div>
+        <div class="section-title">🤝 邀请好友 · 二级团队</div>
+        <div class="invite-box"><span style="font-family: monospace;">DOLPHIN666</span><span style="color:#7C3AED;">复制邀请码</span></div>
+        <div class="flex-between" style="margin-top: 12px;"><span>一级团队: 8 人</span><span>二级团队: 23 人</span><span>团队业绩: 42,350 U</span></div>
+    </div>
+
+    <!-- IM 入口示意 -->
+    <div class="card" style="background: linear-gradient(145deg, #FCFAFF, #F7F2FF);">
+        <div class="flex-between"><div class="section-title">💬 社区聊天 · AI 助手</div><span style="font-size:0.7rem;">12条未读</span></div>
+        <div style="display: flex; gap: 12px; overflow-x: auto; margin-bottom: 12px;">
+            <span style="background:#EDE9FE; padding:6px 14px; border-radius: 40px;">🐬 海豚大厅</span>
+            <span style="background:white; padding:6px 14px; border-radius: 40px;">💎 质押交流</span>
+            <span style="background:white; padding:6px 14px; border-radius: 40px;">🏆 交易赛小组</span>
         </div>
-        <div class="progress-bar" style="margin-top: 8px;">
-            <div class="progress-fill" id="stakeHRatio" style="width:0%"></div>
-        </div>
-        <div class="flex-between" style="font-size:0.7rem;">
-            <span>H质押占比上限 (流通2000万H)</span>
-            <span id="stakeHPercent">0%</span>
-        </div>
-        <hr>
-        <div class="flex-between">
-            <span>🗳️ 质押U奖励池消耗</span>
-            <span id="rewardPoolUsed">0%</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="rewardPoolFill" style="width:0%"></div>
+        <div style="background:white; border-radius: 28px; padding: 12px;">
+            <div style="font-size:0.8rem;"><span style="font-weight:600;">AI助手:</span> 欢迎！@我提问任何关于质押、交易赛的问题~</div>
+            <div class="input-group" style="margin-top: 8px;"><input placeholder="说点什么...   @AI 提问"><span>发送</span></div>
         </div>
     </div>
 
-    <!-- 多签地址分布 -->
-    <div class="card">
-        <div class="card-title">🏦 社区多签地址（分散管理）</div>
-        <div style="font-size:0.75rem; margin-bottom: 12px;">主储备 · 做市专用 · 生态激励 · 治理金库 · 备用</div>
-        <div class="metric-grid" style="gap: 8px;">
-            <div class="metric-item" style="flex:1; min-width:80px;"><div class="metric-label">主储备</div><div class="metric-value" style="font-size:1rem;" id="mainReserve">--</div></div>
-            <div class="metric-item" style="flex:1; min-width:80px;"><div class="metric-label">做市专用</div><div class="metric-value" style="font-size:1rem;" id="mmAddrH">--</div></div>
-            <div class="metric-item" style="flex:1; min-width:80px;"><div class="metric-label">生态激励</div><div class="metric-value" style="font-size:1rem;" id="ecoAddrH">--</div></div>
-        </div>
-        <div class="metric-grid" style="margin-top: 6px;">
-            <div class="metric-item" style="flex:1;"><div class="metric-label">治理金库</div><div class="metric-value" style="font-size:1rem;" id="govAddrH">--</div></div>
-            <div class="metric-item" style="flex:1;"><div class="metric-label">备用缓冲</div><div class="metric-value" style="font-size:1rem;" id="backupAddrH">--</div></div>
-        </div>
-        <div class="address-badge" style="margin-top: 12px; text-align: center;">所有地址由同一多签组（≥3/5）管理 · 链上可查</div>
-    </div>
-
-    <button class="btn-refresh" id="refreshBtn">🔄 刷新数据 (模拟实时)</button>
-    <div style="text-align: center; font-size: 0.65rem; margin-top: 12px; color: #8a78b0;">
-        数据基于链上模拟，每30秒自动刷新 | 海豚社区 · 透明面板
+    <!-- 底部导航（模拟） -->
+    <div style="height: 80px;"></div>
+    <div class="bottom-nav">
+        <div class="nav-item active"><div class="nav-icon">🏠</div><span>首页</span></div>
+        <div class="nav-item"><div class="nav-icon">💰</div><span>质押</span></div>
+        <div class="nav-item"><div class="nav-icon">🏆</div><span>交易赛</span></div>
+        <div class="nav-item"><div class="nav-icon">👛</div><span>钱包</span></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><span>我的</span></div>
     </div>
 </div>
 
 <script>
-    // 模拟动态数据（符合经济模型设定）
-    let currentData = {
-        treasury: 12580,          // U
-        mmReserve: 21500,         // 做市储备U
-        rewardPoolH: 100000000,   // H奖励池剩余
-        dailyTax: 342,
-        hPrice: 0.00552,
-        poolU: 105000,
-        poolH: 19047619,
-        dailyVolume: 18500,
-        stakedH: 7200000,
-        stakedU: 28500,
-        // 多签地址分布 (单位: H)
-        mainReserve: 700000000,
-        mmAddrH: 120000000,
-        ecoAddrH: 100000000,
-        govAddrH: 80000000,
-        backupAddrH: 30000000,
-    };
-
-    // 辅助函数格式化数字
-    function formatNumber(num, decimals = 0) {
-        if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
-        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-        if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-        return num.toFixed(decimals);
-    }
-    function formatCurrency(num) {
-        return num.toFixed(2) + ' U';
-    }
-    function formatPrice(price) {
-        return price.toFixed(6) + ' U/H';
-    }
-
-    // 更新所有UI
-    function updateUI() {
-        // 国库 & 做市
-        document.getElementById('treasury').innerText = formatCurrency(currentData.treasury);
-        document.getElementById('mmReserve').innerText = formatCurrency(currentData.mmReserve);
-        document.getElementById('rewardPool').innerText = formatNumber(currentData.rewardPoolH, 0) + ' H';
-        document.getElementById('dailyTax').innerText = formatCurrency(currentData.dailyTax);
-        // 趋势简单模拟（相对上次变化，需要存储上次值）
-        // 存储trend简易
-        if (typeof window.lastTreasury !== 'undefined') {
-            let diff = currentData.treasury - window.lastTreasury;
-            let trendEl = document.getElementById('treasuryTrend');
-            if (diff >= 0) trendEl.innerHTML = `今日+${diff.toFixed(2)} U`;
-            else trendEl.innerHTML = `今日${diff.toFixed(2)} U`;
-        } else {
-            document.getElementById('treasuryTrend').innerHTML = '今日+0 U';
-        }
-        // 做市储备趋势
-        if (typeof window.lastMM !== 'undefined') {
-            let diffMM = currentData.mmReserve - window.lastMM;
-            let mmTrendEl = document.getElementById('mmTrend');
-            if (diffMM >= 0) mmTrendEl.innerHTML = `今日+${diffMM.toFixed(2)} U`;
-            else mmTrendEl.innerHTML = `今日${diffMM.toFixed(2)} U`;
-        } else {
-            document.getElementById('mmTrend').innerHTML = '今日+0 U';
-        }
-
-        // 价格与池子
-        document.getElementById('hPrice').innerText = formatPrice(currentData.hPrice);
-        document.getElementById('poolU').innerText = formatCurrency(currentData.poolU);
-        document.getElementById('poolH').innerText = formatNumber(currentData.poolH, 0);
-        document.getElementById('dailyVolume').innerText = formatCurrency(currentData.dailyVolume);
-        // 模拟价格变化百分比
-        let priceChange = ((currentData.hPrice - 0.0055) / 0.0055 * 100).toFixed(2);
-        let changeEl = document.getElementById('priceChange24h');
-        if (priceChange >= 0) changeEl.innerHTML = `24h +${priceChange}%`;
-        else changeEl.innerHTML = `24h ${priceChange}%`;
-        if (priceChange < 0) changeEl.classList.add('down');
-        else changeEl.classList.remove('down');
-
-        // 质押数据
-        document.getElementById('stakedH').innerText = formatNumber(currentData.stakedH, 0) + ' H';
-        document.getElementById('stakedU').innerText = formatCurrency(currentData.stakedU);
-        let totalCirculateH = 20000000; // 流通H上限约2000万
-        let stakeHPercent = (currentData.stakedH / totalCirculateH * 100).toFixed(1);
-        document.getElementById('stakeHRatio').style.width = Math.min(100, (currentData.stakedH / totalCirculateH * 100)) + '%';
-        document.getElementById('stakeHPercent').innerText = stakeHPercent + '%';
-        // 奖励池消耗
-        let initialPool = 100000000;
-        let usedPercent = ((initialPool - currentData.rewardPoolH) / initialPool * 100).toFixed(1);
-        document.getElementById('rewardPoolUsed').innerText = usedPercent + '%';
-        document.getElementById('rewardPoolFill').style.width = usedPercent + '%';
-
-        // 多签地址分布 (单位H)
-        document.getElementById('mainReserve').innerText = formatNumber(currentData.mainReserve,0) + ' H';
-        document.getElementById('mmAddrH').innerText = formatNumber(currentData.mmAddrH,0) + ' H';
-        document.getElementById('ecoAddrH').innerText = formatNumber(currentData.ecoAddrH,0) + ' H';
-        document.getElementById('govAddrH').innerText = formatNumber(currentData.govAddrH,0) + ' H';
-        document.getElementById('backupAddrH').innerText = formatNumber(currentData.backupAddrH,0) + ' H';
-
-        // 迷你价格走势图 (模拟最近7个价格点)
-        renderPriceBars();
-
-        // 更新时间
-        let now = new Date();
-        document.getElementById('updateTime').innerHTML = `更新于 ${now.toLocaleTimeString()}`;
-        // 存储上一次值
-        window.lastTreasury = currentData.treasury;
-        window.lastMM = currentData.mmReserve;
-    }
-
-    // 随机波动模拟（符合经济模型范围，轻微漂移）
-    function simulateTick() {
-        // 国库变化：每日税收 + 少量质押支出（简化模拟）
-        let newTax = 300 + Math.random() * 200;
-        let treasuryOut = (currentData.stakedH * currentData.hPrice * 0.007) * (0.5 + Math.random() * 0.5); // 模拟质押支出
-        let treasuryChange = newTax - treasuryOut;
-        currentData.treasury = Math.max(2000, currentData.treasury + treasuryChange * 0.2); // 平滑变动，不剧烈
-        currentData.dailyTax = Math.floor(newTax);
-        // 做市储备轻微增长（做市利润）
-        let mmProfit = (Math.random() * 80) + 20;
-        currentData.mmReserve += mmProfit;
-        currentData.mmReserve = Math.max(10000, currentData.mmReserve);
-        // 价格根据池子模拟轻微波动，但保持与池子联动（基于恒定乘积简化）
-        let tradeImpact = (Math.random() - 0.5) * 0.0003;
-        currentData.hPrice = Math.max(0.0045, Math.min(0.0072, currentData.hPrice + tradeImpact));
-        // 更新池子U/H维持乘积恒定（k=2e12）
-        let k = 2e12;
-        let newPoolU = currentData.poolU;
-        let newPoolH = k / newPoolU;
-        currentData.poolH = newPoolH;
-        // 每日交易量波动
-        currentData.dailyVolume = 15000 + Math.random() * 10000;
-        // 质押量微变化（新用户质押/解除）
-        let stakeDeltaH = (Math.random() - 0.5) * 200000;
-        currentData.stakedH = Math.max(0, Math.min(20000000, currentData.stakedH + stakeDeltaH));
-        let stakeDeltaU = (Math.random() - 0.5) * 1500;
-        currentData.stakedU = Math.max(0, currentData.stakedU + stakeDeltaU);
-        // 奖励池消耗: 质押U每日收益支出
-        let rewardConsume = currentData.stakedU * 0.005 / currentData.hPrice;
-        currentData.rewardPoolH = Math.max(0, currentData.rewardPoolH - rewardConsume * 0.3); // 模拟部分发放
-        // 多签地址保持不变（主要展示分布），但可做微小调整模拟划拨？保持稳定即可
-        // 但为了演示动态，可微调生态激励地址余额减少（用于活动）
-        if (Math.random() < 0.3) {
-            let spend = Math.random() * 500000;
-            currentData.ecoAddrH = Math.max(90000000, currentData.ecoAddrH - spend);
-        }
-        updateUI();
-    }
-
-    // 迷你柱状图模拟近24h价格趋势
-    function renderPriceBars() {
-        let container = document.getElementById('priceChartBars');
-        if (!container) return;
-        // 生成随机相对高度
-        let heights = [];
-        let basePrice = currentData.hPrice;
-        for (let i = 0; i < 12; i++) {
-            let factor = 0.8 + Math.random() * 0.6;
-            heights.push(factor);
-        }
-        container.innerHTML = '';
-        heights.forEach(h => {
-            let bar = document.createElement('div');
-            bar.className = 'bar';
-            let heightPercent = Math.min(40, Math.max(12, h * 30));
-            bar.style.height = heightPercent + 'px';
-            container.appendChild(bar);
-        });
-    }
-
-    // 自动刷新定时器
-    let interval;
-    function startAutoRefresh() {
-        if (interval) clearInterval(interval);
-        interval = setInterval(() => {
-            simulateTick();
-        }, 30000);
-    }
-    // 手动刷新
-    document.getElementById('refreshBtn').addEventListener('click', () => {
-        simulateTick();
+    // 简单模拟按钮点击提示（仅演示）
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', () => alert('模拟交互：实际开发会接入真实合约/后端'));
     });
-
-    // 初始化
-    function init() {
-        updateUI();
-        startAutoRefresh();
-        // 立即再模拟一次让数据更生动
-        setTimeout(() => simulateTick(), 500);
-    }
-    init();
+    document.querySelector('.invite-box').addEventListener('click', () => {
+        navigator.clipboard.writeText('DOLPHIN666');
+        alert('邀请码已复制');
+    });
 </script>
 </body>
 </html>
