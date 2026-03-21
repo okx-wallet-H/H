@@ -3,19 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>海豚社区 · 高保真原型</title>
+    <title>海豚社区 · 终极原型</title>
     <style>
+        :root {
+            --primary: #7C3AED;
+            --primary-light: #9B4DFF;
+            --bg-color: #F8F9FA;
+            --text-main: #1C1C28;
+            --text-muted: #8F90A6;
+            --glass-bg: rgba(255, 255, 255, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.85);
+            --card-shadow: 0 24px 48px -12px rgba(45, 21, 100, 0.12);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: #F5F0FF;
+            background-color: var(--bg-color);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-            color: #1E1A2F;
-            padding: 20px 16px 90px;
+            color: var(--text-main);
+            padding: 20px 16px 100px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 氛围背景 */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            overflow: hidden;
+            background: linear-gradient(145deg, #F4F0FF 0%, #F0E9FF 100%);
+        }
+        .ambient-bg::before,
+        .ambient-bg::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: float 12s ease-in-out infinite alternate;
+        }
+        .ambient-bg::before {
+            width: 350px;
+            height: 350px;
+            background: rgba(124, 58, 237, 0.3);
+            top: -100px;
+            left: -100px;
+        }
+        .ambient-bg::after {
+            width: 300px;
+            height: 300px;
+            background: rgba(16, 185, 129, 0.15);
+            bottom: 10%;
+            right: -80px;
+            animation-delay: -6s;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
         }
 
         .container {
@@ -23,114 +77,138 @@
             margin: 0 auto;
         }
 
-        /* 页面切换 */
+        /* 页面切换动画 */
         .page {
             display: none;
-            animation: fadeIn 0.3s ease;
+            animation: fadeUp 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
         }
         .page.active {
             display: block;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        /* 卡片样式 - 高级磨砂玻璃质感 */
+        /* 高级卡片 */
         .card {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(0px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
             border-radius: 32px;
-            padding: 20px;
+            padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 12px 28px -8px rgba(98, 54, 255, 0.12), 0 0 0 1px rgba(124, 58, 237, 0.05);
-            transition: all 0.2s ease;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.2s ease;
         }
 
-        /* 独立价格卡片 (大号) */
-        .price-card {
-            background: linear-gradient(135deg, #7C3AED, #9B4DFF);
-            border-radius: 36px;
-            padding: 28px 20px;
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
             margin-bottom: 20px;
-            text-align: center;
-            box-shadow: 0 20px 35px -12px rgba(124, 58, 237, 0.4);
-        }
-        .price-label {
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.8);
-        }
-        .price-value {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: white;
-            margin: 8px 0;
-            font-family: monospace;
-            letter-spacing: -1px;
-        }
-        .price-change {
-            background: rgba(255,255,255,0.2);
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: white;
-        }
-        .trend-chart {
             display: flex;
-            justify-content: center;
-            gap: 4px;
-            margin-top: 16px;
-            height: 32px;
-            align-items: flex-end;
+            align-items: center;
+            justify-content: space-between;
+            color: #2D1B69;
         }
-        .trend-chart span {
-            width: 6px;
-            background: rgba(255,255,255,0.6);
-            border-radius: 4px;
-            transition: height 0.3s;
+        .section-title a {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            background: rgba(124, 58, 237, 0.12);
+            padding: 6px 14px;
+            border-radius: 40px;
+            transition: all 0.2s;
+        }
+        .section-title a:active {
+            background: rgba(124, 58, 237, 0.2);
         }
 
-        /* 社区数据网格 */
+        /* 数据网格 */
         .stats-grid {
             display: flex;
             gap: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
-        .stat-item {
+        .metric-card {
             flex: 1;
-            background: #FEFBFF;
-            border-radius: 28px;
-            padding: 14px 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 16px 12px;
             text-align: center;
-            border: 1px solid #EDE5FF;
+            border: 1px solid rgba(255, 255, 255, 0.7);
         }
-        .stat-label {
+        .metric-label {
             font-size: 0.7rem;
-            font-weight: 500;
-            color: #8B7AB8;
-            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--text-muted);
             letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
-        .stat-number {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #4C1D95;
-            margin-top: 6px;
-            font-family: monospace;
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #2D1B69;
         }
 
-        /* 质押卡片 (上下排列) */
-        .stake-card {
-            background: #FFFFFF;
-            border-radius: 32px;
+        /* 独立价格卡片 */
+        .price-hero {
+            background: linear-gradient(135deg, #2D1B69, var(--primary));
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .price-hero::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .price-hero .metric-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+        }
+        .price-hero .metric-value {
+            color: white;
+            font-size: 2rem;
+            font-weight: 800;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .trend-line {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 5px;
+            height: 38px;
+            margin-top: 12px;
+        }
+        .trend-line span {
+            width: 5px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 3px;
+            transition: height 0.3s;
+        }
+
+        /* 质押卡片（上下排列） */
+        .stake-block {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 28px;
             padding: 20px;
             margin-bottom: 16px;
-            border: 1px solid #EDE5FF;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
         .stake-header {
             display: flex;
@@ -140,62 +218,64 @@
         }
         .stake-title {
             font-size: 1.1rem;
-            font-weight: 700;
+            font-weight: 800;
             color: #2D1B69;
         }
         .stake-rate {
-            background: #EDE9FE;
+            background: #F3E8FF;
             padding: 4px 12px;
             border-radius: 40px;
             font-size: 0.7rem;
-            font-weight: 600;
-            color: #5B21B6;
+            font-weight: 700;
+            color: var(--primary);
         }
         .input-group {
-            background: #F3F0FF;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 60px;
             padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             margin: 12px 0;
+            border: 1px solid rgba(0, 0, 0, 0.02);
         }
         .input-group input {
             background: transparent;
             border: none;
             font-size: 1rem;
+            font-weight: 600;
             width: 70%;
             outline: none;
-            font-weight: 500;
         }
         .btn-gradient {
-            background: linear-gradient(135deg, #7C3AED, #9B4DFF);
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
             border: none;
             border-radius: 60px;
             padding: 14px;
-            font-weight: 600;
+            font-weight: 700;
             color: white;
             width: 100%;
             font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 6px 14px rgba(124, 58, 237, 0.2);
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
         }
         .btn-gradient:active {
             transform: scale(0.98);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
         }
         .btn-outline {
             background: transparent;
-            border: 1px solid #EDE5FF;
+            border: 1px solid #E2E8F0;
             border-radius: 40px;
             padding: 8px 16px;
             font-size: 0.8rem;
-            font-weight: 500;
-            color: #5B21B6;
+            font-weight: 600;
+            color: var(--primary);
             cursor: pointer;
         }
 
-        /* 横向滑动区域 */
+        /* 横向滚动 */
         .scroll-x {
             display: flex;
             overflow-x: auto;
@@ -205,14 +285,14 @@
         }
         .token-card {
             flex: 0 0 110px;
-            background: #FEFBFF;
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 28px;
             padding: 14px 8px;
             text-align: center;
-            border: 1px solid #EDE5FF;
+            border: 1px solid rgba(255, 255, 255, 0.7);
         }
         .token-symbol {
-            font-weight: 700;
+            font-weight: 800;
             font-size: 1rem;
         }
         .token-price {
@@ -223,25 +303,81 @@
         .token-change {
             font-size: 0.7rem;
         }
-        .positive { color: #10B981; }
-        .negative { color: #EF4444; }
+        .positive {
+            color: #10B981;
+        }
+        .negative {
+            color: #EF4444;
+        }
+
+        /* 工具网格 */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 8px;
+        }
+        .tool-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 12px 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .tool-card:active {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .tool-icon {
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+        }
+        .tool-name {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        /* 聊天列表 */
+        .chat-item {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+        }
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            background: #F3E8FF;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
 
         /* 底部导航 */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255,255,255,0.96);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 40px;
             display: flex;
-            justify-content: space-around;
-            padding: 10px 20px 26px;
-            max-width: 500px;
-            margin: 0 auto;
-            border-radius: 32px 32px 0 0;
-            box-shadow: 0 -4px 12px rgba(0,0,0,0.02);
+            justify-content: space-between;
+            padding: 10px 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            z-index: 100;
         }
         .nav-item {
             display: flex;
@@ -249,282 +385,304 @@
             align-items: center;
             gap: 4px;
             font-size: 0.7rem;
-            color: #A19BC5;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-        .nav-item.active { color: #7C3AED; font-weight: 500; }
-        .nav-icon { font-size: 1.5rem; }
-
-        /* 其他页面共享组件 */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .badge {
-            background: #EDE9FE;
-            border-radius: 40px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
             font-weight: 600;
-            color: #5B21B6;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-icon {
+            font-size: 1.4rem;
+            filter: grayscale(0.4) opacity(0.7);
+            transition: all 0.2s;
+        }
+        .nav-item.active .nav-icon {
+            filter: none;
+            transform: translateY(-2px);
+        }
+        .nav-item.active span {
+            color: var(--primary);
         }
         .flex-between {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .mt-2 { margin-top: 8px; }
-        .mt-3 { margin-top: 16px; }
-        .mb-2 { margin-bottom: 8px; }
-        .text-center { text-align: center; }
-        hr { margin: 16px 0; border-color: #F0E9FF; }
+        .badge {
+            background: #F3E8FF;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .mt-2 {
+            margin-top: 8px;
+        }
+        .mb-2 {
+            margin-bottom: 8px;
+        }
+        .text-center {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+<div class="ambient-bg"></div>
 <div class="container">
     <!-- 首页 -->
     <div id="homePage" class="page active">
+        <div class="text-center" style="margin-bottom: 24px;">
+            <h1 style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">海豚社区</h1>
+            <p style="color: var(--text-muted); font-weight: 500;">真正的价值源于诚信共建</p>
+        </div>
+
         <!-- 独立价格卡片 -->
-        <div class="price-card">
-            <div class="price-label">H 实时价格</div>
-            <div class="price-value">0.00552 U</div>
-            <div class="price-change" id="priceChangeBadge">+2.34%</div>
-            <div class="trend-chart" id="priceTrendHome"></div>
+        <div class="card price-hero">
+            <div class="metric-label">H Token 实时价格</div>
+            <div class="metric-value">0.00552 U</div>
+            <div class="trend-line" id="priceTrendHome"></div>
+            <div class="flex-between" style="margin-top: 8px;">
+                <span class="badge" style="background: rgba(255,255,255,0.2); color:white;">+2.34%</span>
+                <span style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">24h 交易量 1.85万 U</span>
+            </div>
         </div>
 
         <!-- 社区数据板块 -->
         <div class="card">
-            <div class="section-header">
-                <span style="font-weight: 600;">📊 社区数据</span>
+            <div class="section-title">
+                <span>📊 社区数据</span>
                 <span class="badge">实时更新</span>
             </div>
             <div class="stats-grid">
-                <div class="stat-item"><div class="stat-label">国库余额</div><div class="stat-number">1.26万 U</div></div>
-                <div class="stat-item"><div class="stat-label">奖励池</div><div class="stat-number">9230万 H</div></div>
+                <div class="metric-card"><div class="metric-label">国库余额</div><div class="metric-value">1.26万 U</div></div>
+                <div class="metric-card"><div class="metric-label">奖励池</div><div class="metric-value">9230万 H</div></div>
             </div>
             <div class="stats-grid">
-                <div class="stat-item"><div class="stat-label">质押 H 总量</div><div class="stat-number">720万</div></div>
-                <div class="stat-item"><div class="stat-label">质押 U 总量</div><div class="stat-number">2.85万</div></div>
-                <div class="stat-item"><div class="stat-label">24h 交易量</div><div class="stat-number">1.85万</div></div>
+                <div class="metric-card"><div class="metric-label">质押 H 总量</div><div class="metric-value">720万 H</div></div>
+                <div class="metric-card"><div class="metric-label">质押 U 总量</div><div class="metric-value">2.85万 U</div></div>
             </div>
         </div>
 
-        <!-- 质押生息 - 上下排列 -->
-        <div class="stake-card">
+        <!-- 质押生息：上下排列 -->
+        <div class="stake-block">
             <div class="stake-header">
                 <span class="stake-title">🔐 质押 H → 得 U</span>
-                <span class="stake-rate">阶梯利率 0.5%~1.0%</span>
+                <span class="stake-rate">阶梯 0.5% ~ 1.0%</span>
             </div>
             <div class="input-group">
                 <input type="number" placeholder="输入质押 H 数量" id="homeStakeHInput">
-                <span style="font-weight:500;">H</span>
+                <span style="font-weight:600;">MAX</span>
             </div>
-            <div class="flex-between" style="margin-bottom: 12px;">
-                <span style="font-size:0.7rem; color:#8B7AB8;">可用余额: 125,000 H</span>
-                <span style="font-size:0.7rem; color:#5B21B6;">预计日收益 ≈ 0.00 U</span>
+            <div class="flex-between" style="margin-bottom: 12px; font-size:0.75rem;">
+                <span>可用余额: 125,000 H</span>
+                <span>预计日收益: ~0.00 U</span>
             </div>
             <button class="btn-gradient" id="homeStakeHBtn">确认质押</button>
             <div class="flex-between mt-2">
-                <span style="font-size:0.75rem;">待领收益: 24.50 U</span>
+                <span style="font-weight:500;">待领收益: 24.50 U</span>
                 <button class="btn-outline" id="homeClaimHBtn">领取收益</button>
             </div>
         </div>
 
-        <div class="stake-card">
+        <div class="stake-block">
             <div class="stake-header">
                 <span class="stake-title">💰 质押 U → 得 H</span>
-                <span class="stake-rate">固定日利率 0.5%</span>
+                <span class="stake-rate">固定 0.5% /天</span>
             </div>
             <div class="input-group">
                 <input type="number" placeholder="输入质押 U 数量" id="homeStakeUInput">
-                <span style="font-weight:500;">U</span>
+                <span style="font-weight:600;">MAX</span>
             </div>
-            <div class="flex-between" style="margin-bottom: 12px;">
-                <span style="font-size:0.7rem; color:#8B7AB8;">可用余额: 2,350 U</span>
-                <span style="font-size:0.7rem; color:#5B21B6;">预计日收益 ≈ 0.00 H</span>
+            <div class="flex-between" style="margin-bottom: 12px; font-size:0.75rem;">
+                <span>可用余额: 2,350 U</span>
+                <span>预计日收益: ~0.00 H</span>
             </div>
             <button class="btn-gradient" id="homeStakeUBtn">确认质押</button>
             <div class="flex-between mt-2">
-                <span style="font-size:0.75rem;">待领收益: 6.2 H</span>
+                <span style="font-weight:500;">待领收益: 6.2 H</span>
                 <button class="btn-outline" id="homeClaimUBtn">领取收益</button>
             </div>
         </div>
 
         <!-- 热门代币横向滑动 -->
         <div class="card">
-            <div class="section-header">
-                <span style="font-weight: 600;">🔥 热门代币</span>
-                <a href="#" id="moreTokensBtn" style="color:#7C3AED; text-decoration:none; font-size:0.8rem;">更多 →</a>
+            <div class="section-title">
+                <span>🔥 热门代币</span>
+                <a href="#" id="moreTokensBtn">更多 →</a>
             </div>
-            <div class="scroll-x">
-                <div class="token-card"><div class="token-symbol">H</div><div class="token-price">0.00552 U</div><div class="token-change positive">+5.67%</div></div>
-                <div class="token-card"><div class="token-symbol">BNB</div><div class="token-price">$585.20</div><div class="token-change positive">+1.2%</div></div>
-                <div class="token-card"><div class="token-symbol">OKB</div><div class="token-price">$48.75</div><div class="token-change negative">-0.3%</div></div>
-                <div class="token-card"><div class="token-symbol">USDT</div><div class="token-price">$1.00</div><div class="token-change positive">+0.01%</div></div>
-                <div class="token-card"><div class="token-symbol">CAKE</div><div class="token-price">$2.45</div><div class="token-change positive">+3.2%</div></div>
+            <div class="scroll-x" id="hotTokensList">
+                <!-- 动态生成 -->
             </div>
         </div>
 
-        <!-- 社区聊天入口（简洁版） -->
+        <!-- 常用工具网格（12个） -->
         <div class="card">
-            <div class="section-header">
-                <span style="font-weight: 600;">💬 社区聊天</span>
-                <a href="#" class="pageLink" data-page="im" style="color:#7C3AED; text-decoration:none; font-size:0.8rem;">进入 →</a>
+            <div class="section-title">
+                <span>🛠️ 常用工具</span>
+                <span class="badge">快捷访问</span>
             </div>
-            <div class="flex-between" style="padding: 8px 0;">
-                <div><span style="font-weight:500;">🐬 海豚大厅</span><div style="font-size:0.7rem; color:#8B7AB8;">AI: 今晚8点交易赛开始</div></div>
-                <span class="badge">12条</span>
-            </div>
-            <div class="flex-between" style="padding: 8px 0;">
-                <div><span style="font-weight:500;">💎 质押交流群</span><div style="font-size:0.7rem; color:#8B7AB8;">阶梯利率调整，收益更高了</div></div>
-            </div>
+            <div class="tools-grid" id="toolsGrid"></div>
         </div>
-    </div>
 
-    <!-- 质押详情页 (参考设计优化) -->
-    <div id="stakePage" class="page">
+        <!-- 社区聊天入口 -->
         <div class="card">
-            <div class="stake-header">
-                <span class="stake-title">📈 全网总质押价值 (TVL)</span>
-                <span class="badge">实时</span>
+            <div class="section-title">
+                <span>💬 社区聊天</span>
+                <a href="#" class="pageLink" data-page="im">进入 →</a>
             </div>
-            <div class="text-center" style="font-size: 2rem; font-weight: 800; color:#4C1D95; margin: 8px 0;">$1,425,800.00</div>
-            <div class="stats-grid mt-2">
-                <div class="stat-item"><div class="stat-label">H质押池</div><div class="stat-number">720万 H</div></div>
-                <div class="stat-item"><div class="stat-label">U质押池</div><div class="stat-number">2.85万 U</div></div>
-            </div>
-        </div>
-
-        <div class="stake-card">
-            <div class="stake-header">
-                <span class="stake-title">质押 H 赚取 U</span>
-                <span class="stake-rate">年化高达 36%</span>
-            </div>
-            <div class="flex-between" style="margin-bottom: 12px;">
-                <span class="badge">阶梯日利率 · 越久越高</span>
-            </div>
-            <div class="stats-grid" style="gap: 8px; margin-bottom: 16px;">
-                <div class="stat-item" style="padding: 8px;"><div class="stat-label">1-7d</div><div class="stat-number" style="font-size:1rem;">0.5%</div></div>
-                <div class="stat-item" style="padding: 8px;"><div class="stat-label">8-16d</div><div class="stat-number" style="font-size:1rem;">0.6%</div></div>
-                <div class="stat-item" style="padding: 8px;"><div class="stat-label">17-30d</div><div class="stat-number" style="font-size:1rem;">0.7%</div></div>
-                <div class="stat-item" style="padding: 8px;"><div class="stat-label">31-60d</div><div class="stat-number" style="font-size:1rem;">0.8%</div></div>
-                <div class="stat-item" style="padding: 8px;"><div class="stat-label">≥61d</div><div class="stat-number" style="font-size:1rem;">1.0%</div></div>
-            </div>
-            <div class="input-group"><input type="number" placeholder="输入质押 H 数量" id="stakeHAmount"><span>H</span></div>
-            <div class="flex-between"><span style="font-size:0.7rem;">可用余额：125,000 H</span><span style="font-size:0.7rem;">预计日收益：~0.00 U</span></div>
-            <button class="btn-gradient mt-2" id="doStakeHDetail">确认质押</button>
-            <div class="flex-between mt-2"><span>待领收益</span><span style="font-weight:700;">24.50 U</span></div>
-            <button class="btn-outline" style="width:100%; margin-top:8px;" id="claimStakeHDetail">领取收益</button>
-        </div>
-
-        <div class="stake-card">
-            <div class="stake-header">
-                <span class="stake-title">质押 U 赚取 H</span>
-                <span class="stake-rate">固定日利率 0.5%</span>
-            </div>
-            <div class="input-group"><input type="number" placeholder="输入质押 U 数量" id="stakeUAmount"><span>U</span></div>
-            <button class="btn-gradient" id="doStakeUDetail">确认质押</button>
-            <div class="flex-between mt-2"><span>待领收益</span><span style="font-weight:700;">6.2 H</span></div>
-            <button class="btn-outline" style="width:100%; margin-top:8px;" id="claimStakeUDetail">领取收益</button>
-            <div class="mt-2 text-center" style="font-size:0.7rem; color:#8B7AB8;">解除质押 24h 到账 · 收益手动领取</div>
-        </div>
-    </div>
-
-    <!-- 交易赛页面 (参考截图升级) -->
-    <div id="contestPage" class="page">
-        <div class="card" style="background: linear-gradient(145deg, #FFFFFF, #FBF8FF);">
-            <div class="text-center">
-                <h2 style="font-size:1.8rem; font-weight:800; background: linear-gradient(135deg,#6C2BD9,#9B4DFF); background-clip:text; -webkit-background-clip:text; color:transparent;">海豚交易赛</h2>
-                <p style="color:#7C3AED;">交易即荣耀 · 共赢未来</p>
-            </div>
-            <div class="stats-grid mt-3">
-                <div class="stat-item"><div class="stat-label">赛事总奖池</div><div class="stat-number">500,000 H</div></div>
-                <div class="stat-item"><div class="stat-label">我的排名</div><div class="stat-number">#23</div></div>
-                <div class="stat-item"><div class="stat-label">我的交易量</div><div class="stat-number">12,500 U</div></div>
-            </div>
-            <div class="section-header mt-2">
-                <span style="font-weight:600;">📊 实时排行榜</span>
-                <span class="badge">距结束 12 天</span>
-            </div>
-            <div class="leaderboard-item" style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0E9FF;">
-                <div><span style="font-weight:700;">🥇 0x71...c4e2</span><div class="badge" style="margin-top:4px;">团队加成 5%</div></div>
-                <span style="font-weight:600;">12.5万 U</span>
-            </div>
-            <div class="leaderboard-item" style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0E9FF;">
-                <div><span style="font-weight:700;">🥈 0x3f...a1b9</span></div>
-                <span>8.9万 U</span>
-            </div>
-            <div class="leaderboard-item" style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0E9FF;">
-                <div><span style="font-weight:700;">🥉 0x92...d7f5</span></div>
-                <span>6.7万 U</span>
-            </div>
-            <div class="leaderboard-item" style="display:flex; justify-content:space-between; padding:12px 0; background:#F9F5FF; border-radius: 28px; margin-top:8px;">
-                <div><span style="font-weight:700;">🔥 我的位置</span><div class="badge" style="margin-top:4px;">差1,280 U进前20</div></div>
-                <span>1.2万 U</span>
-            </div>
-            <button class="btn-outline" style="width:100%; margin-top:16px;" id="contestRulesBtn">活动规则 & 奖励说明</button>
-        </div>
-    </div>
-
-    <!-- IM 页面 (消息中心) -->
-    <div id="imPage" class="page">
-        <div class="card">
-            <div class="section-header">
-                <span style="font-weight:600;">💬 消息中心</span>
-                <span class="badge">搜索群组或聊天</span>
-            </div>
-            <div class="chat-item" style="padding:12px 0; border-bottom:1px solid #F0E9FF; cursor:pointer;" data-room="hall">
-                <div class="flex-between"><div><span style="font-weight:600;">🐬 海豚官方大厅</span><div style="font-size:0.7rem; color:#8B7AB8;">AI助手：今晚8点交易赛准时开..</div></div><span class="badge">12</span></div>
-            </div>
-            <div class="chat-item" style="padding:12px 0; border-bottom:1px solid #F0E9FF; cursor:pointer;" data-room="stake">
-                <div class="flex-between"><div><span style="font-weight:600;">💎 质押高收益交流群</span><div style="font-size:0.7rem; color:#8B7AB8;">小海豚：最近的阶梯利率怎么算？</div></div><span style="font-size:0.7rem;">昨天</span></div>
-            </div>
-            <div class="chat-item" style="padding:12px 0; cursor:pointer;" data-room="ai">
-                <div class="flex-between"><div><span style="font-weight:600;">🤖 AI专属客服小豚</span><div style="font-size:0.7rem; color:#8B7AB8;">问我任何关于社区规则的问题哦～</div></div><span style="font-size:0.7rem;">周二</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 钱包页面 (参考截图优化) -->
-    <div id="walletPage" class="page">
-        <div class="card">
-            <div class="text-center">
-                <div style="font-size:0.8rem; color:#8B7AB8;">总资产折合 (USD)</div>
-                <div style="font-size:2rem; font-weight:800; color:#4C1D95;">$12,450.00</div>
-                <div class="flex-between mt-2" style="background:#F3F0FF; border-radius:60px; padding:8px 16px;">
-                    <span style="font-family:monospace;">0x71C...e4c2</span>
-                    <select class="network-selector" style="background:transparent; border:none;"><option>BNB Chain</option><option>x Layer</option></select>
+            <div class="chat-item" data-room="hall">
+                <div class="chat-avatar">🐬</div>
+                <div style="flex:1;">
+                    <div class="flex-between"><span style="font-weight:700;">海豚官方大厅</span><span class="badge" style="background:#EF4444; color:white;">12</span></div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">AI助手：今晚8点交易赛准时开启！</div>
                 </div>
             </div>
-            <div class="wallet-actions" style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:20px 0;">
-                <div class="action-btn" style="background:#FEFBFF; border-radius:28px; padding:12px; text-align:center; border:1px solid #EDE5FF; cursor:pointer;" id="depositBtn">📥 充币</div>
-                <div class="action-btn" style="background:#FEFBFF; border-radius:28px; padding:12px; text-align:center; border:1px solid #EDE5FF; cursor:pointer;" id="withdrawBtn">📤 提币</div>
-                <div class="action-btn" style="background:#FEFBFF; border-radius:28px; padding:12px; text-align:center; border:1px solid #EDE5FF; cursor:pointer;" id="tradeBtn">🔄 交易</div>
-                <div class="action-btn" style="background:#FEFBFF; border-radius:28px; padding:12px; text-align:center; border:1px solid #EDE5FF; cursor:pointer;" id="buyBtn">🛒 买币</div>
+            <div class="chat-item" data-room="stake">
+                <div class="chat-avatar">💎</div>
+                <div style="flex:1;">
+                    <div class="flex-between"><span style="font-weight:700;">质押高收益交流群</span><span class="badge">昨日</span></div>
+                    <div style="font-size:0.75rem; color:var(--text-muted);">小海豚：阶梯利率怎么算最划算？</div>
+                </div>
             </div>
-            <div class="section-header"><span style="font-weight:600;">资产列表</span><span class="badge">价值 USD</span></div>
-            <div class="asset-row" style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0E9FF;">
-                <div><span style="font-weight:500;">H Token</span><div style="font-size:0.7rem;">125,000 H</div></div>
-                <div class="text-right"><span>$690.00</span><div class="positive">+2.34%</div></div>
+        </div>
+    </div>
+
+    <!-- 质押详情页 -->
+    <div id="stakePage" class="page">
+        <div class="text-center" style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">质押矩阵</h1>
+            <p style="color: var(--text-muted); font-weight: 500;">锁定资产，稳健获取网络收益</p>
+        </div>
+
+        <div class="card price-hero" style="padding: 24px;">
+            <div class="metric-label">全网总质押价值 (TVL)</div>
+            <div class="metric-value" style="font-size: 2rem;">$ 1,425,800.00</div>
+            <div class="flex-between" style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 16px;">
+                <div><div class="metric-label">H质押池</div><div style="color:white; font-weight:700;">720万 H</div></div>
+                <div><div class="metric-label">U质押池</div><div style="color:white; font-weight:700;">2.85万 U</div></div>
             </div>
-            <div class="asset-row" style="display:flex; justify-content:space-between; padding:12px 0; border-bottom:1px solid #F0E9FF;">
-                <div><span style="font-weight:500;">BNB</span><div style="font-size:0.7rem;">0.85 BNB</div></div>
-                <div class="text-right"><span>$497.42</span><div class="positive">+1.20%</div></div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><span>🔥 质押 H 赚取 U</span><span class="badge">年化高达 36%</span></div>
+            <div class="step-bar-container" style="background: rgba(255,255,255,0.4); border-radius: 24px; padding: 16px; margin-bottom: 16px;">
+                <div class="flex-between"><span style="font-size:0.8rem; font-weight:600;">阶梯日利率机制</span><span class="badge" style="background:var(--primary); color:white;">越久越高</span></div>
+                <div style="display: flex; height: 8px; background: rgba(124,58,237,0.1); border-radius: 8px; margin: 12px 0;">
+                    <div style="flex:1; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 8px 0 0 8px;"></div>
+                    <div style="flex:1; background: linear-gradient(90deg, var(--primary-light), var(--primary)); opacity:0.8;"></div>
+                    <div style="flex:1; background: #E2E8F0;"></div>
+                    <div style="flex:1; background: #E2E8F0;"></div>
+                    <div style="flex:1; background: #E2E8F0;"></div>
+                </div>
+                <div class="flex-between" style="font-size:0.7rem;">
+                    <span>1-7d 0.5%</span><span>8-16d 0.6%</span><span>17-30d 0.7%</span><span>31-60d 0.8%</span><span>≥61d 1.0%</span>
+                </div>
             </div>
-            <div class="asset-row" style="display:flex; justify-content:space-between; padding:12px 0;">
-                <div><span style="font-weight:500;">USDT</span><div style="font-size:0.7rem;">11,262.58 USDT</div></div>
-                <div class="text-right"><span>$11,262.58</span><div class="positive">0.00%</div></div>
+            <div class="input-group"><input type="number" placeholder="输入质押 H 数量"><span>MAX</span></div>
+            <div class="flex-between" style="margin-bottom:16px; font-size:0.75rem;"><span>可用余额: 125,000 H</span><span>预计日收益: ~0.00 U</span></div>
+            <button class="btn-gradient">确认质押</button>
+            <div class="flex-between mt-2"><span style="font-weight:500;">待领收益: 24.50 U</span><button class="btn-outline">提取收益</button></div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><span>💎 质押 U 赚取 H</span><span class="badge">固定日利率 0.5%</span></div>
+            <div class="input-group"><input type="number" placeholder="输入质押 U 数量"><span>MAX</span></div>
+            <button class="btn-gradient">确认质押</button>
+            <div class="flex-between mt-2"><span style="font-weight:500;">待领收益: 6.2 H</span><button class="btn-outline">提取收益</button></div>
+            <div class="text-center mt-2" style="font-size:0.7rem; color:var(--text-muted);">解除质押 24h 到账 · 收益手动领取</div>
+        </div>
+    </div>
+
+    <!-- 交易赛页面 -->
+    <div id="contestPage" class="page">
+        <div class="text-center" style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">海豚交易赛</h1>
+            <p style="color: var(--text-muted); font-weight: 500;">交易即荣耀 · 共赢未来</p>
+        </div>
+
+        <div class="card price-hero" style="padding: 24px;">
+            <div class="metric-label">🔥 赛事总奖池</div>
+            <div class="metric-value" style="font-size: 2rem;">500,000 H</div>
+            <div class="flex-between" style="margin-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 16px;">
+                <div><div class="metric-label">我的排名</div><div style="color:white; font-weight:700;">#23</div></div>
+                <div><div class="metric-label">我的交易量</div><div style="color:white; font-weight:700;">12,500 U</div></div>
             </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><span>📊 实时排行榜</span><span class="badge">距结束 12 天</span></div>
+            <div class="chat-item" style="border-left: 4px solid #F59E0B;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥇</span> 0x71...c4e2 <span class="badge" style="margin-left:8px;">团队+5%</span></div><span>12.5万 U</span></div></div>
+            <div class="chat-item" style="border-left: 4px solid #9CA3AF;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥈</span> 0x3f...a1b9</div><span>8.9万 U</span></div></div>
+            <div class="chat-item" style="border-left: 4px solid #B45309;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥉</span> 0x92...d7f5</div><span>6.7万 U</span></div></div>
+            <div class="chat-item" style="background: rgba(124,58,237,0.1); border-color: var(--primary);"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">23</span> 我的位置 · 差1,280 U进前20</div><span>1.2万 U</span></div></div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><span>👥 团队战绩</span><span class="badge">奖励加成</span></div>
+            <div class="flex-between"><span>团队总交易量</span><span><strong>42.3万 U</strong></span></div>
+            <div class="flex-between mt-2"><span>个人奖励预估</span><span><strong>325 H</strong></span></div>
+            <div class="flex-between mt-2"><span>团队奖励预估</span><span><strong>1,200 H</strong></span></div>
+            <div class="badge mt-2" style="background: var(--primary); color:white; display:inline-block;">🎁 个人前100名瓜分50万H，团队额外加成5%</div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">📜 规则与 FAQ</div>
+            <details><summary>📌 活动规则</summary><p style="margin-top:8px;">时间：2026.4.1-4.30，统计 H 代币在 Uniswap 上的交易量（买入+卖出），排名前100名瓜分50万H奖励池，团队业绩额外加成。</p></details>
+            <details><summary>🏅 团队奖励机制</summary><p style="margin-top:8px;">一级团队交易量贡献5%加成，二级团队2%加成，最终奖励叠加至个人总奖励。</p></details>
+            <details><summary>❓ 奖励发放时间</summary><p style="margin-top:8px;">活动结束后7个工作日内发放至钱包。</p></details>
+        </div>
+    </div>
+
+    <!-- IM 页面 -->
+    <div id="imPage" class="page">
+        <div class="text-center" style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">消息中心</h1>
+        </div>
+        <div class="card" style="padding: 16px;">
+            <div class="input-group" style="margin-bottom: 16px;"><span>🔍</span><input type="text" placeholder="搜索群组或聊天"></div>
+            <div class="chat-item" data-room="hall"><div class="chat-avatar">🐬</div><div><div style="font-weight:700;">海豚官方大厅</div><div style="font-size:0.75rem; color:var(--text-muted);">AI助手：今晚8点交易赛准时开启！</div></div><span class="badge" style="background:#EF4444; color:white;">12</span></div>
+            <div class="chat-item" data-room="stake"><div class="chat-avatar">💎</div><div><div style="font-weight:700;">质押高收益交流群</div><div style="font-size:0.75rem; color:var(--text-muted);">小海豚：最近的阶梯利率怎么算？</div></div><span class="badge">昨天</span></div>
+            <div class="chat-item" data-room="ai"><div class="chat-avatar">🤖</div><div><div style="font-weight:700;">AI 专属客服小豚</div><div style="font-size:0.75rem; color:var(--text-muted);">问我任何关于社区规则的问题哦～</div></div><span class="badge">周二</span></div>
+        </div>
+    </div>
+
+    <!-- 钱包页面 -->
+    <div id="walletPage" class="page">
+        <div class="text-center" style="margin-bottom: 24px;">
+            <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">我的数字钱包</h1>
+            <p style="color: var(--text-muted); font-weight: 500;">去中心化资产管理中心</p>
+        </div>
+
+        <div class="card price-hero" style="padding: 24px;">
+            <div class="metric-label">总资产折合 (USD)</div>
+            <div class="metric-value" style="font-size: 2rem;">$ 12,450.00</div>
+            <div class="flex-between" style="margin-top: 20px;">
+                <span style="font-family: monospace; background: rgba(0,0,0,0.2); padding: 6px 12px; border-radius: 20px;">0x71C...e4c2</span>
+                <span style="background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 20px;">BNB Chain ▼</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tools-grid" style="margin-top:0;">
+                <div class="tool-card" id="depositBtn"><div class="tool-icon">📥</div><div class="tool-name">充币</div></div>
+                <div class="tool-card" id="withdrawBtn"><div class="tool-icon">📤</div><div class="tool-name">提币</div></div>
+                <div class="tool-card" id="tradeBtn"><div class="tool-icon">🔄</div><div class="tool-name">交易</div></div>
+                <div class="tool-card" id="buyBtn"><div class="tool-icon">💳</div><div class="tool-name">买币</div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title"><span>💰 资产列表</span><span style="font-size:1.2rem; cursor:pointer;" id="settingsBtn">⚙️</span></div>
+            <div class="chat-item" style="justify-content: space-between;"><div><div class="flex-between"><span style="font-weight:800;">H Token</span><span style="font-size:0.7rem; margin-left:8px;">+2.34%</span></div><div style="font-size:0.8rem;">125,000 H</div></div><div style="font-weight:700;">$690.00</div></div>
+            <div class="chat-item" style="justify-content: space-between;"><div><div class="flex-between"><span style="font-weight:800;">BNB</span><span style="font-size:0.7rem; margin-left:8px;">+1.20%</span></div><div style="font-size:0.8rem;">0.85 BNB</div></div><div style="font-weight:700;">$497.42</div></div>
+            <div class="chat-item" style="justify-content: space-between;"><div><div class="flex-between"><span style="font-weight:800;">USDT</span><span style="font-size:0.7rem;">0.00%</span></div><div style="font-size:0.8rem;">11,262.58 USDT</div></div><div style="font-weight:700;">$11,262.58</div></div>
         </div>
     </div>
 
     <!-- 底部导航 -->
     <div class="bottom-nav">
         <div class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><span>首页</span></div>
-        <div class="nav-item" data-nav="stake"><div class="nav-icon">💰</div><span>质押</span></div>
+        <div class="nav-item" data-nav="stake"><div class="nav-icon">💎</div><span>质押</span></div>
         <div class="nav-item" data-nav="contest"><div class="nav-icon">🏆</div><span>交易赛</span></div>
         <div class="nav-item" data-nav="im"><div class="nav-icon">💬</div><span>IM</span></div>
         <div class="nav-item" data-nav="wallet"><div class="nav-icon">👛</div><span>钱包</span></div>
@@ -547,46 +705,73 @@
             nav.classList.remove('active');
             if (nav.getAttribute('data-nav') === pageId) nav.classList.add('active');
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    document.querySelectorAll('.nav-item').forEach(nav => {
-        nav.addEventListener('click', () => switchPage(nav.getAttribute('data-nav')));
+    document.querySelectorAll('.nav-item').forEach(nav => nav.addEventListener('click', () => switchPage(nav.getAttribute('data-nav'))));
+    document.querySelectorAll('.pageLink').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); switchPage(link.getAttribute('data-page')); }));
+
+    // 热门代币动态生成
+    const hotTokens = [
+        { symbol: 'H', price: '0.00552 U', change: '+5.67%', up: true },
+        { symbol: 'BNB', price: '$585.20', change: '+1.2%', up: true },
+        { symbol: 'OKB', price: '$48.75', change: '-0.3%', up: false },
+        { symbol: 'USDT', price: '$1.00', change: '+0.01%', up: true },
+        { symbol: 'CAKE', price: '$2.45', change: '+3.2%', up: true }
+    ];
+    const container = document.getElementById('hotTokensList');
+    hotTokens.forEach(t => {
+        const card = document.createElement('div');
+        card.className = 'token-card';
+        card.innerHTML = `
+            <div class="token-symbol">${t.symbol}</div>
+            <div class="token-price">${t.price}</div>
+            <div class="token-change ${t.up ? 'positive' : 'negative'}">${t.change}</div>
+        `;
+        container.appendChild(card);
     });
-    document.querySelectorAll('.pageLink').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            switchPage(link.getAttribute('data-page'));
-        });
+
+    // 工具网格 (12个常用工具)
+    const tools = [
+        "签到", "抽奖", "积分", "行情", "查询系统", "便捷访问",
+        "交易", "连接OKX", "团队详情", "邀请好友", "我的收益", "设置昵称"
+    ];
+    const toolsGrid = document.getElementById('toolsGrid');
+    tools.forEach(name => {
+        const div = document.createElement('div');
+        div.className = 'tool-card';
+        div.innerHTML = `<div class="tool-icon">🔧</div><div class="tool-name">${name}</div>`;
+        div.addEventListener('click', () => alert(`「${name}」功能开发中`));
+        toolsGrid.appendChild(div);
     });
 
     // 动态价格趋势线
-    function updateTrend() {
+    function updateTrendLine() {
         const container = document.getElementById('priceTrendHome');
         if (!container) return;
         container.innerHTML = '';
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 12; i++) {
             let height = 8 + Math.random() * 20;
             let span = document.createElement('span');
             span.style.height = height + 'px';
             container.appendChild(span);
         }
     }
-    updateTrend();
-    setInterval(() => {
-        let change = (Math.random() * 6 - 3).toFixed(2);
-        document.getElementById('priceChangeBadge').innerText = (change >= 0 ? '+' : '') + change + '%';
-        updateTrend();
-    }, 5000);
+    updateTrendLine();
+    setInterval(updateTrendLine, 4000);
 
     // 模拟按钮交互
-    const btns = ['homeStakeHBtn', 'homeStakeUBtn', 'homeClaimHBtn', 'homeClaimUBtn', 'doStakeHDetail', 'doStakeUDetail', 'claimStakeHDetail', 'claimStakeUDetail', 'contestRulesBtn', 'moreTokensBtn', 'depositBtn', 'withdrawBtn', 'tradeBtn', 'buyBtn'];
-    btns.forEach(id => {
-        let btn = document.getElementById(id);
-        if (btn) btn.addEventListener('click', () => alert('模拟操作：实际开发将连接智能合约/后端'));
+    const buttons = [
+        'homeStakeHBtn', 'homeStakeUBtn', 'homeClaimHBtn', 'homeClaimUBtn',
+        'moreTokensBtn', 'depositBtn', 'withdrawBtn', 'tradeBtn', 'buyBtn', 'settingsBtn'
+    ];
+    buttons.forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) btn.addEventListener('click', (e) => { e.preventDefault(); alert('模拟操作：实际开发将连接智能合约/后端'); });
     });
-    document.querySelectorAll('.chat-item').forEach(el => {
-        el.addEventListener('click', () => alert('进入聊天室（演示版）'));
+    document.querySelectorAll('.chat-item, .tool-card, .token-card').forEach(el => {
+        if (!el.classList?.contains('tool-card')) el.addEventListener('click', () => alert('演示交互，正式版会接入真实功能'));
     });
-    document.getElementById('moreTokensBtn')?.addEventListener('click', (e) => { e.preventDefault(); alert('更多代币行情开发中'); });
+    document.getElementById('moreTokensBtn')?.addEventListener('click', (e) => { e.preventDefault(); alert('更多代币行情即将上线'); });
 </script>
 </body>
 </html>
