@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>海豚社区 · 完整版</title>
+    <title>海豚社区 · 完整优化版</title>
     <style>
         * {
             margin: 0;
@@ -105,18 +105,18 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            gap: 8px;
+            gap: 12px;
         }
         .h-logo {
             background: linear-gradient(135deg, #2D1B69, var(--primary));
-            width: 40px;
-            height: 40px;
-            border-radius: 16px;
+            width: 44px;
+            height: 44px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             color: white;
             cursor: pointer;
             flex-shrink: 0;
@@ -126,7 +126,7 @@
             flex: 1;
             background: rgba(255,255,255,0.8);
             border-radius: 60px;
-            padding: 10px 18px;
+            padding: 12px 18px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -136,16 +136,55 @@
         .search-box input {
             background: transparent;
             border: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             width: 100%;
             outline: none;
         }
         .gift-icon {
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             cursor: pointer;
             background: none;
             border: none;
             flex-shrink: 0;
+        }
+
+        /* 价格卡片 */
+        .price-hero {
+            background: linear-gradient(135deg, #2D1B69, var(--primary));
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .price-hero .metric-label {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8rem;
+        }
+        .price-hero .metric-value {
+            color: white;
+            font-size: 2rem;
+            font-weight: 800;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        .price-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+        .trade-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 48px;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .trade-btn:active {
+            background: rgba(255,255,255,0.3);
+            transform: scale(0.96);
         }
 
         /* 轮播图 */
@@ -163,27 +202,76 @@
             border: 1px solid rgba(255,255,255,0.6);
         }
 
-        /* 价格卡片内按钮 */
-        .price-header {
+        /* 数据网格 */
+        .stats-grid {
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 16px;
         }
-        .trade-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 40px;
-            padding: 6px 14px;
+        .metric-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 16px 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .metric-label {
             font-size: 0.7rem;
             font-weight: 600;
-            color: white;
-            cursor: pointer;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #2D1B69;
         }
 
-        /* 常用功能网格 (6个) */
+        /* 质押区块 */
+        .stake-block {
+            background: rgba(255,255,255,0.7);
+            border-radius: 28px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .input-group {
+            background: rgba(255,255,255,0.9);
+            border-radius: 60px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+        }
+        .input-group input {
+            background: transparent;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            width: 70%;
+            outline: none;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border: none;
+            border-radius: 60px;
+            padding: 14px;
+            font-weight: 700;
+            color: white;
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .btn-gradient:active {
+            transform: scale(0.98);
+        }
+
+        /* 常用功能 4列网格 */
         .tools-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 16px;
             margin-top: 8px;
         }
@@ -194,6 +282,10 @@
             text-align: center;
             cursor: pointer;
             border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: background 0.2s;
+        }
+        .tool-card:active {
+            background: rgba(255,255,255,0.8);
         }
         .tool-icon {
             font-size: 1.6rem;
@@ -241,23 +333,30 @@
             font-size: 0.8rem;
         }
 
-        /* 通用样式 */
-        .stats-grid { display: flex; gap: 12px; margin-bottom: 16px; }
-        .metric-card { flex: 1; background: rgba(255, 255, 255, 0.6); border-radius: 24px; padding: 16px 12px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.7); }
-        .metric-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
-        .metric-value { font-size: 1.2rem; font-weight: 800; color: #2D1B69; }
-        .price-hero { background: linear-gradient(135deg, #2D1B69, var(--primary)); border: none; }
-        .price-hero .metric-label { color: rgba(255,255,255,0.8); }
-        .price-hero .metric-value { color: white; font-size: 2rem; font-weight: 800; }
-        .kline-canvas { width: 100%; height: 80px; margin-top: 12px; background: rgba(0,0,0,0.05); border-radius: 16px; padding: 4px; }
-        canvas { width: 100%; height: 100%; display: block; border-radius: 12px; }
-        .stake-block { background: rgba(255,255,255,0.7); border-radius: 28px; padding: 20px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.8); }
-        .input-group { background: rgba(255,255,255,0.9); border-radius: 60px; padding: 12px 16px; display: flex; justify-content: space-between; margin: 12px 0; }
-        .btn-gradient { background: linear-gradient(135deg, var(--primary), var(--primary-light)); border: none; border-radius: 60px; padding: 14px; font-weight: 700; color: white; width: 100%; cursor: pointer; }
-        .scroll-x { display: flex; overflow-x: auto; gap: 14px; padding-bottom: 8px; }
-        .token-card { flex: 0 0 110px; background: rgba(255,255,255,0.6); border-radius: 28px; padding: 14px 8px; text-align: center; border: 1px solid rgba(255,255,255,0.7); }
-        .chat-item { background: rgba(255,255,255,0.5); border-radius: 24px; padding: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 14px; cursor: pointer; }
-        .chat-avatar { width: 48px; height: 48px; background: #F3E8FF; border-radius: 28px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        /* 聊天 & 排行榜样式 */
+        .chat-item {
+            background: rgba(255,255,255,0.5);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+        }
+        .chat-avatar {
+            width: 48px;
+            height: 48px;
+            background: #F3E8FF;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* 底部导航 */
         .bottom-nav {
             position: fixed;
             bottom: 20px;
@@ -283,22 +382,66 @@
             color: var(--text-muted);
             cursor: pointer;
         }
-        .nav-icon { font-size: 1.4rem; filter: grayscale(0.4) opacity(0.7); }
+        .nav-icon { font-size: 1.4rem; filter: grayscale(0.4) opacity(0.7); transition: all 0.2s; }
         .nav-item.active .nav-icon { filter: none; transform: translateY(-2px); }
         .nav-item.active span { color: var(--primary); }
         .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .badge { background: #F3E8FF; color: var(--primary); padding: 4px 10px; border-radius: 40px; font-size: 0.7rem; font-weight: 700; }
+        .badge {
+            background: #F3E8FF;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
         .mt-2 { margin-top: 8px; }
         .mb-2 { margin-bottom: 8px; }
         .text-center { text-align: center; }
         .positive { color: #10B981; }
         .negative { color: #EF4444; }
+        .kline-canvas {
+            width: 100%;
+            height: 80px;
+            margin-top: 12px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 16px;
+            padding: 4px;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 12px;
+        }
+        .scroll-x {
+            display: flex;
+            overflow-x: auto;
+            gap: 14px;
+            padding-bottom: 8px;
+        }
+        .token-card {
+            flex: 0 0 110px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 28px;
+            padding: 14px 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .token-symbol {
+            font-weight: 800;
+            font-size: 1rem;
+        }
+        .token-price {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 6px 0;
+        }
     </style>
 </head>
 <body>
 <div class="ambient-bg"></div>
 <div class="container">
-    <!-- 头部（仅首页显示，其他页面隐藏） -->
+    <!-- 头部（仅首页显示） -->
     <div class="header-custom" id="globalHeader">
         <div class="h-logo" id="settingsLogo">H</div>
         <div class="search-box">
@@ -310,16 +453,11 @@
 
     <!-- 首页 -->
     <div id="homePage" class="page active">
-        <!-- 轮播图 (在价格卡片下方) -->
-        <div class="carousel-placeholder">
-            📢 社区活动 · 交易赛火热进行中｜质押享阶梯收益
-        </div>
-
-        <!-- 价格卡片 + 交易按钮 -->
+        <!-- 价格卡片（位于轮播图上方） -->
         <div class="card price-hero">
             <div class="price-header">
                 <div class="metric-label">H Token 实时价格</div>
-                <button class="trade-btn" id="tradeBtnHeader">交易</button>
+                <button class="trade-btn" id="tradeBtnHeader">交易 →</button>
             </div>
             <div class="metric-value">0.00552 U</div>
             <div class="kline-canvas"><canvas id="priceKline" width="500" height="80"></canvas></div>
@@ -327,6 +465,11 @@
                 <span class="badge" style="background: rgba(255,255,255,0.2); color:white;">+2.34%</span>
                 <span style="font-size:0.7rem; color:rgba(255,255,255,0.7);">24h 交易量 1.85万 U</span>
             </div>
+        </div>
+
+        <!-- 轮播图 -->
+        <div class="carousel-placeholder">
+            📢 社区活动 · 交易赛火热进行中｜质押享阶梯收益
         </div>
 
         <!-- 社区数据 -->
@@ -362,7 +505,7 @@
             <div class="scroll-x" id="hotTokensList"></div>
         </div>
 
-        <!-- 常用功能（6个） -->
+        <!-- 常用功能 4列 8个 -->
         <div class="card">
             <div class="flex-between"><span style="font-weight:700;">🛠️ 常用功能</span><span class="badge">快捷访问</span></div>
             <div class="tools-grid" id="toolsGrid"></div>
@@ -382,12 +525,8 @@
         </div>
     </div>
 
-    <!-- 设置中心页面（独立） -->
+    <!-- 设置中心页面（无标题） -->
     <div id="settingsPage" class="page">
-        <div class="text-center" style="margin-bottom: 24px;">
-            <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">设置中心</h1>
-            <p style="color: var(--text-muted);">管理你的账户与偏好</p>
-        </div>
         <div class="card">
             <div class="settings-grid">
                 <div class="settings-item" data-action="backup"><div class="settings-icon">🔐</div><div class="settings-name">备份钱包</div></div>
@@ -412,27 +551,24 @@
         <div class="text-center" style="font-size:0.7rem; color:var(--text-muted); margin-top: 8px;">安全提示：请勿向任何人泄露私钥</div>
     </div>
 
-    <!-- 质押页面（完整内容） -->
+    <!-- 质押页面（完整） -->
     <div id="stakePage" class="page">
-        <div class="text-center" style="margin-bottom: 24px;"><h1 style="font-size:1.8rem; font-weight:800; background:linear-gradient(135deg,#2D1B69,var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">质押矩阵</h1><p style="color:var(--text-muted);">锁定资产，稳健获取网络收益</p></div>
         <div class="card price-hero" style="padding:24px;"><div class="metric-label">全网总质押价值 (TVL)</div><div class="metric-value" style="font-size:2rem;">$ 1,425,800.00</div><div class="flex-between" style="margin-top:16px;"><div><div class="metric-label">H质押池</div><div style="color:white;">720万 H</div></div><div><div class="metric-label">U质押池</div><div style="color:white;">2.85万 U</div></div></div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">质押 H 赚取 U</span><span class="badge">阶梯利率</span></div><div class="step-bar-container" style="background:rgba(255,255,255,0.4); border-radius:24px; padding:16px; margin:16px 0;"><div class="flex-between"><span>阶梯日利率机制</span><span class="badge" style="background:var(--primary); color:white;">越久越高</span></div><div style="display:flex; height:8px; background:rgba(124,58,237,0.1); border-radius:8px; margin:12px 0;"><div style="flex:1; background:linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius:8px 0 0 8px;"></div><div style="flex:1; background:linear-gradient(90deg, var(--primary-light), var(--primary)); opacity:0.8;"></div><div style="flex:1; background:#E2E8F0;"></div><div style="flex:1; background:#E2E8F0;"></div><div style="flex:1; background:#E2E8F0;"></div></div><div class="flex-between" style="font-size:0.7rem;"><span>1-7d 0.5%</span><span>8-16d 0.6%</span><span>17-30d 0.7%</span><span>31-60d 0.8%</span><span>≥61d 1.0%</span></div></div><div class="input-group"><input type="number" placeholder="输入质押 H 数量"><span>MAX</span></div><div class="flex-between" style="margin-bottom:16px;"><span>可用余额: 125,000 H</span><span>预计日收益: ~0.00 U</span></div><button class="btn-gradient">确认质押</button><div class="flex-between mt-2"><span>待领收益: 24.50 U</span><button class="btn-outline" style="background:transparent; border:1px solid #E2E8F0; border-radius:40px; padding:8px 16px;">领取收益</button></div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">质押 U 赚取 H</span><span class="badge">阶梯利率</span></div><div class="input-group"><input type="number" placeholder="输入质押 U 数量"><span>MAX</span></div><button class="btn-gradient">确认质押</button><div class="flex-between mt-2"><span>待领收益: 6.2 H</span><button class="btn-outline" style="background:transparent; border:1px solid #E2E8F0; border-radius:40px; padding:8px 16px;">领取收益</button></div><div class="text-center mt-2" style="font-size:0.7rem;">解除质押 24h 到账 · 收益手动领取</div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">我的质押</span><span class="badge">实时</span></div><div class="stats-grid mt-2"><div class="metric-card"><div class="metric-label">质押 H</div><div class="metric-value">12,500 H</div><div class="metric-label">累计收益</div><div class="metric-value">324.5 U</div></div><div class="metric-card"><div class="metric-label">质押 U</div><div class="metric-value">1,200 U</div><div class="metric-label">累计收益</div><div class="metric-value">87.2 H</div></div></div><button class="btn-gradient">一键领取收益</button></div>
     </div>
 
-    <!-- 交易赛页面（完整内容） -->
+    <!-- 交易赛页面（完整） -->
     <div id="contestPage" class="page">
-        <div class="text-center" style="margin-bottom:24px;"><h1 style="font-size:1.8rem; font-weight:800; background:linear-gradient(135deg,#2D1B69,var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">海豚交易赛</h1><p style="color:var(--text-muted);">交易即荣耀 · 共赢未来</p></div>
         <div class="card price-hero"><div class="metric-label">赛事总奖池</div><div class="metric-value" style="font-size:2rem;">500,000 H</div><div class="flex-between" style="margin-top:16px;"><div><div class="metric-label">我的排名</div><div style="color:white;">#23</div></div><div><div class="metric-label">我的交易量</div><div style="color:white;">12,500 U</div></div></div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">📊 实时排行榜</span><span class="badge">距结束 12 天</span></div><div class="chat-item" style="border-left:4px solid #F59E0B;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥇</span> 0x71...c4e2 <span class="badge" style="margin-left:8px;">团队+5%</span></div><span>12.5万 U</span></div></div><div class="chat-item" style="border-left:4px solid #9CA3AF;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥈</span> 0x3f...a1b9</div><span>8.9万 U</span></div></div><div class="chat-item" style="border-left:4px solid #B45309;"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">🥉</span> 0x92...d7f5</div><span>6.7万 U</span></div></div><div class="chat-item" style="background:rgba(124,58,237,0.1);"><div class="flex-between" style="width:100%;"><div><span style="font-weight:800;">23</span> 我的位置 · 差1,280 U进前20</div><span>1.2万 U</span></div></div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">👥 团队战绩</span><span class="badge">奖励加成</span></div><div class="stats-grid mt-2"><div class="metric-card"><div class="metric-label">团队总交易量</div><div class="metric-value">42.3万 U</div></div><div class="metric-card"><div class="metric-label">个人奖励预估</div><div class="metric-value">325 H</div></div></div><div class="stats-grid"><div class="metric-card"><div class="metric-label">团队奖励预估</div><div class="metric-value">1,200 H</div></div><div class="metric-card"><div class="metric-label">加成比例</div><div class="metric-value">5% + 2%</div></div></div><div class="reward-box" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A); border-radius:24px; padding:16px; margin-top:16px; text-align:center;"><span style="font-weight:800;">🎁 预估总奖励</span><div style="font-size:1.5rem; font-weight:800;">1,525 H</div><button class="btn-gradient" style="margin-top:12px; padding:10px;">立即领取奖励</button></div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">📜 规则与 FAQ</span></div><details><summary>📌 活动规则</summary><p>时间：2026.4.1-4.30，统计 H 代币在 Uniswap 上的交易量（买入+卖出），排名前100名瓜分50万H奖励池，团队业绩额外加成。</p></details><details><summary>🏅 团队奖励机制</summary><p>一级团队交易量贡献5%加成，二级团队2%加成，最终奖励叠加至个人总奖励。</p></details><details><summary>❓ 奖励发放时间</summary><p>活动结束后7个工作日内开放领取。</p></details></div>
     </div>
 
-    <!-- IM 页面 -->
+    <!-- IM 页面（无标题） -->
     <div id="imPage" class="page">
-        <div class="text-center" style="margin-bottom:24px;"><h1 style="font-size:1.8rem; font-weight:800; background:linear-gradient(135deg,#2D1B69,var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">消息中心</h1></div>
         <div class="card" style="padding:16px;"><div class="input-group" style="margin-bottom:16px;"><span>🔍</span><input type="text" placeholder="搜索群组或聊天"></div>
             <div class="chat-item" data-room="hall"><div class="chat-avatar">🐬</div><div><div style="font-weight:700;">海豚官方大厅</div><div style="font-size:0.75rem;">AI助手：今晚8点交易赛准时开启！</div></div><span class="badge" style="background:#EF4444; color:white;">12</span></div>
             <div class="chat-item" data-room="stake"><div class="chat-avatar">💎</div><div><div style="font-weight:700;">质押高收益交流群</div><div style="font-size:0.75rem;">小海豚：阶梯利率怎么算？</div></div><span class="badge">昨天</span></div>
@@ -440,9 +576,8 @@
         </div>
     </div>
 
-    <!-- 钱包页面 -->
+    <!-- 钱包页面（无标题） -->
     <div id="walletPage" class="page">
-        <div class="text-center" style="margin-bottom:24px;"><h1 style="font-size:1.8rem; font-weight:800; background:linear-gradient(135deg,#2D1B69,var(--primary)); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">我的数字钱包</h1><p style="color:var(--text-muted);">去中心化资产管理中心</p></div>
         <div class="card price-hero"><div class="metric-label">总资产折合 (USD)</div><div class="metric-value" style="font-size:2rem;">$ 12,450.00</div><div class="flex-between" style="margin-top:20px;"><span style="background:rgba(0,0,0,0.2); padding:6px 12px; border-radius:20px;">0x71C...e4c2</span><span style="background:rgba(255,255,255,0.2); padding:6px 12px; border-radius:20px;">BNB Chain ▼</span></div></div>
         <div class="card"><div class="tools-grid" style="margin-top:0;"><div class="tool-card" id="depositBtn"><div class="tool-icon">📥</div><div>充币</div></div><div class="tool-card" id="withdrawBtn"><div class="tool-icon">📤</div><div>提币</div></div><div class="tool-card" id="tradeBtn"><div class="tool-icon">🔄</div><div>交易</div></div><div class="tool-card" id="buyBtn"><div class="tool-icon">💳</div><div>买币</div></div></div></div>
         <div class="card"><div class="flex-between"><span style="font-weight:700;">💰 资产列表</span><span style="cursor:pointer;" id="settingsBtn">⚙️</span></div><div class="chat-item" style="justify-content:space-between;"><div><div class="flex-between"><span style="font-weight:800;">H Token</span><span class="positive">+2.34%</span></div><div>125,000 H</div></div><div>$690.00</div></div><div class="chat-item" style="justify-content:space-between;"><div><div class="flex-between"><span style="font-weight:800;">BNB</span><span class="positive">+1.20%</span></div><div>0.85 BNB</div></div><div>$497.42</div></div><div class="chat-item" style="justify-content:space-between;"><div><div class="flex-between"><span style="font-weight:800;">USDT</span><span>0.00%</span></div><div>11,262.58 USDT</div></div><div>$11,262.58</div></div></div>
@@ -475,31 +610,20 @@
             nav.classList.remove('active');
             if (nav.getAttribute('data-nav') === pageId) nav.classList.add('active');
         });
-        // 控制顶部头部显示：只在首页显示
         const header = document.getElementById('globalHeader');
-        if (header) {
-            if (pageId === 'home') {
-                header.style.display = 'flex';
-            } else {
-                header.style.display = 'none';
-            }
-        }
+        if (header) header.style.display = pageId === 'home' ? 'flex' : 'none';
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    document.querySelectorAll('.nav-item').forEach(nav => {
-        nav.addEventListener('click', () => switchPage(nav.getAttribute('data-nav')));
-    });
-    document.querySelectorAll('.pageLink').forEach(link => {
-        link.addEventListener('click', (e) => { e.preventDefault(); switchPage(link.getAttribute('data-page')); });
-    });
-    // 设置中心入口
+    document.querySelectorAll('.nav-item').forEach(nav => nav.addEventListener('click', () => switchPage(nav.getAttribute('data-nav'))));
+    document.querySelectorAll('.pageLink').forEach(link => link.addEventListener('click', (e) => { e.preventDefault(); switchPage(link.getAttribute('data-page')); }));
     document.getElementById('settingsLogo').addEventListener('click', () => switchPage('settings'));
 
-    // 常用功能生成（6个）
+    // 常用功能 8个（4列）
     const features = [
         { name: "我的积分", icon: "⭐" }, { name: "分享好友", icon: "📤" },
         { name: "团队详情", icon: "👥" }, { name: "盈亏分析", icon: "📊" },
-        { name: "常用链接", icon: "🔗" }, { name: "海豚模型", icon: "🐬" }
+        { name: "常用链接", icon: "🔗" }, { name: "海豚模型", icon: "🐬" },
+        { name: "邀请奖励", icon: "🎁" }, { name: "收益日历", icon: "📅" }
     ];
     const toolsGrid = document.getElementById('toolsGrid');
     features.forEach(f => {
@@ -569,7 +693,7 @@
     drawKline();
     window.addEventListener('resize', drawKline);
 
-    // 设置中心网格点击模拟
+    // 设置中心网格点击
     document.querySelectorAll('.settings-item').forEach(item => {
         item.addEventListener('click', () => alert(`「${item.querySelector('.settings-name')?.innerText || '功能'}」开发中`));
     });
@@ -585,7 +709,7 @@
     document.getElementById('buyBtn')?.addEventListener('click', () => alert('买币功能开发中'));
     document.getElementById('settingsBtn')?.addEventListener('click', () => switchPage('settings'));
 
-    // 初始控制头部显示（首页显示）
+    // 初始控制头部显示
     document.getElementById('globalHeader').style.display = 'flex';
 </script>
 </body>
