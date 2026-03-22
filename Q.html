@@ -99,7 +99,7 @@
             box-shadow: var(--card-shadow);
         }
 
-        /* 头部 */
+        /* 头部（仅首页显示） */
         .header-custom {
             display: flex;
             justify-content: space-between;
@@ -298,8 +298,8 @@
 <body>
 <div class="ambient-bg"></div>
 <div class="container">
-    <!-- 头部 -->
-    <div class="header-custom">
+    <!-- 头部（仅首页显示，其他页面隐藏） -->
+    <div class="header-custom" id="globalHeader">
         <div class="h-logo" id="settingsLogo">H</div>
         <div class="search-box">
             <span>🔍</span>
@@ -475,6 +475,15 @@
             nav.classList.remove('active');
             if (nav.getAttribute('data-nav') === pageId) nav.classList.add('active');
         });
+        // 控制顶部头部显示：只在首页显示
+        const header = document.getElementById('globalHeader');
+        if (header) {
+            if (pageId === 'home') {
+                header.style.display = 'flex';
+            } else {
+                header.style.display = 'none';
+            }
+        }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     document.querySelectorAll('.nav-item').forEach(nav => {
@@ -575,6 +584,9 @@
     document.getElementById('tradeBtn')?.addEventListener('click', () => alert('交易功能开发中'));
     document.getElementById('buyBtn')?.addEventListener('click', () => alert('买币功能开发中'));
     document.getElementById('settingsBtn')?.addEventListener('click', () => switchPage('settings'));
+
+    // 初始控制头部显示（首页显示）
+    document.getElementById('globalHeader').style.display = 'flex';
 </script>
 </body>
 </html>
