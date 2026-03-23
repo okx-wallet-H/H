@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>X Layer USDT 转账查询工具</title>
   <style>
     * {
@@ -10,29 +10,23 @@
       padding: 0;
       box-sizing: border-box;
     }
-
     body {
       background: #f5f7fc;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
       padding: 24px 20px;
       color: #1e293b;
     }
-
     .container {
       max-width: 1400px;
       margin: 0 auto;
     }
-
-    /* 卡片样式 */
     .card {
       background: #ffffff;
       border-radius: 28px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
       margin-bottom: 24px;
       overflow: hidden;
-      transition: all 0.2s ease;
     }
-
     .card-header {
       padding: 20px 28px 0 28px;
       display: flex;
@@ -41,7 +35,6 @@
       flex-wrap: wrap;
       gap: 12px;
     }
-
     .card-header h2 {
       font-size: 1.5rem;
       font-weight: 600;
@@ -50,12 +43,9 @@
       -webkit-background-clip: text;
       color: transparent;
     }
-
     .card-body {
       padding: 20px 28px 28px;
     }
-
-    /* 表单组件 */
     .form-grid {
       display: flex;
       flex-wrap: wrap;
@@ -63,12 +53,10 @@
       align-items: flex-end;
       margin-bottom: 20px;
     }
-
     .field {
       flex: 1;
       min-width: 200px;
     }
-
     .field label {
       display: block;
       font-size: 0.8rem;
@@ -78,7 +66,6 @@
       color: #5b6e8c;
       margin-bottom: 6px;
     }
-
     input, select {
       width: 100%;
       padding: 12px 16px;
@@ -89,13 +76,11 @@
       transition: all 0.2s;
       font-family: inherit;
     }
-
     input:focus, select:focus {
       outline: none;
       border-color: #a855f7;
       box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
     }
-
     button {
       background: #4f46e5;
       border: none;
@@ -112,30 +97,25 @@
       font-family: inherit;
       box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
-
     button:hover {
       background: #4338ca;
       transform: translateY(-1px);
     }
-
     button.secondary {
       background: #f1f5f9;
       color: #1e293b;
       box-shadow: none;
       border: 1px solid #e2e8f0;
     }
-
     button.secondary:hover {
       background: #e6edf5;
     }
-
     .stats-row {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
       margin: 24px 0 16px;
     }
-
     .stat-card {
       flex: 1;
       background: #f8fafc;
@@ -143,7 +123,6 @@
       padding: 16px 20px;
       border: 1px solid #eef2f6;
     }
-
     .stat-label {
       font-size: 0.75rem;
       font-weight: 600;
@@ -151,18 +130,15 @@
       color: #5b6e8c;
       letter-spacing: 0.5px;
     }
-
     .stat-value {
       font-size: 1.9rem;
       font-weight: 700;
       margin-top: 8px;
       word-break: break-word;
     }
-
     .income { color: #10b981; }
     .expense { color: #ef4444; }
     .net { background: linear-gradient(135deg, #4f46e5, #a855f7); background-clip: text; -webkit-background-clip: text; color: transparent; }
-
     .info-bar {
       display: flex;
       flex-wrap: wrap;
@@ -174,7 +150,6 @@
       font-size: 0.8rem;
       color: #334155;
     }
-
     .badge {
       display: inline-flex;
       align-items: center;
@@ -185,21 +160,18 @@
     }
     .badge-in { background: #d1fae5; color: #065f46; }
     .badge-out { background: #fee2e2; color: #991b1b; }
-
     .table-wrapper {
       overflow-x: auto;
       border-radius: 20px;
       border: 1px solid #edf2f7;
       background: white;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.85rem;
       min-width: 800px;
     }
-
     th {
       text-align: left;
       padding: 14px 12px;
@@ -208,31 +180,25 @@
       color: #2c3e66;
       border-bottom: 1px solid #e9edf2;
     }
-
     td {
       padding: 14px 12px;
       border-bottom: 1px solid #f0f2f7;
       vertical-align: middle;
     }
-
     tr:hover td {
       background-color: #fafcff;
     }
-
     .mono {
       font-family: 'SF Mono', 'Menlo', monospace;
       font-size: 0.75rem;
     }
-
     a {
       color: #4f46e5;
       text-decoration: none;
     }
-
     a:hover {
       text-decoration: underline;
     }
-
     .status-msg {
       padding: 14px 20px;
       border-radius: 60px;
@@ -242,27 +208,22 @@
       font-size: 0.85rem;
       display: none;
     }
-
     .status-msg.show {
       display: block;
     }
-
     .status-msg.error {
       background: #fee2e2;
       color: #b91c1c;
     }
-
     .status-msg.success {
       background: #dcfce7;
       color: #166534;
     }
-
     .flex-btns {
       display: flex;
       gap: 12px;
       align-items: center;
     }
-
     @media (max-width: 720px) {
       .card-body { padding: 18px; }
       .form-grid { flex-direction: column; }
@@ -272,7 +233,6 @@
 </head>
 <body>
 <div class="container">
-  <!-- 头部 -->
   <div class="card" style="background: linear-gradient(120deg, #ffffff 0%, #fef9ff 100%);">
     <div class="card-body">
       <h1 style="font-size: 1.9rem; font-weight: 700;">🔍 X Layer · USDT 链上查询</h1>
@@ -280,12 +240,11 @@
       <div class="info-bar" style="margin-top: 16px;">
         <span>⚡ 主网: X Layer (Chain ID 196)</span>
         <span>💎 代币: USDT</span>
-        <span>📡 RPC: QuickNode (支持CORS)</span>
+        <span>📡 RPC: 公共节点 (推荐 rpc.xlayer.tech)</span>
       </div>
     </div>
   </div>
 
-  <!-- 查询表单 -->
   <div class="card">
     <div class="card-header">
       <h2>📋 查询条件</h2>
@@ -314,7 +273,8 @@
       <div class="form-grid" style="margin-top: 4px;">
         <div class="field">
           <label>RPC 节点地址</label>
-          <input type="text" id="rpcUrl" value="https://shy-shy-surf.xlayer-mainnet.quiknode.pro/fa135d65d86e5cf4688019042067d4449f1235c5">
+          <input type="text" id="rpcUrl" value="https://rpc.xlayer.tech">
+          <div style="font-size: 12px; margin-top: 5px; color: #6c757d;">💡 若遇到 403，可尝试更换为：https://xlayerrpc.okx.com 或 https://x1.rpc.thirdweb.com</div>
         </div>
         <div class="field">
           <label>USDT 合约地址</label>
@@ -325,7 +285,6 @@
     </div>
   </div>
 
-  <!-- 统计卡片 -->
   <div class="card">
     <div class="card-header">
       <h2>📊 统计结果</h2>
@@ -347,7 +306,6 @@
     </div>
   </div>
 
-  <!-- 明细表格 -->
   <div class="card">
     <div class="card-header">
       <h2>📜 历史明细</h2>
@@ -393,50 +351,37 @@
   const queryAddrSpan = document.getElementById('queryAddrDisplay');
   const recordsBody = document.getElementById('recordsTable');
 
-  let lastRecords = []; // 存储最新查询结果用于导出
+  let lastRecords = [];
 
-  // 辅助函数：显示状态
   function showMessage(text, type = 'info') {
     statusDiv.textContent = text;
     statusDiv.className = `status-msg show ${type}`;
-    if (type === 'error') console.error(text);
-    else console.log(text);
+    console.log(text);
   }
 
   function hideMessage() {
     statusDiv.classList.remove('show');
   }
 
-  // 验证地址
   function isAddress(addr) {
     return /^0x[a-fA-F0-9]{40}$/.test(addr);
   }
 
-  // RPC 调用封装 (支持 CORS)
   async function rpcCall(url, method, params) {
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        id: Date.now(),
-        method,
-        params
-      })
+      body: JSON.stringify({ jsonrpc: '2.0', id: Date.now(), method, params })
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
     const json = await response.json();
     if (json.error) throw new Error(json.error.message || 'RPC error');
     return json.result;
   }
 
-  // 获取代币精度
   async function fetchDecimals(rpcUrl, tokenAddr) {
     try {
-      const data = await rpcCall(rpcUrl, 'eth_call', [{
-        to: tokenAddr,
-        data: DECIMALS_SIG
-      }, 'latest']);
+      const data = await rpcCall(rpcUrl, 'eth_call', [{ to: tokenAddr, data: DECIMALS_SIG }, 'latest']);
       return parseInt(data, 16);
     } catch (e) {
       console.warn('获取decimals失败, 默认18', e);
@@ -444,15 +389,10 @@
     }
   }
 
-  // 获取代币symbol
   async function fetchSymbol(rpcUrl, tokenAddr) {
     try {
-      const hexData = await rpcCall(rpcUrl, 'eth_call', [{
-        to: tokenAddr,
-        data: SYMBOL_SIG
-      }, 'latest']);
+      const hexData = await rpcCall(rpcUrl, 'eth_call', [{ to: tokenAddr, data: SYMBOL_SIG }, 'latest']);
       if (!hexData || hexData === '0x') return 'USDT';
-      // 解析字符串
       const withoutPrefix = hexData.slice(2);
       const lenHex = withoutPrefix.slice(64, 128);
       const len = parseInt(lenHex, 16);
@@ -468,7 +408,6 @@
     }
   }
 
-  // 格式化金额 (大数)
   function formatAmount(value, decimals) {
     const divisor = 10n ** BigInt(decimals);
     let intPart = value / divisor;
@@ -478,24 +417,20 @@
     return `${intPart}.${fracStr}`;
   }
 
-  // 数字展示友好（千位分隔）
   function beautifyNumber(str) {
     let parts = str.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
   }
 
-  // 截断地址显示
   function truncate(addr, start = 6, end = 4) {
     if (!addr || addr.length < start + end + 3) return addr;
     return `${addr.slice(0, start)}...${addr.slice(-end)}`;
   }
 
-  // 获取区块时间戳 (并发控制)
   async function fetchBlockTimestamps(rpcUrl, blockNumbers) {
     const uniqueBlocks = [...new Set(blockNumbers)];
     const map = new Map();
-    // 分批并发 避免 RPC 过载
     const batchSize = 20;
     for (let i = 0; i < uniqueBlocks.length; i += batchSize) {
       const batch = uniqueBlocks.slice(i, i + batchSize);
@@ -513,57 +448,39 @@
     return map;
   }
 
-  // 格式化时间戳
   function formatTimestamp(ts) {
     if (!ts) return '未知';
     const d = new Date(ts * 1000);
     return d.toLocaleString('zh-CN', { hour12: false });
   }
 
-  // 核心查询逻辑 (直连RPC)
   async function queryByRPC(address, rpcUrl, tokenAddr, startBlockNum, stepSize) {
     const lowerAddress = address.toLowerCase();
     const paddedAddr = `0x000000000000000000000000${lowerAddress.slice(2)}`.toLowerCase();
-    // 获取最新区块
     const latestHex = await rpcCall(rpcUrl, 'eth_blockNumber', []);
     const latestBlock = parseInt(latestHex, 16);
     const fromBlock = Math.max(0, startBlockNum);
     if (fromBlock > latestBlock) throw new Error('起始区块大于最新高度');
 
-    // 获取token信息
     const decimals = await fetchDecimals(rpcUrl, tokenAddr);
     const symbol = await fetchSymbol(rpcUrl, tokenAddr);
     const tokenMeta = { decimals, symbol, name: 'USDT', contract: tokenAddr };
 
-    // 分段拉取 logs
     let allLogs = [];
     let currentFrom = fromBlock;
     while (currentFrom <= latestBlock) {
       const currentTo = Math.min(currentFrom + stepSize - 1, latestBlock);
       showMessage(`🔄 扫描区块 ${currentFrom.toLocaleString()} → ${currentTo.toLocaleString()} (最新 ${latestBlock.toLocaleString()})`, 'info');
-      // 并行查询转入和转出
       const [inLogs, outLogs] = await Promise.all([
-        rpcCall(rpcUrl, 'eth_getLogs', [{
-          address: tokenAddr,
-          fromBlock: `0x${currentFrom.toString(16)}`,
-          toBlock: `0x${currentTo.toString(16)}`,
-          topics: [TRANSFER_TOPIC, null, paddedAddr]
-        }]),
-        rpcCall(rpcUrl, 'eth_getLogs', [{
-          address: tokenAddr,
-          fromBlock: `0x${currentFrom.toString(16)}`,
-          toBlock: `0x${currentTo.toString(16)}`,
-          topics: [TRANSFER_TOPIC, paddedAddr, null]
-        }])
+        rpcCall(rpcUrl, 'eth_getLogs', [{ address: tokenAddr, fromBlock: `0x${currentFrom.toString(16)}`, toBlock: `0x${currentTo.toString(16)}`, topics: [TRANSFER_TOPIC, null, paddedAddr] }]),
+        rpcCall(rpcUrl, 'eth_getLogs', [{ address: tokenAddr, fromBlock: `0x${currentFrom.toString(16)}`, toBlock: `0x${currentTo.toString(16)}`, topics: [TRANSFER_TOPIC, paddedAddr, null] }])
       ]);
       allLogs.push(...inLogs, ...outLogs);
       currentFrom = currentTo + 1;
       if (currentFrom > latestBlock) break;
-      // 短暂延迟避免速率限制 (可选)
       await new Promise(r => setTimeout(r, 80));
     }
 
-    // 解析 logs
     const rawTransfers = [];
     for (const log of allLogs) {
       const from = `0x${log.topics[1].slice(26)}`.toLowerCase();
@@ -577,14 +494,10 @@
         txHash: log.transactionHash,
         blockNumber: parseInt(log.blockNumber, 16),
         logIndex: parseInt(log.logIndex, 16),
-        from,
-        to,
-        value,
-        direction
+        from, to, value, direction
       });
     }
 
-    // 去重 (同一交易同一logIndex)
     const uniqueMap = new Map();
     for (const t of rawTransfers) {
       const key = `${t.txHash}-${t.logIndex}-${t.direction}`;
@@ -594,41 +507,26 @@
     transfers.sort((a,b) => b.blockNumber - a.blockNumber || b.logIndex - a.logIndex);
 
     if (transfers.length === 0) {
-      return {
-        token: tokenMeta,
-        summary: { incomeTotal: '0', expenseTotal: '0', netIncome: '0', incomeCount: 0, expenseCount: 0, totalRecords: 0 },
-        records: []
-      };
+      return { token: tokenMeta, summary: { incomeTotal: '0', expenseTotal: '0', netIncome: '0', incomeCount: 0, expenseCount: 0, totalRecords: 0 }, records: [] };
     }
 
-    // 获取区块时间戳
     const blockNumbers = transfers.map(t => t.blockNumber);
     const timeMap = await fetchBlockTimestamps(rpcUrl, blockNumbers);
 
-    // 聚合统计 & 构建记录
     let incomeRaw = 0n, expenseRaw = 0n;
     let incCnt = 0, expCnt = 0;
     const records = [];
 
     for (const tx of transfers) {
       const amountStr = formatAmount(tx.value, decimals);
-      const numAmount = parseFloat(amountStr);
-      if (tx.direction === 'in') {
-        incomeRaw += tx.value;
-        incCnt++;
-      } else {
-        expenseRaw += tx.value;
-        expCnt++;
-      }
+      if (tx.direction === 'in') { incomeRaw += tx.value; incCnt++; }
+      else { expenseRaw += tx.value; expCnt++; }
       records.push({
         timeStamp: timeMap.get(tx.blockNumber) || 0,
         timeStr: formatTimestamp(timeMap.get(tx.blockNumber) || 0),
         direction: tx.direction,
         amount: amountStr,
-        from: tx.from,
-        to: tx.to,
-        txHash: tx.txHash,
-        blockNumber: tx.blockNumber
+        from: tx.from, to: tx.to, txHash: tx.txHash, blockNumber: tx.blockNumber
       });
     }
 
@@ -640,19 +538,11 @@
 
     return {
       token: tokenMeta,
-      summary: {
-        incomeTotal,
-        expenseTotal,
-        netIncome: finalNet,
-        incomeCount: incCnt,
-        expenseCount: expCnt,
-        totalRecords: records.length
-      },
+      summary: { incomeTotal, expenseTotal, netIncome: finalNet, incomeCount: incCnt, expenseCount: expCnt, totalRecords: records.length },
       records
     };
   }
 
-  // 渲染结果到UI
   function render(data, address) {
     const s = data.summary;
     totalInSpan.innerText = beautifyNumber(s.incomeTotal);
@@ -691,22 +581,13 @@
     recordsBody.innerHTML = html;
   }
 
-  // 导出CSV
   function exportCSV(records) {
     if (!records || records.length === 0) {
       showMessage('暂无数据可导出', 'error');
       return;
     }
     const headers = ['时间', '方向', '金额(USDT)', 'From', 'To', '交易哈希', '区块'];
-    const rows = records.map(r => [
-      r.timeStr || '',
-      r.direction === 'in' ? '收入' : '支出',
-      r.amount,
-      r.from,
-      r.to,
-      r.txHash,
-      r.blockNumber
-    ]);
+    const rows = records.map(r => [r.timeStr || '', r.direction === 'in' ? '收入' : '支出', r.amount, r.from, r.to, r.txHash, r.blockNumber]);
     const csvContent = [headers, ...rows].map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
@@ -719,7 +600,6 @@
     URL.revokeObjectURL(url);
   }
 
-  // 主查询入口
   async function handleQuery() {
     const address = addressInput.value.trim();
     const rpcUrl = rpcUrlInput.value.trim();
@@ -765,13 +645,14 @@
     } catch (err) {
       console.error(err);
       let errorMsg = err.message || '未知错误';
-      if (errorMsg.includes('CORS') || errorMsg.includes('fetch')) {
+      if (errorMsg.includes('403')) {
+        errorMsg = 'HTTP 403 禁止访问：当前 RPC 节点需要授权或已失效。请更换 RPC 地址（如 https://rpc.xlayer.tech）后重试。';
+      } else if (errorMsg.includes('CORS') || errorMsg.includes('fetch')) {
         errorMsg = 'CORS 或网络错误：请确保RPC支持跨域，或将此页面部署至本地服务器 (如 python -m http.server) 再访问';
       } else if (errorMsg.includes('rate limit')) {
         errorMsg = 'RPC 速率限制，请减小步长或稍后重试';
       }
       showMessage(`❌ 查询失败: ${errorMsg}`, 'error');
-      // 清空旧数据避免误导
       recordsBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 40px;">查询出错，请检查参数或稍后重试</td></tr>`;
     } finally {
       queryBtn.disabled = false;
@@ -793,13 +674,11 @@
     hideMessage();
   }
 
-  // 绑定事件
   queryBtn.addEventListener('click', handleQuery);
   clearBtn.addEventListener('click', clearAll);
   exportBtn.addEventListener('click', () => exportCSV(lastRecords));
 
-  // 初始化提示
-  showMessage('✨ 就绪 | 默认RPC为QuickNode节点，支持CORS，可直接查询', 'info');
+  showMessage('✨ 就绪 | 默认RPC为公共节点，若遇403可手动更换其他RPC地址', 'info');
   setTimeout(() => hideMessage(), 3000);
 </script>
 </body>
