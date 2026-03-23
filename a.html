@@ -11,7 +11,6 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-
         :root {
             --primary: #7C3AED;
             --primary-light: #9B4DFF;
@@ -23,9 +22,7 @@
             --card-shadow: 0 24px 48px -12px rgba(45, 21, 100, 0.12);
             --success: #10B981;
             --danger: #EF4444;
-            --warning: #F59E0B;
         }
-
         body {
             background-color: var(--bg-color);
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
@@ -34,7 +31,6 @@
             overflow-x: hidden;
             position: relative;
         }
-
         .ambient-bg {
             position: fixed;
             top: 0;
@@ -73,23 +69,19 @@
             0% { transform: translate(0, 0) scale(1); }
             100% { transform: translate(30px, 50px) scale(1.1); }
         }
-
         .container {
             max-width: 700px;
             margin: 0 auto;
         }
-
         .card {
             background: var(--glass-bg);
             backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
             border-radius: 32px;
             padding: 24px;
             margin-bottom: 20px;
             box-shadow: var(--card-shadow);
         }
-
         h1 {
             font-size: 1.8rem;
             font-weight: 800;
@@ -105,7 +97,6 @@
             color: var(--text-muted);
             margin-bottom: 24px;
         }
-
         .input-group {
             background: rgba(255, 255, 255, 0.9);
             border-radius: 60px;
@@ -119,7 +110,7 @@
         .input-group label {
             font-weight: 600;
             color: var(--primary);
-            min-width: 80px;
+            min-width: 90px;
         }
         .input-group input {
             background: transparent;
@@ -127,10 +118,6 @@
             font-size: 0.9rem;
             width: 100%;
             outline: none;
-        }
-        .input-group input::placeholder {
-            color: var(--text-muted);
-            font-size: 0.8rem;
         }
         .btn-gradient {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -146,18 +133,9 @@
             box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
             margin-top: 8px;
         }
-        .btn-gradient:active {
-            transform: scale(0.98);
-        }
-        .btn-gradient:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .result-area {
-            margin-top: 16px;
-            overflow-x: auto;
-        }
+        .btn-gradient:active { transform: scale(0.98); }
+        .btn-gradient:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result-area { margin-top: 16px; overflow-x: auto; }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -169,7 +147,6 @@
             text-align: left;
             font-weight: 600;
             color: var(--primary);
-            border-radius: 16px 0 0 0;
         }
         td {
             padding: 10px 8px;
@@ -182,9 +159,7 @@
             font-family: monospace;
             font-size: 0.75rem;
         }
-        .hash-link:hover {
-            text-decoration: underline;
-        }
+        .hash-link:hover { text-decoration: underline; }
         .loading {
             text-align: center;
             padding: 40px;
@@ -215,9 +190,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .mt-2 {
-            margin-top: 8px;
-        }
+        .mt-2 { margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -225,27 +198,27 @@
 <div class="container">
     <div class="card">
         <h1>🔍 xLayer USDT 转账记录</h1>
-        <div class="sub">查询指定钱包地址的 USDT 交易明细</div>
+        <div class="sub">使用 OKLink API 查询地址历史交易</div>
 
         <div class="input-group">
-            <label>🔑 API Key</label>
-            <input type="text" id="apiKeyInput" placeholder="请输入 OKLink API Key (免费申请)" value="">
+            <label>🔑 OKLink API Key</label>
+            <input type="text" id="apiKeyInput" placeholder="免费申请：https://www.oklink.com/cn/api" value="">
         </div>
         <div class="input-group">
             <label>📮 钱包地址</label>
-            <input type="text" id="addressInput" placeholder="0x..." value="">
+            <input type="text" id="addressInput" placeholder="0x...">
         </div>
         <div class="input-group">
-            <label>📦 USDT 合约</label>
-            <input type="text" id="contractInput" placeholder="xLayer USDT 合约地址" value="0x1E4A596bABE0C6F32BE9e7EbDeBfE6C6BcB4Df35">
+            <label>📦 USDT 合约地址 (xLayer)</label>
+            <input type="text" id="contractInput" value="0x1E4A596bABE0C6F32BE9e7EbDeBfE6C6BcB4Df35">
         </div>
         <div class="input-group">
-            <label>🌐 网络</label>
-            <input type="text" id="chainIdInput" placeholder="链ID (xLayer = 196)" value="196" readonly style="background:#f0f0f0;">
+            <label>🌐 链名称</label>
+            <input type="text" id="chainName" value="xlayer" readonly>
         </div>
 
         <button class="btn-gradient" id="queryBtn">查询转账记录</button>
-        <div class="info-tip">💡 提示：需要 <a href="https://www.oklink.com/cn/api" target="_blank" style="color:var(--primary)">OKLink API Key</a>（免费版每日 5 万次调用）。USDT 合约地址默认为 xLayer 主网 USDT，如需查询其他代币请修改。</div>
+        <div class="info-tip">💡 提示：<a href="https://www.oklink.com/cn/api" target="_blank" style="color:var(--primary)">OKLink API Key</a> 免费申请，xLayer 链短名为 <code>xlayer</code>。USDT 合约地址已预填，如需查询其他代币请修改。</div>
     </div>
 
     <div class="card" id="resultCard" style="display: none;">
@@ -258,100 +231,51 @@
 </div>
 
 <script>
-    // 配置
-    const DEFAULT_USDT_CONTRACT = '0x1E4A596bABE0C6F32BE9e7EbDeBfE6C6BcB4Df35'; // xLayer 主网 USDT 合约 (已验证)
-    const CHAIN_ID = '196'; // xLayer
     const OKLINK_API_BASE = 'https://www.oklink.com/api/v5/explorer/address/address-transaction';
-
-    // 获取DOM元素
+    const DEFAULT_USDT_CONTRACT = '0x1E4A596bABE0C6F32BE9e7EbDeBfE6C6BcB4Df35';
     const apiKeyInput = document.getElementById('apiKeyInput');
     const addressInput = document.getElementById('addressInput');
     const contractInput = document.getElementById('contractInput');
-    const chainIdInput = document.getElementById('chainIdInput');
     const queryBtn = document.getElementById('queryBtn');
     const resultCard = document.getElementById('resultCard');
     const resultContent = document.getElementById('resultContent');
     const resultCountSpan = document.getElementById('resultCount');
 
-    // 加载本地存储的 API Key
-    if (localStorage.getItem('oklink_api_key')) {
-        apiKeyInput.value = localStorage.getItem('oklink_api_key');
-    }
-    // 加载上次查询的地址
-    if (localStorage.getItem('last_address')) {
-        addressInput.value = localStorage.getItem('last_address');
-    }
-    // 默认 USDT 合约地址
-    contractInput.value = DEFAULT_USDT_CONTRACT;
+    if (localStorage.getItem('oklink_api_key')) apiKeyInput.value = localStorage.getItem('oklink_api_key');
+    if (localStorage.getItem('last_address')) addressInput.value = localStorage.getItem('last_address');
 
-    // 存储 API Key
-    apiKeyInput.addEventListener('change', () => {
-        localStorage.setItem('oklink_api_key', apiKeyInput.value);
-    });
+    apiKeyInput.addEventListener('change', () => localStorage.setItem('oklink_api_key', apiKeyInput.value));
+    addressInput.addEventListener('change', () => localStorage.setItem('last_address', addressInput.value));
 
-    // 查询函数
     async function queryTransactions() {
         const apiKey = apiKeyInput.value.trim();
         const address = addressInput.value.trim();
         const tokenContract = contractInput.value.trim();
-        const chainId = chainIdInput.value.trim();
 
-        if (!apiKey) {
-            alert('请填写 OKLink API Key');
-            return;
-        }
-        if (!address) {
-            alert('请填写钱包地址');
-            return;
-        }
-        if (!tokenContract) {
-            alert('请填写 USDT 合约地址');
-            return;
-        }
+        if (!apiKey) { alert('请填写 OKLink API Key'); return; }
+        if (!address) { alert('请填写钱包地址'); return; }
+        if (!tokenContract) { alert('请填写 USDT 合约地址'); return; }
 
-        // 保存地址
-        localStorage.setItem('last_address', address);
-
-        // 显示加载状态
         resultCard.style.display = 'block';
         resultContent.innerHTML = '<div class="loading">⏳ 正在查询，请稍候...</div>';
         resultCountSpan.innerText = '加载中';
-
         queryBtn.disabled = true;
         queryBtn.innerText = '查询中...';
 
         try {
-            // 调用 OKLink API 获取该地址的所有交易（包括 ERC-20 转账）
-            // 注意：OKLink 的地址交易接口返回的是该地址的所有交易（含原生币和代币），需要过滤出代币转账
-            // 使用 fetch 请求，需要包含 API Key 在请求头中
+            // 注意：链短名使用 'xlayer'，符合 OKLink 规范
             const url = `${OKLINK_API_BASE}?chainShortName=xlayer&address=${address}&limit=50&protocolType=token_20`;
-            // 根据文档，需要添加 'Ok-Access-Key' 头
             const response = await fetch(url, {
-                headers: {
-                    'Ok-Access-Key': apiKey,
-                    'Accept': 'application/json'
-                }
+                headers: { 'Ok-Access-Key': apiKey, 'Accept': 'application/json' }
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
-            if (data.code !== '0') {
-                throw new Error(data.msg || 'API 返回错误');
-            }
+            if (data.code !== '0') throw new Error(data.msg || 'API 返回错误');
 
             const records = data.data?.hits || [];
-            // 过滤出代币合约地址为 USDT 的交易
-            const usdtTransfers = records.filter(tx => {
-                // 交易中可能包含多个代币转账（一个交易可以包含多个 Transfer 事件）
-                // 我们需要遍历 tokenTransfers 数组
-                if (tx.tokenTransfers && tx.tokenTransfers.length > 0) {
-                    return tx.tokenTransfers.some(transfer => transfer.contractAddress?.toLowerCase() === tokenContract.toLowerCase());
-                }
-                return false;
-            });
+            const usdtTransfers = records.filter(tx =>
+                tx.tokenTransfers?.some(transfer => transfer.contractAddress?.toLowerCase() === tokenContract.toLowerCase())
+            );
 
             if (usdtTransfers.length === 0) {
                 resultContent.innerHTML = '<div class="loading">📭 未找到 USDT 转账记录</div>';
@@ -359,10 +283,10 @@
                 return;
             }
 
-            // 构建表格
-            let html = '<table><thead><tr><th>交易哈希</th><th>时间</th><th>类型</th><th>数量</th><th>交易地址</th></tr></thead><tbody>';
+            let html = '</td><thead>——
+<th>交易哈希</th><th>时间</th><th>类型</th><th>数量</th><th>对方地址</th>
+</thead><tbody>';
             for (const tx of usdtTransfers) {
-                // 每个交易可能有多条代币转账，分别展示
                 const txHash = tx.txId || tx.hash;
                 const timestamp = tx.transactionTime ? new Date(tx.transactionTime).toLocaleString() : (tx.blockTime ? new Date(tx.blockTime).toLocaleString() : '未知');
                 for (const transfer of tx.tokenTransfers) {
@@ -373,13 +297,13 @@
                     const isSent = from.toLowerCase() === address.toLowerCase();
                     const type = isSent ? '转出 ➡️' : '转入 ⬅️';
                     const counterparty = isSent ? to : from;
-                    html += `<tr>
-                        <td><a href="https://www.oklink.com/xlayer/tx/${txHash}" target="_blank" class="hash-link">${txHash.slice(0, 10)}...${txHash.slice(-8)}</a></td>
-                        <td>${timestamp}</td>
-                        <td>${type}</td>
-                        <td>${value} USDT</td>
-                        <td class="hash-link" title="${counterparty}">${counterparty.slice(0, 10)}...${counterparty.slice(-6)}</td>
-                    </tr>`;
+                    html += `——
+<td><a href="https://www.oklink.com/xlayer/tx/${txHash}" target="_blank" class="hash-link">${txHash.slice(0, 10)}...${txHash.slice(-8)}</a></td>
+<td>${timestamp}</td>
+<td>${type}</td>
+<td>${value} USDT</td>
+<td class="hash-link" title="${counterparty}">${counterparty.slice(0, 10)}...${counterparty.slice(-6)}</td>
+</tr>`;
                 }
             }
             html += '</tbody></table>';
@@ -396,10 +320,7 @@
     }
 
     queryBtn.addEventListener('click', queryTransactions);
-
-    // 自动补全默认值（如果未填）
     if (!contractInput.value) contractInput.value = DEFAULT_USDT_CONTRACT;
-    if (!chainIdInput.value) chainIdInput.value = CHAIN_ID;
 </script>
 </body>
 </html>
