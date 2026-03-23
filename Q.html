@@ -40,15 +40,15 @@
 <script>
     // ==================== 配置（已全部填写） ====================
     // Supabase Edge Function 地址（用于代理 RPC 请求）
-    const FUNCTION_URL = 'https://nqqbtjthryxlwfylfcvd.supabase.co/functions/v1/proxy-rpc';
+    const FUNCTION_URL ='https://brydhwbiypnnktuwawpq.supabase.co/functions/v1/proxy-rpc'
     // USDT0 合约地址（X Layer）
     const USDT0_ADDRESS = '0x779ded0c9e1022225f8e0630b35a9b54be713736';
     // Transfer 事件签名
     const TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
     // Supabase 配置（用于保存查询历史）
-    const supabaseUrl = 'https://nqqbtjthryxlwfylfcvd.supabase.co';
-    const supabaseAnonKey = 'sb_publishable_g0DxElg04wma-A5xfVFMqw_hawAwKn-';
+    const supabaseUrl = 'https://brydhwbiypnnktuwawpq.supabase.co';
+    const supabaseAnonKey = 'sb_publishable_CFHvOpVgVnJ8nUogySZ9nw_GFJHqsMW';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     // 自定义 Provider（通过 Edge Function 转发 RPC 请求）
