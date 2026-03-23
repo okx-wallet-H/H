@@ -2,179 +2,123 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>X Layer USDT0 交易查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H代币社区常见问题解答 (FAQ)</title>
     <style>
-        body { font-family: system-ui; max-width: 900px; margin: 2rem auto; padding: 1rem; background: #f0f2f5; }
-        .container { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h2 { margin-top: 0; color: #1e3a8a; }
-        .input-group { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-        input { flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; font-family: monospace; }
-        button { padding: 0.75rem 1.5rem; background: #1e3a8a; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; }
-        button:hover { background: #2563eb; }
-        .status { margin: 1rem 0; padding: 0.5rem; border-radius: 8px; background: #f1f5f9; font-size: 0.9rem; }
-        pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 12px; overflow-x: auto; font-size: 0.85rem; line-height: 1.4; }
-        .error { color: #f87171; }
-        .toggle-supabase { margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-        footer { margin-top: 2rem; text-align: center; font-size: 0.8rem; color: #64748b; }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #2980b9;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            font-size: 1.4em;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .question {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+        .answer {
+            margin: 0;
+            color: #444;
+        }
+        .highlight {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        ul {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<div class="container">
-    <h2>🔍 X Layer USDT0 交易查询</h2>
-    <div class="input-group">
-        <input type="text" id="address" placeholder="输入 0x 地址（例如 0x...）" />
-        <button onclick="queryTransactions()">查询</button>
+
+    <h1>H代币社区常见问题解答 (FAQ)</h1>
+
+    <h2>💡 核心机制与交易篇</h2>
+    
+    <div class="faq-item">
+        <p class="question">Q1：我们项目的核心玩法是什么？</p>
+        <p class="answer">简单来说就是“持币生息，多劳多得”。您可以通过交易购买 H 代币，将其存入智能合约进行质押，每天晚上 20:00 准时赚取稳定币（U）收益。同时，参与社区的交易比赛还能获得额外的 H 代币奖励。</p>
     </div>
-    <div class="status" id="status">✨ 输入地址后点击查询</div>
-    <div id="result"><pre>等待查询...</pre></div>
 
-    <div class="toggle-supabase">
-        <input type="checkbox" id="enableSupabase" checked>
-        <label for="enableSupabase">📊 保存查询记录到 Supabase</label>
+    <div class="faq-item">
+        <p class="question">Q2：交易的时候扣除的 5% 税费去哪了？</p>
+        <p class="answer">无论是买入、卖出还是社区地址的交易，所有交易均会扣除 5% 的税费。这笔钱会 <span class="highlight">100% 直接进入国库</span>。国库唯一的用途就是向所有质押 H 代币的用户发放 U 收益。取之于交易，用之于质押者。</p>
     </div>
-    <footer>USDT0 合约地址：0x779ded0c9e1022225f8e0630b35a9b54be713736</footer>
-</div>
 
-<script>
-    // ==================== 配置（已全部填写） ====================
-    // Supabase Edge Function 地址（用于代理 RPC 请求）
-    const FUNCTION_URL ='https://brydhwbiypnnktuwawpq.supabase.co/functions/v1/proxy-rpc'
-    // USDT0 合约地址（X Layer）
-    const USDT0_ADDRESS = '0x779ded0c9e1022225f8e0630b35a9b54be713736';
-    // Transfer 事件签名
-    const TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
+    <div class="faq-item">
+        <p class="question">Q3：为什么交易税扣的是 U，而不是 H 代币？</p>
+        <p class="answer">扣除 U 是为了保护国库的购买力和稳定性。如果扣除 H 代币，当 H 价格波动时，国库的价值也会大幅缩水。固定扣除 U 可以确保国库始终有充足的稳定币储备，从而保障每一位质押者的 U 收益能足额发放。</p>
+    </div>
 
-    // Supabase 配置（用于保存查询历史）
-    const supabaseUrl = 'https://brydhwbiypnnktuwawpq.supabase.co';
-    const supabaseAnonKey = 'sb_publishable_CFHvOpVgVnJ8nUogySZ9nw_GFJHqsMW';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+    <h2>💰 质押与收益篇</h2>
 
-    // 自定义 Provider（通过 Edge Function 转发 RPC 请求）
-    class CustomProvider extends ethers.JsonRpcProvider {
-        async send(method, params) {
-            const response = await fetch(FUNCTION_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 1 })
-            });
-            const data = await response.json();
-            if (data.error) throw new Error(data.error.message);
-            return data.result;
-        }
-    }
-    const provider = new CustomProvider();
-    const iface = new ethers.Interface([
-        'event Transfer(address indexed from, address indexed to, uint256 value)'
-    ]);
+    <div class="faq-item">
+        <p class="question">Q4：质押 H 代币有什么要求？需要锁仓吗？</p>
+        <p class="answer">没有任何门槛，<span class="highlight">无锁仓，无周期限制</span>！您随时可以存入，也随时可以提取本金，真正做到资金进出自由。</p>
+    </div>
 
-    // DOM 元素
-    const addressInput = document.getElementById('address');
-    const statusDiv = document.getElementById('status');
-    const resultDiv = document.getElementById('result');
-    const enableSupabaseCheck = document.getElementById('enableSupabase');
+    <div class="faq-item">
+        <p class="question">Q5：质押的收益是怎么计算的？</p>
+        <div class="answer">
+            我们采用“智能阶梯收益”模式，质押的时间越长，每天的收益率就越高。具体日化收益如下：
+            <ul>
+                <li>第 1 - 7 天：<strong>0.5% / 天</strong></li>
+                <li>第 8 - 16 天：<strong>0.6% / 天</strong></li>
+                <li>第 17 - 30 天：<strong>0.7% / 天</strong></li>
+                <li>第 31 - 60 天：<strong>0.8% / 天</strong></li>
+                <li>第 61 - 90 天：<strong>1.0% / 天</strong></li>
+                <li>91 天及以上：<span class="highlight">1.2% / 天</span></li>
+            </ul>
+            收益将在每天晚上 <strong>20:00</strong> 准时自动发放到您的账户。
+        </div>
+    </div>
 
-    // ==================== 查询函数 ====================
-    async function queryTransactions() {
-        const address = addressInput.value.trim();
-        if (!address || !ethers.isAddress(address)) {
-            alert('请输入有效的以太坊地址（0x 开头）');
-            return;
-        }
+    <div class="faq-item">
+        <p class="question">Q6：如果我中途提取了代币，重新质押收益怎么算？</p>
+        <p class="answer">随时提取本金是自由的，但如果您提取后重新进行质押，您的阶梯时间将被重置，收益率将重新从第一天的 0.5% 开始计算。所以，长期持有收益最大化！</p>
+    </div>
 
-        statusDiv.innerText = '⏳ 正在查询，请稍候...';
-        resultDiv.innerHTML = '<pre>查询中（可能需要几秒）...</pre>';
+    <h2>🛡️ 安全与治理篇</h2>
 
-        try {
-            // 1. 获取当前区块高度，查询最近 10000 个区块
-            const latestBlock = await provider.getBlockNumber();
-            const fromBlock = Math.max(0, latestBlock - 10000);
-            const toBlock = latestBlock;
+    <div class="faq-item">
+        <p class="question">Q7：我质押的本金安全吗？项目方会不会挪用？</p>
+        <p class="answer">绝对安全。所有质押的 H 代币本金都会存放在一个独立的<span class="highlight">智能合约地址</span>中，由代码自动管理。没有任何个人或团队（包括项目方）有权限操控或转移这些资金。</p>
+    </div>
 
-            // 2. 获取 USDT0 的所有 Transfer 日志
-            const filter = {
-                address: USDT0_ADDRESS,
-                topics: [TRANSFER_TOPIC],
-                fromBlock: fromBlock,
-                toBlock: toBlock
-            };
-            const logs = await provider.getLogs(filter);
+    <div class="faq-item">
+        <p class="question">Q8：社区的预留代币会被砸盘吗？</p>
+        <p class="answer">不会。首先，社区持有的代币<strong>不参与任何质押</strong>，不瓜分国库的 U 收益。其次，这部分代币完全由<strong>社区投票 + 多签钱包</strong>共同决定用途（主要用于 App 内的拉新奖励和交易赛活动），保证了资金使用的绝对公开、透明。</p>
+    </div>
 
-            // 3. 解码并筛选相关转账
-            const txs = [];
-            for (const log of logs) {
-                const parsed = iface.parseLog(log);
-                if (!parsed) continue;
-                const { from, to, value } = parsed.args;
-                if (from.toLowerCase() === address.toLowerCase() || to.toLowerCase() === address.toLowerCase()) {
-                    txs.push({
-                        hash: log.transactionHash,
-                        block: log.blockNumber,
-                        from,
-                        to,
-                        value: ethers.formatUnits(value, 18) // USDT0 是 18 位小数
-                    });
-                }
-            }
-
-            // 4. 展示结果
-            if (txs.length === 0) {
-                resultDiv.innerHTML = `<pre>📭 地址 ${address} 在最近 10000 个区块内没有 USDT0 转账记录。</pre>`;
-                statusDiv.innerText = '✅ 查询完成，无记录';
-            } else {
-                let output = `地址: ${address}\n区块范围: ${fromBlock} → ${toBlock}\n共找到 ${txs.length} 条记录\n\n`;
-                txs.forEach((tx, i) => {
-                    output += `[${i+1}] 交易哈希: ${tx.hash}\n`;
-                    output += `区块: ${tx.block}\n`;
-                    output += `发送方: ${tx.from}\n`;
-                    output += `接收方: ${tx.to}\n`;
-                    output += `数量: ${tx.value} USDT0\n`;
-                    output += '------------------------\n';
-                });
-                resultDiv.innerHTML = `<pre>${output}</pre>`;
-                statusDiv.innerText = `✅ 查询完成，找到 ${txs.length} 条记录`;
-            }
-
-            // 5. 可选：保存到 Supabase
-            if (enableSupabaseCheck.checked) {
-                await saveToSupabase(address, txs);
-            }
-
-        } catch (err) {
-            console.error(err);
-            let errorMsg = err.message || '未知错误';
-            if (errorMsg.includes('CORS')) errorMsg = '跨域问题，请检查 Edge Function 是否部署成功。';
-            resultDiv.innerHTML = `<pre class="error">❌ 查询失败: ${errorMsg}</pre>`;
-            statusDiv.innerText = '❌ 查询失败';
-        }
-    }
-
-    // ==================== 保存到 Supabase ====================
-    async function saveToSupabase(address, transactions) {
-        try {
-            const { error } = await supabase
-                .from('query_history')
-                .insert({
-                    address: address,
-                    query_time: new Date().toISOString(),
-                    result: transactions
-                });
-            if (error) {
-                console.warn('Supabase 保存失败:', error.message);
-                statusDiv.innerText += ' (历史保存失败)';
-            } else {
-                statusDiv.innerText += ' (历史已保存)';
-            }
-        } catch (e) {
-            console.warn('Supabase 保存异常:', e);
-        }
-    }
-
-    // 回车查询
-    addressInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') queryTransactions();
-    });
-</script>
 </body>
 </html>
