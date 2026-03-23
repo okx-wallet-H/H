@@ -1,266 +1,43 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>海豚社区 - 热门代币</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        /* 代币列表特定样式 */
-        .filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .search-wrapper {
-            flex: 1;
-            min-width: 180px;
-        }
-        .chain-selector, .sort-select {
-            background: var(--glass-bg);
-            backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-main);
-            outline: none;
-            cursor: pointer;
-        }
-        .token-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .token-item {
-            background: rgba(255,255,255,0.6);
-            border-radius: 28px;
-            padding: 16px;
-            border: 1px solid rgba(255,255,255,0.7);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s;
-        }
-        .token-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .token-icon {
-            width: 44px;
-            height: 44px;
-            background: #F3E8FF;
-            border-radius: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #4C1D95;
-        }
-        .token-details {
-            display: flex;
-            flex-direction: column;
-        }
-        .token-symbol {
-            font-weight: 800;
-            font-size: 1rem;
-        }
-        .token-name {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-        .token-stats {
-            text-align: right;
-        }
-        .token-price {
-            font-weight: 700;
-            font-size: 1rem;
-        }
-        .token-change {
-            font-size: 0.7rem;
-        }
-        .token-volume {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-        }
-        .loading-placeholder {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-        @media (max-width: 480px) {
-            .token-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            .token-stats {
-                text-align: left;
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-            }
-            .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-        }
-    </style>
+    <title>测试 X Layer RPC 连接</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
 </head>
 <body>
-<div class="ambient-bg"></div>
-<div class="container">
-    <div class="text-center" style="margin-bottom: 24px;">
-        <h1 style="font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #2D1B69, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">热门代币</h1>
-        <p style="color: var(--text-muted); font-weight: 500;">发现 xLayer & BNB Chain 优质资产</p>
-    </div>
+    <h2>测试 RPC 连接</h2>
+    <button onclick="testRPC()">测试连接</button>
+    <pre id="output">等待点击...</pre>
 
-    <div class="card">
-        <div class="filter-bar">
-            <div class="search-wrapper">
-                <div class="input-group" style="margin:0; background: rgba(255,255,255,0.8);">
-                    <span>🔍</span>
-                    <input type="text" id="searchInput" placeholder="搜索代币名称、符号或地址" style="width:100%;">
-                </div>
-            </div>
-            <select id="chainSelect" class="chain-selector">
-                <option value="xlayer">xLayer</option>
-                <option value="bnb">BNB Chain</option>
-            </select>
-            <select id="sortSelect" class="sort-select">
-                <option value="volume">按成交额</option>
-                <option value="change">按涨跌幅</option>
-                <option value="marketcap">按市值</option>
-            </select>
-        </div>
+    <script>
+        const FUNCTION_URL = 'https://nqqbtjthryxlwfylfcvd.supabase.co/functions/v1/proxy-rpc';
 
-        <div id="tokenList" class="token-list">
-            <div class="loading-placeholder">加载中...</div>
-        </div>
-    </div>
-</div>
-
-<div class="bottom-nav">
-    <a href="index.html" class="nav-item"><div class="nav-icon">🏠</div><span>首页</span></a>
-    <a href="stake.html" class="nav-item"><div class="nav-icon">💎</div><span>质押</span></a>
-    <a href="contest.html" class="nav-item"><div class="nav-icon">🏆</div><span>交易赛</span></a>
-    <a href="im.html" class="nav-item"><div class="nav-icon">💬</div><span>IM</span></a>
-    <a href="wallet.html" class="nav-item"><div class="nav-icon">👛</div><span>钱包</span></a>
-    <a href="tokens.html" class="nav-item active"><div class="nav-icon">📈</div><span>行情</span></a>
-</div>
-
-<script src="common.js"></script>
-<script>
-    // 模拟代币数据（后续可替换为真实 API）
-    const mockTokens = {
-        xlayer: [
-            { symbol: "H", name: "海豚代币", price: 0.00552, change: 5.67, volume: 185000, marketcap: 5520000, icon: "🐬" },
-            { symbol: "OKB", name: "OKB", price: 48.75, change: -0.3, volume: 15200000, marketcap: 2925000000, icon: "🔵" },
-            { symbol: "USDT", name: "Tether USD", price: 1.00, change: 0.01, volume: 125000000, marketcap: 112000000000, icon: "💵" },
-            { symbol: "XLAYER", name: "xLayer Token", price: 0.12, change: 2.5, volume: 3400000, marketcap: 60000000, icon: "⚡" }
-        ],
-        bnb: [
-            { symbol: "BNB", name: "BNB", price: 585.20, change: 1.2, volume: 1250000000, marketcap: 90000000000, icon: "🔶" },
-            { symbol: "CAKE", name: "PancakeSwap", price: 2.45, change: 3.2, volume: 48000000, marketcap: 620000000, icon: "🥞" },
-            { symbol: "USDT", name: "Tether USD", price: 1.00, change: 0.01, volume: 890000000, marketcap: 112000000000, icon: "💵" },
-            { symbol: "H", name: "海豚代币", price: 0.00552, change: 5.67, volume: 185000, marketcap: 5520000, icon: "🐬" }
-        ]
-    };
-
-    let currentTokens = [];
-    let currentChain = 'xlayer';
-
-    function formatNumber(num) {
-        if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
-        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-        if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-        return num.toFixed(2);
-    }
-
-    function formatVolume(num) {
-        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-        if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
-        return num.toFixed(0);
-    }
-
-    function renderTokenList() {
-        const container = document.getElementById('tokenList');
-        if (!container) return;
-
-        if (!currentTokens.length) {
-            container.innerHTML = '<div class="loading-placeholder">暂无数据</div>';
-            return;
+        // 自定义 Provider
+        class CustomProvider extends ethers.JsonRpcProvider {
+            async send(method, params) {
+                const response = await fetch(FUNCTION_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 1 })
+                });
+                const data = await response.json();
+                if (data.error) throw new Error(data.error.message);
+                return data.result;
+            }
         }
 
-        container.innerHTML = currentTokens.map(token => `
-            <div class="token-item">
-                <div class="token-info">
-                    <div class="token-icon">${token.icon}</div>
-                    <div class="token-details">
-                        <div class="token-symbol">${token.symbol}</div>
-                        <div class="token-name">${token.name}</div>
-                    </div>
-                </div>
-                <div class="token-stats">
-                    <div class="token-price">$${token.price.toFixed(token.price < 1 ? 6 : 2)}</div>
-                    <div class="token-change ${token.change >= 0 ? 'positive' : 'negative'}">${token.change >= 0 ? '+' : ''}${token.change.toFixed(2)}%</div>
-                    <div class="token-volume">24h 成交 ${formatVolume(token.volume)}</div>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function sortTokens(tokens, sortBy) {
-        const sorted = [...tokens];
-        switch (sortBy) {
-            case 'volume':
-                return sorted.sort((a, b) => b.volume - a.volume);
-            case 'change':
-                return sorted.sort((a, b) => b.change - a.change);
-            case 'marketcap':
-                return sorted.sort((a, b) => b.marketcap - a.marketcap);
-            default:
-                return sorted;
+        async function testRPC() {
+            const output = document.getElementById('output');
+            output.innerText = '连接中...';
+            try {
+                const provider = new CustomProvider();
+                const blockNumber = await provider.getBlockNumber();
+                output.innerText = `✅ 连接成功！当前区块高度: ${blockNumber}`;
+            } catch (err) {
+                output.innerText = `❌ 连接失败: ${err.message}`;
+                console.error(err);
+            }
         }
-    }
-
-    function filterTokens(tokens, searchTerm) {
-        if (!searchTerm) return tokens;
-        const term = searchTerm.toLowerCase();
-        return tokens.filter(t => 
-            t.symbol.toLowerCase().includes(term) || 
-            t.name.toLowerCase().includes(term)
-        );
-    }
-
-    function updateList() {
-        let tokens = mockTokens[currentChain] || [];
-        const searchTerm = document.getElementById('searchInput')?.value || '';
-        const sortBy = document.getElementById('sortSelect')?.value || 'volume';
-        tokens = filterTokens(tokens, searchTerm);
-        tokens = sortTokens(tokens, sortBy);
-        currentTokens = tokens;
-        renderTokenList();
-    }
-
-    function handleChainChange() {
-        currentChain = document.getElementById('chainSelect').value;
-        updateList();
-    }
-
-    // 初始化
-    document.addEventListener('DOMContentLoaded', () => {
-        updateList();
-        document.getElementById('chainSelect').addEventListener('change', handleChainChange);
-        document.getElementById('sortSelect').addEventListener('change', updateList);
-        document.getElementById('searchInput').addEventListener('input', updateList);
-    });
-</script>
+    </script>
 </body>
 </html>
