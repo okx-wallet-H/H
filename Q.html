@@ -1,45 +1,180 @@
-import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>X Layer USDT0 交易查询</title>
+    <style>
+        body { font-family: system-ui; max-width: 900px; margin: 2rem auto; padding: 1rem; background: #f0f2f5; }
+        .container { background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; color: #1e3a8a; }
+        .input-group { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        input { flex: 1; padding: 0.75rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 8px; font-family: monospace; }
+        button { padding: 0.75rem 1.5rem; background: #1e3a8a; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; }
+        button:hover { background: #2563eb; }
+        .status { margin: 1rem 0; padding: 0.5rem; border-radius: 8px; background: #f1f5f9; font-size: 0.9rem; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 12px; overflow-x: auto; font-size: 0.85rem; line-height: 1.4; }
+        .error { color: #f87171; }
+        .toggle-supabase { margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        footer { margin-top: 2rem; text-align: center; font-size: 0.8rem; color: #64748b; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="container">
+    <h2>🔍 X Layer USDT0 交易查询</h2>
+    <div class="input-group">
+        <input type="text" id="address" placeholder="输入 0x 地址（例如 0x...）" />
+        <button onclick="queryTransactions()">查询</button>
+    </div>
+    <div class="status" id="status">✨ 输入地址后点击查询</div>
+    <div id="result"><pre>等待查询...</pre></div>
 
-const RPC_URL = "https://shy-shy-surf.xlayer-mainnet.quiknode.pro/fa135d65d86e5cf4688019042067d4449f1235c5";
+    <div class="toggle-supabase">
+        <input type="checkbox" id="enableSupabase" checked>
+        <label for="enableSupabase">📊 保存查询记录到 Supabase</label>
+    </div>
+    <footer>USDT0 合约地址：0x779ded0c9e1022225f8e0630b35a9b54be713736</footer>
+</div>
 
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    });
-  }
+<script>
+    // ==================== 配置（已全部填写） ====================
+    // Supabase Edge Function 地址（用于代理 RPC 请求）
+    const FUNCTION_URL = 'https://nqqbtjthryxlwfylfcvd.supabase.co/functions/v1/proxy-rpc';
+    // USDT0 合约地址（X Layer）
+    const USDT0_ADDRESS = '0x779ded0c9e1022225f8e0630b35a9b54be713736';
+    // Transfer 事件签名
+    const TRANSFER_TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef';
 
-  try {
-    if (req.method !== "POST") {
-      return new Response(JSON.stringify({ error: "Method not allowed" }), {
-        status: 405,
-        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-      });
+    // Supabase 配置（用于保存查询历史）
+    const supabaseUrl = 'https://nqqbtjthryxlwfylfcvd.supabase.co';
+    const supabaseAnonKey = 'sb_publishable_g0DxElg04wma-A5xfVFMqw_hawAwKn-';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+    // 自定义 Provider（通过 Edge Function 转发 RPC 请求）
+    class CustomProvider extends ethers.JsonRpcProvider {
+        async send(method, params) {
+            const response = await fetch(FUNCTION_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jsonrpc: '2.0', method, params, id: 1 })
+            });
+            const data = await response.json();
+            if (data.error) throw new Error(data.error.message);
+            return data.result;
+        }
+    }
+    const provider = new CustomProvider();
+    const iface = new ethers.Interface([
+        'event Transfer(address indexed from, address indexed to, uint256 value)'
+    ]);
+
+    // DOM 元素
+    const addressInput = document.getElementById('address');
+    const statusDiv = document.getElementById('status');
+    const resultDiv = document.getElementById('result');
+    const enableSupabaseCheck = document.getElementById('enableSupabase');
+
+    // ==================== 查询函数 ====================
+    async function queryTransactions() {
+        const address = addressInput.value.trim();
+        if (!address || !ethers.isAddress(address)) {
+            alert('请输入有效的以太坊地址（0x 开头）');
+            return;
+        }
+
+        statusDiv.innerText = '⏳ 正在查询，请稍候...';
+        resultDiv.innerHTML = '<pre>查询中（可能需要几秒）...</pre>';
+
+        try {
+            // 1. 获取当前区块高度，查询最近 10000 个区块
+            const latestBlock = await provider.getBlockNumber();
+            const fromBlock = Math.max(0, latestBlock - 10000);
+            const toBlock = latestBlock;
+
+            // 2. 获取 USDT0 的所有 Transfer 日志
+            const filter = {
+                address: USDT0_ADDRESS,
+                topics: [TRANSFER_TOPIC],
+                fromBlock: fromBlock,
+                toBlock: toBlock
+            };
+            const logs = await provider.getLogs(filter);
+
+            // 3. 解码并筛选相关转账
+            const txs = [];
+            for (const log of logs) {
+                const parsed = iface.parseLog(log);
+                if (!parsed) continue;
+                const { from, to, value } = parsed.args;
+                if (from.toLowerCase() === address.toLowerCase() || to.toLowerCase() === address.toLowerCase()) {
+                    txs.push({
+                        hash: log.transactionHash,
+                        block: log.blockNumber,
+                        from,
+                        to,
+                        value: ethers.formatUnits(value, 18) // USDT0 是 18 位小数
+                    });
+                }
+            }
+
+            // 4. 展示结果
+            if (txs.length === 0) {
+                resultDiv.innerHTML = `<pre>📭 地址 ${address} 在最近 10000 个区块内没有 USDT0 转账记录。</pre>`;
+                statusDiv.innerText = '✅ 查询完成，无记录';
+            } else {
+                let output = `地址: ${address}\n区块范围: ${fromBlock} → ${toBlock}\n共找到 ${txs.length} 条记录\n\n`;
+                txs.forEach((tx, i) => {
+                    output += `[${i+1}] 交易哈希: ${tx.hash}\n`;
+                    output += `区块: ${tx.block}\n`;
+                    output += `发送方: ${tx.from}\n`;
+                    output += `接收方: ${tx.to}\n`;
+                    output += `数量: ${tx.value} USDT0\n`;
+                    output += '------------------------\n';
+                });
+                resultDiv.innerHTML = `<pre>${output}</pre>`;
+                statusDiv.innerText = `✅ 查询完成，找到 ${txs.length} 条记录`;
+            }
+
+            // 5. 可选：保存到 Supabase
+            if (enableSupabaseCheck.checked) {
+                await saveToSupabase(address, txs);
+            }
+
+        } catch (err) {
+            console.error(err);
+            let errorMsg = err.message || '未知错误';
+            if (errorMsg.includes('CORS')) errorMsg = '跨域问题，请检查 Edge Function 是否部署成功。';
+            resultDiv.innerHTML = `<pre class="error">❌ 查询失败: ${errorMsg}</pre>`;
+            statusDiv.innerText = '❌ 查询失败';
+        }
     }
 
-    const body = await req.json();
-    const response = await fetch(RPC_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    // ==================== 保存到 Supabase ====================
+    async function saveToSupabase(address, transactions) {
+        try {
+            const { error } = await supabase
+                .from('query_history')
+                .insert({
+                    address: address,
+                    query_time: new Date().toISOString(),
+                    result: transactions
+                });
+            if (error) {
+                console.warn('Supabase 保存失败:', error.message);
+                statusDiv.innerText += ' (历史保存失败)';
+            } else {
+                statusDiv.innerText += ' (历史已保存)';
+            }
+        } catch (e) {
+            console.warn('Supabase 保存异常:', e);
+        }
+    }
 
-    const data = await response.json();
-    return new Response(JSON.stringify(data), {
-      status: response.status,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
+    // 回车查询
+    addressInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') queryTransactions();
     });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-    });
-  }
-});
+</script>
+</body>
+</html>
