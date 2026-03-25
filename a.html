@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>海豚社区 · 区间网格挂单策略</title>
+    <title>海豚社区 · 网格挂单策略</title>
     <style>
         * {
             margin: 0;
@@ -12,9 +12,9 @@
         }
         body {
             background: linear-gradient(145deg, #0a0f1a 0%, #0c1220 100%);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
             padding: 2rem 1rem;
-            color: #eef2ff;
+            color: #edf2f7;
         }
         .container {
             max-width: 1100px;
@@ -44,9 +44,6 @@
             border-left: 3px solid #38bdf8;
             padding-left: 0.75rem;
         }
-        .input-group {
-            margin-bottom: 1rem;
-        }
         .input-row {
             display: flex;
             flex-wrap: wrap;
@@ -65,7 +62,7 @@
             color: #94a3b8;
             margin-bottom: 0.2rem;
         }
-        input, select {
+        input {
             width: 100%;
             background: #0f172a;
             border: 1px solid #334155;
@@ -116,29 +113,17 @@
             color: #facc15;
             font-weight: 600;
         }
-        .warning {
-            background: rgba(249, 115, 22, 0.15);
-            border-left: 3px solid #f97316;
-            padding: 0.6rem 1rem;
-            border-radius: 0.8rem;
-            font-size: 0.75rem;
-            margin: 0.8rem 0;
-        }
-        .success {
-            color: #4ade80;
-        }
-        .info {
-            font-size: 0.7rem;
-            color: #6b7280;
-            text-align: center;
-            margin-top: 1rem;
-        }
-        .badge {
-            background: #1e293b;
+        .info-note {
+            background: rgba(56, 189, 248, 0.1);
             border-radius: 1rem;
-            padding: 0.2rem 0.6rem;
-            font-size: 0.7rem;
-            display: inline-block;
+            padding: 0.8rem;
+            font-size: 0.75rem;
+            color: #9cb3e0;
+            margin-top: 1rem;
+            line-height: 1.4;
+        }
+        .info-note strong {
+            color: #7dd3fc;
         }
         footer {
             text-align: center;
@@ -152,7 +137,7 @@
 <div class="container">
     <div class="card">
         <h1>🐬 区间网格挂单策略</h1>
-        <div class="sub">基于 AMM 恒定乘积 (k=2e12) | 自动计算每档挂单价位与数量</div>
+        <div class="sub">基于 AMM 恒定乘积 | 输入价格区间与本金，自动生成买卖挂单</div>
 
         <div class="input-row">
             <div class="input-field">
@@ -170,48 +155,43 @@
         </div>
         <div class="input-row">
             <div class="input-field">
-                <label>💵 做市本金 (U, 用于买单)</label>
+                <label>💵 做市本金 (U, 用于买入)</label>
                 <input type="number" id="capital" step="1000" value="10000">
             </div>
             <div class="input-field">
-                <label>🔢 网格层数 (2~10)</label>
-                <input type="number" id="gridLevels" step="1" min="2" max="10" value="3">
-            </div>
-            <div class="input-field">
-                <label>⚙️ 安全系数 (0.5~1)</label>
-                <input type="number" id="safety" step="0.05" min="0.5" max="1" value="0.8">
+                <label>🔢 网格层数 (2~8)</label>
+                <input type="number" id="gridLevels" step="1" min="2" max="8" value="3">
             </div>
         </div>
         <div class="input-row">
-            <button id="calcBtn">✨ 生成挂单策略</button>
+            <button id="calcBtn">✨ 生成挂单网格</button>
         </div>
     </div>
 
     <div id="resultCard" class="card" style="display: none;">
-        <h2 style="font-size:1.2rem; margin-bottom:0.5rem;">📋 挂单网格明细</h2>
+        <h2 style="font-size:1.2rem; margin-bottom:0.5rem;">📋 挂单明细</h2>
         <div id="gridTable" class="result-table"></div>
-        <div id="taxWarning" class="warning"></div>
-        <div id="summary" class="info"></div>
+        <div id="taxNote" class="info-note"></div>
     </div>
-    <footer>※ 恒定乘积 k=2e12 (基于初始流动性深度)。安全系数控制挂单量不超过外部流动性的比例，避免过度滑点。每档价差需 >5.263% 才能覆盖双向5%交易税，否则将显示警告。</footer>
+    <footer>※ 恒定乘积 k=2e12（基于初始流动性）。挂单量已按市场深度限制，避免过度滑点。详细说明见下方注释。</footer>
 </div>
 
 <script>
-    // 恒定乘积常数 (基于初始流动性池: U=105000, H≈19047619, 价格0.0055125)
+    // 恒定乘积常数 (基于初始流动性池: U=105000, H≈19047619)
     const K = 2e12;
+    // 安全系数（固定80%，确保挂单量不超过市场深度的80%，避免滑点过大）
+    const SAFETY = 0.8;
 
-    // 获取DOM元素
+    // DOM 元素
     const currentPriceInput = document.getElementById('currentPrice');
     const priceLowInput = document.getElementById('priceLow');
     const priceHighInput = document.getElementById('priceHigh');
     const capitalInput = document.getElementById('capital');
     const gridLevelsInput = document.getElementById('gridLevels');
-    const safetyInput = document.getElementById('safety');
     const calcBtn = document.getElementById('calcBtn');
     const resultCard = document.getElementById('resultCard');
     const gridTableDiv = document.getElementById('gridTable');
-    const taxWarningDiv = document.getElementById('taxWarning');
-    const summaryDiv = document.getElementById('summary');
+    const taxNoteDiv = document.getElementById('taxNote');
 
     // 辅助格式化
     function formatNum(n, decimals=6) {
@@ -227,28 +207,26 @@
         return n.toFixed(2);
     }
 
-    // 根据当前价格，计算当前池子H和U (基于K)
+    // 根据价格获取当前池子 U 和 H
     function getPoolState(price) {
         const U = Math.sqrt(K * price);
         const H = Math.sqrt(K / price);
         return { U, H };
     }
 
-    // 计算给定价格档位的外部交易量（用于确定挂单上限）
-    function getExternalAmount(price, targetPrice, direction) {
-        // direction: 'buy' 表示挂买单（价格低于当前价），需要外部卖盘；'sell' 表示挂卖单，需要外部买盘
-        const currentState = getPoolState(price);
-        const targetState = getPoolState(targetPrice);
+    // 计算外部可提供的交易量（用于限制挂单）
+    function getExternalAmount(currentPrice, targetPrice, direction) {
+        const curr = getPoolState(currentPrice);
+        const target = getPoolState(targetPrice);
         if (direction === 'buy') {
-            // 价格下跌到 targetPrice，需要外部卖出 H 量 = H_target - H_current
-            return Math.max(0, targetState.H - currentState.H);
+            // 价格下跌到 targetPrice，需要外部卖出 H 量
+            return Math.max(0, target.H - curr.H);
         } else {
-            // 价格上涨到 targetPrice，需要外部买入 H 量 = H_current - H_target
-            return Math.max(0, currentState.H - targetState.H);
+            // 价格上涨到 targetPrice，需要外部买入 H 量
+            return Math.max(0, curr.H - target.H);
         }
     }
 
-    // 生成网格策略
     function generateStrategy() {
         // 获取输入
         let currentPrice = parseFloat(currentPriceInput.value);
@@ -256,176 +234,141 @@
         let high = parseFloat(priceHighInput.value);
         let capital = parseFloat(capitalInput.value);
         let levels = parseInt(gridLevelsInput.value);
-        let safety = parseFloat(safetyInput.value);
 
         if (isNaN(currentPrice) || currentPrice <= 0) currentPrice = 0.0055125;
-        if (isNaN(low) || low <= 0) low = 0.005;
-        if (isNaN(high) || high <= low) high = low + 0.001;
+        if (isNaN(low) || low <= 0) low = currentPrice * 0.9;
+        if (isNaN(high) || high <= low) high = currentPrice * 1.1;
         if (isNaN(capital) || capital <= 0) capital = 10000;
         if (isNaN(levels) || levels < 2) levels = 2;
-        if (levels > 10) levels = 10;
-        if (isNaN(safety) || safety < 0.5) safety = 0.8;
-        if (safety > 1) safety = 1;
+        if (levels > 8) levels = 8;
 
-        // 确保区间包含当前价格（仅用于展示，不强求）
+        // 确保区间包含当前价格（仅用于计算，不强制）
         const effectiveLow = Math.min(low, currentPrice);
         const effectiveHigh = Math.max(high, currentPrice);
 
-        // 生成网格价格点（等间距，包含边界）
+        // 生成网格价格点（等间距）
         const step = (effectiveHigh - effectiveLow) / levels;
         let gridPrices = [];
         for (let i = 0; i <= levels; i++) {
             gridPrices.push(effectiveLow + i * step);
         }
 
-        // 计算总资产（H 部分按当前价格折算为等值 U，用于分配卖单）
-        // 假设用户提供本金 capital（U）用于买单，同时提供等值 H 用于卖单（即总投入为 2*capital）
-        const totalUValue = capital * 2;   // 理论总市值，一半U一半H
-        const totalH = totalUValue / currentPrice; // 全部换成H的数量，但实际卖单只用一半的H
-        // 实际卖单可用 H 总量 = capital / currentPrice  (因为一半资金用于H)
-        const availableHForSell = capital / currentPrice;   // 价值 capital U 的H
+        // 分配买单资金（所有买单总预算 = capital U）
+        const buyGridCount = levels;      // 除最高价外，每个网格点都可挂买单
+        const perBuyBudget = capital / buyGridCount;
 
-        // 用于存储每档挂单数据
+        // 卖单可用 H 总量：价值 capital U 的 H（因为本金对称，一半U一半H）
+        const availableHForSell = capital / currentPrice;
+        const sellGridCount = levels;     // 除最低价外，每个网格点都可挂卖单
+        const perSellH = availableHForSell / sellGridCount;
+
         const buyOrders = [];
         const sellOrders = [];
 
-        // 总买单资金分配（只在非最高价网格点挂买单）
-        const buyGridCount = levels; // 0 到 levels-1 共 levels 个网格点挂买单
-        const totalBuyBudget = capital; // 所有买单总预算（U，含税，实际支付时会含税，但预算就是用户准备出的U）
-        // 每个买单档位预算（U）
-        const perBuyBudget = totalBuyBudget / buyGridCount;
-
-        // 卖单档位数量（非最低价网格点）
-        const sellGridCount = levels;
-        const perSellH = availableHForSell / sellGridCount; // 每档卖单H数量
-
-        // 遍历每个网格点（除最高价外挂买单，除最低价外挂卖单）
+        // 遍历每个网格点，生成挂单
         for (let i = 0; i <= levels; i++) {
             const price = gridPrices[i];
-            // 买入挂单（价格低于当前价才可能触发，但策略中用户可以在任何价格挂单，我们仅生成低于当前价的网格买单）
+            // 买入挂单（价格低于当前价才可能成交，但策略允许在任意网格挂单，我们仅限制低于当前价的网格点）
             if (i < levels) {
                 const buyPrice = price;
-                // 根据当前价格和该买单价格，计算外部卖盘量，限制挂单量
-                const externalSellH = getExternalAmount(currentPrice, buyPrice, 'buy');
-                let maxBuyH = externalSellH * safety;
-                // 根据预算计算理论挂单量（H数量）
+                // 外部卖盘量
+                const externalSell = getExternalAmount(currentPrice, buyPrice, 'buy');
+                let maxBuyH = externalSell * SAFETY;
+                // 预算可买 H 量
                 let budgetH = perBuyBudget / buyPrice;
                 let actualBuyH = Math.min(budgetH, maxBuyH);
                 if (maxBuyH <= 0) actualBuyH = 0;
-                const requiredU = actualBuyH * buyPrice;   // 含税总支付
-                const tax = requiredU * 0.05;
+                const requiredU = actualBuyH * buyPrice;
                 buyOrders.push({
                     price: buyPrice,
                     hAmount: actualBuyH,
                     uCost: requiredU,
-                    tax: tax,
-                    externalNeeded: externalSellH,
                     valid: actualBuyH > 0
                 });
             }
             // 卖出挂单（价格高于当前价）
             if (i > 0) {
                 const sellPrice = price;
-                const externalBuyH = getExternalAmount(currentPrice, sellPrice, 'sell');
-                let maxSellH = externalBuyH * safety;
+                const externalBuy = getExternalAmount(currentPrice, sellPrice, 'sell');
+                let maxSellH = externalBuy * SAFETY;
                 let actualSellH = Math.min(perSellH, maxSellH);
                 if (maxSellH <= 0) actualSellH = 0;
                 const grossU = actualSellH * sellPrice;
-                const tax = grossU * 0.05;
-                const netU = grossU * 0.95;
                 sellOrders.push({
                     price: sellPrice,
                     hAmount: actualSellH,
                     grossU: grossU,
-                    tax: tax,
-                    netU: netU,
-                    externalNeeded: externalBuyH,
                     valid: actualSellH > 0
                 });
             }
         }
 
-        // 渲染表格
         renderTable(buyOrders, sellOrders, gridPrices);
     }
 
     function renderTable(buyOrders, sellOrders, gridPrices) {
-        // 创建表头
-        let html = `<table>
-            <thead>
-                <tr>
-                    <th>网格价格 (U/H)</th>
-                    <th>买入挂单 (H)</th>
-                    <th>买入所需U (含税)</th>
-                    <th>买入税收 (进国库)</th>
-                    <th>卖出挂单 (H)</th>
-                    <th>卖出预期收入 (税前U)</th>
-                    <th>卖出税收 (进国库)</th>
-                    <th>卖出税后到手 (U)</th>
-                </tr>
-            </thead>
-            <tbody>`;
-
-        // 由于买单和卖单数量可能不同，我们按价格合并显示
         // 创建价格到数据的映射
         const buyMap = new Map();
         const sellMap = new Map();
         buyOrders.forEach(b => buyMap.set(b.price, b));
         sellOrders.forEach(s => sellMap.set(s.price, s));
 
-        // 收集所有价格并排序
         const allPrices = [...new Set([...buyMap.keys(), ...sellMap.keys()])].sort((a,b) => a-b);
+        if (allPrices.length === 0) {
+            gridTableDiv.innerHTML = '<div class="info-note">⚠️ 无法生成有效挂单，请调整区间或本金。</div>';
+            taxNoteDiv.innerHTML = '';
+            resultCard.style.display = 'block';
+            return;
+        }
+
+        let html = `<table>
+            <thead>
+                <tr>
+                    <th>网格价格 (U/H)</th>
+                    <th>买入挂单 (H)</th>
+                    <th>买入所需 (U)</th>
+                    <th>卖出挂单 (H)</th>
+                    <th>卖出预期收入 (U)</th>
+                </tr>
+            </thead>
+            <tbody>`;
         for (let price of allPrices) {
             const buy = buyMap.get(price);
             const sell = sellMap.get(price);
-            const buyH = buy ? formatLarge(buy.hAmount) : '—';
-            const buyCost = buy ? formatNum(buy.uCost, 2) : '—';
-            const buyTax = buy ? formatNum(buy.tax, 2) : '—';
-            const sellH = sell ? formatLarge(sell.hAmount) : '—';
-            const sellGross = sell ? formatNum(sell.grossU, 2) : '—';
-            const sellTax = sell ? formatNum(sell.tax, 2) : '—';
-            const sellNet = sell ? formatNum(sell.netU, 2) : '—';
+            const buyH = buy && buy.valid ? formatLarge(buy.hAmount) : '—';
+            const buyCost = buy && buy.valid ? formatNum(buy.uCost, 2) : '—';
+            const sellH = sell && sell.valid ? formatLarge(sell.hAmount) : '—';
+            const sellIncome = sell && sell.valid ? formatNum(sell.grossU, 2) : '—';
             html += `<tr>
                 <td class="price-highlight">${formatNum(price, 6)}</td>
                 <td>${buyH}</td>
                 <td>${buyCost}</td>
-                <td>${buyTax}</td>
                 <td>${sellH}</td>
-                <td>${sellGross}</td>
-                <td>${sellTax}</td>
-                <td>${sellNet}</td>
+                <td>${sellIncome}</td>
             </tr>`;
         }
         html += `</tbody></table>`;
         gridTableDiv.innerHTML = html;
 
-        // 税收覆盖检查
-        let minSpread = Infinity;
+        // 计算最小价差比例，用于税收提示
+        let minRatio = Infinity;
         for (let i = 0; i < gridPrices.length - 1; i++) {
-            const lower = gridPrices[i];
-            const upper = gridPrices[i+1];
-            const ratio = upper / lower;
-            if (ratio < minSpread) minSpread = ratio;
+            const ratio = gridPrices[i+1] / gridPrices[i];
+            if (ratio < minRatio) minRatio = ratio;
         }
-        const requiredRatio = 1 / 0.95; // 1.0526315789
-        let warningMsg = '';
-        if (minSpread < requiredRatio) {
-            warningMsg = `⚠️ 当前网格最小价差比例 ${(minSpread*100-100).toFixed(2)}%，小于覆盖税收所需价差 5.263%。相邻两档之间价差不足，单次套利可能亏损。建议扩大区间或减少网格层数，使每档价差≥5.263%。`;
+        const required = 1 / 0.95; // ≈1.05263
+        let taxMsg = '';
+        if (minRatio < required) {
+            taxMsg = `⚠️ 当前网格最小价差 ${((minRatio-1)*100).toFixed(2)}%，小于覆盖5%交易税所需价差5.263%。单次低买高卖可能亏损，建议扩大区间或减少网格层数。`;
         } else {
-            warningMsg = `✅ 网格最小价差比例 ${(minSpread*100-100).toFixed(2)}%，满足税收覆盖条件，单次完整套利（低买高卖）可盈利。`;
+            taxMsg = `✅ 当前网格最小价差 ${((minRatio-1)*100).toFixed(2)}%，满足税收覆盖条件（价差≥5.263%），单次套利可盈利。`;
         }
-        taxWarningDiv.innerHTML = warningMsg;
+        taxNoteDiv.innerHTML = `${taxMsg}<br>💡 说明：交易税5%已由国库收取，本策略挂单数量已按市场深度（安全系数80%）限制，避免滑点过大。实际成交后，买入所需U已包含税费，卖出收入为税前金额。`;
 
-        // 汇总信息
-        const totalBuyU = buyOrders.reduce((sum, b) => sum + b.uCost, 0);
-        const totalSellNet = sellOrders.reduce((sum, s) => sum + s.netU, 0);
-        const totalTax = buyOrders.reduce((sum, b) => sum + b.tax, 0) + sellOrders.reduce((sum, s) => sum + s.tax, 0);
-        summaryDiv.innerHTML = `📊 总买单预算: ${formatNum(totalBuyU,2)} U | 预期全部卖单税后收入: ${formatNum(totalSellNet,2)} U | 总税收贡献国库: ${formatNum(totalTax,2)} U<br>💡 若价格在区间内完整震荡一次，理论毛利润约 ${formatNum(totalSellNet - totalBuyU,2)} U (已扣税)。`;
         resultCard.style.display = 'block';
     }
 
     calcBtn.addEventListener('click', generateStrategy);
-    // 页面加载时自动生成一次
     generateStrategy();
 </script>
 </body>
