@@ -2,12 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>海豚社区 | 去中心化自治社区</title>
-    <!-- 引入 Google Fonts 提升质感 -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (免费图标库) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>海豚社区 · 挂单策略计算器 | 低买高卖 覆盖交易税</title>
     <style>
         * {
             margin: 0;
@@ -16,150 +12,66 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0b1120 0%, #0f172a 100%);
-            min-height: 100vh;
+            background: linear-gradient(145deg, #0a0f1f 0%, #0c1225 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            padding: 2rem 1rem;
             color: #eef2ff;
         }
 
-        /* 主容器 */
-        .app-container {
-            max-width: 1400px;
+        .container {
+            max-width: 1300px;
             margin: 0 auto;
-            padding: 1.5rem;
         }
 
-        /* 引导页样式 (动态卡片) */
-        .onboarding-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 85vh;
-        }
-
-        .onboarding-card {
-            background: rgba(18, 25, 45, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            box-shadow: 0 25px 45px -12px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 700px;
-            padding: 2rem 2rem 2.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .step-indicator {
-            display: flex;
-            justify-content: space-between;
+        /* 头部 */
+        .hero {
+            text-align: center;
             margin-bottom: 2rem;
-            gap: 0.5rem;
         }
-
-        .step-dot {
-            flex: 1;
-            height: 4px;
-            background: #2d3a5e;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-        .step-dot.active {
-            background: #38bdf8;
-            box-shadow: 0 0 6px #38bdf8;
-        }
-
-        .step-content {
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .step-title {
+        .hero h1 {
             font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #fff, #7dd3fc);
+            background: linear-gradient(135deg, #c084fc, #60a5fa);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .hero p {
+            color: #9ca3af;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
         }
 
-        .stats-badge {
-            background: #1e293b;
-            border-radius: 1rem;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-left: 4px solid #38bdf8;
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            gap: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(95deg, #2563eb, #38bdf8);
-            border: none;
-            padding: 0.8rem 1.8rem;
+        /* 卡片 */
+        .card {
+            background: rgba(15, 25, 45, 0.75);
+            backdrop-filter: blur(12px);
             border-radius: 2rem;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            padding: 1.5rem;
+            margin-bottom: 1.8rem;
+            transition: all 0.2s;
+        }
+        .card-title {
+            font-size: 1.3rem;
             font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 1rem;
-            flex: 1;
-            text-align: center;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid #38bdf8;
-            padding: 0.8rem 1.8rem;
-            border-radius: 2rem;
-            font-weight: 500;
-            color: #bae6fd;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .btn-primary:hover, .btn-outline:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-        }
-
-        /* 注册登录页面 (双面板) */
-        .auth-section {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(8px);
-            border-radius: 2rem;
-            padding: 2rem;
-            max-width: 500px;
-            margin: 2rem auto;
-            border: 1px solid #2d3a5e;
-        }
-
-        .auth-tabs {
+            margin-bottom: 1rem;
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #2d3a5e;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 3px solid #38bdf8;
+            padding-left: 0.75rem;
         }
 
-        .auth-tab {
-            padding: 0.5rem 1.5rem;
-            cursor: pointer;
-            font-weight: 500;
-            color: #94a3b8;
-            transition: 0.2s;
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
-
-        .auth-tab.active {
-            color: #38bdf8;
-            border-bottom: 2px solid #38bdf8;
+        @media (max-width: 760px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
         }
 
         .input-group {
@@ -167,471 +79,397 @@
         }
         .input-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            color: #cbd5e1;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #9ca3af;
+            margin-bottom: 0.4rem;
         }
-        .input-group input {
+        .input-field {
             width: 100%;
             background: #0f172a;
-            border: 1px solid #334155;
-            padding: 0.8rem 1rem;
+            border: 1px solid #2d3a5e;
             border-radius: 1rem;
+            padding: 0.7rem 1rem;
             color: white;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             outline: none;
             transition: 0.2s;
         }
-        .input-group input:focus {
+        .input-field:focus {
             border-color: #38bdf8;
             box-shadow: 0 0 0 2px rgba(56,189,248,0.2);
         }
 
-        /* 后台管理系统区域 */
-        .dashboard-section {
-            display: none;
-        }
-
-        .dashboard-header {
+        .slider-label {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+        input[type="range"] {
+            width: 100%;
+            height: 4px;
+            -webkit-appearance: none;
+            background: #2d3a5e;
+            border-radius: 5px;
+            outline: none;
+        }
+        input[type="range"]:focus {
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 0 6px #38bdf8;
         }
 
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .stat-card {
-            background: #0f172a;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            border: 1px solid #1e293b;
-            transition: all 0.2s;
-        }
-
-        .stat-card h3 {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #94a3b8;
-            margin-bottom: 0.75rem;
+        .result-box {
+            background: #0b1120;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid #38bdf8;
         }
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.6rem;
             font-weight: 700;
-            color: #f1f5f9;
+            color: #facc15;
+            line-height: 1.2;
         }
-        .stat-sub {
+        .stat-label {
+            font-size: 0.7rem;
+            color: #8ca3c9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge {
+            background: #1e293b;
+            border-radius: 2rem;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.7rem;
+            display: inline-block;
+            margin-right: 0.5rem;
+            color: #b9e6ff;
+        }
+        .warning {
+            color: #f97316;
+            background: rgba(249,115,22,0.1);
+            padding: 0.6rem;
+            border-radius: 1rem;
             font-size: 0.8rem;
-            color: #5ee0fa;
-            margin-top: 0.5rem;
+            margin-top: 0.8rem;
         }
-
-        .staking-table {
-            overflow-x: auto;
+        .success {
+            color: #4ade80;
+        }
+        hr {
+            border-color: #1e2a44;
+            margin: 1rem 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #5f6e8c;
             margin-top: 2rem;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #0f172a;
-            border-radius: 1rem;
-        }
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #1e293b;
-        }
-        th {
-            color: #7dd3fc;
-            font-weight: 600;
-        }
-
-        .badge {
-            background: #2563eb20;
-            padding: 0.2rem 0.8rem;
+        button {
+            background: #2563eb;
+            border: none;
             border-radius: 2rem;
-            font-size: 0.8rem;
-            color: #90e0ff;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .btn-sm {
-            background: #1e293b;
-            padding: 0.4rem 1rem;
-            border-radius: 2rem;
-            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            color: white;
+            font-weight: 500;
             cursor: pointer;
             transition: 0.2s;
         }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 3rem;
-            font-size: 0.75rem;
-            color: #5b6e8c;
+        button:hover {
+            background: #3b82f6;
         }
-        .hidden {
-            display: none;
-        }
-        .success-msg {
-            color: #4ade80;
-            margin-top: 1rem;
-            text-align: center;
-        }
-        i {
-            margin-right: 6px;
-        }
-        @media (max-width: 700px) {
-            .app-container { padding: 1rem; }
-            .step-title { font-size: 1.4rem; }
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
     </style>
 </head>
 <body>
-<div class="app-container">
-    <!-- 引导页区域 -->
-    <div id="onboardingWrapper" class="onboarding-section">
-        <div class="onboarding-card">
-            <div class="step-indicator" id="stepIndicator"></div>
-            <div class="step-content" id="stepContent"></div>
-            <div class="btn-group" id="stepButtons"></div>
+<div class="container">
+    <div class="hero">
+        <h1>🐬 挂单策略计算器 · 低买高卖 覆盖交易税</h1>
+        <p>基于 Uniswap V2 AMM 恒定乘积公式 | 自动估算挂单深度 & 税收盈亏平衡</p>
+    </div>
+
+    <div class="card">
+        <div class="card-title">📊 当前池子状态 (Uniswap V2)</div>
+        <div class="grid-2col">
+            <div>
+                <div class="input-group">
+                    <label>💰 池子 U 储备 (USDT / U)</label>
+                    <input type="number" id="poolU" class="input-field" step="1000" value="105000">
+                </div>
+                <div class="input-group">
+                    <label>🪙 池子 H 储备 (H Token)</label>
+                    <input type="number" id="poolH" class="input-field" step="100000" value="19047619">
+                </div>
+                <div class="result-box">
+                    <div class="stat-label">当前市场价格</div>
+                    <div class="stat-number" id="currentPrice">0.000000</div>
+                    <div class="stat-label">恒定乘积 k = U × H</div>
+                    <div id="kValue" style="font-size:0.8rem; word-break:break-all;">2.00e12</div>
+                </div>
+            </div>
+            <div>
+                <div class="input-group">
+                    <div class="slider-label">
+                        <span>📈 挂单价差幅度 (±%)</span>
+                        <span id="spreadPercent">6.0%</span>
+                    </div>
+                    <input type="range" id="spreadSlider" min="1" max="12" step="0.5" value="6">
+                </div>
+                <div class="input-group">
+                    <label>⚙️ 挂单安全系数 (不超过外部流动性的比例)</label>
+                    <input type="range" id="safetyFactor" min="0.5" max="1" step="0.05" value="0.8">
+                    <div class="flex-between">
+                        <span>保守 50%</span>
+                        <span id="safetyVal">80%</span>
+                        <span>激进 100%</span>
+                    </div>
+                </div>
+                <div class="badge">💡 盈亏平衡价差需 > 5.263% (覆盖买卖双向税收)</div>
+            </div>
         </div>
     </div>
 
-    <!-- 注册/登录页面 (初始隐藏) -->
-    <div id="authWrapper" style="display: none;">
-        <div class="auth-section">
-            <div class="auth-tabs">
-                <div class="auth-tab active" data-tab="login">登录</div>
-                <div class="auth-tab" data-tab="register">注册</div>
+    <div class="grid-2col">
+        <!-- 左侧：买单策略 -->
+        <div class="card">
+            <div class="card-title">🔽 买入挂单 (低吸)</div>
+            <div id="buyStrategy">
+                <!-- 动态渲染 -->
+                <div>计算中...</div>
             </div>
-            <div id="loginForm">
-                <div class="input-group">
-                    <label>邮箱 / 用户名</label>
-                    <input type="text" id="loginUser" placeholder="请输入用户名或邮箱">
-                </div>
-                <div class="input-group">
-                    <label>密码</label>
-                    <input type="password" id="loginPwd" placeholder="密码">
-                </div>
-                <button class="btn-primary" id="doLoginBtn" style="width:100%">进入社区后台</button>
-                <div id="loginMsg" class="success-msg"></div>
+            <div id="buyWarning" class="warning" style="display:none;"></div>
+        </div>
+        <!-- 右侧：卖单策略 -->
+        <div class="card">
+            <div class="card-title">🔼 卖出挂单 (高抛)</div>
+            <div id="sellStrategy">
+                <div>计算中...</div>
             </div>
-            <div id="registerForm" style="display: none;">
-                <div class="input-group">
-                    <label>用户名</label>
-                    <input type="text" id="regUser" placeholder="设置用户名">
+            <div id="sellWarning" class="warning" style="display:none;"></div>
+        </div>
+    </div>
+
+    <!-- 策略选择与解释 -->
+    <div class="card">
+        <div class="card-title">🎯 挂单策略指南 & 税收覆盖解释</div>
+        <div class="grid-2col">
+            <div>
+                <h3 style="font-size:1rem; margin-bottom:0.5rem;">📌 先买后卖 vs 先卖后买 vs 双向网格</h3>
+                <ul style="padding-left:1.2rem; font-size:0.85rem; color:#cbd5e6; line-height:1.5;">
+                    <li><span class="badge">先买后卖</span> 预期价格先跌后涨 → 提前挂低价买单，成交后等待反弹挂卖单。适合震荡下行预期。</li>
+                    <li><span class="badge">先卖后买</span> 预期价格先涨后跌 → 提前挂高价卖单，成交后等待回调再买回。适合冲高回落预期。</li>
+                    <li><span class="badge">双向挂单 (网格)</span> 同时挂买卖单，无论涨跌都能吃到价差，无需预测方向。✅ 推荐作为主要做市策略。</li>
+                </ul>
+                <div class="result-box" style="margin-top:1rem;">
+                    <div class="stat-label">💰 税收覆盖条件</div>
+                    <div>买入卖出各 5% 税费 → 完整套利需卖出价 / 买入价 > <strong id="breakEven">1.05263</strong> (约5.263%涨幅)</div>
+                    <div>当前设定价差: <strong id="currentSpreadRatio">---</strong>，<span id="profitStatus">⚠️ 无法覆盖税收</span></div>
                 </div>
-                <div class="input-group">
-                    <label>邮箱</label>
-                    <input type="email" id="regEmail" placeholder="邮箱地址">
+            </div>
+            <div>
+                <h3 style="font-size:1rem; margin-bottom:0.5rem;">📐 计算逻辑 (AMM 公式)</h3>
+                <p style="font-size:0.8rem; color:#b9e6ff;">价格 P = U/H , k = U×H = 常数。<br>
+                目标买入价 P_buy = P × (1 - spread%) → 对应池子 H_buy = √(k / P_buy)<br>
+                外部需要卖出 H 量 = H_buy - H_current → 挂单量 ≤ 安全系数 × 该数量，确保成交且不严重滑点。<br>
+                同理卖出价 P_sell = P × (1 + spread%) → 外部需要买入 H 量 = H_current - H_sell。</p>
+                <div class="warning" style="margin-top:0.8rem;">
+                    💡 实际成交时，你的挂单也会轻微影响价格，建议使用≤80%的安全系数，分批挂单。
                 </div>
-                <div class="input-group">
-                    <label>密码</label>
-                    <input type="password" id="regPwd" placeholder="密码">
-                </div>
-                <button class="btn-primary" id="doRegBtn" style="width:100%">注册并登录</button>
-                <div id="regMsg" class="success-msg"></div>
             </div>
         </div>
     </div>
 
-    <!-- 后台管理系统 (仪表盘) -->
-    <div id="dashboardWrapper" style="display: none;">
-        <div class="dashboard-header">
-            <h1><i class="fas fa-dolphin"></i> 海豚社区 · DAO 治理仪表板</h1>
-            <div class="nav-buttons">
-                <div class="btn-sm" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出登录</div>
-            </div>
-        </div>
-        <!-- 关键数据卡片 -->
-        <div class="stat-grid">
-            <div class="stat-card">
-                <h3><i class="fas fa-coins"></i> 国库余额 (USDT)</h3>
-                <div class="stat-number">$29,193,819</div>
-                <div class="stat-sub">实时监控 · 100% 智能合约</div>
-            </div>
-            <div class="stat-card">
-                <h3><i class="fas fa-chart-line"></i> H Token 流通总量</h3>
-                <div class="stat-number">199,984 H</div>
-                <div class="stat-sub">公平发射 · 联合曲线发行</div>
-            </div>
-            <div class="stat-card">
-                <h3><i class="fas fa-hourglass-half"></i> 国库可持续天数</h3>
-                <div class="stat-number">1,993 天</div>
-                <div class="stat-sub">基于当前质押收益模型</div>
-            </div>
-            <div class="stat-card">
-                <h3><i class="fas fa-lock"></i> 质押总价值 (TVL)</h3>
-                <div class="stat-number" id="tvlValue">≈ $4.2M</div>
-                <div class="stat-sub">H+U 双池质押</div>
-            </div>
-        </div>
-
-        <!-- 质押经济模型简介卡片 -->
-        <div class="stat-card" style="margin-bottom: 1.5rem;">
-            <h3><i class="fas fa-chart-simple"></i> H 币经济模型</h3>
-            <p style="margin-top: 0.5rem; font-size:0.9rem;">总发行量 10亿 H | 公平发射，无预售 | 买卖税 5% (U) 全入国库 | UniSwap V2 流动性池</p>
-            <p style="font-size:0.85rem; color:#b9e6ff;">国库支出质押收益，智能合约自动执行，永不增发。</p>
-        </div>
-
-        <!-- 质押收益表 + 双策略 -->
-        <div class="stat-card">
-            <h3><i class="fas fa-chart-pie"></i> 质押机制与收益规则</h3>
-            <div style="display: flex; gap: 1rem; margin: 1rem 0; flex-wrap: wrap;">
-                <div class="badge"><i class="fas fa-shield-alt"></i> 稳健型：锚定质押时H价值</div>
-                <div class="badge"><i class="fas fa-chart-line"></i> 进取型：锚定H数量</div>
-                <div class="badge"><i class="fas fa-dollar-sign"></i> 质押U得H</div>
-            </div>
-            <div class="staking-table">
-                <table>
-                    <thead>
-                        <tr><th>质押时长</th><th>每日利率 (APY等效)</th><th>说明</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1-7 天</td><td>0.5%</td><td rowspan="6">收益次日20点发放，解除质押24h冷却期</td></tr>
-                        <tr><td>8-15 天</td><td>0.6%</td></tr>
-                        <tr><td>16-30 天</td><td>0.7%</td></tr>
-                        <tr><td>31-60 天</td><td>0.8%</td></tr>
-                        <tr><td>61-90 天</td><td>1.0%</td></tr>
-                        <tr><td>91天以上</td><td>1.2%</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="stats-badge" style="margin-top: 1.2rem;">
-                <i class="fas fa-database"></i> 资金流向：用户质押本金进入多签冷钱包；收益由国库实时划拨智能合约。国库余额不足30天收益 → 下调至30%，不足15天 → 暂停发放等待社区投票。
-            </div>
-        </div>
-
-        <!-- 模拟动态收益计算器 -->
-        <div class="stat-card" style="margin-top: 1rem;">
-            <h3><i class="fas fa-calculator"></i> 质押收益模拟器 (稳健型演示)</h3>
-            <div class="input-group" style="display:flex; gap:1rem; align-items: flex-end; flex-wrap:wrap;">
-                <div style="flex:1">
-                    <label>质押H数量</label>
-                    <input type="number" id="stakeAmount" placeholder="输入H数量" value="1000">
-                </div>
-                <div style="flex:1">
-                    <label>质押时H价格 (U)</label>
-                    <input type="number" id="stakePrice" placeholder="价格" value="1.2">
-                </div>
-                <div style="flex:1">
-                    <label>选择时长区间</label>
-                    <select id="stakeDaysSelect" style="background:#0f172a; border:1px solid #334155; padding:0.7rem; border-radius:1rem; color:white;">
-                        <option value="0.5">1-7天 (0.5%)</option>
-                        <option value="0.6">8-15天 (0.6%)</option>
-                        <option value="0.7">16-30天 (0.7%)</option>
-                        <option value="0.8">31-60天 (0.8%)</option>
-                        <option value="1.0">61-90天 (1.0%)</option>
-                        <option value="1.2">91天以上 (1.2%)</option>
-                    </select>
-                </div>
-                <button class="btn-sm" id="calcBtn" style="background:#2563eb; height: 45px;">模拟收益</button>
-            </div>
-            <div id="simResult" style="margin-top: 1rem; background:#0b1120; border-radius: 1rem; padding: 0.8rem; color:#b9e6ff;">
-                日收益: -- U / 年化预估: --
-            </div>
-            <div style="font-size:0.75rem; margin-top: 0.5rem;">*稳健型每日收益 = (质押时H价值U) × 日利率。本金安全锁入智能合约</div>
-        </div>
-        <div class="footer-note">
-            <i class="fas fa-code-branch"></i> 去中心化治理 · 多签国库 + 智能合约驱动 | 数据基于链上实时快照
-        </div>
+    <div class="footer">
+        ⚡ 策略基于 Uniswap V2 恒定乘积做市 | 交易税 5% 已内置于盈亏判断 | 动态调整挂单价差可提高胜率
     </div>
 </div>
 
 <script>
-    // 引导页内容 (7个步骤 + 最后的ready)
-    const steps = [
-        { title: "🐬 欢迎来到海豚社区", desc: "海豚社区是去中心化自治社区，所有资产以及决策，都由促进发展的团队长共同决定！透明、公正、共建。", icon: "fas fa-dolphin" },
-        { title: "💰 H Token 价值支撑", desc: "H Token 是社区的价值引擎，由智能合约与多签驱动社区繁荣发展。每一笔链上交易都赋能国库。", icon: "fas fa-token" },
-        { title: "🔄 交易 → 国库 → 质押", desc: "交易H币→国库收税→质押H→国库发放收益。质押的H进入智能合约锁定，保证本金安全，收益完全去中心化。", icon: "fas fa-hand-holding-usd" },
-        { title: "📊 实时国库面板", desc: "国库账号实时监听，智能合约实时分析统计可持续天数，并展示在App面板，透明化运作。", icon: "fas fa-chart-line" },
-        { title: "🏦 国库数据现况", desc: `<div class="stats-badge"><strong>国库余额：$29,193,819</strong><br>质量总量：199,984 H<br>还可支付：1993天<br>✨好模式经得起时间的考验✨</div>`, icon: "fas fa-chart-simple" },
-        { title: "🚀 你准备好了吗？", desc: "加入海豚社区，一起扬帆起航！在这里，你的每一次贡献都会获得价值反馈。", icon: "fas fa-sailboat" },
-        { title: "💎 我们的信念", desc: "我们始终相信，真正的价值源于诚信共建。去中心化精神，让财富自由流动。", icon: "fas fa-handshake" }
-    ];
+    // DOM 元素
+    const poolUInput = document.getElementById('poolU');
+    const poolHInput = document.getElementById('poolH');
+    const spreadSlider = document.getElementById('spreadSlider');
+    const spreadPercentSpan = document.getElementById('spreadPercent');
+    const safetySlider = document.getElementById('safetyFactor');
+    const safetyValSpan = document.getElementById('safetyVal');
+    const currentPriceSpan = document.getElementById('currentPrice');
+    const kValueSpan = document.getElementById('kValue');
+    const breakEvenSpan = document.getElementById('breakEven');
+    const currentSpreadRatioSpan = document.getElementById('currentSpreadRatio');
+    const profitStatusSpan = document.getElementById('profitStatus');
 
-    let currentStep = 0;
-    const onboardingDiv = document.getElementById('onboardingWrapper');
-    const authDiv = document.getElementById('authWrapper');
-    const dashboardDiv = document.getElementById('dashboardWrapper');
+    const buyStrategyDiv = document.getElementById('buyStrategy');
+    const sellStrategyDiv = document.getElementById('sellStrategy');
+    const buyWarningDiv = document.getElementById('buyWarning');
+    const sellWarningDiv = document.getElementById('sellWarning');
 
-    // 渲染引导指示器及内容
-    function renderOnboarding() {
-        const indicatorDiv = document.getElementById('stepIndicator');
-        const contentDiv = document.getElementById('stepContent');
-        const btnDiv = document.getElementById('stepButtons');
-        indicatorDiv.innerHTML = '';
-        for(let i=0; i<steps.length; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'step-dot' + (i === currentStep ? ' active' : '');
-            indicatorDiv.appendChild(dot);
-        }
-        const step = steps[currentStep];
-        contentDiv.innerHTML = `
-            <div class="step-title"><i class="${step.icon}"></i> ${step.title}</div>
-            <div style="line-height:1.6; font-size:1.05rem;">${step.desc}</div>
-        `;
-        btnDiv.innerHTML = '';
-        if(currentStep > 0) {
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'btn-outline';
-            prevBtn.innerHTML = '<i class="fas fa-arrow-left"></i> 上一步';
-            prevBtn.onclick = () => { if(currentStep>0) { currentStep--; renderOnboarding(); } };
-            btnDiv.appendChild(prevBtn);
-        }
-        if(currentStep < steps.length - 1) {
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'btn-primary';
-            nextBtn.innerHTML = '下一步 <i class="fas fa-arrow-right"></i>';
-            nextBtn.onclick = () => { currentStep++; renderOnboarding(); };
-            btnDiv.appendChild(nextBtn);
+    let currentU = 105000;
+    let currentH = 19047619;
+    let spread = 0.06;      // 默认 6%
+    let safety = 0.8;       // 安全系数
+
+    // 辅助科学计数法展示
+    function formatNumber(num, decimals = 4) {
+        if (num > 1e6) return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        if (num > 1e3) return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
+        if (num < 1e-4) return num.toExponential(4);
+        return num.toFixed(decimals);
+    }
+
+    function formatLargeNumber(num) {
+        if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+        if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
+        return num.toFixed(2);
+    }
+
+    function compute() {
+        // 读取输入
+        let U = parseFloat(poolUInput.value);
+        let H = parseFloat(poolHInput.value);
+        if (isNaN(U) || U <= 0) U = 105000;
+        if (isNaN(H) || H <= 0) H = 19047619;
+        currentU = U;
+        currentH = H;
+        const k = U * H;
+        const price = U / H;
+
+        // 价差
+        const spreadRaw = parseFloat(spreadSlider.value);
+        spread = spreadRaw / 100;
+        spreadPercentSpan.innerText = spreadRaw.toFixed(1) + '%';
+        const safetyRaw = parseFloat(safetySlider.value);
+        safety = safetyRaw;
+        safetyValSpan.innerText = (safetyRaw * 100).toFixed(0) + '%';
+
+        // 更新显示
+        currentPriceSpan.innerText = price.toFixed(8);
+        kValueSpan.innerText = formatLargeNumber(k) + ' (' + k.toExponential(4) + ')';
+
+        // 盈亏平衡比值 1/0.95 = 1.0526315789
+        const breakEvenRatio = 1 / 0.95;  // ≈1.05263158
+        breakEvenSpan.innerText = breakEvenRatio.toFixed(5);
+        const sellBuyRatio = (1 + spread) / (1 - spread);
+        currentSpreadRatioSpan.innerText = (sellBuyRatio).toFixed(5);
+        if (sellBuyRatio > breakEvenRatio) {
+            profitStatusSpan.innerHTML = '✅ 价差足够覆盖税收，盈利空间存在';
+            profitStatusSpan.style.color = '#4ade80';
         } else {
-            const finishBtn = document.createElement('button');
-            finishBtn.className = 'btn-primary';
-            finishBtn.innerHTML = '<i class="fas fa-check-circle"></i> 立即加入社区';
-            finishBtn.onclick = () => {
-                // 引导完成，显示注册登录页面
-                onboardingDiv.style.display = 'none';
-                authDiv.style.display = 'block';
-                dashboardDiv.style.display = 'none';
-                // 重置注册登录显示
-                showLoginTab(true);
-            };
-            btnDiv.appendChild(finishBtn);
+            profitStatusSpan.innerHTML = '❌ 价差不足 5.263%，无法覆盖双向税收，建议加大价差';
+            profitStatusSpan.style.color = '#f97316';
         }
-    }
 
-    // 注册登录tab切换
-    function showLoginTab(showLogin) {
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
-        const tabs = document.querySelectorAll('.auth-tab');
-        if(showLogin) {
-            loginForm.style.display = 'block';
-            registerForm.style.display = 'none';
-            tabs[0].classList.add('active');
-            tabs[1].classList.remove('active');
+        // 计算买单所需外部卖盘
+        const P_buy = price * (1 - spread);
+        const H_buy = Math.sqrt(k / P_buy);
+        const externalSellH = H_buy - H;   // 需要外部净卖出 H 量
+        const maxBuyH = Math.max(0, externalSellH * safety);
+        const maxBuyU_need = maxBuyH * P_buy;   // 实际需要支付 U (含税，因为这是成交总价)
+        // 税收明细
+        const taxOnBuy = maxBuyU_need * 0.05;
+        const netToPool = maxBuyU_need * 0.95;
+
+        // 卖单所需外部买盘
+        const P_sell = price * (1 + spread);
+        const H_sell = Math.sqrt(k / P_sell);
+        const externalBuyH = H - H_sell;
+        const maxSellH = Math.max(0, externalBuyH * safety);
+        const maxSellU_receive_gross = maxSellH * P_sell;   // 卖出前总 U (含税)
+        const taxOnSell = maxSellU_receive_gross * 0.05;
+        const netReceiveU = maxSellU_receive_gross * 0.95;
+
+        // 渲染买单区域
+        if (externalSellH <= 0) {
+            buyStrategyDiv.innerHTML = `<div class="warning">⚠️ 当前价差 ${(spread*100).toFixed(1)}% 小于市场价格波动空间，买单价格高于或等于现价，无外部卖盘支持。请增大价差或等待市场下跌。</div>`;
+            buyWarningDiv.style.display = 'block';
+            buyWarningDiv.innerHTML = '⚠️ 无法形成有效挂单：目标买入价高于或等于市价，不会成交。建议提高价差。';
         } else {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'block';
-            tabs[1].classList.add('active');
-            tabs[0].classList.remove('active');
+            buyStrategyDiv.innerHTML = `
+                <div class="result-box">
+                    <div class="flex-between"><span class="stat-label">🎯 挂单买入价</span><span class="stat-number" style="font-size:1.3rem;">${P_buy.toFixed(8)} U/H</span></div>
+                    <div class="flex-between"><span>📉 比现价低</span><span>${(spread*100).toFixed(1)}%</span></div>
+                    <hr>
+                    <div><span class="stat-label">🏦 达到此价需要外部净卖出 H 量</span><br><strong>${formatLargeNumber(externalSellH)} H</strong> (约 ${formatNumber(externalSellH * P_buy, 2)} U)</div>
+                    <div><span class="stat-label">✅ 建议挂单量 (安全系数 ${(safety*100).toFixed(0)}%)</span><br><strong>${formatLargeNumber(maxBuyH)} H</strong></div>
+                    <div><span class="stat-label">💰 所需资金 (含5%买入税)</span><br>≈ ${formatNumber(maxBuyU_need, 2)} U</div>
+                    <div><span class="stat-label">💸 其中税收 (进国库)</span><br>${formatNumber(taxOnBuy, 2)} U</div>
+                    <div><span class="stat-label">🔁 实际进入池子 U</span><br>${formatNumber(netToPool, 2)} U</div>
+                </div>
+                <div style="margin-top:0.6rem; font-size:0.75rem; color:#7c9bcf;">📌 策略提示：若市场下跌至挂单价，买单成交，后续可等待反弹卖出完成套利。</div>
+            `;
+            buyWarningDiv.style.display = 'none';
         }
-    }
 
-    // 模拟登录/注册 (简易本地存储, 仅演示)
-    function initAuthEvents() {
-        document.querySelectorAll('.auth-tab').forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const type = tab.getAttribute('data-tab');
-                showLoginTab(type === 'login');
-            });
-        });
-        document.getElementById('doLoginBtn').addEventListener('click', () => {
-            const user = document.getElementById('loginUser').value.trim();
-            const pwd = document.getElementById('loginPwd').value;
-            if(!user || !pwd) {
-                document.getElementById('loginMsg').innerHTML = '请输入用户名和密码';
-                return;
+        // 渲染卖单区域
+        if (externalBuyH <= 0) {
+            sellStrategyDiv.innerHTML = `<div class="warning">⚠️ 当前价差 ${(spread*100).toFixed(1)}%，卖出目标价低于现价，无外部买盘支持。请扩大价差或等待市场上涨。</div>`;
+            sellWarningDiv.style.display = 'block';
+            sellWarningDiv.innerHTML = '⚠️ 无法形成有效挂单：目标卖出价低于或等于市价，不会成交。建议提高价差。';
+        } else {
+            sellStrategyDiv.innerHTML = `
+                <div class="result-box">
+                    <div class="flex-between"><span class="stat-label">🎯 挂单卖出价</span><span class="stat-number" style="font-size:1.3rem;">${P_sell.toFixed(8)} U/H</span></div>
+                    <div class="flex-between"><span>📈 比现价高</span><span>${(spread*100).toFixed(1)}%</span></div>
+                    <hr>
+                    <div><span class="stat-label">🏦 达到此价需要外部净买入 H 量</span><br><strong>${formatLargeNumber(externalBuyH)} H</strong> (约 ${formatNumber(externalBuyH * P_sell, 2)} U)</div>
+                    <div><span class="stat-label">✅ 建议挂单量 (安全系数 ${(safety*100).toFixed(0)}%)</span><br><strong>${formatLargeNumber(maxSellH)} H</strong></div>
+                    <div><span class="stat-label">💵 卖出预期总金额 (含5%卖出税)</span><br>≈ ${formatNumber(maxSellU_receive_gross, 2)} U</div>
+                    <div><span class="stat-label">💸 其中税收 (进国库)</span><br>${formatNumber(taxOnSell, 2)} U</div>
+                    <div><span class="stat-label">💰 你实际到手 (税后)</span><br>${formatNumber(netReceiveU, 2)} U</div>
+                </div>
+                <div style="margin-top:0.6rem; font-size:0.75rem; color:#7c9bcf;">📌 策略提示：若市场上扬至挂单价，卖单成交，可等待回调后低价接回，赚取价差。</div>
+            `;
+            sellWarningDiv.style.display = 'none';
+        }
+
+        // 额外展示完整套利模拟（如果双向挂单都成交）
+        if (externalBuyH > 0 && externalSellH > 0) {
+            const fullCycleProfit = netReceiveU - maxBuyU_need;
+            const profitRate = (fullCycleProfit / maxBuyU_need) * 100;
+            const profitHtml = `<div class="result-box" style="margin-top:0.8rem; background:#0a142e;">
+                                <div class="flex-between"><span>🔄 双向挂单同时成交模拟 (先买后卖)</span><span class="${fullCycleProfit>0?'success':'warning'}">净利润 ≈ ${formatNumber(fullCycleProfit,2)} U</span></div>
+                                <div class="flex-between"><span>收益率 (扣除全部税收)</span><span>${profitRate.toFixed(2)}%</span></div>
+                                <div style="font-size:0.7rem;">* 实际市场不会同时成交，但若震荡波动，网格策略可捕获双向利润。</div>
+                            </div>`;
+            // 追加到买卖卡片底部，不重复累加，放在说明区
+            const extraDiv = document.getElementById('profitPreview');
+            if(!extraDiv) {
+                const newDiv = document.createElement('div');
+                newDiv.id = 'profitPreview';
+                newDiv.innerHTML = profitHtml;
+                document.querySelector('.grid-2col').after(newDiv);
+            } else {
+                document.getElementById('profitPreview').innerHTML = profitHtml;
             }
-            // 模拟任意账户登录成功（演示）
-            document.getElementById('loginMsg').innerHTML = '登录成功！跳转仪表板...';
-            setTimeout(() => {
-                authDiv.style.display = 'none';
-                dashboardDiv.style.display = 'block';
-                loadDashboardData();
-            }, 600);
-        });
-        document.getElementById('doRegBtn').addEventListener('click', () => {
-            const regUser = document.getElementById('regUser').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const pwd = document.getElementById('regPwd').value;
-            if(!regUser || !email || !pwd) {
-                document.getElementById('regMsg').innerHTML = '请完整填写信息';
-                return;
-            }
-            document.getElementById('regMsg').innerHTML = '注册成功，自动登录...';
-            setTimeout(() => {
-                authDiv.style.display = 'none';
-                dashboardDiv.style.display = 'block';
-                loadDashboardData();
-            }, 600);
-        });
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            dashboardDiv.style.display = 'none';
-            onboardingDiv.style.display = 'flex';
-            authDiv.style.display = 'none';
-            currentStep = 0;
-            renderOnboarding();
-        });
-    }
-
-    // 模拟后台动态数据 / 质押收益计算
-    function loadDashboardData() {
-        // 可展示国库余额等静态已经存在，也可动态更新tvl
-        const tvlElement = document.getElementById('tvlValue');
-        if(tvlElement) {
-            // 模拟TVL基于流通量估算
-            const totalH = 199984;
-            const priceH = 1.28; // 假设H价1.28U
-            const hValue = totalH * priceH;
-            const uStakedMock = 2100000;
-            const tvl = (hValue + uStakedMock).toFixed(0);
-            tvlElement.innerHTML = `≈ $${Number(tvl).toLocaleString()}`;
-        }
-        // 绑定模拟计算器
-        const calcBtn = document.getElementById('calcBtn');
-        if(calcBtn) {
-            calcBtn.onclick = () => {
-                let amount = parseFloat(document.getElementById('stakeAmount').value);
-                let priceAtStake = parseFloat(document.getElementById('stakePrice').value);
-                let rate = parseFloat(document.getElementById('stakeDaysSelect').value);
-                if(isNaN(amount) || isNaN(priceAtStake)) {
-                    document.getElementById('simResult').innerHTML = '请输入有效的数字';
-                    return;
-                }
-                const lockedValue = amount * priceAtStake;  // 锚定价值
-                const dailyReturnU = lockedValue * (rate / 100);
-                const yearlyReturn = dailyReturnU * 365;
-                document.getElementById('simResult').innerHTML = `📈 每日收益 ≈ ${dailyReturnU.toFixed(4)} USDT &nbsp;&nbsp; 年化收益 ≈ ${yearlyReturn.toFixed(2)} USDT (基于稳健型)`;
-            };
-        }
-        // 默认触发一次展示示例
-        const simResultDiv = document.getElementById('simResult');
-        if(simResultDiv && document.getElementById('stakeAmount')) {
-            document.getElementById('stakeAmount').value = 1000;
-            document.getElementById('stakePrice').value = 1.2;
-            const rateSelect = document.getElementById('stakeDaysSelect');
-            if(rateSelect) rateSelect.value = "0.5";
-            // 自动触发一次
-            setTimeout(() => {
-                if(document.getElementById('calcBtn')) document.getElementById('calcBtn').click();
-            }, 100);
+        } else {
+            const extraDiv = document.getElementById('profitPreview');
+            if(extraDiv) extraDiv.remove();
         }
     }
 
-    // 额外展示质押收益表格附注动态化
-    function bindDynamicEffects() {
-        // 补充一些hover效果等
-    }
+    // 事件监听
+    poolUInput.addEventListener('input', compute);
+    poolHInput.addEventListener('input', compute);
+    spreadSlider.addEventListener('input', compute);
+    safetySlider.addEventListener('input', compute);
 
-    // 初始化渲染引导页
-    renderOnboarding();
-    initAuthEvents();
-    bindDynamicEffects();
-    // 如果直接从引导进入注册，无冲突
-    // 额外确保全局样式
+    // 初始化
+    compute();
 </script>
 </body>
 </html>
