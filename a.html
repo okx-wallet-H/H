@@ -2,473 +2,327 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>海豚社区 · 挂单策略计算器 | 低买高卖 覆盖交易税</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海豚社区 · 挂单策略计算器</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
-            background: linear-gradient(145deg, #0a0f1f 0%, #0c1225 100%);
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: #0b1120;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             padding: 2rem 1rem;
-            color: #eef2ff;
+            color: #e2e8f0;
         }
-
         .container {
-            max-width: 1300px;
+            max-width: 1000px;
             margin: 0 auto;
         }
-
-        /* 头部 */
-        .hero {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .hero h1 {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #c084fc, #60a5fa);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -0.3px;
-        }
-        .hero p {
-            color: #9ca3af;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        /* 卡片 */
-        .card {
-            background: rgba(15, 25, 45, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 1.5rem;
-            margin-bottom: 1.8rem;
-            transition: all 0.2s;
-        }
-        .card-title {
-            font-size: 1.3rem;
+        h1 {
+            font-size: 1.5rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-left: 3px solid #38bdf8;
+            margin-bottom: 0.25rem;
+            color: #7dd3fc;
+        }
+        .sub {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid #3b82f6;
             padding-left: 0.75rem;
         }
-
-        .grid-2col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-        @media (max-width: 760px) {
-            .grid-2col {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-        }
-        .input-group label {
-            display: block;
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: #9ca3af;
-            margin-bottom: 0.4rem;
-        }
-        .input-field {
-            width: 100%;
+        .card {
             background: #0f172a;
-            border: 1px solid #2d3a5e;
-            border-radius: 1rem;
-            padding: 0.7rem 1rem;
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #1e293b;
+        }
+        .input-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .input-group {
+            flex: 1;
+            min-width: 140px;
+        }
+        label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #94a3b8;
+            margin-bottom: 0.2rem;
+        }
+        input {
+            width: 100%;
+            background: #020617;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.75rem;
             color: white;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             outline: none;
-            transition: 0.2s;
         }
-        .input-field:focus {
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 2px rgba(56,189,248,0.2);
+        input:focus {
+            border-color: #3b82f6;
         }
-
-        .slider-label {
+        .range-label {
             display: flex;
             justify-content: space-between;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             margin-bottom: 0.3rem;
         }
         input[type="range"] {
-            width: 100%;
+            padding: 0;
             height: 4px;
-            -webkit-appearance: none;
-            background: #2d3a5e;
-            border-radius: 5px;
-            outline: none;
-        }
-        input[type="range"]:focus {
-            outline: none;
-        }
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background: #38bdf8;
-            cursor: pointer;
-            box-shadow: 0 0 6px #38bdf8;
-        }
-
-        .result-box {
-            background: #0b1120;
-            border-radius: 1.2rem;
-            padding: 1rem;
-            margin-top: 1rem;
-            border-left: 4px solid #38bdf8;
-        }
-        .stat-number {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #facc15;
-            line-height: 1.2;
-        }
-        .stat-label {
-            font-size: 0.7rem;
-            color: #8ca3c9;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            background: #1e293b;
         }
         .badge {
             background: #1e293b;
-            border-radius: 2rem;
-            padding: 0.2rem 0.7rem;
+            border-radius: 1rem;
+            padding: 0.2rem 0.6rem;
             font-size: 0.7rem;
             display: inline-block;
-            margin-right: 0.5rem;
-            color: #b9e6ff;
+            margin-right: 0.4rem;
         }
-        .warning {
-            color: #f97316;
-            background: rgba(249,115,22,0.1);
-            padding: 0.6rem;
-            border-radius: 1rem;
-            font-size: 0.8rem;
+        .result-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
             margin-top: 0.8rem;
         }
-        .success {
-            color: #4ade80;
+        .result-card {
+            flex: 1;
+            background: #0a0f1c;
+            border-radius: 1rem;
+            padding: 0.8rem;
         }
-        hr {
-            border-color: #1e2a44;
+        .result-title {
+            font-size: 0.7rem;
+            color: #7dd3fc;
+            margin-bottom: 0.3rem;
+        }
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            word-break: break-word;
+        }
+        .small-text {
+            font-size: 0.7rem;
+            color: #8ca3c9;
+            margin-top: 0.4rem;
+        }
+        .divider {
+            height: 1px;
+            background: #1e293b;
             margin: 1rem 0;
         }
-        .footer {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #5f6e8c;
-            margin-top: 2rem;
+        .status {
+            font-size: 0.8rem;
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            background: #0b1120;
+            margin-top: 0.8rem;
+        }
+        .ok { color: #4ade80; }
+        .warn { color: #f97316; }
+        hr {
+            border-color: #1e293b;
+            margin: 0.8rem 0;
         }
         button {
             background: #2563eb;
             border: none;
             border-radius: 2rem;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
             color: white;
-            font-weight: 500;
             cursor: pointer;
-            transition: 0.2s;
         }
         button:hover {
             background: #3b82f6;
         }
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #475569;
+            margin-top: 1.5rem;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="hero">
-        <h1>🐬 挂单策略计算器 · 低买高卖 覆盖交易税</h1>
-        <p>基于 Uniswap V2 AMM 恒定乘积公式 | 自动估算挂单深度 & 税收盈亏平衡</p>
+    <h1>🐬 挂单策略计算器</h1>
+    <div class="sub">基于 Uniswap V2 AMM | 覆盖5%交易税 | 自动估算挂单深度</div>
+
+    <div class="card">
+        <div class="input-row">
+            <div class="input-group">
+                <label>池子 U 储备 (USDT)</label>
+                <input type="number" id="poolU" value="105000" step="5000">
+            </div>
+            <div class="input-group">
+                <label>池子 H 储备 (H代币)</label>
+                <input type="number" id="poolH" value="19047619" step="500000">
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <div class="range-label"><span>挂单价差 (±%)</span><span id="spreadVal">6.0%</span></div>
+                <input type="range" id="spread" min="1" max="12" step="0.5" value="6">
+            </div>
+            <div class="input-group">
+                <div class="range-label"><span>安全系数 (挂单量占比)</span><span id="safeVal">80%</span></div>
+                <input type="range" id="safety" min="0.5" max="1" step="0.05" value="0.8">
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <label>当前价格 (U/H)</label>
+                <input type="text" id="currentPrice" readonly>
+            </div>
+            <div class="input-group">
+                <label>恒定乘积 k</label>
+                <input type="text" id="kValue" readonly>
+            </div>
+        </div>
     </div>
 
     <div class="card">
-        <div class="card-title">📊 当前池子状态 (Uniswap V2)</div>
-        <div class="grid-2col">
-            <div>
-                <div class="input-group">
-                    <label>💰 池子 U 储备 (USDT / U)</label>
-                    <input type="number" id="poolU" class="input-field" step="1000" value="105000">
-                </div>
-                <div class="input-group">
-                    <label>🪙 池子 H 储备 (H Token)</label>
-                    <input type="number" id="poolH" class="input-field" step="100000" value="19047619">
-                </div>
-                <div class="result-box">
-                    <div class="stat-label">当前市场价格</div>
-                    <div class="stat-number" id="currentPrice">0.000000</div>
-                    <div class="stat-label">恒定乘积 k = U × H</div>
-                    <div id="kValue" style="font-size:0.8rem; word-break:break-all;">2.00e12</div>
-                </div>
+        <div class="input-row">
+            <div class="result-card">
+                <div class="result-title">🔽 买入挂单 (低价吸筹)</div>
+                <div id="buyPrice" class="result-value">—</div>
+                <div id="buyAmount" class="small-text">建议挂单量: —</div>
+                <div id="buyCost" class="small-text">所需资金(含税): —</div>
+                <div id="buyTax" class="small-text">税收贡献国库: —</div>
             </div>
-            <div>
-                <div class="input-group">
-                    <div class="slider-label">
-                        <span>📈 挂单价差幅度 (±%)</span>
-                        <span id="spreadPercent">6.0%</span>
-                    </div>
-                    <input type="range" id="spreadSlider" min="1" max="12" step="0.5" value="6">
-                </div>
-                <div class="input-group">
-                    <label>⚙️ 挂单安全系数 (不超过外部流动性的比例)</label>
-                    <input type="range" id="safetyFactor" min="0.5" max="1" step="0.05" value="0.8">
-                    <div class="flex-between">
-                        <span>保守 50%</span>
-                        <span id="safetyVal">80%</span>
-                        <span>激进 100%</span>
-                    </div>
-                </div>
-                <div class="badge">💡 盈亏平衡价差需 > 5.263% (覆盖买卖双向税收)</div>
+            <div class="result-card">
+                <div class="result-title">🔼 卖出挂单 (高价抛售)</div>
+                <div id="sellPrice" class="result-value">—</div>
+                <div id="sellAmount" class="small-text">建议挂单量: —</div>
+                <div id="sellIncome" class="small-text">预期收入(税前): —</div>
+                <div id="sellTax" class="small-text">税收贡献国库: —</div>
             </div>
         </div>
+        <div class="divider"></div>
+        <div id="profitStatus" class="status">—</div>
+        <div id="strategyTip" class="small-text" style="margin-top: 0.6rem;">💡 双向挂单(网格)无需预测方向，价差满足税收条件即可稳健获利。</div>
     </div>
-
-    <div class="grid-2col">
-        <!-- 左侧：买单策略 -->
-        <div class="card">
-            <div class="card-title">🔽 买入挂单 (低吸)</div>
-            <div id="buyStrategy">
-                <!-- 动态渲染 -->
-                <div>计算中...</div>
-            </div>
-            <div id="buyWarning" class="warning" style="display:none;"></div>
-        </div>
-        <!-- 右侧：卖单策略 -->
-        <div class="card">
-            <div class="card-title">🔼 卖出挂单 (高抛)</div>
-            <div id="sellStrategy">
-                <div>计算中...</div>
-            </div>
-            <div id="sellWarning" class="warning" style="display:none;"></div>
-        </div>
-    </div>
-
-    <!-- 策略选择与解释 -->
-    <div class="card">
-        <div class="card-title">🎯 挂单策略指南 & 税收覆盖解释</div>
-        <div class="grid-2col">
-            <div>
-                <h3 style="font-size:1rem; margin-bottom:0.5rem;">📌 先买后卖 vs 先卖后买 vs 双向网格</h3>
-                <ul style="padding-left:1.2rem; font-size:0.85rem; color:#cbd5e6; line-height:1.5;">
-                    <li><span class="badge">先买后卖</span> 预期价格先跌后涨 → 提前挂低价买单，成交后等待反弹挂卖单。适合震荡下行预期。</li>
-                    <li><span class="badge">先卖后买</span> 预期价格先涨后跌 → 提前挂高价卖单，成交后等待回调再买回。适合冲高回落预期。</li>
-                    <li><span class="badge">双向挂单 (网格)</span> 同时挂买卖单，无论涨跌都能吃到价差，无需预测方向。✅ 推荐作为主要做市策略。</li>
-                </ul>
-                <div class="result-box" style="margin-top:1rem;">
-                    <div class="stat-label">💰 税收覆盖条件</div>
-                    <div>买入卖出各 5% 税费 → 完整套利需卖出价 / 买入价 > <strong id="breakEven">1.05263</strong> (约5.263%涨幅)</div>
-                    <div>当前设定价差: <strong id="currentSpreadRatio">---</strong>，<span id="profitStatus">⚠️ 无法覆盖税收</span></div>
-                </div>
-            </div>
-            <div>
-                <h3 style="font-size:1rem; margin-bottom:0.5rem;">📐 计算逻辑 (AMM 公式)</h3>
-                <p style="font-size:0.8rem; color:#b9e6ff;">价格 P = U/H , k = U×H = 常数。<br>
-                目标买入价 P_buy = P × (1 - spread%) → 对应池子 H_buy = √(k / P_buy)<br>
-                外部需要卖出 H 量 = H_buy - H_current → 挂单量 ≤ 安全系数 × 该数量，确保成交且不严重滑点。<br>
-                同理卖出价 P_sell = P × (1 + spread%) → 外部需要买入 H 量 = H_current - H_sell。</p>
-                <div class="warning" style="margin-top:0.8rem;">
-                    💡 实际成交时，你的挂单也会轻微影响价格，建议使用≤80%的安全系数，分批挂单。
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        ⚡ 策略基于 Uniswap V2 恒定乘积做市 | 交易税 5% 已内置于盈亏判断 | 动态调整挂单价差可提高胜率
-    </div>
+    <footer>※ 安全系数建议 ≤80%，避免过度滑点。盈亏平衡需卖出价/买入价 > 1.05263 (约5.263%涨幅)。</footer>
 </div>
 
 <script>
-    // DOM 元素
     const poolUInput = document.getElementById('poolU');
     const poolHInput = document.getElementById('poolH');
-    const spreadSlider = document.getElementById('spreadSlider');
-    const spreadPercentSpan = document.getElementById('spreadPercent');
-    const safetySlider = document.getElementById('safetyFactor');
-    const safetyValSpan = document.getElementById('safetyVal');
+    const spreadSlider = document.getElementById('spread');
+    const spreadVal = document.getElementById('spreadVal');
+    const safetySlider = document.getElementById('safety');
+    const safeVal = document.getElementById('safeVal');
     const currentPriceSpan = document.getElementById('currentPrice');
     const kValueSpan = document.getElementById('kValue');
-    const breakEvenSpan = document.getElementById('breakEven');
-    const currentSpreadRatioSpan = document.getElementById('currentSpreadRatio');
-    const profitStatusSpan = document.getElementById('profitStatus');
 
-    const buyStrategyDiv = document.getElementById('buyStrategy');
-    const sellStrategyDiv = document.getElementById('sellStrategy');
-    const buyWarningDiv = document.getElementById('buyWarning');
-    const sellWarningDiv = document.getElementById('sellWarning');
+    const buyPriceDiv = document.getElementById('buyPrice');
+    const buyAmountDiv = document.getElementById('buyAmount');
+    const buyCostDiv = document.getElementById('buyCost');
+    const buyTaxDiv = document.getElementById('buyTax');
+    const sellPriceDiv = document.getElementById('sellPrice');
+    const sellAmountDiv = document.getElementById('sellAmount');
+    const sellIncomeDiv = document.getElementById('sellIncome');
+    const sellTaxDiv = document.getElementById('sellTax');
+    const profitStatusDiv = document.getElementById('profitStatus');
 
-    let currentU = 105000;
-    let currentH = 19047619;
-    let spread = 0.06;      // 默认 6%
-    let safety = 0.8;       // 安全系数
-
-    // 辅助科学计数法展示
-    function formatNumber(num, decimals = 4) {
-        if (num > 1e6) return num.toLocaleString('en-US', { maximumFractionDigits: 0 });
-        if (num > 1e3) return num.toLocaleString('en-US', { maximumFractionDigits: 2 });
-        if (num < 1e-4) return num.toExponential(4);
-        return num.toFixed(decimals);
+    function formatNumber(n, decimals=4) {
+        if (n === undefined || isNaN(n)) return '0';
+        if (Math.abs(n) > 1e6) return n.toLocaleString('en-US', {maximumFractionDigits: 0});
+        if (Math.abs(n) < 0.0001) return n.toExponential(4);
+        return n.toFixed(decimals);
     }
 
-    function formatLargeNumber(num) {
-        if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
-        if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
-        if (num >= 1e3) return (num / 1e3).toFixed(2) + 'K';
-        return num.toFixed(2);
+    function formatLarge(n) {
+        if (n >= 1e9) return (n/1e9).toFixed(2)+'B';
+        if (n >= 1e6) return (n/1e6).toFixed(2)+'M';
+        if (n >= 1e3) return (n/1e3).toFixed(2)+'K';
+        return n.toFixed(2);
     }
 
     function compute() {
-        // 读取输入
         let U = parseFloat(poolUInput.value);
         let H = parseFloat(poolHInput.value);
         if (isNaN(U) || U <= 0) U = 105000;
         if (isNaN(H) || H <= 0) H = 19047619;
-        currentU = U;
-        currentH = H;
         const k = U * H;
         const price = U / H;
 
-        // 价差
-        const spreadRaw = parseFloat(spreadSlider.value);
-        spread = spreadRaw / 100;
-        spreadPercentSpan.innerText = spreadRaw.toFixed(1) + '%';
-        const safetyRaw = parseFloat(safetySlider.value);
-        safety = safetyRaw;
-        safetyValSpan.innerText = (safetyRaw * 100).toFixed(0) + '%';
+        const spread = parseFloat(spreadSlider.value) / 100;
+        spreadVal.innerText = (spread*100).toFixed(1)+'%';
+        const safety = parseFloat(safetySlider.value);
+        safeVal.innerText = (safety*100).toFixed(0)+'%';
 
-        // 更新显示
-        currentPriceSpan.innerText = price.toFixed(8);
-        kValueSpan.innerText = formatLargeNumber(k) + ' (' + k.toExponential(4) + ')';
+        currentPriceSpan.value = price.toFixed(8);
+        kValueSpan.value = formatLarge(k) + ' (' + k.toExponential(4)+')';
 
-        // 盈亏平衡比值 1/0.95 = 1.0526315789
-        const breakEvenRatio = 1 / 0.95;  // ≈1.05263158
-        breakEvenSpan.innerText = breakEvenRatio.toFixed(5);
-        const sellBuyRatio = (1 + spread) / (1 - spread);
-        currentSpreadRatioSpan.innerText = (sellBuyRatio).toFixed(5);
-        if (sellBuyRatio > breakEvenRatio) {
-            profitStatusSpan.innerHTML = '✅ 价差足够覆盖税收，盈利空间存在';
-            profitStatusSpan.style.color = '#4ade80';
-        } else {
-            profitStatusSpan.innerHTML = '❌ 价差不足 5.263%，无法覆盖双向税收，建议加大价差';
-            profitStatusSpan.style.color = '#f97316';
-        }
-
-        // 计算买单所需外部卖盘
-        const P_buy = price * (1 - spread);
-        const H_buy = Math.sqrt(k / P_buy);
-        const externalSellH = H_buy - H;   // 需要外部净卖出 H 量
+        // 买入策略
+        const buyPrice = price * (1 - spread);
+        const H_buy = Math.sqrt(k / buyPrice);
+        const externalSellH = H_buy - H;          // 需要外部净卖出H量
         const maxBuyH = Math.max(0, externalSellH * safety);
-        const maxBuyU_need = maxBuyH * P_buy;   // 实际需要支付 U (含税，因为这是成交总价)
-        // 税收明细
-        const taxOnBuy = maxBuyU_need * 0.05;
-        const netToPool = maxBuyU_need * 0.95;
-
-        // 卖单所需外部买盘
-        const P_sell = price * (1 + spread);
-        const H_sell = Math.sqrt(k / P_sell);
+        const totalCost = maxBuyH * buyPrice;      // 含税总U支付
+        const buyTax = totalCost * 0.05;
+        
+        // 卖出策略
+        const sellPrice = price * (1 + spread);
+        const H_sell = Math.sqrt(k / sellPrice);
         const externalBuyH = H - H_sell;
         const maxSellH = Math.max(0, externalBuyH * safety);
-        const maxSellU_receive_gross = maxSellH * P_sell;   // 卖出前总 U (含税)
-        const taxOnSell = maxSellU_receive_gross * 0.05;
-        const netReceiveU = maxSellU_receive_gross * 0.95;
+        const grossIncome = maxSellH * sellPrice;   // 税前总收入
+        const sellTax = grossIncome * 0.05;
+        const netIncome = grossIncome * 0.95;
 
-        // 渲染买单区域
-        if (externalSellH <= 0) {
-            buyStrategyDiv.innerHTML = `<div class="warning">⚠️ 当前价差 ${(spread*100).toFixed(1)}% 小于市场价格波动空间，买单价格高于或等于现价，无外部卖盘支持。请增大价差或等待市场下跌。</div>`;
-            buyWarningDiv.style.display = 'block';
-            buyWarningDiv.innerHTML = '⚠️ 无法形成有效挂单：目标买入价高于或等于市价，不会成交。建议提高价差。';
+        // 显示
+        buyPriceDiv.innerText = buyPrice.toFixed(8) + ' U/H';
+        if (externalSellH > 0) {
+            buyAmountDiv.innerText = `建议挂单量: ${formatLarge(maxBuyH)} H (需外部卖盘 ${formatLarge(externalSellH)} H)`;
+            buyCostDiv.innerText = `所需资金(含税): ${formatNumber(totalCost,2)} U`;
+            buyTaxDiv.innerText = `税收贡献国库: ${formatNumber(buyTax,2)} U`;
         } else {
-            buyStrategyDiv.innerHTML = `
-                <div class="result-box">
-                    <div class="flex-between"><span class="stat-label">🎯 挂单买入价</span><span class="stat-number" style="font-size:1.3rem;">${P_buy.toFixed(8)} U/H</span></div>
-                    <div class="flex-between"><span>📉 比现价低</span><span>${(spread*100).toFixed(1)}%</span></div>
-                    <hr>
-                    <div><span class="stat-label">🏦 达到此价需要外部净卖出 H 量</span><br><strong>${formatLargeNumber(externalSellH)} H</strong> (约 ${formatNumber(externalSellH * P_buy, 2)} U)</div>
-                    <div><span class="stat-label">✅ 建议挂单量 (安全系数 ${(safety*100).toFixed(0)}%)</span><br><strong>${formatLargeNumber(maxBuyH)} H</strong></div>
-                    <div><span class="stat-label">💰 所需资金 (含5%买入税)</span><br>≈ ${formatNumber(maxBuyU_need, 2)} U</div>
-                    <div><span class="stat-label">💸 其中税收 (进国库)</span><br>${formatNumber(taxOnBuy, 2)} U</div>
-                    <div><span class="stat-label">🔁 实际进入池子 U</span><br>${formatNumber(netToPool, 2)} U</div>
-                </div>
-                <div style="margin-top:0.6rem; font-size:0.75rem; color:#7c9bcf;">📌 策略提示：若市场下跌至挂单价，买单成交，后续可等待反弹卖出完成套利。</div>
-            `;
-            buyWarningDiv.style.display = 'none';
+            buyAmountDiv.innerText = `⚠️ 价差过小，无外部卖盘支持，增大价差或等待下跌`;
+            buyCostDiv.innerText = `--`;
+            buyTaxDiv.innerText = `--`;
         }
 
-        // 渲染卖单区域
-        if (externalBuyH <= 0) {
-            sellStrategyDiv.innerHTML = `<div class="warning">⚠️ 当前价差 ${(spread*100).toFixed(1)}%，卖出目标价低于现价，无外部买盘支持。请扩大价差或等待市场上涨。</div>`;
-            sellWarningDiv.style.display = 'block';
-            sellWarningDiv.innerHTML = '⚠️ 无法形成有效挂单：目标卖出价低于或等于市价，不会成交。建议提高价差。';
+        sellPriceDiv.innerText = sellPrice.toFixed(8) + ' U/H';
+        if (externalBuyH > 0) {
+            sellAmountDiv.innerText = `建议挂单量: ${formatLarge(maxSellH)} H (需外部买盘 ${formatLarge(externalBuyH)} H)`;
+            sellIncomeDiv.innerText = `预期收入(税前): ${formatNumber(grossIncome,2)} U`;
+            sellTaxDiv.innerText = `税收贡献国库: ${formatNumber(sellTax,2)} U`;
         } else {
-            sellStrategyDiv.innerHTML = `
-                <div class="result-box">
-                    <div class="flex-between"><span class="stat-label">🎯 挂单卖出价</span><span class="stat-number" style="font-size:1.3rem;">${P_sell.toFixed(8)} U/H</span></div>
-                    <div class="flex-between"><span>📈 比现价高</span><span>${(spread*100).toFixed(1)}%</span></div>
-                    <hr>
-                    <div><span class="stat-label">🏦 达到此价需要外部净买入 H 量</span><br><strong>${formatLargeNumber(externalBuyH)} H</strong> (约 ${formatNumber(externalBuyH * P_sell, 2)} U)</div>
-                    <div><span class="stat-label">✅ 建议挂单量 (安全系数 ${(safety*100).toFixed(0)}%)</span><br><strong>${formatLargeNumber(maxSellH)} H</strong></div>
-                    <div><span class="stat-label">💵 卖出预期总金额 (含5%卖出税)</span><br>≈ ${formatNumber(maxSellU_receive_gross, 2)} U</div>
-                    <div><span class="stat-label">💸 其中税收 (进国库)</span><br>${formatNumber(taxOnSell, 2)} U</div>
-                    <div><span class="stat-label">💰 你实际到手 (税后)</span><br>${formatNumber(netReceiveU, 2)} U</div>
-                </div>
-                <div style="margin-top:0.6rem; font-size:0.75rem; color:#7c9bcf;">📌 策略提示：若市场上扬至挂单价，卖单成交，可等待回调后低价接回，赚取价差。</div>
-            `;
-            sellWarningDiv.style.display = 'none';
+            sellAmountDiv.innerText = `⚠️ 价差过小，无外部买盘支持，增大价差或等待上涨`;
+            sellIncomeDiv.innerText = `--`;
+            sellTaxDiv.innerText = `--`;
         }
 
-        // 额外展示完整套利模拟（如果双向挂单都成交）
-        if (externalBuyH > 0 && externalSellH > 0) {
-            const fullCycleProfit = netReceiveU - maxBuyU_need;
-            const profitRate = (fullCycleProfit / maxBuyU_need) * 100;
-            const profitHtml = `<div class="result-box" style="margin-top:0.8rem; background:#0a142e;">
-                                <div class="flex-between"><span>🔄 双向挂单同时成交模拟 (先买后卖)</span><span class="${fullCycleProfit>0?'success':'warning'}">净利润 ≈ ${formatNumber(fullCycleProfit,2)} U</span></div>
-                                <div class="flex-between"><span>收益率 (扣除全部税收)</span><span>${profitRate.toFixed(2)}%</span></div>
-                                <div style="font-size:0.7rem;">* 实际市场不会同时成交，但若震荡波动，网格策略可捕获双向利润。</div>
-                            </div>`;
-            // 追加到买卖卡片底部，不重复累加，放在说明区
-            const extraDiv = document.getElementById('profitPreview');
-            if(!extraDiv) {
-                const newDiv = document.createElement('div');
-                newDiv.id = 'profitPreview';
-                newDiv.innerHTML = profitHtml;
-                document.querySelector('.grid-2col').after(newDiv);
-            } else {
-                document.getElementById('profitPreview').innerHTML = profitHtml;
-            }
+        // 税收盈亏分析
+        const breakEvenRatio = 1 / 0.95;  // ≈1.05263
+        const actualRatio = (1+spread)/(1-spread);
+        if (actualRatio > breakEvenRatio) {
+            profitStatusDiv.innerHTML = `✅ 当前价差 ${(spread*100).toFixed(1)}% 满足税收覆盖条件 (卖出价/买入价=${actualRatio.toFixed(4)} > ${breakEvenRatio.toFixed(4)})，套利有利可图。`;
+            profitStatusDiv.className = 'status ok';
         } else {
-            const extraDiv = document.getElementById('profitPreview');
-            if(extraDiv) extraDiv.remove();
+            profitStatusDiv.innerHTML = `⚠️ 当前价差 ${(spread*100).toFixed(1)}% 不足以覆盖双向5%交易税 (需卖出价/买入价 > 1.05263)，建议将价差提高至6%以上。`;
+            profitStatusDiv.className = 'status warn';
         }
     }
 
-    // 事件监听
     poolUInput.addEventListener('input', compute);
     poolHInput.addEventListener('input', compute);
     spreadSlider.addEventListener('input', compute);
     safetySlider.addEventListener('input', compute);
-
-    // 初始化
     compute();
 </script>
 </body>
