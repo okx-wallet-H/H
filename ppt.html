@@ -2,378 +2,589 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>海豚社区 · 质押模型 | 紫色主题PPT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+    <title>海豚社区 (H) · 紫韵白底 · 动态飞轮 · 全民共治</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: #F5F0FF;  /* 柔和紫灰背景 */
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.45;
+            background-color: #FFFFFF;
+            font-family: 'Inter', sans-serif;
             color: #1E1A2F;
-            padding: 2rem 1rem;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
-        /* 幻灯片容器 */
-        .presentation {
-            max-width: 1100px;
+        /* 柔和渐变背景点缀 */
+        .bg-soft {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: radial-gradient(circle at 10% 20%, rgba(156, 106, 222, 0.08), transparent 60%),
+                        radial-gradient(circle at 90% 70%, rgba(106, 90, 205, 0.05), transparent 70%);
+        }
+
+        .container {
+            max-width: 600px;
             margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* 每一张 “PPT 卡片” */
-        .slide {
-            background: #FFFFFF;
-            border-radius: 32px;
-            box-shadow: 0 20px 35px -12px rgba(98, 0, 234, 0.12), 0 4px 12px rgba(0, 0, 0, 0.02);
-            margin-bottom: 2rem;
-            padding: 2rem 2rem 2.2rem;
-            transition: all 0.2s;
+        section {
+            margin: 48px 0;
         }
 
-        /* 封面特殊样式 */
-        .cover {
-            text-align: center;
-            background: linear-gradient(135deg, #FFFFFF 0%, #F9F3FF 100%);
-        }
-
-        /* 紫色主题元素 */
-        .accent-text {
-            color: #7C3AED;
-            font-weight: 600;
-        }
-        .purple-badge {
-            background: #F0E9FF;
-            color: #6B21D6;
-            font-size: 0.7rem;
-            font-weight: 600;
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-            display: inline-block;
-        }
         h1 {
-            font-size: 2.8rem;
-            font-weight: 700;
-            background: linear-gradient(120deg, #7C3AED, #A855F7);
-            background-clip: text;
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6C3BAA 0%, #9B59B6 50%, #C77DFF 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             color: transparent;
-            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
+
         h2 {
             font-size: 1.6rem;
-            font-weight: 600;
-            color: #2D264B;
+            font-weight: 700;
             margin-bottom: 1rem;
-            letter-spacing: -0.3px;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            border-left: 4px solid #A855F7;
-            padding-left: 0.9rem;
+            letter-spacing: -0.01em;
+            border-left: 4px solid #9B59B6;
+            padding-left: 1rem;
+            color: #2C1E4A;
         }
+
         h3 {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #3B2E5E;
+            margin-bottom: 0.5rem;
+            color: #6C3BAA;
+        }
+
+        .badge {
+            background: rgba(155, 89, 182, 0.12);
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #8B5CF6;
+            display: inline-block;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            padding: 18px;
+            border: 1px solid #E9E4F5;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        .card:hover {
+            border-color: #C77DFF;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 59, 170, 0.08);
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+        }
+
+        /* 对比双栏 */
+        .comparison {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .comp-card {
+            flex: 1;
+            background: #F9F7FE;
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid #E2D9F5;
+            transition: 0.2s;
+        }
+        .comp-card h3 {
+            font-size: 1.4rem;
             margin-bottom: 0.5rem;
         }
-
-        /* 双模式卡片 */
-        .mode-grid {
-            display: flex;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
-        }
-        .mode-card {
-            flex: 1;
-            background: #FCFAFF;
-            border-radius: 28px;
-            padding: 1.5rem;
-            border: 1px solid #E9DFFF;
-            transition: transform 0.2s;
-        }
-        .mode-card:hover {
-            transform: translateY(-4px);
-            border-color: #C4B5FD;
-        }
-        .mode-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #7C3AED;
-            margin-bottom: 0.75rem;
-        }
-        .formula {
-            background: #F5F0FF;
-            padding: 0.5rem 0.8rem;
-            border-radius: 20px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            margin: 0.75rem 0;
-            color: #2D264B;
-        }
-
-        /* 阶梯利率表格 */
         .rate-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.2rem 0;
+            background: #F9F7FE;
             border-radius: 20px;
             overflow: hidden;
         }
+        .rate-table th, .rate-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #EDE7F6;
+            color: #2C1E4A;
+        }
         .rate-table th {
-            background: #F5F0FF;
-            padding: 12px 8px;
-            font-weight: 600;
-            color: #4C3A7A;
-            text-align: center;
-        }
-        .rate-table td {
-            padding: 10px 8px;
-            text-align: center;
-            border-bottom: 1px solid #EEE9FF;
-        }
-        .highlight-percent {
+            color: #9B59B6;
             font-weight: 700;
-            color: #7C3AED;
         }
 
-        /* 国库保护机制 */
-        .protection-box {
-            background: #F9F6FF;
-            border-radius: 24px;
-            padding: 1.2rem;
-            margin: 1rem 0;
-            border-left: 4px solid #A855F7;
+        /* 飞轮动画容器 (白色底适配) */
+        .flywheel-container {
+            background: #FCFAFF;
+            border-radius: 48px;
+            padding: 16px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(108, 59, 170, 0.08);
+            border: 1px solid #EEE6FF;
         }
-
-        /* 指标卡片 */
-        .stats-row {
-            display: flex;
-            gap: 1.2rem;
-            justify-content: space-between;
-            margin: 1.5rem 0;
-            flex-wrap: wrap;
+        .flywheel-svg {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            cursor: pointer;
         }
-        .stat-item {
-            background: #FEFBFF;
-            border-radius: 24px;
-            padding: 1rem;
+        .flywheel-caption {
             text-align: center;
-            flex: 1;
-            border: 1px solid #EEE5FF;
-        }
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #7C3AED;
+            margin-top: 12px;
+            font-size: 0.7rem;
+            color: #7C6B9A;
         }
 
-        /* 操作流程 */
-        .steps {
+        /* 计算器 + 图表区域 白色卡片 */
+        .calculator {
+            background: #FFFFFF;
+            border-radius: 36px;
+            padding: 24px;
+            margin: 32px 0;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.04);
+            border: 1px solid #F0EAFB;
+        }
+        .calc-row {
             display: flex;
-            gap: 1rem;
-            margin: 1.5rem 0;
             flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
         }
-        .step {
-            background: #FEFBFF;
-            border-radius: 24px;
-            padding: 1rem;
+        .calc-group {
             flex: 1;
-            text-align: center;
-            border: 1px solid #E9DFFF;
+            min-width: 130px;
         }
-        .step-number {
-            width: 32px;
-            height: 32px;
-            background: #7C3AED;
-            color: white;
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #5B4A7A;
+            font-size: 0.8rem;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            background: #F9F7FE;
+            border: 1px solid #E2D9F5;
+            border-radius: 20px;
+            color: #1E1A2F;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #C77DFF;
+            box-shadow: 0 0 0 2px rgba(155,89,182,0.2);
+        }
+        button {
+            background: linear-gradient(95deg, #9B59B6, #6C3BAA);
+            border: none;
+            padding: 12px 20px;
             border-radius: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+            box-shadow: 0 2px 8px rgba(108,59,170,0.2);
         }
-
+        button:active {
+            transform: scale(0.98);
+        }
+        .result-box {
+            background: #F9F7FE;
+            border-radius: 28px;
+            padding: 18px;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+        }
+        .result-item {
+            background: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 28px;
+            flex: 1;
+            min-width: 100px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            border: 1px solid #EDE7F6;
+        }
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #6C3BAA;
+            word-break: break-word;
+        }
+        .chart-container {
+            margin-top: 24px;
+            background: #FCFAFF;
+            border-radius: 28px;
+            padding: 12px;
+            border: 1px solid #EEE6FF;
+        }
+        canvas {
+            max-height: 260px;
+            width: 100%;
+        }
+        .footnote {
+            font-size: 0.65rem;
+            color: #8A7AAA;
+            text-align: center;
+            margin-top: 12px;
+        }
         footer {
             text-align: center;
-            margin-top: 2rem;
-            font-size: 0.75rem;
-            color: #9C87C2;
+            padding: 28px 0 24px;
+            border-top: 1px solid #EDE7F6;
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #6C5A8A;
         }
-
-        hr {
-            margin: 1.2rem 0;
-            border: none;
-            height: 1px;
-            background: #E9DFFF;
+        /* 手机优化 */
+        @media (max-width: 480px) {
+            .container { padding: 0 16px; }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.4rem; }
+            .result-value { font-size: 1rem; }
+            .comp-card { padding: 16px; }
+            .card { padding: 14px; }
         }
-
-        @media (max-width: 720px) {
-            .slide {
-                padding: 1.5rem;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            h2 {
-                font-size: 1.3rem;
-            }
-            .mode-grid {
-                flex-direction: column;
-            }
-            .stats-row {
-                flex-direction: column;
-            }
+        .hover-line {
+            transition: stroke-width 0.2s, stroke 0.2s;
         }
     </style>
 </head>
 <body>
-<div class="presentation">
-    <!-- 封面幻灯片 -->
-    <div class="slide cover">
-        <div style="margin-bottom: 1rem;">
-            <span class="purple-badge">海豚社区 · 核心机制</span>
+<div class="bg-soft"></div>
+<div class="container">
+    <!-- Hero -->
+    <section style="margin-top: 32px; text-align: center;">
+        <div class="badge" style="margin-bottom: 12px;">✦ 公平发射 · 代码即法律 ✦</div>
+        <h1>海豚社区 (H)<br>自我造血 · 全民共治</h1>
+        <p style="font-size: 0.95rem; margin-top: 12px; max-width: 90%; margin-left: auto; margin-right: auto; color: #5B4A7A;">去中心化自治生态 — 无预售、无预留、U本位国库、双模质押</p>
+        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+            <span class="badge">联合曲线定价</span>
+            <span class="badge">5% U税</span>
+            <span class="badge">多签国库</span>
         </div>
-        <h1>质押经济模型</h1>
-        <p style="font-size: 1.1rem; color: #5B4B8A; margin-top: 0.5rem;">双模式收益 · 阶梯利率 · 国库永续保障</p>
-        <div style="margin-top: 2rem;">
-            <p style="color: #6C5A9E;">代码约束 · 透明治理 · 每日U收益</p>
-        </div>
-        <div style="margin-top: 2rem;">
-            <span style="background: #EDE6FF; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem;">🔥 质押即参与，收益可持续</span>
-        </div>
-    </div>
+    </section>
 
-    <!-- 第2张：质押核心价值 -->
-    <div class="slide">
-        <h2>✨ 质押的核心价值</h2>
-        <div class="stats-row">
-            <div class="stat-item">
-                <div class="stat-number">驱动买盘</div>
-                <div>质押前提：必须购买 H</div>
-                <div style="font-size:0.75rem;">需求直接转化为买压</div>
+    <!-- 核心理念 -->
+    <section>
+        <h2>⚡ 核心理念 · 打破DeFi弊端</h2>
+        <div class="card-grid">
+            <div class="card"><div class="card-icon">🔥</div><h3>公平发射</h3><p>无预售、无预留、无增发，联合曲线定价。</p></div>
+            <div class="card"><div class="card-icon">🤝</div><h3>全民同权</h3><p>统一5%交易税，无豁免权，多签治理。</p></div>
+            <div class="card"><div class="card-icon">💰</div><h3>国库自造血</h3><p>U本位税费，支持质押与生态建设。</p></div>
+            <div class="card"><div class="card-icon">🔍</div><h3>全链透明</h3><p>关键地址实时展示，链上可查。</p></div>
+        </div>
+    </section>
+
+    <!-- 动态飞轮 SVG 动画 + 线条交互 (紫色主题调整) -->
+    <section>
+        <h2>🌀 飞轮效应 · 自增强回路</h2>
+        <div class="flywheel-container">
+            <svg class="flywheel-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="gradRingPurple" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stop-color="#B873FF"/>
+                        <stop offset="100%" stop-color="#9B59B6"/>
+                    </linearGradient>
+                    <filter id="glowPurple" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="2.5"/>
+                        <feMerge>
+                            <feMergeNode in="offsetblur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+                <!-- 外圈旋转圆环 -->
+                <g class="rotating-ring">
+                    <circle cx="250" cy="250" r="190" fill="none" stroke="url(#gradRingPurple)" stroke-width="2.5" stroke-dasharray="8 6" stroke-linecap="round">
+                        <animateTransform attributeName="transform" type="rotate" from="0 250 250" to="360 250 250" dur="30s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="250" cy="250" r="210" fill="none" stroke="#D9B8FF" stroke-width="1.2" stroke-dasharray="4 8">
+                        <animateTransform attributeName="transform" type="rotate" from="360 250 250" to="0 250 250" dur="25s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+                <!-- 流动粒子 -->
+                <g id="flowDotsPurple">
+                    <circle cx="250" cy="65" r="4" fill="#9B59B6">
+                        <animateMotion path="M 250,65 A 185,185 0 1,1 249.9,65" dur="12s" repeatCount="indefinite" calcMode="linear" id="dotAnimPurple"/>
+                    </circle>
+                    <circle cx="250" cy="435" r="3" fill="#C77DFF">
+                        <animateMotion path="M 250,435 A 185,185 0 1,0 250.1,435" dur="14s" repeatCount="indefinite" calcMode="linear"/>
+                    </circle>
+                </g>
+                <!-- 中心图标 -->
+                <circle cx="250" cy="250" r="48" fill="#F9F7FE" stroke="#9B59B6" stroke-width="2" filter="url(#glowPurple)"/>
+                <text x="250" y="258" text-anchor="middle" fill="#6C3BAA" font-size="28" font-weight="bold" font-family="monospace">H</text>
+                <!-- 飞轮节点文字 -->
+                <g font-size="11" fill="#2C1E4A" font-weight="500">
+                    <text x="390" y="180" text-anchor="middle">🏆 交易赛</text>
+                    <text x="430" y="290" text-anchor="middle">📈 放大交易量</text>
+                    <text x="360" y="390" text-anchor="middle">💰 国库税收↑</text>
+                    <text x="200" y="430" text-anchor="middle">✨ 高额质押收益</text>
+                    <text x="60" y="310" text-anchor="middle">🚀 更大激励</text>
+                    <text x="50" y="190" text-anchor="middle">🔄 飞轮循环</text>
+                </g>
+                <!-- 连接线条 (交互) 紫色调 -->
+                <path id="line1" d="M250 202 L310 180 L390 180" stroke="#B873FF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+                <path id="line2" d="M390 180 L430 250 L430 290" stroke="#C77DFF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+                <path id="line3" d="M430 290 L380 360 L360 390" stroke="#B873FF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+                <path id="line4" d="M360 390 L280 410 L200 430" stroke="#C77DFF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+                <path id="line5" d="M200 430 L110 360 L60 310" stroke="#B873FF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+                <path id="line6" d="M60 310 L70 210 L50 190" stroke="#C77DFF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+                <path id="line7" d="M50 190 L120 150 L202 202" stroke="#B873FF" stroke-width="1.8" fill="none" stroke-dasharray="4 2" class="hover-line"/>
+            </svg>
+            <div class="flywheel-caption">✨ 轻触或长按线条加速流动 · 紫色飞轮 ✨</div>
+        </div>
+    </section>
+
+    <!-- 5%交易税 + 阶梯利率 -->
+    <section>
+        <h2>📈 5% U税 · 阶梯长锁激励</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+            <div style="flex:1; background:#F9F7FE; border-radius:28px; padding:18px;">
+                <div style="font-size:2rem; font-weight:800; color:#9B59B6;">5% U</div>
+                <p style="font-size:0.85rem;">买卖均扣5%稳定币进国库，用于质押收益/流动性/激励。</p>
             </div>
-            <div class="stat-item">
-                <div class="stat-number">锁仓减少流通</div>
-                <div>阶梯利率鼓励长期持有</div>
-                <div style="font-size:0.75rem;">91天+享1.2%日利率</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">国库反哺</div>
-                <div>收益100%来自交易税</div>
-                <div style="font-size:0.75rem;">可持续飞轮</div>
-            </div>
-        </div>
-        <p style="margin-top: 1rem;">用户将 H 质押至独立合约，每日领取 <strong class="accent-text">U (稳定币) 收益</strong>，收益由社区国库智能合约自动发放，本金安全无虞。</p>
-    </div>
-
-    <!-- 第3张：双模式收益对比 (重点) -->
-    <div class="slide">
-        <h2>📊 双模式收益 · 满足不同偏好</h2>
-        <div class="mode-grid">
-            <div class="mode-card">
-                <div class="mode-title">🛡️ 稳健型</div>
-                <div class="formula">
-                    每日收益 = 质押时 H 价值(U) × 日利率
-                </div>
-                <p style="font-size: 0.85rem;">✅ 价格锁定，不受币价波动影响<br>✅ 收益稳定可预期，适合长期持有者</p>
-                <div class="purple-badge" style="margin-top: 0.5rem;">本金保U，收益恒定</div>
-            </div>
-            <div class="mode-card">
-                <div class="mode-title">🚀 进取型</div>
-                <div class="formula">
-                    每日收益 = 质押 H 数量 × 日利率 × 当日 H 价格
-                </div>
-                <p style="font-size: 0.85rem;">✅ 收益随 H 价格上涨而放大<br>✅ 适合看好币价升值的用户</p>
-                <div class="purple-badge" style="margin-top: 0.5rem;">杠杆效应，价量齐升</div>
+            <div style="flex:2; background:#F9F7FE; border-radius:28px; padding:18px;">
+                <table class="rate-table">
+                    <tr><th>锁仓天数</th><th>日利率</th><th>年化APY</th></tr>
+                    <tr><td>1–30天</td><td>0.5%</td><td>≈182.5%</td></tr>
+                    <tr><td>31–90天</td><td>0.8%</td><td>≈292%</td></tr>
+                    <tr><td>91天+</td><td>1.2%</td><td>≈438%</td></tr>
+                </table>
+                <p class="footnote" style="margin-top:8px;">🔒 锁仓越久利率越高，减少流通压力</p>
             </div>
         </div>
-        <div style="background: #F9F6FF; border-radius: 20px; padding: 0.8rem; margin-top: 0.5rem; font-size: 0.85rem;">
-            💡 无论选择哪种模式，质押本金均由独立合约保管，任何人均无法挪用。
+    </section>
+
+    <!-- 双模质押 + 熔断概述 -->
+    <div class="comparison">
+        <div class="comp-card"><h3>🛡️ 稳健型</h3><p>锁定U价值，收益固定，无惧币价波动。</p><span class="badge">Income Focus</span></div>
+        <div class="comp-card"><h3>🚀 进取型</h3><p>挂钩H数量，币价上涨时收益放大，复利杠杆。</p><span class="badge">Growth Focus</span></div>
+    </div>
+    <div style="background:#F9F7FE; border-radius:24px; padding:14px; margin:10px 0;">
+        <div style="display: flex; gap:12px; flex-wrap:wrap; justify-content:space-between;">
+            <div><span style="color:#B873FF;">⚠️ 一级预警</span> 国库<30天收益 → 收益降30%</div>
+            <div><span style="color:#C77DFF;">⛔ 二级熔断</span> 国库<15天收益 → 暂停，DAO投票</div>
         </div>
     </div>
 
-    <!-- 第4张：阶梯利率表 -->
-    <div class="slide">
-        <h2>⏳ 阶梯利率 · 长持增益</h2>
-        <p>质押时长越长，日利率越高，年化最高可达 <strong class="accent-text">438%</strong>。</p>
-        <table class="rate-table">
-            <thead>
-                <tr><th>质押天数</th><th>日利率</th><th>年化收益 (单利)</th><th>优势</th></tr>
-            </thead>
-            <tbody>
-                <tr><td>1 – 7 天</td><td class="highlight-percent">0.5%</td><td>182.5%</td><td>灵活短期</td></tr>
-                <tr><td>8 – 15 天</td><td class="highlight-percent">0.6%</td><td>219%</td><td>中期增益</td></tr>
-                <tr><td>16 – 30 天</td><td class="highlight-percent">0.7%</td><td>255.5%</td><td>稳健增值</td></tr>
-                <tr><td>31 – 60 天</td><td class="highlight-percent">0.8%</td><td>292%</td><td>深度锁仓</td></tr>
-                <tr><td>61 – 90 天</td><td class="highlight-percent">1.0%</td><td>365%</td><td>高额回报</td></tr>
-                <tr><td>91 天以上</td><td class="highlight-percent">1.2%</td><td>438%</td><td>最大激励</td></tr>
-            </tbody>
-        </table>
-        <div class="protection-box" style="margin-top: 0.5rem;">
-            🔒 质押后次日 20:00 (UTC+8) 开始发放收益，解除质押需 24 小时冷却期，资金安全。
+    <!-- 质押计算器 + 图表展示 -->
+    <div class="calculator">
+        <h2 style="border-left-color:#9B59B6;">🧮 质押收益模拟 & 动态图表</h2>
+        <div class="calc-row">
+            <div class="calc-group"><label>📌 质押模式</label>
+                <select id="stakeMode"><option value="stable">稳健型 (U本位)</option><option value="growth">进取型 (H本位)</option></select>
+            </div>
+            <div class="calc-group"><label>💰 投入金额</label><input type="number" id="amountInput" value="1000" step="100"><small id="amountUnit" style="color:#8A7AAA;">(U)</small></div>
+            <div class="calc-group"><label>⏱️ 锁仓天数</label><input type="number" id="lockDays" value="60" step="1"></div>
+            <div class="calc-group" id="priceGroup"><label>📈 未来H价格 (U)</label><input type="number" id="futurePrice" value="2.0" step="0.1"><small>当前H=1U</small></div>
+        </div>
+        <button id="calcBtn">🔄 更新收益 & 图表</button>
+        <div id="resultArea" class="result-box">
+            <div class="result-item"><div class="result-label">日利率</div><div id="dailyRate" class="result-value">0.00%</div></div>
+            <div class="result-item"><div class="result-label">每日收益</div><div id="dailyReward" class="result-value">0</div></div>
+            <div class="result-item"><div class="result-label">锁仓期总收益</div><div id="totalReward" class="result-value">0</div></div>
+        </div>
+        <!-- 收益图表展示 (累计收益曲线) -->
+        <div class="chart-container">
+            <canvas id="rewardChart" width="400" height="200" style="width:100%; height:auto; max-height:260px;"></canvas>
+            <div class="footnote">📊 收益增长曲线 (基于当前参数，模拟每日累计收益)</div>
         </div>
     </div>
 
-    <!-- 第5张：国库保护机制与可持续性 -->
-    <div class="slide">
-        <h2>🏦 国库保护机制 · 永不枯竭</h2>
-        <p>质押收益的支付完全由社区国库（U资产）支撑，国库收入来自 <strong class="accent-text">每笔 H 交易 5% 买入税 + 5% 卖出税</strong>。</p>
-        <div class="protection-box">
-            <strong>自动安全阀</strong><br>
-            • 国库余额 <strong>不足 30 天收益总额</strong> → 每日收益自动降至原收益的 30%<br>
-            • 国库余额 <strong>不足 15 天收益总额</strong> → 收益立即暂停发放，等待社区 DAO 调整利率或补充国库<br>
-            • 所有支出由智能合约执行，无人能干预，确保系统长期稳健
+    <!-- 透明 + 常见问题 -->
+    <section>
+        <h2>🔐 信任终点 · 链上透明</h2>
+        <div class="card-grid">
+            <div class="card"><div class="card-icon">🔒</div><h3>永久锁定流动性</h3><p>Uniswap V2 流动性销毁权限。</p></div>
+            <div class="card"><div class="card-icon">📊</div><h3>可视化看板</h3><p>国库/做市/质押地址实时公开。</p></div>
+            <div class="card"><div class="card-icon">❓</div><h3>FAQ</h3><p>零预留；税费高但收益覆盖；多签国库无法挪用。</p></div>
         </div>
-        <div class="stats-row" style="margin-top: 0.5rem;">
-            <div class="stat-item"><span class="stat-number">100%</span><div>税费进入国库</div></div>
-            <div class="stat-item"><span class="stat-number">多签+DAO</span><div>透明治理</div></div>
-            <div class="stat-item"><span class="stat-number">无增发</span><div>总量10亿恒定</div></div>
-        </div>
-    </div>
-
-    <!-- 第6张：参与流程 -->
-    <div class="slide">
-        <h2>📌 如何参与质押</h2>
-        <div class="steps">
-            <div class="step"><div class="step-number">1</div><strong>购买 H</strong><br>通过 OKX DEX 或 Uniswap 购买 H 代币</div>
-            <div class="step"><div class="step-number">2</div><strong>进入质押</strong><br>在社区 App 选择「稳健型」或「进取型」</div>
-            <div class="step"><div class="step-number">3</div><strong>选择时长</strong><br>确认质押天数 (1–7天 / 8–15天 / 16–30天 / 31–60天 / 61–90天 / 91天+)</div>
-            <div class="step"><div class="step-number">4</div><strong>领取收益</strong><br>每日自动发放 U 到钱包，随时可查看收益记录</div>
-        </div>
-        <div class="protection-box" style="margin-top: 0.5rem; background:#F5F0FF;">
-            💜 社区多签地址 <strong>不参与质押</strong>，杜绝利益冲突。所有数据链上实时可查，透明公正。
-        </div>
-    </div>
-
-    <!-- 第7张：数据透明与治理愿景 -->
-    <div class="slide">
-        <h2>🔍 实时看板 & 未来治理</h2>
-        <p>社区 App 内集成链上数据看板，实时展示：</p>
-        <ul style="margin: 0.8rem 0 1rem 1.5rem; color: #3A2D5E;">
-            <li>国库 U 余额及历史收支</li>
-            <li>质押总量（稳健型/进取型分布）</li>
-            <li>当前阶梯利率 & 用户个人收益</li>
-            <li>做市地址持仓与交易记录</li>
-        </ul>
-        <p>现阶段由多签团队长管理国库，未来将逐步过渡至 <strong class="accent-text">DAO 治理</strong>，由社区投票决定国库资金用途、利率调整等关键参数，实现完全去中心化。</p>
-        <hr>
-        <div style="text-align: center; font-size: 0.85rem; margin-top: 0.8rem;">
-            🌊 海豚社区 · 代码即法律，透明即信任
-        </div>
-    </div>
+    </section>
 
     <footer>
-        质押模型基于永久流动性池与交易税机制设计 | 所有数据均上链可验证
+        <p>© 2025 海豚社区 · 用代码约束权力，用透明换取信任 | 链上数据实时可验证</p>
+        <p style="margin-top: 6px;">🌐 dolphin.community  💬 t.me/dolphin_h  🐦 @Dolphin_H</p>
     </footer>
 </div>
+
+<script>
+    // 阶梯利率函数
+    function getDailyRateByDays(days) {
+        if (days <= 30) return 0.005;
+        if (days <= 90) return 0.008;
+        return 0.012;
+    }
+
+    let chartInstance = null;
+
+    function updateAll() {
+        const mode = document.getElementById('stakeMode').value;
+        let rawAmount = parseFloat(document.getElementById('amountInput').value);
+        let days = parseInt(document.getElementById('lockDays').value, 10);
+        let futurePrice = parseFloat(document.getElementById('futurePrice').value);
+
+        if (isNaN(rawAmount) || rawAmount <= 0) rawAmount = 0;
+        if (isNaN(days) || days < 1) days = 1;
+        if (isNaN(futurePrice) || futurePrice <= 0) futurePrice = 1;
+
+        const dailyRate = getDailyRateByDays(days);
+        const dailyRatePercent = (dailyRate * 100).toFixed(2) + '%';
+        document.getElementById('dailyRate').innerHTML = dailyRatePercent;
+
+        let dailyRaw, totalRaw;
+        if (mode === 'stable') {
+            let principalU = rawAmount;
+            dailyRaw = principalU * dailyRate;
+            totalRaw = dailyRaw * days;
+            document.getElementById('dailyReward').innerHTML = dailyRaw.toFixed(2) + ' U';
+            document.getElementById('totalReward').innerHTML = totalRaw.toFixed(2) + ' U';
+            generateChart(days, dailyRate, principalU, 'stable', null);
+        } else {
+            let hAmount = rawAmount;
+            dailyRaw = hAmount * dailyRate;
+            totalRaw = dailyRaw * days;
+            let dailyRewardU = dailyRaw * futurePrice;
+            let totalRewardU = totalRaw * futurePrice;
+            document.getElementById('dailyReward').innerHTML = dailyRaw.toFixed(4) + ' H  ≈ ' + dailyRewardU.toFixed(2) + ' U';
+            document.getElementById('totalReward').innerHTML = totalRaw.toFixed(4) + ' H  ≈ ' + totalRewardU.toFixed(2) + ' U';
+            generateChart(days, dailyRate, hAmount, 'growth', futurePrice);
+        }
+
+        const unitSpan = document.getElementById('amountUnit');
+        if (mode === 'stable') {
+            unitSpan.innerText = '(单位: U)';
+        } else {
+            unitSpan.innerText = '(单位: H 数量)';
+        }
+    }
+
+    function generateChart(days, dailyRate, principal, mode, futurePrice) {
+        const ctx = document.getElementById('rewardChart').getContext('2d');
+        const labels = [];
+        const cumulativeData = [];
+        let maxPoints = Math.min(days, 180);
+        for (let i = 1; i <= maxPoints; i++) {
+            labels.push(i);
+            let dailyGain = principal * dailyRate;
+            let cumulative = dailyGain * i;
+            if (mode === 'growth' && futurePrice) {
+                cumulative = cumulative * futurePrice;
+            }
+            cumulativeData.push(cumulative);
+        }
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: mode === 'stable' ? '累计收益 (U)' : '累计收益 (U 价值)',
+                    data: cumulativeData,
+                    borderColor: '#9B59B6',
+                    backgroundColor: 'rgba(155,89,182,0.05)',
+                    borderWidth: 2.5,
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 1,
+                    pointHoverRadius: 5,
+                    pointBackgroundColor: '#C77DFF'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    tooltip: { mode: 'index', intersect: false, backgroundColor: '#FFFFFF', titleColor: '#6C3BAA', bodyColor: '#2C1E4A', borderColor: '#E9E4F5', borderWidth: 1 },
+                    legend: { labels: { color: '#5B4A7A' } }
+                },
+                scales: {
+                    x: { title: { display: true, text: '锁仓天数', color: '#8A7AAA' }, ticks: { color: '#5B4A7A' }, grid: { color: '#F0EAFB' } },
+                    y: { title: { display: true, text: '收益 (U)', color: '#8A7AAA' }, ticks: { color: '#5B4A7A' }, grid: { color: '#F0EAFB' } }
+                }
+            }
+        });
+    }
+
+    // 飞轮交互 (移动端触摸加速)
+    const svg = document.querySelector('.flywheel-svg');
+    const lines = document.querySelectorAll('.hover-line');
+    const dotAnim = document.getElementById('dotAnimPurple');
+    let touchTimer = null;
+    const accelerate = () => {
+        lines.forEach(line => line.setAttribute('stroke-width', '3'));
+        if(dotAnim) dotAnim.setAttribute('dur', '6s');
+    };
+    const reset = () => {
+        lines.forEach(line => line.setAttribute('stroke-width', '1.8'));
+        if(dotAnim) dotAnim.setAttribute('dur', '12s');
+    };
+    svg.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        accelerate();
+        if(touchTimer) clearTimeout(touchTimer);
+        touchTimer = setTimeout(reset, 800);
+    });
+    svg.addEventListener('mouseenter', accelerate);
+    svg.addEventListener('mouseleave', reset);
+
+    // 绑定事件
+    document.getElementById('calcBtn').addEventListener('click', updateAll);
+    document.getElementById('stakeMode').addEventListener('change', updateAll);
+    document.getElementById('amountInput').addEventListener('input', updateAll);
+    document.getElementById('lockDays').addEventListener('input', updateAll);
+    document.getElementById('futurePrice').addEventListener('input', updateAll);
+    window.addEventListener('load', updateAll);
+</script>
 </body>
 </html>
