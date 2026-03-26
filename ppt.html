@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>海豚社区 · 质押模型 | 紫色主题PPT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #F5F0FF;  /* 柔和紫灰背景 */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.45;
+            color: #1E1A2F;
+            padding: 2rem 1rem;
+        }
+
+        /* 幻灯片容器 */
+        .presentation {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* 每一张 “PPT 卡片” */
+        .slide {
+            background: #FFFFFF;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(98, 0, 234, 0.12), 0 4px 12px rgba(0, 0, 0, 0.02);
+            margin-bottom: 2rem;
+            padding: 2rem 2rem 2.2rem;
+            transition: all 0.2s;
+        }
+
+        /* 封面特殊样式 */
+        .cover {
+            text-align: center;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F9F3FF 100%);
+        }
+
+        /* 紫色主题元素 */
+        .accent-text {
+            color: #7C3AED;
+            font-weight: 600;
+        }
+        .purple-badge {
+            background: #F0E9FF;
+            color: #6B21D6;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #7C3AED, #A855F7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #2D264B;
+            margin-bottom: 1rem;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-left: 4px solid #A855F7;
+            padding-left: 0.9rem;
+        }
+        h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3B2E5E;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 双模式卡片 */
+        .mode-grid {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .mode-card {
+            flex: 1;
+            background: #FCFAFF;
+            border-radius: 28px;
+            padding: 1.5rem;
+            border: 1px solid #E9DFFF;
+            transition: transform 0.2s;
+        }
+        .mode-card:hover {
+            transform: translateY(-4px);
+            border-color: #C4B5FD;
+        }
+        .mode-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #7C3AED;
+            margin-bottom: 0.75rem;
+        }
+        .formula {
+            background: #F5F0FF;
+            padding: 0.5rem 0.8rem;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin: 0.75rem 0;
+            color: #2D264B;
+        }
+
+        /* 阶梯利率表格 */
+        .rate-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.2rem 0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .rate-table th {
+            background: #F5F0FF;
+            padding: 12px 8px;
+            font-weight: 600;
+            color: #4C3A7A;
+            text-align: center;
+        }
+        .rate-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #EEE9FF;
+        }
+        .highlight-percent {
+            font-weight: 700;
+            color: #7C3AED;
+        }
+
+        /* 国库保护机制 */
+        .protection-box {
+            background: #F9F6FF;
+            border-radius: 24px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            border-left: 4px solid #A855F7;
+        }
+
+        /* 指标卡片 */
+        .stats-row {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: space-between;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: #FEFBFF;
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            flex: 1;
+            border: 1px solid #EEE5FF;
+        }
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #7C3AED;
+        }
+
+        /* 操作流程 */
+        .steps {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .step {
+            background: #FEFBFF;
+            border-radius: 24px;
+            padding: 1rem;
+            flex: 1;
+            text-align: center;
+            border: 1px solid #E9DFFF;
+        }
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: #7C3AED;
+            color: white;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #9C87C2;
+        }
+
+        hr {
+            margin: 1.2rem 0;
+            border: none;
+            height: 1px;
+            background: #E9DFFF;
+        }
+
+        @media (max-width: 720px) {
+            .slide {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.3rem;
+            }
+            .mode-grid {
+                flex-direction: column;
+            }
+            .stats-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="presentation">
+    <!-- 封面幻灯片 -->
+    <div class="slide cover">
+        <div style="margin-bottom: 1rem;">
+            <span class="purple-badge">海豚社区 · 核心机制</span>
+        </div>
+        <h1>质押经济模型</h1>
+        <p style="font-size: 1.1rem; color: #5B4B8A; margin-top: 0.5rem;">双模式收益 · 阶梯利率 · 国库永续保障</p>
+        <div style="margin-top: 2rem;">
+            <p style="color: #6C5A9E;">代码约束 · 透明治理 · 每日U收益</p>
+        </div>
+        <div style="margin-top: 2rem;">
+            <span style="background: #EDE6FF; padding: 0.3rem 1rem; border-radius: 40px; font-size: 0.8rem;">🔥 质押即参与，收益可持续</span>
+        </div>
+    </div>
+
+    <!-- 第2张：质押核心价值 -->
+    <div class="slide">
+        <h2>✨ 质押的核心价值</h2>
+        <div class="stats-row">
+            <div class="stat-item">
+                <div class="stat-number">驱动买盘</div>
+                <div>质押前提：必须购买 H</div>
+                <div style="font-size:0.75rem;">需求直接转化为买压</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">锁仓减少流通</div>
+                <div>阶梯利率鼓励长期持有</div>
+                <div style="font-size:0.75rem;">91天+享1.2%日利率</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">国库反哺</div>
+                <div>收益100%来自交易税</div>
+                <div style="font-size:0.75rem;">可持续飞轮</div>
+            </div>
+        </div>
+        <p style="margin-top: 1rem;">用户将 H 质押至独立合约，每日领取 <strong class="accent-text">U (稳定币) 收益</strong>，收益由社区国库智能合约自动发放，本金安全无虞。</p>
+    </div>
+
+    <!-- 第3张：双模式收益对比 (重点) -->
+    <div class="slide">
+        <h2>📊 双模式收益 · 满足不同偏好</h2>
+        <div class="mode-grid">
+            <div class="mode-card">
+                <div class="mode-title">🛡️ 稳健型</div>
+                <div class="formula">
+                    每日收益 = 质押时 H 价值(U) × 日利率
+                </div>
+                <p style="font-size: 0.85rem;">✅ 价格锁定，不受币价波动影响<br>✅ 收益稳定可预期，适合长期持有者</p>
+                <div class="purple-badge" style="margin-top: 0.5rem;">本金保U，收益恒定</div>
+            </div>
+            <div class="mode-card">
+                <div class="mode-title">🚀 进取型</div>
+                <div class="formula">
+                    每日收益 = 质押 H 数量 × 日利率 × 当日 H 价格
+                </div>
+                <p style="font-size: 0.85rem;">✅ 收益随 H 价格上涨而放大<br>✅ 适合看好币价升值的用户</p>
+                <div class="purple-badge" style="margin-top: 0.5rem;">杠杆效应，价量齐升</div>
+            </div>
+        </div>
+        <div style="background: #F9F6FF; border-radius: 20px; padding: 0.8rem; margin-top: 0.5rem; font-size: 0.85rem;">
+            💡 无论选择哪种模式，质押本金均由独立合约保管，任何人均无法挪用。
+        </div>
+    </div>
+
+    <!-- 第4张：阶梯利率表 -->
+    <div class="slide">
+        <h2>⏳ 阶梯利率 · 长持增益</h2>
+        <p>质押时长越长，日利率越高，年化最高可达 <strong class="accent-text">438%</strong>。</p>
+        <table class="rate-table">
+            <thead>
+                <tr><th>质押天数</th><th>日利率</th><th>年化收益 (单利)</th><th>优势</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>1 – 7 天</td><td class="highlight-percent">0.5%</td><td>182.5%</td><td>灵活短期</td></tr>
+                <tr><td>8 – 15 天</td><td class="highlight-percent">0.6%</td><td>219%</td><td>中期增益</td></tr>
+                <tr><td>16 – 30 天</td><td class="highlight-percent">0.7%</td><td>255.5%</td><td>稳健增值</td></tr>
+                <tr><td>31 – 60 天</td><td class="highlight-percent">0.8%</td><td>292%</td><td>深度锁仓</td></tr>
+                <tr><td>61 – 90 天</td><td class="highlight-percent">1.0%</td><td>365%</td><td>高额回报</td></tr>
+                <tr><td>91 天以上</td><td class="highlight-percent">1.2%</td><td>438%</td><td>最大激励</td></tr>
+            </tbody>
+        </table>
+        <div class="protection-box" style="margin-top: 0.5rem;">
+            🔒 质押后次日 20:00 (UTC+8) 开始发放收益，解除质押需 24 小时冷却期，资金安全。
+        </div>
+    </div>
+
+    <!-- 第5张：国库保护机制与可持续性 -->
+    <div class="slide">
+        <h2>🏦 国库保护机制 · 永不枯竭</h2>
+        <p>质押收益的支付完全由社区国库（U资产）支撑，国库收入来自 <strong class="accent-text">每笔 H 交易 5% 买入税 + 5% 卖出税</strong>。</p>
+        <div class="protection-box">
+            <strong>自动安全阀</strong><br>
+            • 国库余额 <strong>不足 30 天收益总额</strong> → 每日收益自动降至原收益的 30%<br>
+            • 国库余额 <strong>不足 15 天收益总额</strong> → 收益立即暂停发放，等待社区 DAO 调整利率或补充国库<br>
+            • 所有支出由智能合约执行，无人能干预，确保系统长期稳健
+        </div>
+        <div class="stats-row" style="margin-top: 0.5rem;">
+            <div class="stat-item"><span class="stat-number">100%</span><div>税费进入国库</div></div>
+            <div class="stat-item"><span class="stat-number">多签+DAO</span><div>透明治理</div></div>
+            <div class="stat-item"><span class="stat-number">无增发</span><div>总量10亿恒定</div></div>
+        </div>
+    </div>
+
+    <!-- 第6张：参与流程 -->
+    <div class="slide">
+        <h2>📌 如何参与质押</h2>
+        <div class="steps">
+            <div class="step"><div class="step-number">1</div><strong>购买 H</strong><br>通过 OKX DEX 或 Uniswap 购买 H 代币</div>
+            <div class="step"><div class="step-number">2</div><strong>进入质押</strong><br>在社区 App 选择「稳健型」或「进取型」</div>
+            <div class="step"><div class="step-number">3</div><strong>选择时长</strong><br>确认质押天数 (1–7天 / 8–15天 / 16–30天 / 31–60天 / 61–90天 / 91天+)</div>
+            <div class="step"><div class="step-number">4</div><strong>领取收益</strong><br>每日自动发放 U 到钱包，随时可查看收益记录</div>
+        </div>
+        <div class="protection-box" style="margin-top: 0.5rem; background:#F5F0FF;">
+            💜 社区多签地址 <strong>不参与质押</strong>，杜绝利益冲突。所有数据链上实时可查，透明公正。
+        </div>
+    </div>
+
+    <!-- 第7张：数据透明与治理愿景 -->
+    <div class="slide">
+        <h2>🔍 实时看板 & 未来治理</h2>
+        <p>社区 App 内集成链上数据看板，实时展示：</p>
+        <ul style="margin: 0.8rem 0 1rem 1.5rem; color: #3A2D5E;">
+            <li>国库 U 余额及历史收支</li>
+            <li>质押总量（稳健型/进取型分布）</li>
+            <li>当前阶梯利率 & 用户个人收益</li>
+            <li>做市地址持仓与交易记录</li>
+        </ul>
+        <p>现阶段由多签团队长管理国库，未来将逐步过渡至 <strong class="accent-text">DAO 治理</strong>，由社区投票决定国库资金用途、利率调整等关键参数，实现完全去中心化。</p>
+        <hr>
+        <div style="text-align: center; font-size: 0.85rem; margin-top: 0.8rem;">
+            🌊 海豚社区 · 代码即法律，透明即信任
+        </div>
+    </div>
+
+    <footer>
+        质押模型基于永久流动性池与交易税机制设计 | 所有数据均上链可验证
+    </footer>
+</div>
+</body>
+</html>
