@@ -1,465 +1,1208 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>海豚社区 · 经济模型模拟器</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            background: #f0ebff;
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 2rem 1rem;
-            color: #1e1a2f;
-        }
-        .sim-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 40px rgba(98, 54, 255, 0.12);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #7c3aed, #a855f7);
-            padding: 1.5rem 2rem;
-            color: white;
-        }
-        .header h1 {
-            font-size: 1.8rem;
-            margin: 0 0 0.25rem;
-        }
-        .header p {
-            opacity: 0.9;
-            margin: 0;
-            font-size: 0.9rem;
-        }
-        .controls {
-            padding: 1.5rem 2rem;
-            background: #fef9ff;
-            border-bottom: 1px solid #e9d5ff;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.2rem;
-            justify-content: space-between;
-            align-items: flex-end;
-        }
-        .param-group {
-            background: white;
-            border-radius: 1rem;
-            padding: 0.8rem 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            border: 1px solid #ede9fe;
-            min-width: 160px;
-        }
-        .param-group label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            font-weight: 600;
-            color: #7c3aed;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-        .param-group input {
-            width: 100%;
-            padding: 0.4rem 0.6rem;
-            border: 1px solid #d9c8ff;
-            border-radius: 0.8rem;
-            font-size: 0.9rem;
-            font-family: monospace;
-        }
-        .param-group .hint {
-            font-size: 0.7rem;
-            color: #6b7280;
-            margin-top: 0.2rem;
-        }
-        button {
-            background: #7c3aed;
-            border: none;
-            padding: 0.6rem 1.5rem;
-            border-radius: 2rem;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        button:hover {
-            background: #5b21b6;
-            transform: scale(0.98);
-        }
-        .stats-panel {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding: 1rem 2rem;
-            background: #faf8ff;
-            border-bottom: 1px solid #ede9fe;
-        }
-        .stat-badge {
-            background: white;
-            border-radius: 1rem;
-            padding: 0.5rem 1rem;
-            border-left: 4px solid #a855f7;
-            flex: 1;
-            min-width: 150px;
-        }
-        .stat-badge .label {
-            font-size: 0.7rem;
-            color: #5b21b6;
-        }
-        .stat-badge .value {
-            font-size: 1.3rem;
-            font-weight: 700;
-        }
-        .chart-area {
-            padding: 1rem 2rem 2rem;
-        }
-        canvas {
-            max-height: 400px;
-            width: 100%;
-        }
-        .table-wrapper {
-            overflow-x: auto;
-            padding: 0 2rem 2rem;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.75rem;
-            background: white;
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        th {
-            background: #f3e8ff;
-            padding: 8px 6px;
-            text-align: right;
-            color: #4c1d95;
-        }
-        td {
-            padding: 6px;
-            border-bottom: 1px solid #f0eaff;
-            text-align: right;
-        }
-        td:first-child, th:first-child {
-            text-align: left;
-            font-weight: 500;
-        }
-        .footnote {
-            font-size: 0.7rem;
-            text-align: center;
-            padding: 1rem;
-            color: #6c6a7a;
-            border-top: 1px solid #ede9fe;
-        }
-        @media (max-width: 700px) {
-            .controls { flex-direction: column; align-items: stretch; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatVault — 移动端UI设计方案</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --bg: #060a10;
+  --bg-app: #0b0f18;
+  --bg-card: #131a28;
+  --bg-card-hover: #182030;
+  --bg-input: #0f1520;
+  --fg: #e4e9f2;
+  --fg-dim: #8b95a8;
+  --fg-muted: #556070;
+  --accent: #00d4aa;
+  --accent-dim: rgba(0,212,170,0.1);
+  --accent-mid: rgba(0,212,170,0.25);
+  --blue: #3b8bff;
+  --blue-dim: rgba(59,139,255,0.1);
+  --amber: #f0a030;
+  --amber-dim: rgba(240,160,48,0.1);
+  --red: #ff4757;
+  --red-dim: rgba(255,71,87,0.1);
+  --border: rgba(255,255,255,0.06);
+  --border-light: rgba(255,255,255,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans SC','Space Grotesk',sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden}
+.font-space{font-family:'Space Grotesk',monospace}
+
+/* 展示页面布局 */
+.showcase{min-height:100vh;padding:40px 20px}
+.showcase-header{text-align:center;margin-bottom:40px}
+.showcase-header h1{font-size:28px;font-weight:900;margin-top:12px}
+.showcase-header p{color:var(--fg-dim);font-size:14px;margin-top:8px;max-width:500px;margin-inline:auto}
+
+/* 页面切换器 */
+.page-switcher{display:flex;justify-content:center;gap:6px;margin-bottom:32px;flex-wrap:wrap}
+.page-btn{
+  padding:10px 18px;border-radius:12px;font-size:13px;font-weight:600;
+  background:var(--bg-card);border:1px solid var(--border);color:var(--fg-dim);
+  cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:6px
+}
+.page-btn.active{background:var(--accent-dim);border-color:var(--accent-mid);color:var(--accent)}
+.page-btn:hover:not(.active){background:var(--bg-card-hover);color:var(--fg)}
+
+/* 手机框 */
+.phone-frame-wrap{display:flex;justify-content:center;align-items:flex-start;gap:40px;flex-wrap:wrap}
+.phone-frame{
+  width:375px;height:780px;border-radius:44px;
+  background:#000;padding:12px;position:relative;
+  box-shadow:0 0 0 2px #1a1f2e,0 0 0 4px #0d1117,0 30px 80px rgba(0,0,0,0.6);
+  flex-shrink:0
+}
+.phone-screen{
+  width:100%;height:100%;border-radius:34px;overflow:hidden;
+  background:var(--bg-app);position:relative;display:flex;flex-direction:column
+}
+.phone-notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:126px;height:28px;background:#000;border-radius:0 0 18px 18px;z-index:50
+}
+.phone-notch::after{
+  content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);
+  width:10px;height:10px;border-radius:50%;background:#1a1f2e
+}
+
+/* 状态栏 */
+.status-bar{
+  height:48px;padding:0 24px;display:flex;align-items:flex-end;justify-content:space-between;
+  font-size:12px;font-weight:600;padding-bottom:4px;flex-shrink:0;position:relative;z-index:40
+}
+.status-bar .time{font-size:15px;font-weight:700}
+.status-bar .icons{display:flex;gap:5px;align-items:center;font-size:12px}
+
+/* 页面内容区 */
+.page-content{flex:1;overflow-y:auto;overflow-x:hidden;position:relative}
+.page-content::-webkit-scrollbar{width:0}
+
+/* 底部导航 */
+.bottom-nav{
+  height:80px;background:rgba(11,15,24,0.95);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);display:flex;align-items:flex-start;
+  justify-content:space-around;padding-top:8px;flex-shrink:0;
+  position:relative;z-index:40
+}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;transition:all .2s}
+.nav-item i{font-size:20px;color:var(--fg-muted);transition:color .2s}
+.nav-item span{font-size:10px;color:var(--fg-muted);font-weight:500;transition:color .2s}
+.nav-item.active i{color:var(--accent)}
+.nav-item.active span{color:var(--accent)}
+.nav-item.center-btn{
+  margin-top:-20px;background:linear-gradient(135deg,var(--accent),#00b89c);
+  width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(0,212,170,0.3)
+}
+.nav-item.center-btn i{color:#000;font-size:20px}
+.nav-item.center-btn span{display:none}
+
+/* 页面公共样式 */
+.page-section{display:none;height:100%;flex-direction:column}
+.page-section.active{display:flex}
+
+.section-header{
+  padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between
+}
+.section-title{font-size:22px;font-weight:900;letter-spacing:-0.5px}
+.section-action{color:var(--fg-muted);font-size:13px;cursor:pointer}
+
+/* 卡片通用 */
+.card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;
+  padding:16px;margin:0 16px 12px;transition:all .2s
+}
+.card-sm{padding:12px;margin:0 16px 8px;border-radius:12px}
+
+/* 标签 */
+.tab-row{display:flex;gap:6px;padding:0 20px 12px;overflow-x:auto}
+.tab-row::-webkit-scrollbar{display:none}
+.tab-pill{
+  padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
+  white-space:nowrap;cursor:pointer;transition:all .2s;
+  background:var(--bg-card);color:var(--fg-dim);border:1px solid var(--border)
+}
+.tab-pill.active{background:var(--accent);color:#000;border-color:var(--accent)}
+
+/* 设计说明面板 */
+.design-notes{
+  width:340px;flex-shrink:0;
+  display:flex;flex-direction:column;gap:20px
+}
+.note-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px
+}
+.note-card h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.note-card h3 i{font-size:12px}
+.note-item{
+  display:flex;gap:10px;align-items:flex-start;padding:8px 0;
+  border-bottom:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--fg-dim)
+}
+.note-item:last-child{border-bottom:none}
+.note-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px
+}
+
+/* 设计系统区域 */
+.design-system{max-width:1200px;margin:60px auto 0;padding:0 20px}
+.ds-section{margin-bottom:48px}
+.ds-section h2{font-size:24px;font-weight:900;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.ds-section h2::before{content:'';width:4px;height:24px;background:var(--accent);border-radius:2px}
+
+.color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.color-swatch{
+  border-radius:12px;overflow:hidden;border:1px solid var(--border);
+  background:var(--bg-card)
+}
+.color-swatch .swatch{height:64px}
+.color-swatch .info{padding:10px 14px}
+.color-swatch .label{font-size:12px;font-weight:600}
+.color-swatch .value{font-size:11px;color:var(--fg-muted);font-family:'Space Grotesk',monospace;margin-top:2px}
+
+.type-scale{display:flex;flex-direction:column;gap:8px}
+.type-row{
+  display:flex;align-items:baseline;gap:16px;padding:12px 16px;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:10px
+}
+.type-row .name{font-size:11px;color:var(--fg-muted);width:80px;flex-shrink:0;font-family:'Space Grotesk'}
+.type-row .preview{flex:1}
+
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.comp-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;
+  display:flex;flex-direction:column;gap:12px
+}
+.comp-label{font-size:11px;color:var(--fg-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+
+/* 页面内组件样式 */
+.asset-card{
+  background:linear-gradient(135deg,#0f2a2a,#0a1525);
+  border:1px solid rgba(0,212,170,0.15);border-radius:20px;
+  padding:20px;margin:0 16px 16px;position:relative;overflow:hidden
+}
+.asset-card::after{
+  content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;
+  background:radial-gradient(circle,rgba(0,212,170,0.1),transparent);border-radius:50%
+}
+.asset-label{font-size:12px;color:var(--fg-muted);margin-bottom:4px}
+.asset-value{font-size:32px;font-weight:900;font-family:'Space Grotesk';line-height:1.1}
+.asset-change{font-size:13px;font-weight:600;margin-top:4px}
+.asset-change.up{color:var(--accent)}
+.asset-change.down{color:var(--red)}
+
+.chat-area{flex:1;padding:12px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.chat-area::-webkit-scrollbar{width:0}
+
+.msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.6;animation:msgIn .3s ease}
+.msg-user{
+  background:linear-gradient(135deg,#1a2a3a,#1a2035);
+  border:1px solid rgba(59,139,255,0.15);align-self:flex-end;border-bottom-right-radius:4px
+}
+.msg-ai{
+  background:var(--bg-card);border:1px solid var(--border);
+  align-self:flex-start;border-bottom-left-radius:4px
+}
+.msg-action{
+  background:var(--accent-dim);border:1px solid var(--accent-mid);
+  align-self:flex-start;border-bottom-left-radius:4px;
+  font-size:12px;white-space:pre-line
+}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.chat-input-bar{
+  padding:10px 16px 20px;border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:center;background:var(--bg-app)
+}
+.chat-input{
+  flex:1;background:var(--bg-input);border:1px solid var(--border);
+  border-radius:24px;padding:10px 16px;font-size:13px;color:var(--fg);
+  outline:none;font-family:inherit
+}
+.chat-input::placeholder{color:var(--fg-muted)}
+.chat-send{
+  width:40px;height:40px;border-radius:50%;background:var(--accent);
+  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#000;font-size:16px;flex-shrink:0
+}
+
+/* 功能入口网格 */
+.func-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:16px}
+.func-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+  padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden
+}
+.func-card:hover{border-color:var(--accent-mid)}
+.func-card .icon{
+  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:16px;margin-bottom:10px
+}
+.func-card .name{font-size:14px;font-weight:700}
+.func-card .desc{font-size:11px;color:var(--fg-muted);margin-top:2px}
+
+/* 社区卡片 */
+.feed-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin:0 16px 10px
+}
+.feed-card .author{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.feed-card .avatar{width:32px;height:32px;border-radius:50%;object-fit:cover}
+.feed-card .author-name{font-size:13px;font-weight:600}
+.feed-card .author-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
+.feed-card .feed-title{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.4}
+.feed-card .feed-text{font-size:12px;color:var(--fg-dim);line-height:1.5}
+.feed-card .feed-img{width:100%;border-radius:10px;margin-top:8px;max-height:140px;object-fit:cover}
+.feed-card .feed-meta{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--fg-muted)}
+.feed-card .feed-meta span{display:flex;align-items:center;gap:4px;cursor:pointer}
+.feed-card .feed-meta span:hover{color:var(--accent)}
+
+/* 策略卡片 */
+.strategy-card{
+  background:linear-gradient(135deg,rgba(0,212,170,0.06),rgba(59,139,255,0.04));
+  border:1px solid rgba(0,212,170,0.15);border-radius:14px;
+  padding:14px 16px;margin:0 16px 10px
+}
+
+/* 持仓行 */
+.position-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 0;border-bottom:1px solid var(--border)
+}
+.position-row:last-child{border-bottom:none}
+.position-left{display:flex;align-items:center;gap:10px}
+.position-icon{
+  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;font-weight:700
+}
+
+/* Agent任务卡片 */
+.agent-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
+  padding:14px 16px;margin:0 16px 10px;display:flex;align-items:center;gap:12px
+}
+.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.agent-dot.running{background:var(--accent);box-shadow:0 0 8px rgba(0,212,170,0.5)}
+.agent-dot.pending{background:var(--amber)}
+.agent-dot.paused{background:var(--fg-muted)}
+
+/* 我的页面 */
+.profile-header{
+  text-align:center;padding:20px 16px 24px;position:relative
+}
+.profile-avatar{
+  width:72px;height:72px;border-radius:50%;margin:0 auto 10px;
+  background:linear-gradient(135deg,var(--accent),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:900;color:#000
+}
+.profile-name{font-size:18px;font-weight:800}
+.profile-id{font-size:12px;color:var(--fg-muted);margin-top:2px}
+.profile-badge{
+  display:inline-flex;align-items:center;gap:4px;padding:4px 10px;
+  border-radius:6px;font-size:11px;font-weight:600;margin-top:8px
+}
+
+.menu-list{padding:0 16px;margin-bottom:12px}
+.menu-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer
+}
+.menu-item:last-child{border-bottom:none}
+.menu-left{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500}
+.menu-left i{width:20px;text-align:center;color:var(--fg-muted);font-size:15px}
+.menu-right{color:var(--fg-muted);font-size:13px;display:flex;align-items:center;gap:4px}
+
+/* 连接状态 */
+.connect-status{
+  display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600
+}
+.connect-dot{width:6px;height:6px;border-radius:50%}
+.connect-dot.on{background:var(--accent);box-shadow:0 0 6px rgba(0,212,170,0.5)}
+.connect-dot.off{background:var(--red)}
+
+/* 下一步行动 */
+.next-steps{max-width:800px;margin:60px auto 0;padding:0 20px 60px}
+.step-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;
+  padding:24px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;
+  transition:all .2s
+}
+.step-card:hover{border-color:var(--accent-mid)}
+.step-num{
+  width:36px;height:36px;border-radius:10px;background:var(--accent-dim);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk';font-weight:700;font-size:14px;color:var(--accent);flex-shrink:0
+}
+.step-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
+.step-card p{font-size:13px;color:var(--fg-dim);line-height:1.6}
+
+/* 响应式 */
+@media(max-width:900px){
+  .phone-frame-wrap{flex-direction:column;align-items:center}
+  .design-notes{width:100%;max-width:375px}
+  .color-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  .comp-grid{grid-template-columns:1fr}
+}
+@media(max-width:400px){
+  .phone-frame{width:340px;height:700px;border-radius:36px;padding:10px}
+  .phone-screen{border-radius:28px}
+}
+</style>
 </head>
 <body>
-<div class="sim-container">
-    <div class="header">
-        <h1>🐬 海豚社区 · 经济模拟器</h1>
-        <p>模拟买卖 + 质押行为对国库、价格、奖励池的动态影响 | 紫色主题 · 实时推演</p>
+
+<div class="showcase">
+  <!-- 头部 -->
+  <div class="showcase-header">
+    <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:8px">
+      <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--blue));display:flex;align-items:center;justify-content:center">
+        <i class="fas fa-comments" style="color:#000;font-size:12px"></i>
+      </div>
+      <span class="font-space" style="font-weight:700;font-size:16px">ChatVault</span>
     </div>
-    <div class="controls">
-        <div class="param-group">
-            <label>📈 每日买入金额 (U)</label>
-            <input type="number" id="buyU" value="5000" step="500">
-            <div class="hint">用户用U买H (产生5%税收)</div>
+    <h1>移动端 UI 设计方案</h1>
+    <p>5个核心页面 · 深色主题 · 对话式交互 · 社区驱动</p>
+  </div>
+
+  <!-- 页面切换器 -->
+  <div class="page-switcher" id="pageSwitcher">
+    <button class="page-btn active" data-page="chat"><i class="fas fa-comment-dots"></i>对话</button>
+    <button class="page-btn" data-page="community"><i class="fas fa-users"></i>社区</button>
+    <button class="page-btn" data-page="trade"><i class="fas fa-chart-line"></i>交易</button>
+    <button class="page-btn" data-page="wallet"><i class="fas fa-wallet"></i>钱包</button>
+    <button class="page-btn" data-page="profile"><i class="fas fa-user"></i>我的</button>
+  </div>
+
+  <!-- 手机 + 说明 -->
+  <div class="phone-frame-wrap">
+    <!-- 手机框 -->
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+        
+        <!-- 状态栏 -->
+        <div class="status-bar">
+          <span class="time font-space">9:41</span>
+          <span class="icons">
+            <i class="fas fa-signal" style="font-size:11px"></i>
+            <i class="fas fa-wifi" style="font-size:11px"></i>
+            <i class="fas fa-battery-full" style="font-size:13px"></i>
+          </span>
         </div>
-        <div class="param-group">
-            <label>📉 每日卖出数量 (H)</label>
-            <input type="number" id="sellH" value="200000" step="50000">
-            <div class="hint">用户卖出H的数量</div>
+
+        <!-- === 对话页 === -->
+        <div class="page-section active" id="page-chat">
+          <div style="padding:8px 20px 12px;display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--blue));display:flex;align-items:center;justify-content:center">
+                <i class="fas fa-robot" style="color:#000;font-size:14px"></i>
+              </div>
+              <div>
+                <div style="font-size:15px;font-weight:700">ChatVault</div>
+                <div style="font-size:10px;color:var(--accent);display:flex;align-items:center;gap:4px">
+                  <span style="width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block"></span>
+                  在线
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:16px;color:var(--fg-muted)">
+              <i class="fas fa-bell" style="font-size:16px;cursor:pointer"></i>
+              <i class="fas fa-gear" style="font-size:16px;cursor:pointer"></i>
+            </div>
+          </div>
+          
+          <div class="chat-area" id="chatArea">
+            <div class="msg msg-ai">你好！我是你的Web3交易助手 🤖<br><br>你可以用自然语言告诉我你想做什么，比如：<br>· "质押1000U到最稳的方案"<br>· "ETH在2200-2800震荡，设网格"<br>· "SOL跌到130帮我买10个"</div>
+            <div class="msg msg-user">帮我质押1000U到稳健方案</div>
+            <div class="msg msg-ai">好的，我来筛选OKX Earn上适合的产品。根据你"稳健"的偏好：</div>
+            <div class="msg msg-action">📋 推荐方案
+
+🥇 USDT灵活理财 — APY 3.2%
+  随时赎回，无锁仓期
+
+🥈 USDT 30天定期 — APY 5.8%
+  收益更优，30天锁仓
+
+💡 建议：1000U全部放30天定期
+预计收益：~$15.9
+
+确认执行？</div>
+          </div>
+          
+          <div class="chat-input-bar">
+            <input class="chat-input" placeholder="说说你想做什么..." id="chatInputField">
+            <button class="chat-send" onclick="sendChatMsg()"><i class="fas fa-paper-plane"></i></button>
+          </div>
         </div>
-        <div class="param-group">
-            <label>➕ 每日新增质押 H (个)</label>
-            <input type="number" id="stakeH" value="100000" step="50000">
+
+        <!-- === 社区页 === -->
+        <div class="page-section" id="page-community">
+          <div class="section-header">
+            <span class="section-title">社区</span>
+            <span class="section-action"><i class="fas fa-pen-to-square" style="margin-right:4px"></i>发布</span>
+          </div>
+          
+          <div class="tab-row" id="communityTabs">
+            <span class="tab-pill active" data-tab="recommend">推荐</span>
+            <span class="tab-pill" data-tab="news">资讯</span>
+            <span class="tab-pill" data-tab="strategy">策略</span>
+            <span class="tab-pill" data-tab="social">动态</span>
+          </div>
+          
+          <div class="page-content" style="padding-bottom:12px">
+            <!-- 资讯卡片 -->
+            <div class="feed-card">
+              <div class="author">
+                <img class="avatar" src="https://picsum.photos/seed/cv1/64/64.jpg" alt="">
+                <div>
+                  <div class="author-name">ChatVault官方</div>
+                  <div class="author-tag" style="background:var(--accent-dim);color:var(--accent)">官方</div>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">2小时前</span>
+              </div>
+              <div class="feed-title">BTC突破10万美金，市场情绪指数升至"极度贪婪"</div>
+              <div class="feed-text">比特币在今日凌晨突破10万美元大关，创历史新高。恐惧贪婪指数升至82，链上活跃地址数同步增长...</div>
+              <div class="feed-meta">
+                <span><i class="far fa-heart"></i> 328</span>
+                <span><i class="far fa-comment"></i> 56</span>
+                <span><i class="fas fa-share-nodes"></i> 42</span>
+              </div>
+            </div>
+
+            <!-- 策略分享 -->
+            <div class="strategy-card">
+              <div class="author">
+                <img class="avatar" src="https://picsum.photos/seed/cv2/64/64.jpg" alt="">
+                <div>
+                  <div class="author-name">CryptoWhale</div>
+                  <div class="author-tag" style="background:var(--amber-dim);color:var(--amber)">策略师</div>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">5小时前</span>
+              </div>
+              <div class="feed-title">ETH网格策略分享 — 30天收益+12.3%</div>
+              <div class="feed-text">区间 $2,200 - $2,800 · 40格 · 每格利润1.5%<br>回测胜率82%，最大回撤-3.2%</div>
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button style="flex:1;padding:8px;border-radius:8px;background:var(--accent);color:#000;font-size:12px;font-weight:700;border:none;cursor:pointer">一键复制策略</button>
+                <button style="padding:8px 14px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);color:var(--fg-dim);font-size:12px;font-weight:600;cursor:pointer">详情</button>
+              </div>
+            </div>
+
+            <!-- 社媒动态 -->
+            <div class="feed-card">
+              <div class="author">
+                <img class="avatar" src="https://picsum.photos/seed/cv3/64/64.jpg" alt="">
+                <div>
+                  <div class="author-name">Vitalik.eth</div>
+                  <div class="author-tag" style="background:var(--blue-dim);color:var(--blue)">KOL</div>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">8小时前</span>
+              </div>
+              <div class="feed-text" style="margin-bottom:8px">L2生态的TVL已经突破500亿美元，以太坊扩容路线图正在兑现。下一步关注Dencun升级后的blob使用率变化。</div>
+              <img class="feed-img" src="https://picsum.photos/seed/chart1/400/200.jpg" alt="">
+              <div class="feed-meta">
+                <span><i class="far fa-heart"></i> 1.2k</span>
+                <span><i class="far fa-comment"></i> 203</span>
+                <span><i class="fas fa-share-nodes"></i> 89</span>
+              </div>
+            </div>
+
+            <!-- 管理员策略 -->
+            <div class="strategy-card">
+              <div class="author">
+                <img class="avatar" src="https://picsum.photos/seed/cv4/64/64.jpg" alt="">
+                <div>
+                  <div class="author-name">ChatVault策略组</div>
+                  <div class="author-tag" style="background:var(--accent-dim);color:var(--accent)">官方策略</div>
+                </div>
+                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">1天前</span>
+              </div>
+              <div class="feed-title">本周量化信号：SOL逢低做多</div>
+              <div class="feed-text">技术面：SOL在128-132形成强支撑<br>入场：$130-133 · 止损：$122 · 目标：$155<br>风险评级：中等</div>
+              <div class="feed-meta">
+                <span><i class="far fa-heart" style="color:var(--red)"></i> 856</span>
+                <span><i class="far fa-comment"></i> 134</span>
+                <span><i class="fas fa-share-nodes"></i> 67</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="param-group">
-            <label>➖ 每日解除质押 H (个)</label>
-            <input type="number" id="unstakeH" value="0" step="50000">
+
+        <!-- === 交易页 === -->
+        <div class="page-section" id="page-trade">
+          <div class="section-header">
+            <span class="section-title">交易</span>
+            <span class="section-action"><i class="fas fa-clock-rotate-left" style="margin-right:4px"></i>历史</span>
+          </div>
+          
+          <div class="page-content" style="padding-bottom:12px">
+            <!-- 资产概览 -->
+            <div class="asset-card">
+              <div class="asset-label">总资产 (USDT)</div>
+              <div class="asset-value font-space">12,450.80</div>
+              <div class="asset-change up font-space">+$234.50 (+1.92%) 今日</div>
+              <div style="display:flex;gap:8px;margin-top:14px">
+                <div style="flex:1;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center">
+                  <div style="font-size:10px;color:var(--fg-muted)">现货</div>
+                  <div class="font-space" style="font-size:13px;font-weight:700;margin-top:2px">$8,230</div>
+                </div>
+                <div style="flex:1;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center">
+                  <div style="font-size:10px;color:var(--fg-muted)">理财</div>
+                  <div class="font-space" style="font-size:13px;font-weight:700;margin-top:2px">$3,220</div>
+                </div>
+                <div style="flex:1;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center">
+                  <div style="font-size:10px;color:var(--fg-muted)">策略</div>
+                  <div class="font-space" style="font-size:13px;font-weight:700;margin-top:2px">$1,000</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 功能入口 -->
+            <div class="func-grid">
+              <div class="func-card">
+                <div class="icon" style="background:var(--accent-dim);color:var(--accent)"><i class="fas fa-lock"></i></div>
+                <div class="name">质押</div>
+                <div class="desc">Earn稳健收益</div>
+              </div>
+              <div class="func-card">
+                <div class="icon" style="background:var(--blue-dim);color:var(--blue)"><i class="fas fa-trophy"></i></div>
+                <div class="name">交易赛</div>
+                <div class="desc">社区竞技</div>
+              </div>
+              <div class="func-card">
+                <div class="icon" style="background:var(--amber-dim);color:var(--amber)"><i class="fas fa-chart-bar"></i></div>
+                <div class="name">AI量化</div>
+                <div class="desc">智能策略</div>
+              </div>
+              <div class="func-card">
+                <div class="icon" style="background:var(--red-dim);color:var(--red)"><i class="fas fa-robot"></i></div>
+                <div class="name">Agent</div>
+                <div class="desc">自动执行</div>
+              </div>
+            </div>
+
+            <!-- 活跃持仓 -->
+            <div style="padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:15px;font-weight:700">活跃持仓</span>
+              <span style="font-size:12px;color:var(--fg-muted)">查看全部 <i class="fas fa-chevron-right" style="font-size:9px"></i></span>
+            </div>
+            <div class="card">
+              <div class="position-row">
+                <div class="position-left">
+                  <div class="position-icon" style="background:rgba(98,126,234,0.15);color:#627eea">E</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:600">ETH网格策略</div>
+                    <div style="font-size:11px;color:var(--fg-muted)">运行中 · 30格</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div class="font-space" style="font-size:13px;font-weight:600;color:var(--accent)">+7.2%</div>
+                  <div style="font-size:11px;color:var(--fg-muted)">$1,072</div>
+                </div>
+              </div>
+              <div class="position-row">
+                <div class="position-left">
+                  <div class="position-icon" style="background:rgba(240,160,48,0.15);color:var(--amber)">S</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:600">SOL条件单</div>
+                    <div style="font-size:11px;color:var(--amber)">待触发 · ≤$130</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:13px;font-weight:600;color:var(--fg-muted)">--</div>
+                  <div style="font-size:11px;color:var(--fg-muted)">$1,300</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 活跃交易赛 -->
+            <div style="padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:15px;font-weight:700">交易赛</span>
+              <span style="font-size:12px;color:var(--accent);cursor:pointer">+ 创建</span>
+            </div>
+            <div class="card" style="background:linear-gradient(135deg,rgba(59,139,255,0.08),rgba(0,212,170,0.05));border-color:rgba(59,139,255,0.15)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <span style="font-size:14px;font-weight:700">BTC周赛 #12</span>
+                <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-weight:600">进行中</span>
+              </div>
+              <div style="display:flex;gap:16px;font-size:12px;color:var(--fg-dim)">
+                <span><i class="fas fa-trophy" style="color:var(--amber);margin-right:4px"></i>奖池 700U</span>
+                <span><i class="fas fa-users" style="margin-right:4px"></i>28人</span>
+                <span><i class="fas fa-clock" style="margin-right:4px"></i>剩3天</span>
+              </div>
+              <div style="margin-top:10px;font-size:12px;color:var(--fg-muted)">
+                你的排名：<span style="color:var(--accent);font-weight:700">#5</span> · 收益率 <span style="color:var(--accent);font-weight:600">+4.8%</span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="param-group">
-            <label>🏦 每日新增质押 U (金额)</label>
-            <input type="number" id="stakeU" value="2000" step="500">
+
+        <!-- === 钱包页 === -->
+        <div class="page-section" id="page-wallet">
+          <div class="section-header">
+            <span class="section-title">钱包</span>
+            <span class="section-action"><i class="fas fa-arrow-right-arrow-left" style="margin-right:4px"></i>转账</span>
+          </div>
+          
+          <div class="page-content" style="padding-bottom:12px">
+            <!-- 总资产 -->
+            <div style="text-align:center;padding:8px 20px 20px">
+              <div style="font-size:12px;color:var(--fg-muted);margin-bottom:4px">总资产估值</div>
+              <div class="font-space" style="font-size:36px;font-weight:900">$12,450<span style="font-size:22px">.80</span></div>
+              <div class="font-space" style="font-size:13px;color:var(--accent);font-weight:600;margin-top:4px">+$234.50 (1.92%)</div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div style="display:flex;gap:10px;padding:0 20px 20px;justify-content:center">
+              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
+                <div style="width:44px;height:44px;border-radius:14px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--accent)"><i class="fas fa-arrow-down"></i></div>
+                <span style="font-size:11px;font-weight:600">充值</span>
+              </div>
+              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
+                <div style="width:44px;height:44px;border-radius:14px;background:var(--blue-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--blue)"><i class="fas fa-arrow-up"></i></div>
+                <span style="font-size:11px;font-weight:600">提现</span>
+              </div>
+              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
+                <div style="width:44px;height:44px;border-radius:14px;background:var(--amber-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--amber)"><i class="fas fa-right-left"></i></div>
+                <span style="font-size:11px;font-weight:600">兑换</span>
+              </div>
+              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
+                <div style="width:44px;height:44px;border-radius:14px;background:var(--red-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--red)"><i class="fas fa-bridge"></i></div>
+                <span style="font-size:11px;font-weight:600">跨链</span>
+              </div>
+            </div>
+
+            <!-- Agent任务 -->
+            <div style="padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:15px;font-weight:700">Agent 任务</span>
+              <span style="font-size:12px;color:var(--accent);cursor:pointer">+ 新建</span>
+            </div>
+            <div class="agent-card">
+              <div class="agent-dot running"></div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600">SOL买入监控</div>
+                <div style="font-size:11px;color:var(--fg-muted)">触发：SOL ≤ $130 · 买入10个</div>
+              </div>
+              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-weight:600">运行中</span>
+            </div>
+            <div class="agent-card">
+              <div class="agent-dot pending"></div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600">BTC止盈</div>
+                <div style="font-size:11px;color:var(--fg-muted)">触发：BTC ≥ $105,000 · 全部卖出</div>
+              </div>
+              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:var(--amber-dim);color:var(--amber);font-weight:600">待触发</span>
+            </div>
+            <div class="agent-card">
+              <div class="agent-dot paused"></div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:600">ETH DCA定投</div>
+                <div style="font-size:11px;color:var(--fg-muted)">每周一买入 $200 ETH</div>
+              </div>
+              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.05);color:var(--fg-muted);font-weight:600">已暂停</span>
+            </div>
+
+            <!-- 资产列表 -->
+            <div style="padding:16px 20px 8px;display:flex;align-items:center;justify-content:space-between">
+              <span style="font-size:15px;font-weight:700">资产</span>
+              <span style="font-size:12px;color:var(--fg-muted);cursor:pointer"><i class="fas fa-eye" style="margin-right:4px"></i></span>
+            </div>
+            <div class="card" style="padding:4px 16px">
+              <div class="position-row">
+                <div class="position-left">
+                  <div class="position-icon font-space" style="background:rgba(98,126,234,0.15);color:#627eea;font-size:11px">BTC</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:600">Bitcoin</div>
+                    <div style="font-size:11px;color:var(--fg-muted)">0.12 BTC</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div class="font-space" style="font-size:13px;font-weight:600">$11,880</div>
+                  <div class="font-space" style="font-size:11px;color:var(--accent)">+3.2%</div>
+                </div>
+              </div>
+              <div class="position-row">
+                <div class="position-left">
+                  <div class="position-icon font-space" style="background:rgba(98,126,234,0.15);color:#627eea;font-size:11px">ETH</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:600">Ethereum</div>
+                    <div style="font-size:11px;color:var(--fg-muted)">1.5 ETH</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div class="font-space" style="font-size:13px;font-weight:600">$3,675</div>
+                  <div class="font-space" style="font-size:11px;color:var(--red)">-1.4%</div>
+                </div>
+              </div>
+              <div class="position-row">
+                <div class="position-left">
+                  <div class="position-icon font-space" style="background:rgba(0,212,170,0.12);color:var(--accent);font-size:11px">USDT</div>
+                  <div>
+                    <div style="font-size:13px;font-weight:600">Tether</div>
+                    <div style="font-size:11px;color:var(--fg-muted)">$3,220 可用</div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div class="font-space" style="font-size:13px;font-weight:600">$3,220</div>
+                  <div class="font-space" style="font-size:11px;color:var(--fg-muted)">--</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="param-group">
-            <label>🔓 每日解除质押 U (金额)</label>
-            <input type="number" id="unstakeU" value="0" step="500">
+
+        <!-- === 我的页 === -->
+        <div class="page-section" id="page-profile">
+          <div class="page-content" style="padding-bottom:12px">
+            <div class="profile-header">
+              <div class="profile-avatar">V</div>
+              <div class="profile-name">Vault Trader</div>
+              <div class="profile-id font-space">@vault_trader · UID 829103</div>
+              <div class="profile-badge" style="background:var(--accent-dim);color:var(--accent)"><i class="fas fa-gem" style="font-size:10px"></i> Pro会员</div>
+            </div>
+
+            <!-- 统计 -->
+            <div style="display:flex;gap:0;margin:0 16px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden">
+              <div style="flex:1;text-align:center;padding:14px;border-right:1px solid var(--border)">
+                <div class="font-space" style="font-size:18px;font-weight:800;color:var(--accent)">47</div>
+                <div style="font-size:11px;color:var(--fg-muted);margin-top:2px">交易天数</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:14px;border-right:1px solid var(--border)">
+                <div class="font-space" style="font-size:18px;font-weight:800;color:var(--accent)">+18.6%</div>
+                <div style="font-size:11px;color:var(--fg-muted);margin-top:2px">总收益率</div>
+              </div>
+              <div style="flex:1;text-align:center;padding:14px">
+                <div class="font-space" style="font-size:18px;font-weight:800">12</div>
+                <div style="font-size:11px;color:var(--fg-muted);margin-top:2px">社区策略</div>
+              </div>
+            </div>
+
+            <!-- 连接状态 -->
+            <div class="card" style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:32px;height:32px;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center">
+                  <span class="font-space" style="font-weight:800;font-size:10px;color:#000">OKX</span>
+                </div>
+                <div>
+                  <div style="font-size:13px;font-weight:600">OKX账户</div>
+                  <div class="connect-status">
+                    <span class="connect-dot on"></span>
+                    <span style="color:var(--accent)">已连接</span>
+                  </div>
+                </div>
+              </div>
+              <span style="font-size:12px;color:var(--fg-muted);cursor:pointer">管理 <i class="fas fa-chevron-right" style="font-size:9px"></i></span>
+            </div>
+
+            <!-- 菜单 -->
+            <div class="menu-list" style="margin-top:4px">
+              <div class="menu-item">
+                <div class="menu-left"><i class="fas fa-shield-halved"></i>安全设置</div>
+                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-left"><i class="fas fa-sliders"></i>风控配置</div>
+                <div class="menu-right"><span style="font-size:11px;color:var(--accent)">L2 限额执行</span> <i class="fas fa-chevron-right"></i></div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-left"><i class="fas fa-bell"></i>通知设置</div>
+                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-left"><i class="fas fa-user-plus"></i>邀请好友</div>
+                <div class="menu-right"><span style="font-size:11px;color:var(--amber)">赚佣金</span> <i class="fas fa-chevron-right"></i></div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-left"><i class="fas fa-circle-question"></i>帮助中心</div>
+                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
+              </div>
+              <div class="menu-item">
+                <div class="menu-left"><i class="fas fa-info-circle"></i>关于ChatVault</div>
+                <div class="menu-right"><span class="font-space" style="font-size:11px">v0.1.0</span> <i class="fas fa-chevron-right"></i></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="param-group">
-            <label>⏱️ 模拟天数</label>
-            <input type="number" id="days" value="30" step="5">
+
+        <!-- 底部导航 -->
+        <div class="bottom-nav" id="bottomNav">
+          <div class="nav-item active" data-page="chat">
+            <i class="fas fa-comment-dots"></i>
+            <span>对话</span>
+          </div>
+          <div class="nav-item" data-page="community">
+            <i class="fas fa-users"></i>
+            <span>社区</span>
+          </div>
+          <div class="nav-item center-btn" data-page="trade">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <div class="nav-item" data-page="wallet">
+            <i class="fas fa-wallet"></i>
+            <span>钱包</span>
+          </div>
+          <div class="nav-item" data-page="profile">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+          </div>
         </div>
-        <button id="runSim">🔄 运行模拟</button>
+      </div>
     </div>
 
-    <div class="stats-panel" id="summaryPanel">
-        <!-- 动态摘要 -->
+    <!-- 设计说明 -->
+    <div class="design-notes" id="designNotes">
+      <!-- 动态填充 -->
     </div>
+  </div>
+</div>
 
-    <div class="chart-area">
-        <canvas id="trendChart" width="800" height="400"></canvas>
+<!-- 设计系统 -->
+<div class="design-system">
+  <div class="ds-section">
+    <h2>色彩系统</h2>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="swatch" style="background:#0b0f18"></div>
+        <div class="info"><div class="label">App背景</div><div class="value">#0B0F18</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#131a28"></div>
+        <div class="info"><div class="label">卡片背景</div><div class="value">#131A28</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#00d4aa"></div>
+        <div class="info"><div class="label">主色/涨/成功</div><div class="value">#00D4AA</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#3b8bff"></div>
+        <div class="info"><div class="label">信息/链接</div><div class="value">#3B8BFF</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#f0a030"></div>
+        <div class="info"><div class="label">警告/待触发</div><div class="value">#F0A030</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#ff4757"></div>
+        <div class="info"><div class="label">危险/跌</div><div class="value">#FF4757</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#e4e9f2"></div>
+        <div class="info"><div class="label">主文字</div><div class="value">#E4E9F2</div></div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch" style="background:#556070"></div>
+        <div class="info"><div class="label">次要文字</div><div class="value">#556070</div></div>
+      </div>
     </div>
+  </div>
 
-    <div class="table-wrapper">
-        <table id="dataTable">
-            <thead>
-                <tr><th>日期</th><th>国库U</th><th>H价格(U/H)</th><th>质押H总量</th><th>质押U总量</th><th>H奖励池余额</th><th>池子U</th><th>池子H</th></tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+  <div class="ds-section">
+    <h2>字体规范</h2>
+    <div class="type-scale">
+      <div class="type-row">
+        <span class="name">H1 / 36px</span>
+        <span class="preview font-space" style="font-size:36px;font-weight:900">$12,450.80</span>
+      </div>
+      <div class="type-row">
+        <span class="name">H2 / 22px</span>
+        <span class="preview" style="font-size:22px;font-weight:900">页面标题</span>
+      </div>
+      <div class="type-row">
+        <span class="name">Body / 14px</span>
+        <span class="preview" style="font-size:14px">正文内容文字</span>
+      </div>
+      <div class="type-row">
+        <span class="name">Caption / 12px</span>
+        <span class="preview" style="font-size:12px;color:var(--fg-dim)">辅助说明文字</span>
+      </div>
+      <div class="type-row">
+        <span class="name">Micro / 10px</span>
+        <span class="preview" style="font-size:10px;color:var(--fg-muted)">标签·徽章·时间</span>
+      </div>
     </div>
-    <div class="footnote">
-        ⚡ 模型基于恒定乘积AMM，每日顺序：买卖交易 → 质押收益发放(按当日20:00价格) → 质押变动。<br>
-        质押H得U利率采用阶梯均值0.7%简化演示，质押U得H固定0.5%。做市干预未纳入可避免复杂，但反映真实税收与质押平衡。
+  </div>
+
+  <div class="ds-section">
+    <h2>核心组件</h2>
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-label">按钮 Primary</div>
+        <button style="width:100%;padding:12px;border-radius:12px;background:var(--accent);color:#000;font-weight:700;font-size:14px;border:none;cursor:pointer">确认执行</button>
+      </div>
+      <div class="comp-card">
+        <div class="comp-label">按钮 Secondary</div>
+        <button style="width:100%;padding:12px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);color:var(--fg);font-weight:600;font-size:14px;cursor:pointer">查看详情</button>
+      </div>
+      <div class="comp-card">
+        <div class="comp-label">标签组</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span style="padding:4px 10px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-size:11px;font-weight:600">运行中</span>
+          <span style="padding:4px 10px;border-radius:6px;background:var(--amber-dim);color:var(--amber);font-size:11px;font-weight:600">待触发</span>
+          <span style="padding:4px 10px;border-radius:6px;background:var(--red-dim);color:var(--red);font-size:11px;font-weight:600">已止损</span>
+          <span style="padding:4px 10px;border-radius:6px;background:var(--blue-dim);color:var(--blue);font-size:11px;font-weight:600">官方</span>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-label">输入框</div>
+        <input style="width:100%;padding:12px 16px;border-radius:24px;background:var(--bg-input);border:1px solid var(--border);color:var(--fg);font-size:14px;outline:none" placeholder="输入消息...">
+      </div>
+      <div class="comp-card">
+        <div class="comp-label">操作卡片 (对话内)</div>
+        <div style="background:var(--accent-dim);border:1px solid var(--accent-mid);border-radius:12px;padding:12px;font-size:12px;line-height:1.6">
+          <div style="font-weight:700;margin-bottom:4px">确认质押</div>
+          <div style="color:var(--fg-dim)">1000 USDT → 30天定期<br>APY: 5.8% · 预计收益: $15.9</div>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-label">连接状态</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(0,212,170,0.4)"></span>
+          <span style="font-size:13px;font-weight:600;color:var(--accent)">OKX 已连接</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--red)"></span>
+          <span style="font-size:13px;font-weight:600;color:var(--red)">钱包未连接</span>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- 下一步行动建议 -->
+<div class="next-steps">
+  <h2 style="font-size:24px;font-weight:900;margin-bottom:20px;display:flex;align-items:center;gap:10px">
+    <span style="width:4px;height:24px;background:var(--accent);border-radius:2px;display:inline-block"></span>
+    下一步行动建议
+  </h2>
+  
+  <div class="step-card">
+    <div class="step-num">1</div>
+    <div>
+      <h3>确认信息架构与导航</h3>
+      <p>当前5个Tab的划分是否合理？社区板块的子分类（推荐/资讯/策略/动态）是否需要调整？对话页是否应该是首页？</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">2</div>
+    <div>
+      <h3>细化每个页面的交互流程</h3>
+      <p>确定每个操作的完整用户路径：从对话输入→意图解析→操作卡片→确认→执行→结果反馈。特别是社区板块的发布、互动、策略复制流程。</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">3</div>
+    <div>
+      <h3>输出高保真设计稿</h3>
+      <p>基于确认的UI方案，用Figma输出完整的高保真设计稿，包含所有状态（空态/加载态/错误态/数据态）和动效标注。</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">4</div>
+    <div>
+      <h3>开发技术选型确认</h3>
+      <p>React Native vs Flutter？状态管理方案？与OKX SDK的集成方式？这些需要在开发前锁定。</p>
+    </div>
+  </div>
+  <div class="step-card">
+    <div class="step-num">5</div>
+    <div>
+      <h3>MVP范围裁剪</h3>
+      <p>第一版不做全部功能，建议：对话+质押+社区资讯先行，交易赛和AI量化第二版，Agent Wallet第三版。快速验证核心假设。</p>
+    </div>
+  </div>
 </div>
 
 <script>
-    // ---------- 初始状态 ----------
-    let state = {
-        poolU: 105000,          // 池子 U 余额
-        poolH: 19047619,        // 池子 H 余额 (初始1904.76万)
-        treasury: 5500,         // 国库 U 余额
-        stakedH: 0,             // 质押 H 总量
-        stakedU: 0,             // 质押 U 总量
-        rewardPoolH: 100000000, // 质押U奖励池 1亿 H
-    };
+// 设计说明数据
+const notesData = {
+  chat: {
+    title: '对话首页',
+    icon: 'fa-comment-dots',
+    color: 'var(--accent)',
+    items: [
+      '对话是整个App的核心入口，用户的所有操作都从这里开始',
+      'AI助手自动识别意图，路由到对应功能模块',
+      '操作卡片（Action Card）是对话中的关键交互，用户在卡片内确认后才执行',
+      '输入框支持文字和语音，降低输入门槛',
+      '顶部显示连接状态和通知入口',
+      '对话历史本地缓存，支持上下文连续对话'
+    ]
+  },
+  community: {
+    title: '社区板块',
+    icon: 'fa-users',
+    color: 'var(--blue)',
+    items: [
+      '四个子Tab：推荐（算法精选）、资讯（快讯+深度）、策略（可复制的交易策略）、动态（社媒聚合）',
+      '策略卡片是核心差异化功能——用户可以一键复制社区策略到自己的账户',
+      '官方策略组发布的内容带有特殊标识，增强可信度',
+      'KOL动态自动聚合Twitter/X内容，标注来源',
+      '互动数据（点赞/评论/分享）驱动内容排序',
+      '发布按钮支持发布动态、分享策略、发起讨论'
+    ]
+  },
+  trade: {
+    title: '交易中心',
+    icon: 'fa-chart-line',
+    color: 'var(--amber)',
+    items: [
+      '顶部资产概览卡片，实时显示总资产和分布',
+      '四大功能入口：质押/交易赛/AI量化/Agent，点击进入对应详情页',
+      '活跃持仓列表，显示当前运行的策略和条件单状态',
+      '交易赛卡片突出显示当前参与的比赛和排名',
+      '功能入口也可以通过对话触发，这里提供可视化快捷入口',
+      '资产数据通过OKX WebSocket实时推送'
+    ]
+  },
+  wallet: {
+    title: '钱包管理',
+    icon: 'fa-wallet',
+    color: 'var(--red)',
+    items: [
+      '大字体显示总资产估值，一目了然',
+      '四个快捷操作：充值/提现/兑换/跨链桥',
+      'Agent任务列表是特色功能，显示所有监控任务的实时状态',
+      '运行中(绿)/待触发(黄)/已暂停(灰) 三种状态清晰区分',
+      '资产列表显示各币种持仓和涨跌幅',
+      '跨链桥对接OKX Onchain OS，支持多链资产统一管理'
+    ]
+  },
+  profile: {
+    title: '个人中心',
+    icon: 'fa-user',
+    color: 'var(--fg)',
+    items: [
+      '用户头像+昵称+UID+会员等级，一目了然',
+      '三个核心统计：交易天数/总收益率/社区策略数',
+      'OKX连接状态是关键信息——未连接时引导用户绑定API Key',
+      '风控配置入口：用户可以调整Agent权限级别(L0-L3)',
+      '邀请好友功能：社交裂变增长',
+      '安全设置：生物识别/交易密码/二次验证'
+    ]
+  }
+};
 
-    // 恒定乘积 k
-    function getK() { return state.poolU * state.poolH; }
+// 渲染设计说明
+function renderNotes(page) {
+  const data = notesData[page];
+  const container = document.getElementById('designNotes');
+  container.innerHTML = `
+    <div class="note-card">
+      <h3><i class="fas ${data.icon}" style="color:${data.color}"></i> ${data.title}</h3>
+      ${data.items.map(item => `
+        <div class="note-item">
+          <div class="note-dot" style="background:${data.color}"></div>
+          <span>${item}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="note-card">
+      <h3><i class="fas fa-lightbulb" style="color:var(--amber)"></i> 设计原则</h3>
+      <div class="note-item">
+        <div class="note-dot" style="background:var(--amber)"></div>
+        <span>对话优先：所有操作都可以通过对话完成，页面入口是补充而非替代</span>
+      </div>
+      <div class="note-item">
+        <div class="note-dot" style="background:var(--amber)"></div>
+        <span>确认机制：任何资金操作都必须经过操作卡片二次确认</span>
+      </div>
+      <div class="note-item">
+        <div class="note-dot" style="background:var(--amber)"></div>
+        <span>渐进披露：首页只展示核心信息，详情通过层级递进</span>
+      </div>
+    </div>
+  `;
+}
 
-    // 更新价格
-    function getPrice() { return state.poolU / state.poolH; }
+// 页面切换
+function switchPage(page) {
+  // 更新页面显示
+  document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  
+  // 更新顶部切换按钮
+  document.querySelectorAll('#pageSwitcher .page-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === page);
+  });
+  
+  // 更新底部导航
+  document.querySelectorAll('#bottomNav .nav-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.page === page);
+  });
+  
+  // 更新设计说明
+  renderNotes(page);
+}
 
-    // 处理买入: 用户支付 buyAmountU (U), 5%税收, 净额入池, 减少池子H
-    function handleBuy(buyU) {
-        if (buyU <= 0) return;
-        const tax = buyU * 0.05;
-        state.treasury += tax;
-        const netU = buyU - tax;            // 实际增加池子的U
-        const k = getK();
-        // 新池子U = 原U + netU, 新池子H = k / 新U
-        const newPoolU = state.poolU + netU;
-        const newPoolH = k / newPoolU;
-        const hBought = state.poolH - newPoolH;   // 用户获得H数量
-        state.poolU = newPoolU;
-        state.poolH = newPoolH;
-        return hBought;
+// 顶部切换按钮事件
+document.querySelectorAll('#pageSwitcher .page-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchPage(btn.dataset.page));
+});
+
+// 底部导航事件
+document.querySelectorAll('#bottomNav .nav-item').forEach(item => {
+  item.addEventListener('click', () => switchPage(item.dataset.page));
+});
+
+// 社区Tab切换
+document.querySelectorAll('#communityTabs .tab-pill').forEach(pill => {
+  pill.addEventListener('click', () => {
+    document.querySelectorAll('#communityTabs .tab-pill').forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+});
+
+// 对话输入
+function sendChatMsg() {
+  const input = document.getElementById('chatInputField');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const area = document.getElementById('chatArea');
+  
+  // 用户消息
+  const userMsg = document.createElement('div');
+  userMsg.className = 'msg msg-user';
+  userMsg.textContent = text;
+  area.appendChild(userMsg);
+  input.value = '';
+  area.scrollTop = area.scrollHeight;
+  
+  // AI回复
+  setTimeout(() => {
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'msg msg-ai';
+    const lower = text.toLowerCase();
+    
+    let reply = '';
+    if (lower.includes('质押') || lower.includes('理财') || lower.includes('stak')) {
+      reply = '好的，我来查看当前OKX Earn上的质押产品。请确认你的资金量和偏好（灵活/定期/高收益优先）？';
+    } else if (lower.includes('交易赛') || lower.includes('比赛')) {
+      reply = '我可以帮你创建或加入交易赛。当前有3场进行中的比赛，你想查看还是创建新的？';
+    } else if (lower.includes('策略') || lower.includes('量化') || lower.includes('网格')) {
+      reply = '收到！请告诉我你想交易的币种和资金量，我会生成策略建议和回测报告。';
+    } else if (lower.includes('买入') || lower.includes('卖出') || lower.includes('监控') || lower.includes('提醒')) {
+      reply = '我来为Agent设置监控任务。请说明触发条件和执行操作，Agent会7×24小时自动监控。';
+    } else if (lower.includes('社区') || lower.includes('动态') || lower.includes('资讯')) {
+      reply = '你可以切换到社区页面查看最新资讯和策略分享，也可以在这里让我帮你筛选感兴趣的内容。';
+    } else {
+      reply = '我是你的Web3交易助手，可以帮你：\n· 质押理财\n· 创建/参加交易赛\n· AI量化策略\n· Agent自动监控\n\n用自然语言告诉我想做什么吧！';
     }
+    
+    aiMsg.textContent = reply;
+    area.appendChild(aiMsg);
+    area.scrollTop = area.scrollHeight;
+  }, 800);
+}
 
-    // 处理卖出: 用户卖出 sellHAmount (H数量), 税收从卖出所得U中扣除, 国库增加税收
-    function handleSell(sellH) {
-        if (sellH <= 0) return 0;
-        const k = getK();
-        // 卖出后新池子H增加, U减少
-        const newPoolH = state.poolH + sellH;
-        const newPoolU = k / newPoolH;
-        const grossUReceived = state.poolU - newPoolU;   // 卖出应得U总额 (税前)
-        const tax = grossUReceived * 0.05;
-        const netUReceived = grossUReceived - tax;
-        state.treasury += tax;
-        state.poolU = newPoolU;
-        state.poolH = newPoolH;
-        return netUReceived;
-    }
+document.getElementById('chatInputField').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') sendChatMsg();
+});
 
-    // 发放质押收益 (每日20:00)
-    function distributeRewards() {
-        const price = getPrice();
-        // 1) 质押H -> 得U  阶梯利率简化: 取平均日利率0.7% (真实阶梯可按天数, 为模拟简洁取0.7%)
-        const hStakeRewardU = state.stakedH * price * 0.007;   // 0.7% 日利率
-        if (hStakeRewardU > 0) {
-            const payU = Math.min(hStakeRewardU, state.treasury);
-            state.treasury -= payU;
-            // 实际发放给用户 (模拟不追踪个人钱包, 仅减少国库)
-        }
-        // 2) 质押U -> 得H  固定日利率0.5% (U价值)
-        const uStakeRewardValue = state.stakedU * 0.005;        // U价值收益
-        const rewardHAmount = uStakeRewardValue / price;        // 按价格折算H
-        if (rewardHAmount > 0 && state.rewardPoolH > 0) {
-            const realRewardH = Math.min(rewardHAmount, state.rewardPoolH);
-            state.rewardPoolH -= realRewardH;
-            // 用户获得H (不改变池子, 用户可能后续卖出, 但卖出手动模拟)
-        }
-    }
-
-    // 质押变动
-    function updateStaking(deltaStakeH, deltaUnstakeH, deltaStakeU, deltaUnstakeU) {
-        // 质押H: 从用户钱包转移, 不改变池子, 只增加质押记录
-        if (deltaStakeH > 0) state.stakedH += deltaStakeH;
-        // 解除质押H: 减少质押量 (假设24h后到账, 但到账前不计入流动性, 简单即时减少)
-        if (deltaUnstakeH > 0) {
-            const realUnstake = Math.min(deltaUnstakeH, state.stakedH);
-            state.stakedH -= realUnstake;
-        }
-        // 质押U
-        if (deltaStakeU > 0) state.stakedU += deltaStakeU;
-        if (deltaUnstakeU > 0) {
-            const realUnstakeU = Math.min(deltaUnstakeU, state.stakedU);
-            state.stakedU -= realUnstakeU;
-        }
-    }
-
-    // 每日模拟循环
-    function simulateDay(dailyBuyU, dailySellH, dailyStakeH, dailyUnstakeH, dailyStakeU, dailyUnstakeU) {
-        // 1. 执行买卖 (先买后卖, 顺序影响轻微, 采用同时净影响简化: 先买后卖)
-        if (dailyBuyU > 0) handleBuy(dailyBuyU);
-        if (dailySellH > 0) handleSell(dailySellH);
-        // 2. 发放当日收益 (基于当日最终价格)
-        distributeRewards();
-        // 3. 质押变动 (新增/解除)
-        updateStaking(dailyStakeH, dailyUnstakeH, dailyStakeU, dailyUnstakeU);
-    }
-
-    // 运行完整模拟, 返回历史记录
-    function runSimulation(days, params) {
-        // 重置状态
-        state = {
-            poolU: 105000,
-            poolH: 19047619,
-            treasury: 5500,
-            stakedH: 0,
-            stakedU: 0,
-            rewardPoolH: 100000000,
-        };
-        const history = [];
-        for (let day = 1; day <= days; day++) {
-            // 深拷贝当前快照
-            const snapshot = {
-                day: day,
-                treasury: state.treasury,
-                price: getPrice(),
-                stakedH: state.stakedH,
-                stakedU: state.stakedU,
-                rewardPoolH: state.rewardPoolH,
-                poolU: state.poolU,
-                poolH: state.poolH,
-            };
-            history.push(snapshot);
-            simulateDay(params.buyU, params.sellH, params.stakeH, params.unstakeH, params.stakeU, params.unstakeU);
-        }
-        // 最后一天再加终态
-        const finalSnapshot = {
-            day: days+1,
-            treasury: state.treasury,
-            price: getPrice(),
-            stakedH: state.stakedH,
-            stakedU: state.stakedU,
-            rewardPoolH: state.rewardPoolH,
-            poolU: state.poolU,
-            poolH: state.poolH,
-        };
-        history.push(finalSnapshot);
-        return history;
-    }
-
-    // ---------- UI 渲染 ----------
-    let currentChart = null;
-
-    function renderSummary(history) {
-        const last = history[history.length-1];
-        const first = history[0];
-        const panel = document.getElementById('summaryPanel');
-        panel.innerHTML = `
-            <div class="stat-badge"><div class="label">最终国库U</div><div class="value">${last.treasury.toFixed(2)}</div><div class="label">初始: ${first.treasury.toFixed(2)}</div></div>
-            <div class="stat-badge"><div class="label">最终H价格</div><div class="value">${last.price.toFixed(6)} U/H</div><div class="label">初始: ${first.price.toFixed(6)}</div></div>
-            <div class="stat-badge"><div class="label">质押H总量</div><div class="value">${last.stakedH.toFixed(0)}</div><div class="label">变化: +${(last.stakedH-first.stakedH).toFixed(0)}</div></div>
-            <div class="stat-badge"><div class="label">质押U总量</div><div class="value">${last.stakedU.toFixed(2)} U</div><div class="label">变化: +${(last.stakedU-first.stakedU).toFixed(2)}</div></div>
-            <div class="stat-badge"><div class="label">H奖励池余额</div><div class="value">${last.rewardPoolH.toFixed(0)} H</div><div class="label">消耗: ${(first.rewardPoolH-last.rewardPoolH).toFixed(0)}</div></div>
-        `;
-    }
-
-    function renderTable(history) {
-        const tbody = document.querySelector('#dataTable tbody');
-        tbody.innerHTML = '';
-        for (let row of history) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>Day ${row.day}</td>
-                <td>${row.treasury.toFixed(2)}</td>
-                <td>${row.price.toFixed(6)}</td>
-                <td>${row.stakedH.toFixed(0)}</td>
-                <td>${row.stakedU.toFixed(2)}</td>
-                <td>${row.rewardPoolH.toFixed(0)}</td>
-                <td>${row.poolU.toFixed(2)}</td>
-                <td>${row.poolH.toFixed(0)}</td>
-            `;
-            tbody.appendChild(tr);
-        }
-    }
-
-    function renderChart(history) {
-        const labels = history.map(d => `D${d.day}`);
-        const treasuryData = history.map(d => d.treasury);
-        const priceData = history.map(d => d.price);
-        const stakedHData = history.map(d => d.stakedH);
-        const ctx = document.getElementById('trendChart').getContext('2d');
-        if (currentChart) currentChart.destroy();
-        currentChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    { label: '国库余额 (U)', data: treasuryData, borderColor: '#a855f7', backgroundColor: 'transparent', tension: 0.2, yAxisID: 'y' },
-                    { label: 'H价格 (U/H)', data: priceData, borderColor: '#3b82f6', backgroundColor: 'transparent', tension: 0.2, yAxisID: 'y1' },
-                    { label: '质押H总量 (万H)', data: stakedHData.map(v => v/10000), borderColor: '#10b981', backgroundColor: 'transparent', tension: 0.2, yAxisID: 'y' }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: { tooltip: { mode: 'index', intersect: false } },
-                scales: {
-                    y: { title: { display: true, text: 'U / 万H', color: '#4b5563' }, beginAtZero: false },
-                    y1: { position: 'right', title: { display: true, text: '价格 (U/H)' }, grid: { drawOnChartArea: false } }
-                }
-            }
-        });
-    }
-
-    function getParamsFromUI() {
-        return {
-            buyU: parseFloat(document.getElementById('buyU').value) || 0,
-            sellH: parseFloat(document.getElementById('sellH').value) || 0,
-            stakeH: parseFloat(document.getElementById('stakeH').value) || 0,
-            unstakeH: parseFloat(document.getElementById('unstakeH').value) || 0,
-            stakeU: parseFloat(document.getElementById('stakeU').value) || 0,
-            unstakeU: parseFloat(document.getElementById('unstakeU').value) || 0,
-        };
-    }
-
-    function run() {
-        const days = parseInt(document.getElementById('days').value) || 30;
-        const params = getParamsFromUI();
-        if (days <= 0 || days > 365) {
-            alert("模拟天数请设置在1~365之间");
-            return;
-        }
-        // 简单校验防止极端输入
-        if (params.buyU < 0) params.buyU = 0;
-        if (params.sellH < 0) params.sellH = 0;
-        const history = runSimulation(days, params);
-        renderSummary(history);
-        renderTable(history);
-        renderChart(history);
-    }
-
-    document.getElementById('runSim').addEventListener('click', run);
-    // 初始运行一次默认演示
-    window.addEventListener('load', () => {
-        run();
-    });
+// 初始化
+renderNotes('chat');
 </script>
 </body>
 </html>
