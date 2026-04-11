@@ -1,204 +1,1836 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Strategy Protocol</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+<title>ChatTrade — 对话即交易</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: #f7f7fb;
-    color: #111;
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — Cyberpunk Noir + Warm Gold
+   ═══════════════════════════════════════════ */
+:root {
+  --bg-void: #0a0a0f;
+  --bg-deep: #0f1019;
+  --bg-surface: #161825;
+  --bg-elevated: #1c1f33;
+  --bg-glass: rgba(28, 31, 51, 0.65);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-glow: rgba(232, 186, 99, 0.25);
+  --text-primary: #eae6df;
+  --text-secondary: #8a8697;
+  --text-muted: #5a5668;
+  --accent-gold: #e8ba63;
+  --accent-gold-bright: #f5d08a;
+  --accent-cyan: #5ce0d8;
+  --accent-red: #e85a5a;
+  --accent-green: #4ecb71;
+  --accent-purple: #a87bff;
+  --gradient-gold: linear-gradient(135deg, #e8ba63 0%, #f5d08a 50%, #e8ba63 100%);
+  --gradient-card: linear-gradient(160deg, rgba(232,186,99,0.08) 0%, rgba(28,31,51,0.9) 100%);
+  --shadow-glow: 0 0 40px rgba(232, 186, 99, 0.12);
+  --shadow-deep: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --font-display: 'Outfit', 'Noto Sans SC', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'Noto Sans SC', 'Outfit', sans-serif;
 }
 
-.container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 20px;
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* ═══════════════════════════════════════════
+   LAYOUT — App Shell
+   ═══════════════════════════════════════════ */
+.app {
+  display: grid;
+  grid-template-columns: 72px 280px 1fr 340px;
+  height: 100vh;
+  position: relative;
 }
 
-.logo {
-    font-weight: 600;
-    font-size: 20px;
-    background: linear-gradient(90deg,#a855f7,#d4af37);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+/* Ambient background noise */
+.app::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 80%, rgba(232,186,99,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 20%, rgba(92,224,216,0.03) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.button {
-    padding: 10px 18px;
-    border-radius: 8px;
-    background: linear-gradient(90deg,#a855f7,#d4af37);
-    color: white;
-    border: none;
-    cursor: pointer;
+/* ═══════════════════════════════════════════
+   NAV RAIL — Left Icon Bar
+   ═══════════════════════════════════════════ */
+.nav-rail {
+  background: var(--bg-deep);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  gap: 6px;
+  z-index: 10;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 20px;
-    margin-top: 20px;
+.nav-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--gradient-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--bg-void);
+  margin-bottom: 20px;
+  box-shadow: 0 0 24px rgba(232,186,99,0.3);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.nav-logo:hover { transform: scale(1.08); }
+
+.nav-item {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  font-size: 20px;
+}
+.nav-item:hover {
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+}
+.nav-item.active {
+  color: var(--accent-gold);
+  background: rgba(232,186,99,0.1);
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -14px;
+  width: 3px;
+  height: 20px;
+  border-radius: 0 3px 3px 0;
+  background: var(--accent-gold);
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+.nav-spacer { flex: 1; }
+
+.nav-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  box-shadow: 0 0 8px rgba(232,90,90,0.6);
 }
 
-.title {
-    font-size: 14px;
-    color: #888;
+/* ═══════════════════════════════════════════
+   SIDEBAR — Channel & DM List
+   ═══════════════════════════════════════════ */
+.sidebar {
+  background: var(--bg-deep);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  overflow: hidden;
 }
 
-.value {
-    font-size: 24px;
-    margin-top: 10px;
-    font-weight: 600;
+.sidebar-header {
+  padding: 20px 20px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.big {
-    font-size: 32px;
+.sidebar-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
 }
 
-.boost {
-    color: #a855f7;
+.sidebar-search {
+  margin: 0 16px 12px;
+  padding: 10px 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.sidebar-search::placeholder { color: var(--text-muted); }
+.sidebar-search:focus { border-color: var(--border-glow); }
+
+.channel-group {
+  padding: 0 12px;
+  margin-bottom: 8px;
+}
+.channel-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  padding: 8px 8px 4px;
 }
 
-.section {
-    margin-top: 30px;
+.channel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.channel-item:hover { background: rgba(255,255,255,0.03); }
+.channel-item.active {
+  background: rgba(232,186,99,0.08);
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    margin-top: 10px;
+.channel-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.channel-icon.trending {
+  background: rgba(232,186,99,0.12);
+  color: var(--accent-gold);
+}
+.channel-icon.token {
+  background: rgba(92,224,216,0.1);
+  color: var(--accent-cyan);
+}
+.channel-icon.nft {
+  background: rgba(168,123,255,0.1);
+  color: var(--accent-purple);
+}
+.channel-icon.dao {
+  background: rgba(78,203,113,0.1);
+  color: var(--accent-green);
 }
 
+.channel-info { flex: 1; min-width: 0; }
+.channel-name {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.channel-preview {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.channel-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.channel-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+.channel-unread {
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: var(--accent-gold);
+  color: var(--bg-void);
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+
+.sidebar-footer {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wallet-card {
+  flex: 1;
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+.wallet-card:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.wallet-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+.wallet-balance {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-top: 2px;
+}
+.wallet-addr {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+/* ═══════════════════════════════════════════
+   MAIN CHAT — Central Conversation Area
+   ═══════════════════════════════════════════ */
+.chat-main {
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+  position: relative;
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  backdrop-filter: blur(12px);
+  background: rgba(15,16,25,0.8);
+  z-index: 5;
+}
+
+.chat-header-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(232,186,99,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  font-size: 18px;
+}
+
+.chat-header-info { flex: 1; }
+.chat-header-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+.chat-header-sub {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1px;
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-green);
+  display: inline-block;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(78,203,113,0.5); }
+  50% { opacity: 0.5; box-shadow: 0 0 8px rgba(78,203,113,0.8); }
+}
+
+.chat-header-actions {
+  display: flex;
+  gap: 8px;
+}
+.header-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+.header-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border-glow);
+}
+
+/* Chat Messages */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  scroll-behavior: smooth;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-track { background: transparent; }
+.chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+}
+
+.msg-group {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  animation: msg-in 0.35s ease-out both;
+}
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+.msg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.msg-avatar-ring {
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+}
+.msg-avatar-ring.gold { border-color: var(--accent-gold); }
+.msg-avatar-ring.cyan { border-color: var(--accent-cyan); }
+.msg-avatar-ring.purple { border-color: var(--accent-purple); }
+
+.msg-content { flex: 1; min-width: 0; }
+
+.msg-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.msg-author {
+  font-size: 13px;
+  font-weight: 600;
+}
+.msg-author.gold { color: var(--accent-gold); }
+.msg-author.cyan { color: var(--accent-cyan); }
+.msg-author.purple { color: var(--accent-purple); }
+.msg-author.green { color: var(--accent-green); }
+
+.msg-tag {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(232,186,99,0.12);
+  color: var(--accent-gold);
+}
+.msg-tag.whale {
+  background: rgba(92,224,216,0.1);
+  color: var(--accent-cyan);
+}
+.msg-tag.builder {
+  background: rgba(168,123,255,0.1);
+  color: var(--accent-purple);
+}
+
+.msg-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.msg-text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-primary);
+}
+
+/* ── Inline Trade Card ── */
+.trade-card {
+  margin-top: 10px;
+  background: var(--gradient-card);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-width: 440px;
+  transition: box-shadow 0.3s;
+}
+.trade-card:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.trade-card-header {
+  padding: 12px 16px 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.trade-type-badge {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 8px;
+  border-radius: 5px;
+}
+.trade-type-badge.buy {
+  background: rgba(78,203,113,0.15);
+  color: var(--accent-green);
+}
+.trade-type-badge.sell {
+  background: rgba(232,90,90,0.15);
+  color: var(--accent-red);
+}
+.trade-type-badge.swap {
+  background: rgba(232,186,99,0.12);
+  color: var(--accent-gold);
+}
+.trade-type-badge.mint {
+  background: rgba(168,123,255,0.12);
+  color: var(--accent-purple);
+}
+
+.trade-pair {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trade-status {
+  margin-left: auto;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--accent-green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.trade-status .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-green);
+}
+
+.trade-card-body {
+  padding: 12px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.trade-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.trade-detail-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.trade-detail-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.trade-detail-value.green { color: var(--accent-green); }
+.trade-detail-value.gold { color: var(--accent-gold); }
+
+.trade-card-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trade-btn {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.trade-btn.primary {
+  background: var(--gradient-gold);
+  color: var(--bg-void);
+}
+.trade-btn.primary:hover {
+  box-shadow: 0 0 20px rgba(232,186,99,0.4);
+  transform: translateY(-1px);
+}
+.trade-btn.secondary {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+.trade-btn.secondary:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+
+.trade-reactions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.trade-reaction {
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.trade-reaction:hover {
+  background: rgba(232,186,99,0.08);
+  border-color: var(--border-glow);
+}
+.trade-reaction.active {
+  background: rgba(232,186,99,0.12);
+  border-color: var(--accent-gold);
+}
+
+/* ── Price Ticker Inline ── */
+.price-ticker-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  background: rgba(232,186,99,0.08);
+  border: 1px solid rgba(232,186,99,0.15);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.price-ticker-inline:hover {
+  background: rgba(232,186,99,0.14);
+  box-shadow: 0 0 12px rgba(232,186,99,0.15);
+}
+.price-ticker-inline .change {
+  font-size: 11px;
+}
+.price-ticker-inline .change.up { color: var(--accent-green); }
+.price-ticker-inline .change.down { color: var(--accent-red); }
+
+/* ── AI Agent Suggestion ── */
+.ai-suggestion {
+  margin-top: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(92,224,216,0.06) 0%, rgba(168,123,255,0.04) 100%);
+  border: 1px solid rgba(92,224,216,0.12);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 440px;
+}
+.ai-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(92,224,216,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.ai-text {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.ai-text strong {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+/* ── Date Divider ── */
+.date-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+.date-divider::before,
+.date-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+.date-divider span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--font-mono);
+}
+
+/* ── System Message ── */
+.system-msg {
+  text-align: center;
+  padding: 8px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.system-msg .icon { font-size: 13px; }
+
+/* ═══════════════════════════════════════════
+   CHAT INPUT — Compose Area
+   ═══════════════════════════════════════════ */
+.chat-input-area {
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(15,16,25,0.6);
+  backdrop-filter: blur(12px);
+}
+
+.input-wrapper {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.input-wrapper:focus-within {
+  border-color: var(--border-glow);
+  box-shadow: 0 0 0 3px rgba(232,186,99,0.06);
+}
+
+.input-top {
+  display: flex;
+  align-items: flex-end;
+}
+
+.input-field {
+  flex: 1;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  min-height: 22px;
+  max-height: 120px;
+  line-height: 1.5;
+}
+.input-field::placeholder { color: var(--text-muted); }
+
+.input-send {
+  padding: 10px 18px;
+  margin: 6px 8px;
+  background: var(--gradient-gold);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--bg-void);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.input-send:hover {
+  box-shadow: 0 0 16px rgba(232,186,99,0.4);
+  transform: translateY(-1px);
+}
+
+.input-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 4px;
+}
+
+.tool-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.tool-btn:hover {
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+}
+.tool-btn .emoji { font-size: 14px; }
+
+.tool-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border-subtle);
+  margin: 0 4px;
+}
+
+.quick-trade {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+.quick-trade-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.quick-trade-btn.buy {
+  color: var(--accent-green);
+  border-color: rgba(78,203,113,0.2);
+}
+.quick-trade-btn.buy:hover {
+  background: rgba(78,203,113,0.1);
+  border-color: rgba(78,203,113,0.4);
+}
+.quick-trade-btn.sell {
+  color: var(--accent-red);
+  border-color: rgba(232,90,90,0.2);
+}
+.quick-trade-btn.sell:hover {
+  background: rgba(232,90,90,0.1);
+  border-color: rgba(232,90,90,0.4);
+}
+.quick-trade-btn.swap {
+  color: var(--accent-gold);
+  border-color: rgba(232,186,99,0.2);
+}
+.quick-trade-btn.swap:hover {
+  background: rgba(232,186,99,0.1);
+  border-color: rgba(232,186,99,0.4);
+}
+
+/* ═══════════════════════════════════════════
+   RIGHT PANEL — Market & Context
+   ═══════════════════════════════════════════ */
+.right-panel {
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  overflow-y: auto;
+}
+.right-panel::-webkit-scrollbar { width: 4px; }
+.right-panel::-webkit-scrollbar-track { background: transparent; }
+.right-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
+
+.panel-section {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.panel-title .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+}
+
+/* Market Chart Placeholder */
+.chart-area {
+  height: 140px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.chart-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.chart-line svg {
+  width: 100%;
+  height: 100%;
+}
+
+.chart-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.chart-price {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.chart-change {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+}
+.chart-change.up { color: var(--accent-green); }
+.chart-change.down { color: var(--accent-red); }
+
+.chart-timeframes {
+  display: flex;
+  gap: 4px;
+}
+.tf-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tf-btn.active {
+  background: rgba(232,186,99,0.1);
+  color: var(--accent-gold);
+}
+.tf-btn:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+/* Token Info Grid */
+.token-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.token-info-item {
+  padding: 10px;
+  background: rgba(255,255,255,0.02);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+.token-info-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+.token-info-value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Community Sentiment */
+.sentiment-bar {
+  display: flex;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  background: var(--bg-surface);
+}
+.sentiment-bull {
+  background: var(--accent-green);
+  transition: width 0.5s ease;
+}
+.sentiment-bear {
+  background: var(--accent-red);
+  transition: width 0.5s ease;
+}
+
+.sentiment-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  font-family: var(--font-mono);
+}
+.sentiment-bull-label { color: var(--accent-green); }
+.sentiment-bear-label { color: var(--accent-red); }
+
+/* Active Traders */
+.trader-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.trader-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.trader-item:hover { background: rgba(255,255,255,0.03); }
+
+.trader-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.trader-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.trader-info { flex: 1; }
+.trader-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.trader-action {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+.trader-pnl {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+.trader-pnl.up { color: var(--accent-green); }
+.trader-pnl.down { color: var(--accent-red); }
+
+/* ── Floating Trade Animation ── */
+.float-trade {
+  position: fixed;
+  pointer-events: none;
+  z-index: 100;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  animation: float-up 2s ease-out forwards;
+}
+.float-trade.buy {
+  color: var(--accent-green);
+  background: rgba(78,203,113,0.12);
+  border: 1px solid rgba(78,203,113,0.2);
+}
+.float-trade.sell {
+  color: var(--accent-red);
+  background: rgba(232,90,90,0.12);
+  border: 1px solid rgba(232,90,90,0.2);
+}
+@keyframes float-up {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-60px); }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — Minimal for demo
+   ═══════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  .app {
+    grid-template-columns: 72px 280px 1fr;
+  }
+  .right-panel { display: none; }
+}
+
+@media (max-width: 768px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+  .nav-rail, .sidebar { display: none; }
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATION — Staggered Entry
+   ═══════════════════════════════════════════ */
+.msg-group:nth-child(1) { animation-delay: 0s; }
+.msg-group:nth-child(2) { animation-delay: 0.08s; }
+.msg-group:nth-child(3) { animation-delay: 0.16s; }
+.msg-group:nth-child(4) { animation-delay: 0.24s; }
+.msg-group:nth-child(5) { animation-delay: 0.32s; }
+.msg-group:nth-child(6) { animation-delay: 0.40s; }
+.msg-group:nth-child(7) { animation-delay: 0.48s; }
+.msg-group:nth-child(8) { animation-delay: 0.56s; }
+.msg-group:nth-child(9) { animation-delay: 0.64s; }
+
+/* Scanline overlay */
+.scanline {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.015) 2px,
+    rgba(0,0,0,0.015) 4px
+  );
+}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="app">
+  <!-- ═══ NAV RAIL ═══ -->
+  <nav class="nav-rail">
+    <div class="nav-logo">CT</div>
+    <div class="nav-item active" title="对话">💬</div>
+    <div class="nav-item" title="交易">📊</div>
+    <div class="nav-item" title="钱包">👛</div>
+    <div class="nav-item" title="DAO">🏛️</div>
+    <div class="nav-item" title="NFT">🎨</div>
+    <div class="nav-spacer"></div>
+    <div class="nav-item" title="通知" style="position:relative">
+      🔔<span class="nav-badge"></span>
+    </div>
+    <div class="nav-item" title="设置">⚙️</div>
+  </nav>
 
-<div class="header">
-    <div class="logo">Strategy Protocol</div>
-    <button class="button" onclick="connectWallet()">连接钱包</button>
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">频道</span>
+      <span style="color:var(--accent-gold);cursor:pointer;font-size:18px">+</span>
+    </div>
+    <input class="sidebar-search" placeholder="搜索代币、频道、人..." />
+
+    <div class="channel-group">
+      <div class="channel-group-title">🔥 热门交易</div>
+      <div class="channel-item active">
+        <div class="channel-icon trending">₿</div>
+        <div class="channel-info">
+          <div class="channel-name">BTC 策略局</div>
+          <div class="channel-preview">鲸鱼刚加了500BTC仓位...</div>
+        </div>
+        <div class="channel-meta">
+          <span class="channel-time">22:13</span>
+          <span class="channel-unread">5</span>
+        </div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon token">Ξ</div>
+        <div class="channel-info">
+          <div class="channel-name">ETH 研究院</div>
+          <div class="channel-preview">Pectra升级利好分析</div>
+        </div>
+        <div class="channel-meta">
+          <span class="channel-time">21:47</span>
+        </div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon trending">🧠</div>
+        <div class="channel-info">
+          <div class="channel-name">AI+Crypto 前沿</div>
+          <div class="channel-preview">VIRTUAL 突破新高</div>
+        </div>
+        <div class="channel-meta">
+          <span class="channel-time">21:30</span>
+          <span class="channel-unread">12</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="channel-group">
+      <div class="channel-group-title">🎨 NFT & 链游</div>
+      <div class="channel-item">
+        <div class="channel-icon nft">👾</div>
+        <div class="channel-info">
+          <div class="channel-name">PFP 实验室</div>
+          <div class="channel-preview">新项目空投讨论</div>
+        </div>
+        <div class="channel-meta">
+          <span class="channel-time">20:55</span>
+        </div>
+      </div>
+      <div class="channel-item">
+        <div class="channel-icon nft">⚔️</div>
+        <div class="channel-info">
+          <div class="channel-name">GameFi 战场</div>
+          <div class="channel-preview">像素农场新版本上线</div>
+        </div>
+        <div class="channel-meta">
+          <span class="channel-time">19:22</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="channel-group">
+      <div class="channel-group-title">🏛️ DAO 治理</div>
+      <div class="channel-item">
+        <div class="channel-icon dao">🗳️</div>
+        <div class="channel-info">
+          <div class="channel-name">社区提案投票</div>
+          <div class="channel-preview">#47提案: 手续费调整</div>
+        </div>
+        <div class="channel-meta">
+          <span class="channel-time">18:40</span>
+          <span class="channel-unread">3</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="wallet-card">
+        <div class="wallet-label">钱包余额</div>
+        <div class="wallet-balance">2.847 ETH</div>
+        <div class="wallet-addr">0x7a3f...e9c2</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN CHAT ═══ -->
+  <main class="chat-main">
+    <div class="chat-header">
+      <div class="chat-header-icon">₿</div>
+      <div class="chat-header-info">
+        <div class="chat-header-name">BTC 策略局</div>
+        <div class="chat-header-sub">
+          <span class="live-dot"></span>
+          <span>1,247 人在线</span>
+          <span style="color:var(--text-muted)">·</span>
+          <span style="color:var(--accent-gold)">₿ 交易中</span>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button class="header-btn" title=" pinned">📌</button>
+        <button class="header-btn" title="搜索">🔍</button>
+        <button class="header-btn" title="成员">👥</button>
+      </div>
+    </div>
+
+    <div class="chat-messages">
+      <!-- Date Divider -->
+      <div class="date-divider"><span>今天 4月11日</span></div>
+
+      <!-- System Message -->
+      <div class="system-msg">
+        <span class="icon">🔔</span>
+        <span>CryptoWhale 加入了频道</span>
+      </div>
+
+      <!-- Message 1: Normal chat -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <div class="msg-avatar-ring gold"></div>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e8ba63' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🐋%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author gold">CryptoWhale</span>
+            <span class="msg-tag">WHALE</span>
+            <span class="msg-time">21:32</span>
+          </div>
+          <div class="msg-text">
+            各位，我刚刚观察到链上大额转账，某巨鲸从冷钱包转出
+            <span class="price-ticker-inline">BTC $82,437 <span class="change up">+3.2%</span></span>
+            估计要建仓了。这种量级通常是机构级别的操作。
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 2: With inline trade card -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <div class="msg-avatar-ring cyan"></div>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%235ce0d8' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🎯%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author cyan">AlphaHunter</span>
+            <span class="msg-tag whale">PRO</span>
+            <span class="msg-time">21:35</span>
+          </div>
+          <div class="msg-text">跟了，刚下单买入 👇</div>
+
+          <!-- TRADE CARD -->
+          <div class="trade-card">
+            <div class="trade-card-header">
+              <span class="trade-type-badge buy">BUY</span>
+              <span class="trade-pair">BTC / USDT</span>
+              <span class="trade-status"><span class="dot"></span> 已成交</span>
+            </div>
+            <div class="trade-card-body">
+              <div class="trade-detail">
+                <span class="trade-detail-label">数量</span>
+                <span class="trade-detail-value">0.5 BTC</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">均价</span>
+                <span class="trade-detail-value gold">$82,380</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">金额</span>
+                <span class="trade-detail-value">$41,190</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">手续费</span>
+                <span class="trade-detail-value green">$0.00</span>
+              </div>
+            </div>
+            <div class="trade-card-footer">
+              <button class="trade-btn primary">跟单买入</button>
+              <button class="trade-btn secondary">查看链上</button>
+              <div class="trade-reactions">
+                <span class="trade-reaction active">🚀 23</span>
+                <span class="trade-reaction">💎 8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 3: Discussion -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <div class="msg-avatar-ring purple"></div>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23a87bff' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🧙%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author purple">DeFiWizard</span>
+            <span class="msg-tag builder">BUILDER</span>
+            <span class="msg-time">21:38</span>
+          </div>
+          <div class="msg-text">
+            等等，别FOMO。看4小时线，RSI已经超买区间了。我建议等回调到 $81,200 再进。另外，美联储下周会议前大概率震荡。
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 4: AI Agent Suggestion -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%231c1f33' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🤖%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author" style="color:var(--accent-cyan)">CT Agent</span>
+            <span class="msg-tag" style="background:rgba(92,224,216,0.1);color:var(--accent-cyan)">AI</span>
+            <span class="msg-time">21:38</span>
+          </div>
+          <div class="msg-text">
+            基于社区讨论和链上数据，为你生成分析：
+          </div>
+          <div class="ai-suggestion">
+            <div class="ai-icon">⚡</div>
+            <div class="ai-text">
+              <strong>鲸鱼追踪：</strong>过去1小时，3个巨鲸地址共转入 2,400 BTC 至交易所，通常为抛压信号。<br>
+              <strong>社区情绪：</strong>72% 看多，但历史数据显示情绪极端时反转概率增大。<br>
+              <strong>建议：</strong>设置止盈 $84,000，止损 $80,500，仓位控制在 15% 以内。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 5: Swap trade card -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <div class="msg-avatar-ring gold"></div>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e8ba63' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🐈%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author gold">YieldFarmer</span>
+            <span class="msg-time">21:42</span>
+          </div>
+          <div class="msg-text">
+            我把一部分 ETH 换成稳定币了，落袋为安 🔄
+          </div>
+
+          <!-- SWAP TRADE CARD -->
+          <div class="trade-card">
+            <div class="trade-card-header">
+              <span class="trade-type-badge swap">SWAP</span>
+              <span class="trade-pair">ETH → USDC</span>
+              <span class="trade-status"><span class="dot"></span> 已成交</span>
+            </div>
+            <div class="trade-card-body">
+              <div class="trade-detail">
+                <span class="trade-detail-label">卖出</span>
+                <span class="trade-detail-value">5.0 ETH</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">获得</span>
+                <span class="trade-detail-value gold">9,875 USDC</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">价格</span>
+                <span class="trade-detail-value">$1,975</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">滑点</span>
+                <span class="trade-detail-value green">0.03%</span>
+              </div>
+            </div>
+            <div class="trade-card-footer">
+              <button class="trade-btn primary">一键 Swap</button>
+              <button class="trade-btn secondary">路由详情</button>
+              <div class="trade-reactions">
+                <span class="trade-reaction">🧠 15</span>
+                <span class="trade-reaction">👀 6</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 6: Mint NFT -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <div class="msg-avatar-ring purple"></div>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23a87bff' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🎨%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author purple">NFTOracle</span>
+            <span class="msg-tag builder">BUILDER</span>
+            <span class="msg-time">21:50</span>
+          </div>
+          <div class="msg-text">
+            新项目 Genesis Keys 刚 mint 了！地板价已经在涨了 🎉
+          </div>
+
+          <!-- MINT CARD -->
+          <div class="trade-card">
+            <div class="trade-card-header">
+              <span class="trade-type-badge mint">MINT</span>
+              <span class="trade-pair">Genesis Keys #2847</span>
+              <span class="trade-status"><span class="dot"></span> 已铸造</span>
+            </div>
+            <div class="trade-card-body">
+              <div class="trade-detail">
+                <span class="trade-detail-label">Mint 价格</span>
+                <span class="trade-detail-value gold">0.08 ETH</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">当前地板</span>
+                <span class="trade-detail-value" style="color:var(--accent-green)">0.14 ETH</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">持有者</span>
+                <span class="trade-detail-value">847</span>
+              </div>
+              <div class="trade-detail">
+                <span class="trade-detail-label">总量</span>
+                <span class="trade-detail-value">2,000</span>
+              </div>
+            </div>
+            <div class="trade-card-footer">
+              <button class="trade-btn primary">立即 Mint</button>
+              <button class="trade-btn secondary">查看合集</button>
+              <div class="trade-reactions">
+                <span class="trade-reaction">🔥 41</span>
+                <span class="trade-reaction">👁️ 19</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 7: Community member reply -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%234ecb71' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🐱%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author green">SatoshiCat</span>
+            <span class="msg-time">22:05</span>
+          </div>
+          <div class="msg-text">
+            @AlphaHunter 跟了你的单，设置止盈 $84k 👍 顺便问下大家，有人试过在对话里直接下限价单吗？感觉这个功能太方便了
+          </div>
+        </div>
+      </div>
+
+      <!-- Message 8: Natural language trade -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <div class="msg-avatar-ring cyan"></div>
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%235ce0d8' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🎯%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author cyan">AlphaHunter</span>
+            <span class="msg-tag whale">PRO</span>
+            <span class="msg-time">22:10</span>
+          </div>
+          <div class="msg-text">
+            当然！直接在输入框打 <span style="font-family:var(--font-mono);color:var(--accent-gold);background:rgba(232,186,99,0.08);padding:2px 6px;border-radius:4px">/limit buy 0.3 BTC @ 81000</span> 就行了。系统自动识别交易意图，弹预览确认。对话即交易，就是这么丝滑 ✨
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="msg-group">
+        <div class="msg-avatar">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e8ba63' width='40' height='40' rx='10'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18'%3E🐋%3C/text%3E%3C/svg%3E" alt="">
+        </div>
+        <div class="msg-content">
+          <div class="msg-header">
+            <span class="msg-author gold">CryptoWhale</span>
+            <span class="msg-tag">WHALE</span>
+          </div>
+          <div class="msg-text" style="color:var(--text-muted);font-style:italic;">
+            正在输入<span class="typing-dots">...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="chat-input-area">
+      <div class="input-wrapper">
+        <div class="input-top">
+          <textarea class="input-field" rows="1" placeholder="输入消息，或用 /buy /sell /swap 开始交易..."></textarea>
+          <button class="input-send">
+            发送 <span style="font-size:14px">⚡</span>
+          </button>
+        </div>
+        <div class="input-toolbar">
+          <button class="tool-btn"><span class="emoji">📎</span> 附件</button>
+          <button class="tool-btn"><span class="emoji">🖼️</span> 图片</button>
+          <button class="tool-btn"><span class="emoji">📊</span> 行情</button>
+          <button class="tool-btn"><span class="emoji">🗳️</span> 投票</button>
+          <div class="tool-divider"></div>
+          <button class="tool-btn"><span class="emoji">🤖</span> AI 助手</button>
+          <div class="quick-trade">
+            <button class="quick-trade-btn buy">/BUY</button>
+            <button class="quick-trade-btn sell">/SELL</button>
+            <button class="quick-trade-btn swap">/SWAP</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══ RIGHT PANEL ═══ -->
+  <aside class="right-panel">
+    <!-- Market Chart -->
+    <div class="panel-section">
+      <div class="panel-title"><span class="dot"></span> BTC / USDT</div>
+      <div class="chart-price-row">
+        <span class="chart-price">$82,437</span>
+        <span class="chart-change up">▲ +3.2%</span>
+      </div>
+      <div class="chart-area">
+        <div class="chart-line">
+          <svg viewBox="0 0 300 120" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4ecb71" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#4ecb71" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,80 Q30,75 60,60 T120,50 T180,30 T240,35 T300,15" fill="none" stroke="#4ecb71" stroke-width="2"/>
+            <path d="M0,80 Q30,75 60,60 T120,50 T180,30 T240,35 T300,15 L300,120 L0,120 Z" fill="url(#chartGrad)"/>
+          </svg>
+        </div>
+      </div>
+      <div class="chart-timeframes">
+        <button class="tf-btn">1H</button>
+        <button class="tf-btn active">4H</button>
+        <button class="tf-btn">1D</button>
+        <button class="tf-btn">1W</button>
+        <button class="tf-btn">1M</button>
+      </div>
+    </div>
+
+    <!-- Token Info -->
+    <div class="panel-section">
+      <div class="panel-title"><span class="dot"></span> 市场数据</div>
+      <div class="token-info-grid">
+        <div class="token-info-item">
+          <div class="token-info-label">24h 成交量</div>
+          <div class="token-info-value">$28.4B</div>
+        </div>
+        <div class="token-info-item">
+          <div class="token-info-label">市值</div>
+          <div class="token-info-value">$1.62T</div>
+        </div>
+        <div class="token-info-item">
+          <div class="token-info-label">24h 高</div>
+          <div class="token-info-value" style="color:var(--accent-green)">$83,102</div>
+        </div>
+        <div class="token-info-item">
+          <div class="token-info-label">24h 低</div>
+          <div class="token-info-value" style="color:var(--accent-red)">$79,847</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Community Sentiment -->
+    <div class="panel-section">
+      <div class="panel-title"><span class="dot"></span> 社区情绪</div>
+      <div class="sentiment-bar">
+        <div class="sentiment-bull" style="width:72%"></div>
+        <div class="sentiment-bear" style="width:28%"></div>
+      </div>
+      <div class="sentiment-labels">
+        <span class="sentiment-bull-label">72% 看多 🐂</span>
+        <span class="sentiment-bear-label">28% 看空 🐻</span>
+      </div>
+    </div>
+
+    <!-- Active Traders -->
+    <div class="panel-section">
+      <div class="panel-title"><span class="dot"></span> 活跃交易者</div>
+      <div class="trader-list">
+        <div class="trader-item">
+          <div class="trader-avatar">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e8ba63' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='16'%3E🐋%3C/text%3E%3C/svg%3E" alt="">
+          </div>
+          <div class="trader-info">
+            <div class="trader-name">CryptoWhale</div>
+            <div class="trader-action">买入 2.1 BTC</div>
+          </div>
+          <span class="trader-pnl up">+24.7%</span>
+        </div>
+        <div class="trader-item">
+          <div class="trader-avatar">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%235ce0d8' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='16'%3E🎯%3C/text%3E%3C/svg%3E" alt="">
+          </div>
+          <div class="trader-info">
+            <div class="trader-name">AlphaHunter</div>
+            <div class="trader-action">买入 0.5 BTC</div>
+          </div>
+          <span class="trader-pnl up">+18.3%</span>
+        </div>
+        <div class="trader-item">
+          <div class="trader-avatar">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e8ba63' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='16'%3E🐈%3C/text%3E%3C/svg%3E" alt="">
+          </div>
+          <div class="trader-info">
+            <div class="trader-name">YieldFarmer</div>
+            <div class="trader-action">Swap ETH→USDC</div>
+          </div>
+          <span class="trader-pnl up">+12.1%</span>
+        </div>
+        <div class="trader-item">
+          <div class="trader-avatar">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23a87bff' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='16'%3E🧙%3C/text%3E%3C/svg%3E" alt="">
+          </div>
+          <div class="trader-info">
+            <div class="trader-name">DeFiWizard</div>
+            <div class="trader-action">设置限价单</div>
+          </div>
+          <span class="trader-pnl down">-3.2%</span>
+        </div>
+      </div>
+    </div>
+  </aside>
 </div>
 
-<!-- 数据面板 -->
-<div class="grid">
+<!-- Scanline overlay -->
+<div class="scanline"></div>
 
-<div class="card">
-    <div class="title">质押资产</div>
-    <div class="value" id="stake">0</div>
-</div>
-
-<div class="card">
-    <div class="title">今日收益</div>
-    <div class="value" id="daily">0</div>
-</div>
-
-<div class="card">
-    <div class="title">累计收益</div>
-    <div class="value" id="total">0</div>
-</div>
-
-<div class="card">
-    <div class="title">Boost等级</div>
-    <div class="value boost" id="boost">Lv.0</div>
-</div>
-
-<div class="card">
-    <div class="title">贡献度</div>
-    <div class="value" id="score">0</div>
-</div>
-
-<div class="card">
-    <div class="title">网格状态</div>
-    <div class="value" id="grid">未启动</div>
-</div>
-
-</div>
-
-<!-- 质押 -->
-<div class="section card">
-    <div class="title">质押代币</div>
-    <input type="number" id="stakeInput" placeholder="输入数量">
-    <button class="button" onclick="stakeToken()">质押</button>
-</div>
-
-<!-- 策略 -->
-<div class="section card">
-    <div class="title">网格策略</div>
-    <button class="button" onclick="startGrid()">启动策略</button>
-</div>
-
-</div>
+<!-- Typing animation -->
+<style>
+.typing-dots {
+  display: inline-block;
+  animation: typing 1.4s infinite;
+}
+@keyframes typing {
+  0%, 20% { opacity: 0; }
+  40% { opacity: 1; }
+  60% { opacity: 1; }
+  80%, 100% { opacity: 0; }
+}
+</style>
 
 <script>
+// Auto-resize textarea
+const textarea = document.querySelector('.input-field');
+textarea.addEventListener('input', () => {
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+});
 
-let user = {
-    stake: 0,
-    daily: 0,
-    total: 0,
-    boost: 0,
-    score: 0,
-    grid: false
+// Scroll to bottom
+const messages = document.querySelector('.chat-messages');
+messages.scrollTop = messages.scrollHeight;
+
+// Quick trade buttons insert command
+document.querySelectorAll('.quick-trade-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const cmd = btn.textContent;
+    textarea.value = cmd + ' ';
+    textarea.focus();
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  });
+});
+
+// Simulate floating trades
+function createFloatTrade() {
+  const types = ['buy', 'sell'];
+  const tokens = ['BTC', 'ETH', 'SOL', 'ARB'];
+  const type = types[Math.floor(Math.random() * types.length)];
+  const token = tokens[Math.floor(Math.random() * tokens.length)];
+  const amount = (Math.random() * 5 + 0.1).toFixed(2);
+
+  const el = document.createElement('div');
+  el.className = `float-trade ${type}`;
+  el.textContent = `${type === 'buy' ? '🟢' : '🔴'} ${type.toUpperCase()} ${amount} ${token}`;
+
+  const chatRect = document.querySelector('.chat-main').getBoundingClientRect();
+  el.style.left = (chatRect.left + Math.random() * chatRect.width * 0.6 + chatRect.width * 0.2) + 'px';
+  el.style.top = (chatRect.bottom - 100) + 'px';
+
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2000);
 }
 
-function connectWallet(){
-    alert("钱包已连接（模拟）")
-}
+setInterval(createFloatTrade, 4000);
+setTimeout(createFloatTrade, 1000);
 
-function stakeToken(){
-    let amount = Number(document.getElementById("stakeInput").value)
-    if(amount <= 0) return
+// Trade reaction toggle
+document.querySelectorAll('.trade-reaction').forEach(el => {
+  el.addEventListener('click', () => {
+    el.classList.toggle('active');
+  });
+});
 
-    user.stake += amount
-    update()
-}
+// Nav item click
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
 
-function startGrid(){
-    user.grid = true
-    document.getElementById("grid").innerText = "运行中"
+// Channel click
+document.querySelectorAll('.channel-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
 
-    setInterval(()=>{
-        let profit = user.stake * (Math.random()*0.002)
-
-        user.daily += profit
-        user.total += profit
-        user.score += profit * 10
-
-        user.boost = Math.floor(user.score / 100)
-
-        update()
-    },2000)
-}
-
-function update(){
-    document.getElementById("stake").innerText = user.stake.toFixed(2)
-    document.getElementById("daily").innerText = user.daily.toFixed(4)
-    document.getElementById("total").innerText = user.total.toFixed(4)
-    document.getElementById("boost").innerText = "Lv." + user.boost
-    document.getElementById("score").innerText = user.score.toFixed(2)
-}
-
+// Timeframe click
+document.querySelectorAll('.tf-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
 </script>
 
 </body>
