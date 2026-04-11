@@ -2,1207 +2,887 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatVault — 移动端UI设计方案</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>OmniChat — 对话即一切</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #060a10;
-  --bg-app: #0b0f18;
-  --bg-card: #131a28;
-  --bg-card-hover: #182030;
-  --bg-input: #0f1520;
-  --fg: #e4e9f2;
-  --fg-dim: #8b95a8;
-  --fg-muted: #556070;
-  --accent: #00d4aa;
-  --accent-dim: rgba(0,212,170,0.1);
-  --accent-mid: rgba(0,212,170,0.25);
-  --blue: #3b8bff;
-  --blue-dim: rgba(59,139,255,0.1);
-  --amber: #f0a030;
-  --amber-dim: rgba(240,160,48,0.1);
-  --red: #ff4757;
-  --red-dim: rgba(255,71,87,0.1);
-  --border: rgba(255,255,255,0.06);
-  --border-light: rgba(255,255,255,0.1);
+  --void:#06060c; --abyss:#0b0c14; --deep:#10111d; --surface:#161829;
+  --elevated:#1d2037; --glass:rgba(16,17,29,0.88);
+  --border:rgba(255,255,255,0.05); --border-l:rgba(255,255,255,0.08);
+  --border-glow:rgba(126,217,223,0.18);
+  --t1:#ede9e0; --t2:#9a95a8; --t3:#5e5a6b;
+  --cyan:#7ed9df; --blue:#6b8afb; --purple:#a67bff; --pink:#e07bff;
+  --orange:#f0a35e; --green:#5ee0a0; --red:#f06e6e; --gold:#f0c95e;
+  --grad-a:linear-gradient(135deg,#7ed9df 0%,#6b8afb 40%,#a67bff 70%,#e07bff 100%);
+  --grad-w:linear-gradient(135deg,#f0a35e,#f0c95e);
+  --grad-g:linear-gradient(135deg,#5ee0a0,#7ed9df);
+  --r-s:10px; --r-m:14px; --r-l:20px; --r-xl:28px;
+  --fd:'Outfit','Noto Sans SC',sans-serif;
+  --fm:'JetBrains Mono',monospace;
+  --fb:'Noto Sans SC','Outfit',sans-serif;
+  --safe-b:env(safe-area-inset-bottom, 0px);
 }
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Noto Sans SC','Space Grotesk',sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden}
-.font-space{font-family:'Space Grotesk',monospace}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;background:var(--void);color:var(--t1);font-family:var(--fb);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;}
+input,textarea,button{font-family:inherit;}
 
-/* 展示页面布局 */
-.showcase{min-height:100vh;padding:40px 20px}
-.showcase-header{text-align:center;margin-bottom:40px}
-.showcase-header h1{font-size:28px;font-weight:900;margin-top:12px}
-.showcase-header p{color:var(--fg-dim);font-size:14px;margin-top:8px;max-width:500px;margin-inline:auto}
+/* ═══ APP SHELL ═══ */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;position:relative;max-width:430px;margin:0 auto;}
+.app::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 60% 50% at 20% 90%,rgba(126,217,223,0.03) 0%,transparent 70%),
+  radial-gradient(ellipse 50% 40% at 80% 10%,rgba(166,123,255,0.03) 0%,transparent 60%);}
 
-/* 页面切换器 */
-.page-switcher{display:flex;justify-content:center;gap:6px;margin-bottom:32px;flex-wrap:wrap}
-.page-btn{
-  padding:10px 18px;border-radius:12px;font-size:13px;font-weight:600;
-  background:var(--bg-card);border:1px solid var(--border);color:var(--fg-dim);
-  cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:6px
+/* ═══ TOP BAR ═══ */
+.topbar{
+  padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));
+  display:flex;align-items:center;gap:10px;
+  background:var(--glass);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);z-index:20;position:relative;
 }
-.page-btn.active{background:var(--accent-dim);border-color:var(--accent-mid);color:var(--accent)}
-.page-btn:hover:not(.active){background:var(--bg-card-hover);color:var(--fg)}
+.tb-back{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--t2);cursor:pointer;font-size:18px;}
+.tb-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.tb-icon.defi{background:rgba(126,217,223,0.1);}
+.tb-icon.nft{background:rgba(166,123,255,0.1);}
+.tb-icon.dao{background:rgba(94,224,160,0.1);}
+.tb-icon.game{background:rgba(240,163,94,0.1);}
+.tb-icon.social{background:rgba(224,123,255,0.1);}
+.tb-info{flex:1;min-width:0;}
+.tb-name{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px;}
+.tb-sub{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px;margin-top:1px;}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pd 2s ease-in-out infinite;}
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-actions{display:flex;gap:4px;}
+.tb-btn{width:32px;height:32px;border-radius:9px;border:none;background:transparent;color:var(--t3);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;}
 
-/* 手机框 */
-.phone-frame-wrap{display:flex;justify-content:center;align-items:flex-start;gap:40px;flex-wrap:wrap}
-.phone-frame{
-  width:375px;height:780px;border-radius:44px;
-  background:#000;padding:12px;position:relative;
-  box-shadow:0 0 0 2px #1a1f2e,0 0 0 4px #0d1117,0 30px 80px rgba(0,0,0,0.6);
-  flex-shrink:0
-}
-.phone-screen{
-  width:100%;height:100%;border-radius:34px;overflow:hidden;
-  background:var(--bg-app);position:relative;display:flex;flex-direction:column
-}
-.phone-notch{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:126px;height:28px;background:#000;border-radius:0 0 18px 18px;z-index:50
-}
-.phone-notch::after{
-  content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);
-  width:10px;height:10px;border-radius:50%;background:#1a1f2e
-}
+/* ═══ MESSAGES ═══ */
+.msgs{flex:1;overflow-y:auto;overflow-x:hidden;padding:8px 14px 8px;display:flex;flex-direction:column;gap:1px;-webkit-overflow-scrolling:touch;position:relative;z-index:5;}
+.msgs::-webkit-scrollbar{display:none;}
 
-/* 状态栏 */
-.status-bar{
-  height:48px;padding:0 24px;display:flex;align-items:flex-end;justify-content:space-between;
-  font-size:12px;font-weight:600;padding-bottom:4px;flex-shrink:0;position:relative;z-index:40
-}
-.status-bar .time{font-size:15px;font-weight:700}
-.status-bar .icons{display:flex;gap:5px;align-items:center;font-size:12px}
+.msg{display:flex;gap:8px;padding:5px 0;animation:mIn .25s ease-out both;}
+@keyframes mIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.msg:nth-child(1){animation-delay:0s}.msg:nth-child(2){animation-delay:.04s}
+.msg:nth-child(3){animation-delay:.08s}.msg:nth-child(4){animation-delay:.12s}
+.msg:nth-child(5){animation-delay:.16s}.msg:nth-child(6){animation-delay:.2s}
+.msg:nth-child(7){animation-delay:.24s}.msg:nth-child(8){animation-delay:.28s}
+.msg:nth-child(9){animation-delay:.32s}.msg:nth-child(10){animation-delay:.36s}
+.msg:nth-child(11){animation-delay:.4s}.msg:nth-child(12){animation-delay:.44s}
 
-/* 页面内容区 */
-.page-content{flex:1;overflow-y:auto;overflow-x:hidden;position:relative}
-.page-content::-webkit-scrollbar{width:0}
+.m-av{width:30px;height:30px;border-radius:8px;flex-shrink:0;overflow:hidden;position:relative;}
+.m-av img{width:100%;height:100%;object-fit:cover;}
+.m-ring{position:absolute;inset:-1.5px;border-radius:9px;border:1.5px solid transparent;}
+.m-ring.cyan{border-color:var(--cyan)}.m-ring.purple{border-color:var(--purple)}
+.m-ring.green{border-color:var(--green)}.m-ring.orange{border-color:var(--orange)}
+.m-ring.pink{border-color:var(--pink)}.m-ring.blue{border-color:var(--blue)}
 
-/* 底部导航 */
-.bottom-nav{
-  height:80px;background:rgba(11,15,24,0.95);backdrop-filter:blur(20px);
-  border-top:1px solid var(--border);display:flex;align-items:flex-start;
-  justify-content:space-around;padding-top:8px;flex-shrink:0;
-  position:relative;z-index:40
-}
-.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 12px;transition:all .2s}
-.nav-item i{font-size:20px;color:var(--fg-muted);transition:color .2s}
-.nav-item span{font-size:10px;color:var(--fg-muted);font-weight:500;transition:color .2s}
-.nav-item.active i{color:var(--accent)}
-.nav-item.active span{color:var(--accent)}
-.nav-item.center-btn{
-  margin-top:-20px;background:linear-gradient(135deg,var(--accent),#00b89c);
-  width:48px;height:48px;border-radius:16px;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(0,212,170,0.3)
-}
-.nav-item.center-btn i{color:#000;font-size:20px}
-.nav-item.center-btn span{display:none}
+.m-body{flex:1;min-width:0;}
+.m-head{display:flex;align-items:baseline;gap:5px;margin-bottom:2px;flex-wrap:wrap;}
+.m-name{font-size:11.5px;font-weight:600;}
+.m-name.cyan{color:var(--cyan)}.m-name.purple{color:var(--purple)}
+.m-name.green{color:var(--green)}.m-name.orange{color:var(--orange)}
+.m-name.pink{color:var(--pink)}.m-name.blue{color:var(--blue)}
 
-/* 页面公共样式 */
-.page-section{display:none;height:100%;flex-direction:column}
-.page-section.active{display:flex}
+.m-tag{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:1px 4px;border-radius:3px;}
+.m-tag.pro{background:rgba(126,217,223,0.1);color:var(--cyan)}
+.m-tag.builder{background:rgba(166,123,255,0.1);color:var(--purple)}
+.m-tag.delegator{background:rgba(94,224,160,0.1);color:var(--green)}
+.m-tag.ai{background:rgba(107,138,251,0.1);color:var(--blue)}
+.m-tag.founder{background:rgba(240,201,94,0.12);color:var(--gold)}
+.m-tag.newbie{background:rgba(255,255,255,0.05);color:var(--t3)}
 
-.section-header{
-  padding:16px 20px 12px;display:flex;align-items:center;justify-content:space-between
-}
-.section-title{font-size:22px;font-weight:900;letter-spacing:-0.5px}
-.section-action{color:var(--fg-muted);font-size:13px;cursor:pointer}
+.m-time{font-size:9px;color:var(--t3);font-family:var(--fm);}
+.m-text{font-size:13px;line-height:1.5;color:var(--t1);}
 
-/* 卡片通用 */
-.card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;
-  padding:16px;margin:0 16px 12px;transition:all .2s
-}
-.card-sm{padding:12px;margin:0 16px 8px;border-radius:12px}
+/* Inline token */
+.tk{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:4px;font-family:var(--fm);font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s;}
+.tk.eth{background:rgba(126,217,223,0.07);color:var(--cyan);border:1px solid rgba(126,217,223,0.1);}
+.tk.sol{background:rgba(166,123,255,0.07);color:var(--purple);border:1px solid rgba(166,123,255,0.1);}
+.tk.btc{background:rgba(240,201,94,0.07);color:var(--gold);border:1px solid rgba(240,201,94,0.1);}
+.tk .chg{font-size:9.5px}.chg.up{color:var(--green)}.chg.down{color:var(--red)}
 
-/* 标签 */
-.tab-row{display:flex;gap:6px;padding:0 20px 12px;overflow-x:auto}
-.tab-row::-webkit-scrollbar{display:none}
-.tab-pill{
-  padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;
-  white-space:nowrap;cursor:pointer;transition:all .2s;
-  background:var(--bg-card);color:var(--fg-dim);border:1px solid var(--border)
-}
-.tab-pill.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.cmd{font-family:var(--fm);font-size:11px;color:var(--cyan);background:rgba(126,217,223,0.06);padding:1px 5px;border-radius:3px;border:1px solid rgba(126,217,223,0.08);}
 
-/* 设计说明面板 */
-.design-notes{
-  width:340px;flex-shrink:0;
-  display:flex;flex-direction:column;gap:20px
-}
-.note-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:20px
-}
-.note-card h3{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.note-card h3 i{font-size:12px}
-.note-item{
-  display:flex;gap:10px;align-items:flex-start;padding:8px 0;
-  border-bottom:1px solid var(--border);font-size:13px;line-height:1.6;color:var(--fg-dim)
-}
-.note-item:last-child{border-bottom:none}
-.note-dot{
-  width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:7px
-}
+/* ═══ ACTION CARDS ═══ */
+.ac{margin-top:6px;border-radius:var(--r-m);overflow:hidden;border:1px solid var(--border-l);transition:box-shadow .3s;}
+.ac:active{box-shadow:0 0 20px rgba(126,217,223,0.15);}
 
-/* 设计系统区域 */
-.design-system{max-width:1200px;margin:60px auto 0;padding:0 20px}
-.ds-section{margin-bottom:48px}
-.ds-section h2{font-size:24px;font-weight:900;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.ds-section h2::before{content:'';width:4px;height:24px;background:var(--accent);border-radius:2px}
+.ac.trade{background:linear-gradient(160deg,rgba(126,217,223,0.04) 0%,var(--surface) 100%);border-color:var(--border-glow);}
+.ac.vote{background:linear-gradient(160deg,rgba(107,138,251,0.05) 0%,var(--surface) 100%);border-color:rgba(107,138,251,0.12);}
+.ac.stake{background:linear-gradient(160deg,rgba(94,224,160,0.04) 0%,var(--surface) 100%);border-color:rgba(94,224,160,0.1);}
+.ac.bridge{background:linear-gradient(160deg,rgba(240,163,94,0.04) 0%,var(--surface) 100%);border-color:rgba(240,163,94,0.1);}
+.ac.mint{background:linear-gradient(160deg,rgba(166,123,255,0.04) 0%,var(--surface) 100%);border-color:rgba(166,123,255,0.1);}
+.ac.claim{background:linear-gradient(160deg,rgba(224,123,255,0.04) 0%,var(--surface) 100%);border-color:rgba(224,123,255,0.1);}
+.ac.deploy{background:linear-gradient(160deg,rgba(126,217,223,0.04) 0%,var(--surface) 100%);border-color:rgba(126,217,223,0.1);}
 
-.color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.color-swatch{
-  border-radius:12px;overflow:hidden;border:1px solid var(--border);
-  background:var(--bg-card)
-}
-.color-swatch .swatch{height:64px}
-.color-swatch .info{padding:10px 14px}
-.color-swatch .label{font-size:12px;font-weight:600}
-.color-swatch .value{font-size:11px;color:var(--fg-muted);font-family:'Space Grotesk',monospace;margin-top:2px}
+.ac-h{padding:8px 12px 6px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);}
+.ac-badge{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:2px 6px;border-radius:3px;}
+.ac-badge.buy{background:rgba(94,224,160,0.1);color:var(--green)}
+.ac-badge.sell{background:rgba(240,110,110,0.1);color:var(--red)}
+.ac-badge.swap{background:rgba(240,201,94,0.08);color:var(--gold)}
+.ac-badge.mint{background:rgba(166,123,255,0.08);color:var(--purple)}
+.ac-badge.stake{background:rgba(94,224,160,0.08);color:var(--green)}
+.ac-badge.vote{background:rgba(107,138,251,0.08);color:var(--blue)}
+.ac-badge.bridge{background:rgba(240,163,94,0.08);color:var(--orange)}
+.ac-badge.claim{background:rgba(224,123,255,0.08);color:var(--pink)}
+.ac-badge.deploy{background:rgba(126,217,223,0.08);color:var(--cyan)}
 
-.type-scale{display:flex;flex-direction:column;gap:8px}
-.type-row{
-  display:flex;align-items:baseline;gap:16px;padding:12px 16px;
-  background:var(--bg-card);border:1px solid var(--border);border-radius:10px
-}
-.type-row .name{font-size:11px;color:var(--fg-muted);width:80px;flex-shrink:0;font-family:'Space Grotesk'}
-.type-row .preview{flex:1}
+.ac-pair{font-family:var(--fm);font-size:11.5px;font-weight:700;}
+.ac-st{margin-left:auto;font-size:9px;font-family:var(--fm);color:var(--green);display:flex;align-items:center;gap:3px;}
+.ac-st .dot{width:4px;height:4px;border-radius:50%;background:var(--green);}
 
-.comp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-.comp-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:20px;
-  display:flex;flex-direction:column;gap:12px
-}
-.comp-label{font-size:11px;color:var(--fg-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+.ac-b{padding:8px 12px;display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.ac-k{font-size:8.5px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px;}
+.ac-v{font-family:var(--fm);font-size:12px;font-weight:700;}
+.ac-v.green{color:var(--green)}.ac-v.cyan{color:var(--cyan)}
+.ac-v.gold{color:var(--gold)}.ac-v.purple{color:var(--purple)}
+.ac-v.orange{color:var(--orange)}.ac-v.pink{color:var(--pink)}
 
-/* 页面内组件样式 */
-.asset-card{
-  background:linear-gradient(135deg,#0f2a2a,#0a1525);
-  border:1px solid rgba(0,212,170,0.15);border-radius:20px;
-  padding:20px;margin:0 16px 16px;position:relative;overflow:hidden
-}
-.asset-card::after{
-  content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;
-  background:radial-gradient(circle,rgba(0,212,170,0.1),transparent);border-radius:50%
-}
-.asset-label{font-size:12px;color:var(--fg-muted);margin-bottom:4px}
-.asset-value{font-size:32px;font-weight:900;font-family:'Space Grotesk';line-height:1.1}
-.asset-change{font-size:13px;font-weight:600;margin-top:4px}
-.asset-change.up{color:var(--accent)}
-.asset-change.down{color:var(--red)}
+.ac-f{padding:7px 12px;border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+.ab{flex:1;padding:7px 0;border-radius:var(--r-s);border:none;font-family:var(--fd);font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;cursor:pointer;transition:all .15s;}
+.ab.pri{background:var(--grad-a);color:var(--void);}
+.ab.pri:active{opacity:.85;transform:scale(.97);}
+.ab.warm{background:var(--grad-w);color:var(--void);}
+.ab.grn{background:var(--grad-g);color:var(--void);}
+.ab.gh{background:rgba(255,255,255,0.04);color:var(--t2);border:1px solid var(--border);}
+.ac-reacts{display:flex;gap:3px;margin-left:auto;}
+.ar{padding:2px 6px;border-radius:8px;background:rgba(255,255,255,0.03);font-size:10px;cursor:pointer;border:1px solid transparent;transition:all .15s;}
+.ar.on{background:rgba(126,217,223,0.06);border-color:var(--border-glow);}
 
-.chat-area{flex:1;padding:12px 16px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
-.chat-area::-webkit-scrollbar{width:0}
+/* Vote bars */
+.vb{margin:6px 12px;}
+.vo{display:flex;align-items:center;gap:6px;margin-bottom:5px;cursor:pointer;padding:4px 6px;border-radius:6px;transition:background .2s;}
+.vo:active{background:rgba(255,255,255,0.02);}
+.vo.sel{background:rgba(107,138,251,0.06);}
+.vo-bar{height:3px;border-radius:2px;background:var(--elevated);flex:1;overflow:hidden;}
+.vo-fill{height:100%;border-radius:2px;background:var(--grad-a);transition:width .5s ease;}
+.vo-lbl{font-size:10.5px;font-weight:500;min-width:48px;}
+.vo-pct{font-family:var(--fm);font-size:9px;color:var(--t2);min-width:28px;text-align:right;}
+.v-ends{font-size:8.5px;color:var(--t3);font-family:var(--fm);padding:0 12px 6px;}
 
-.msg{max-width:82%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.6;animation:msgIn .3s ease}
-.msg-user{
-  background:linear-gradient(135deg,#1a2a3a,#1a2035);
-  border:1px solid rgba(59,139,255,0.15);align-self:flex-end;border-bottom-right-radius:4px
-}
-.msg-ai{
-  background:var(--bg-card);border:1px solid var(--border);
-  align-self:flex-start;border-bottom-left-radius:4px
-}
-.msg-action{
-  background:var(--accent-dim);border:1px solid var(--accent-mid);
-  align-self:flex-start;border-bottom-left-radius:4px;
-  font-size:12px;white-space:pre-line
-}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* AI block */
+.ai-b{margin-top:6px;padding:8px 12px;max-width:100%;background:linear-gradient(135deg,rgba(107,138,251,0.04),rgba(166,123,255,0.02));border:1px solid rgba(107,138,251,0.08);border-radius:var(--r-m);display:flex;align-items:flex-start;gap:7px;}
+.ai-i{width:22px;height:22px;border-radius:6px;background:rgba(107,138,251,0.1);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.ai-t{font-size:11px;line-height:1.45;color:var(--t2);}
+.ai-t b{color:var(--blue);font-weight:600;}
 
-.chat-input-bar{
-  padding:10px 16px 20px;border-top:1px solid var(--border);
-  display:flex;gap:8px;align-items:center;background:var(--bg-app)
-}
-.chat-input{
-  flex:1;background:var(--bg-input);border:1px solid var(--border);
-  border-radius:24px;padding:10px 16px;font-size:13px;color:var(--fg);
-  outline:none;font-family:inherit
-}
-.chat-input::placeholder{color:var(--fg-muted)}
-.chat-send{
-  width:40px;height:40px;border-radius:50%;background:var(--accent);
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  color:#000;font-size:16px;flex-shrink:0
-}
+/* System */
+.sys{text-align:center;padding:5px;font-size:10px;color:var(--t3);display:flex;align-items:center;justify-content:center;gap:4px;}
 
-/* 功能入口网格 */
-.func-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px;margin-bottom:16px}
-.func-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
-  padding:16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden
-}
-.func-card:hover{border-color:var(--accent-mid)}
-.func-card .icon{
-  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;font-size:16px;margin-bottom:10px
-}
-.func-card .name{font-size:14px;font-weight:700}
-.func-card .desc{font-size:11px;color:var(--fg-muted);margin-top:2px}
+/* Date */
+.ddiv{display:flex;align-items:center;gap:10px;padding:8px 0;}
+.ddiv::before,.ddiv::after{content:'';flex:1;height:1px;background:var(--border);}
+.ddiv span{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:1px;font-family:var(--fm);}
 
-/* 社区卡片 */
-.feed-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
-  padding:14px 16px;margin:0 16px 10px
+/* ═══ INPUT BAR ═══ */
+.input-wrap{
+  padding:8px 12px;padding-bottom:max(8px,calc(var(--safe-b) + 8px));
+  background:var(--glass);backdrop-filter:blur(20px);border-top:1px solid var(--border);z-index:20;position:relative;
 }
-.feed-card .author{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.feed-card .avatar{width:32px;height:32px;border-radius:50%;object-fit:cover}
-.feed-card .author-name{font-size:13px;font-weight:600}
-.feed-card .author-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-weight:600}
-.feed-card .feed-title{font-size:14px;font-weight:700;margin-bottom:4px;line-height:1.4}
-.feed-card .feed-text{font-size:12px;color:var(--fg-dim);line-height:1.5}
-.feed-card .feed-img{width:100%;border-radius:10px;margin-top:8px;max-height:140px;object-fit:cover}
-.feed-card .feed-meta{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--fg-muted)}
-.feed-card .feed-meta span{display:flex;align-items:center;gap:4px;cursor:pointer}
-.feed-card .feed-meta span:hover{color:var(--accent)}
+.input-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-m);overflow:hidden;transition:border .2s;}
+.input-box:focus-within{border-color:var(--border-glow);}
 
-/* 策略卡片 */
-.strategy-card{
-  background:linear-gradient(135deg,rgba(0,212,170,0.06),rgba(59,139,255,0.04));
-  border:1px solid rgba(0,212,170,0.15);border-radius:14px;
-  padding:14px 16px;margin:0 16px 10px
+.input-row{display:flex;align-items:flex-end;padding:0 4px 0 0;}
+.input-f{flex:1;padding:10px 12px;background:transparent;border:none;color:var(--t1);font-size:13px;resize:none;outline:none;min-height:18px;max-height:80px;line-height:1.45;}
+.input-f::placeholder{color:var(--t3);}
+.input-send{padding:7px 12px;margin:5px 4px;border:none;border-radius:8px;background:var(--grad-a);color:var(--void);font-family:var(--fd);font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:3px;transition:opacity .15s;}
+.input-send:active{opacity:.8;}
+
+.quick-row{display:flex;gap:3px;padding:4px 6px 2px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.quick-row::-webkit-scrollbar{display:none;}
+.qb{padding:4px 8px;border-radius:5px;border:1px solid var(--border);background:transparent;font-family:var(--fm);font-size:9px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;}
+.qb:active{opacity:.7;}
+.qb.buy{color:var(--green);border-color:rgba(94,224,160,0.12)}
+.qb.sell{color:var(--red);border-color:rgba(240,110,110,0.12)}
+.qb.swap{color:var(--gold);border-color:rgba(240,201,94,0.12)}
+.qb.stake{color:var(--cyan);border-color:rgba(126,217,223,0.12)}
+.qb.vote{color:var(--blue);border-color:rgba(107,138,251,0.12)}
+.qb.bridge{color:var(--orange);border-color:rgba(240,163,94,0.12)}
+.qb.mint{color:var(--purple);border-color:rgba(166,123,255,0.12)}
+.qb.claim{color:var(--pink);border-color:rgba(224,123,255,0.12)}
+
+/* ═══ BOTTOM SHEET ═══ */
+.sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;opacity:0;pointer-events:none;transition:opacity .3s;}
+.sheet-overlay.show{opacity:1;pointer-events:auto;}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:101;max-width:430px;margin:0 auto;
+  background:var(--deep);border-radius:20px 20px 0 0;transform:translateY(100%);
+  transition:transform .35s cubic-bezier(.32,.72,0,1);padding-bottom:var(--safe-b);}
+.sheet.show{transform:translateY(0);}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);margin:8px auto 0;}
+.sheet-body{padding:16px 20px 24px;}
+
+.sh-title{font-size:16px;font-weight:800;margin-bottom:4px;}
+.sh-sub{font-size:11px;color:var(--t3);margin-bottom:16px;font-family:var(--fm);}
+
+.sh-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.sh-row:last-child{border:none;}
+.sh-label{font-size:12px;color:var(--t2);}
+.sh-val{font-family:var(--fm);font-size:13px;font-weight:700;}
+
+.sh-btn{width:100%;padding:14px;border:none;border-radius:var(--r-m);font-family:var(--fd);font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:16px;transition:all .15s;}
+.sh-btn:active{opacity:.85;transform:scale(.98);}
+.sh-btn.confirm{background:var(--grad-a);color:var(--void);}
+.sh-btn.cancel{background:rgba(255,255,255,0.04);color:var(--t2);margin-top:8px;border:1px solid var(--border);}
+
+/* ═══ BOTTOM TAB BAR ═══ */
+.tabbar{
+  display:none; /* Hidden when in chat view - accessed via back nav */
 }
 
-/* 持仓行 */
-.position-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 0;border-bottom:1px solid var(--border)
-}
-.position-row:last-child{border-bottom:none}
-.position-left{display:flex;align-items:center;gap:10px}
-.position-icon{
-  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
-  justify-content:center;font-size:14px;font-weight:700
-}
+/* ═══ FLOATING TRADE ═══ */
+.ft{position:fixed;pointer-events:none;z-index:90;font-family:var(--fm);font-size:9px;font-weight:700;padding:3px 7px;border-radius:4px;animation:fup 2s ease-out forwards;}
+.ft.buy{color:var(--green);background:rgba(94,224,160,0.08);border:1px solid rgba(94,224,160,0.12);}
+.ft.sell{color:var(--red);background:rgba(240,110,110,0.08);border:1px solid rgba(240,110,110,0.12);}
+.ft.stake{color:var(--cyan);background:rgba(126,217,223,0.08);border:1px solid rgba(126,217,223,0.12);}
+.ft.mint{color:var(--purple);background:rgba(166,123,255,0.08);border:1px solid rgba(166,123,255,0.12);}
+@keyframes fup{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-40px)}}
 
-/* Agent任务卡片 */
-.agent-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:14px;
-  padding:14px 16px;margin:0 16px 10px;display:flex;align-items:center;gap:12px
-}
-.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.agent-dot.running{background:var(--accent);box-shadow:0 0 8px rgba(0,212,170,0.5)}
-.agent-dot.pending{background:var(--amber)}
-.agent-dot.paused{background:var(--fg-muted)}
+/* ═══ DISCOVER OVERLAY ═══ */
+.disc-overlay{position:fixed;inset:0;z-index:50;background:var(--void);transform:translateX(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);max-width:430px;margin:0 auto;}
+.disc-overlay.show{transform:translateX(0);}
+.disc-head{padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.disc-title{flex:1;font-size:16px;font-weight:800;}
+.disc-close{width:32px;height:32px;border-radius:9px;border:none;background:transparent;color:var(--t2);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.disc-body{flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch;}
+.disc-body::-webkit-scrollbar{display:none;}
 
-/* 我的页面 */
-.profile-header{
-  text-align:center;padding:20px 16px 24px;position:relative
-}
-.profile-avatar{
-  width:72px;height:72px;border-radius:50%;margin:0 auto 10px;
-  background:linear-gradient(135deg,var(--accent),var(--blue));
-  display:flex;align-items:center;justify-content:center;
-  font-size:28px;font-weight:900;color:#000
-}
-.profile-name{font-size:18px;font-weight:800}
-.profile-id{font-size:12px;color:var(--fg-muted);margin-top:2px}
-.profile-badge{
-  display:inline-flex;align-items:center;gap:4px;padding:4px 10px;
-  border-radius:6px;font-size:11px;font-weight:600;margin-top:8px
-}
+.disc-search{width:100%;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-m);color:var(--t1);font-size:13px;outline:none;margin-bottom:16px;}
+.disc-search::placeholder{color:var(--t3);}
+.disc-search:focus{border-color:var(--border-glow);}
 
-.menu-list{padding:0 16px;margin-bottom:12px}
-.menu-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer
-}
-.menu-item:last-child{border-bottom:none}
-.menu-left{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500}
-.menu-left i{width:20px;text-align:center;color:var(--fg-muted);font-size:15px}
-.menu-right{color:var(--fg-muted);font-size:13px;display:flex;align-items:center;gap:4px}
+.disc-cat{margin-bottom:20px;}
+.disc-cat-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.disc-cat-title .emoji{font-size:14px;}
 
-/* 连接状态 */
-.connect-status{
-  display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600
-}
-.connect-dot{width:6px;height:6px;border-radius:50%}
-.connect-dot.on{background:var(--accent);box-shadow:0 0 6px rgba(0,212,170,0.5)}
-.connect-dot.off{background:var(--red)}
+.disc-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-m);background:var(--surface);border:1px solid var(--border);margin-bottom:6px;cursor:pointer;transition:all .15s;}
+.disc-card:active{background:var(--elevated);transform:scale(.98);}
+.dc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.dc-icon.defi{background:rgba(126,217,223,0.1)}.dc-icon.nft{background:rgba(166,123,255,0.1)}
+.dc-icon.dao{background:rgba(94,224,160,0.1)}.dc-icon.game{background:rgba(240,163,94,0.1)}
+.dc-icon.social{background:rgba(224,123,255,0.1)}.dc-icon.infra{background:rgba(107,138,251,0.1)}
+.dc-icon.l2{background:rgba(240,201,94,0.1)}
+.dc-info{flex:1;min-width:0;}
+.dc-name{font-size:13px;font-weight:600;}
+.dc-desc{font-size:10px;color:var(--t3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dc-members{font-family:var(--fm);font-size:9px;color:var(--t2);background:rgba(255,255,255,0.04);padding:2px 6px;border-radius:4px;flex-shrink:0;}
 
-/* 下一步行动 */
-.next-steps{max-width:800px;margin:60px auto 0;padding:0 20px 60px}
-.step-card{
-  background:var(--bg-card);border:1px solid var(--border);border-radius:16px;
-  padding:24px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;
-  transition:all .2s
-}
-.step-card:hover{border-color:var(--accent-mid)}
-.step-num{
-  width:36px;height:36px;border-radius:10px;background:var(--accent-dim);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Space Grotesk';font-weight:700;font-size:14px;color:var(--accent);flex-shrink:0
-}
-.step-card h3{font-size:15px;font-weight:700;margin-bottom:4px}
-.step-card p{font-size:13px;color:var(--fg-dim);line-height:1.6}
+/* ═══ WALLET OVERLAY ═══ */
+.wal-overlay{position:fixed;inset:0;z-index:50;background:var(--void);transform:translateY(100%);transition:transform .35s cubic-bezier(.32,.72,0,1);max-width:430px;margin:0 auto;border-radius:20px 20px 0 0;}
+.wal-overlay.show{transform:translateY(0);}
+.wal-head{padding:16px 20px;padding-top:max(16px,env(safe-area-inset-top));border-bottom:1px solid var(--border);}
+.wal-close{width:32px;height:32px;border-radius:9px;border:none;background:transparent;color:var(--t2);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;float:right;}
+.wal-balance{text-align:center;padding:20px 0;clear:both;}
+.wal-bal-label{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;}
+.wal-bal-val{font-family:var(--fm);font-size:32px;font-weight:700;margin-top:4px;background:var(--grad-a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.wal-addr{font-family:var(--fm);font-size:10px;color:var(--t3);margin-top:4px;}
+.wal-chains{display:flex;gap:4px;justify-content:center;margin-top:8px;}
+.wal-chain-tag{font-size:9px;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.04);color:var(--t2);font-family:var(--fm);cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.wal-chain-tag.on{border-color:var(--border-glow);background:rgba(126,217,223,0.06);color:var(--cyan);}
 
-/* 响应式 */
-@media(max-width:900px){
-  .phone-frame-wrap{flex-direction:column;align-items:center}
-  .design-notes{width:100%;max-width:375px}
-  .color-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
-  .comp-grid{grid-template-columns:1fr}
-}
-@media(max-width:400px){
-  .phone-frame{width:340px;height:700px;border-radius:36px;padding:10px}
-  .phone-screen{border-radius:28px}
-}
+.wal-body{padding:16px 20px;overflow-y:auto;max-height:50vh;-webkit-overflow-scrolling:touch;}
+.wal-token{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.wal-token:last-child{border:none;}
+.wt-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.wt-info{flex:1;}
+.wt-name{font-size:12.5px;font-weight:600;}
+.wt-chain{font-size:9px;color:var(--t3);}
+.wt-val{text-align:right;}
+.wt-amt{font-family:var(--fm);font-size:12.5px;font-weight:700;}
+.wt-usd{font-size:9.5px;color:var(--t2);font-family:var(--fm);}
+
+.wal-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 20px 24px;}
+.wa-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 0;border-radius:var(--r-m);background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:all .15s;}
+.wa-btn:active{background:var(--elevated);transform:scale(.95);}
+.wa-icon{font-size:20px;}
+.wa-label{font-size:9px;font-weight:600;color:var(--t2);}
+
+/* Typing */
+.typing{animation:tbl 1.4s infinite;display:inline-block;}
+@keyframes tbl{0%,20%{opacity:0}40%{opacity:1}60%{opacity:1}80%,100%{opacity:0}}
+
+/* Grain */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:999;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.01) 2px,rgba(0,0,0,0.01) 4px);}
 </style>
 </head>
 <body>
 
-<div class="showcase">
-  <!-- 头部 -->
-  <div class="showcase-header">
-    <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:8px">
-      <div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--blue));display:flex;align-items:center;justify-content:center">
-        <i class="fas fa-comments" style="color:#000;font-size:12px"></i>
-      </div>
-      <span class="font-space" style="font-weight:700;font-size:16px">ChatVault</span>
+<div class="app" id="app">
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="tb-back" id="btnDiscover">☰</div>
+    <div class="tb-icon defi">🦄</div>
+    <div class="tb-info">
+      <div class="tb-name">Uniswap 研究 <span style="font-size:10px;color:var(--cyan)">⚡ DeFi</span></div>
+      <div class="tb-sub"><span class="live-dot"></span>842 在线</div>
     </div>
-    <h1>移动端 UI 设计方案</h1>
-    <p>5个核心页面 · 深色主题 · 对话式交互 · 社区驱动</p>
+    <div class="tb-actions">
+      <button class="tb-btn" id="btnWallet">👛</button>
+      <button class="tb-btn">🔔</button>
+    </div>
   </div>
 
-  <!-- 页面切换器 -->
-  <div class="page-switcher" id="pageSwitcher">
-    <button class="page-btn active" data-page="chat"><i class="fas fa-comment-dots"></i>对话</button>
-    <button class="page-btn" data-page="community"><i class="fas fa-users"></i>社区</button>
-    <button class="page-btn" data-page="trade"><i class="fas fa-chart-line"></i>交易</button>
-    <button class="page-btn" data-page="wallet"><i class="fas fa-wallet"></i>钱包</button>
-    <button class="page-btn" data-page="profile"><i class="fas fa-user"></i>我的</button>
-  </div>
+  <!-- MESSAGES -->
+  <div class="msgs" id="msgs">
+    <div class="ddiv"><span>4月12日</span></div>
 
-  <!-- 手机 + 说明 -->
-  <div class="phone-frame-wrap">
-    <!-- 手机框 -->
-    <div class="phone-frame">
-      <div class="phone-screen">
-        <div class="phone-notch"></div>
-        
-        <!-- 状态栏 -->
-        <div class="status-bar">
-          <span class="time font-space">9:41</span>
-          <span class="icons">
-            <i class="fas fa-signal" style="font-size:11px"></i>
-            <i class="fas fa-wifi" style="font-size:11px"></i>
-            <i class="fas fa-battery-full" style="font-size:13px"></i>
-          </span>
-        </div>
-
-        <!-- === 对话页 === -->
-        <div class="page-section active" id="page-chat">
-          <div style="padding:8px 20px 12px;display:flex;align-items:center;justify-content:space-between">
-            <div style="display:flex;align-items:center;gap:10px">
-              <div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--blue));display:flex;align-items:center;justify-content:center">
-                <i class="fas fa-robot" style="color:#000;font-size:14px"></i>
-              </div>
-              <div>
-                <div style="font-size:15px;font-weight:700">ChatVault</div>
-                <div style="font-size:10px;color:var(--accent);display:flex;align-items:center;gap:4px">
-                  <span style="width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block"></span>
-                  在线
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;gap:16px;color:var(--fg-muted)">
-              <i class="fas fa-bell" style="font-size:16px;cursor:pointer"></i>
-              <i class="fas fa-gear" style="font-size:16px;cursor:pointer"></i>
-            </div>
+    <!-- Swap -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring cyan"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%237ed9df' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🦊%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name cyan">MetaFox</span><span class="m-tag pro">PRO</span><span class="m-time">00:18</span></div>
+        <div class="m-text">把一部分 <span class="tk eth">ETH $1,975 <span class="chg up">+2.1%</span></span> 换成 USDC，等回调再接</div>
+        <div class="ac trade" onclick="openSheet('swap')">
+          <div class="ac-h"><span class="ac-badge swap">SWAP</span><span class="ac-pair">ETH → USDC</span><span class="ac-st"><span class="dot"></span>已成交</span></div>
+          <div class="ac-b">
+            <div><div class="ac-k">卖出</div><div class="ac-v">3.0 ETH</div></div>
+            <div><div class="ac-k">获得</div><div class="ac-v gold">5,925 USDC</div></div>
+            <div><div class="ac-k">路由</div><div class="ac-v cyan">Uniswap V3</div></div>
+            <div><div class="ac-k">滑点</div><div class="ac-v green">0.02%</div></div>
           </div>
-          
-          <div class="chat-area" id="chatArea">
-            <div class="msg msg-ai">你好！我是你的Web3交易助手 🤖<br><br>你可以用自然语言告诉我你想做什么，比如：<br>· "质押1000U到最稳的方案"<br>· "ETH在2200-2800震荡，设网格"<br>· "SOL跌到130帮我买10个"</div>
-            <div class="msg msg-user">帮我质押1000U到稳健方案</div>
-            <div class="msg msg-ai">好的，我来筛选OKX Earn上适合的产品。根据你"稳健"的偏好：</div>
-            <div class="msg msg-action">📋 推荐方案
-
-🥇 USDT灵活理财 — APY 3.2%
-  随时赎回，无锁仓期
-
-🥈 USDT 30天定期 — APY 5.8%
-  收益更优，30天锁仓
-
-💡 建议：1000U全部放30天定期
-预计收益：~$15.9
-
-确认执行？</div>
-          </div>
-          
-          <div class="chat-input-bar">
-            <input class="chat-input" placeholder="说说你想做什么..." id="chatInputField">
-            <button class="chat-send" onclick="sendChatMsg()"><i class="fas fa-paper-plane"></i></button>
-          </div>
-        </div>
-
-        <!-- === 社区页 === -->
-        <div class="page-section" id="page-community">
-          <div class="section-header">
-            <span class="section-title">社区</span>
-            <span class="section-action"><i class="fas fa-pen-to-square" style="margin-right:4px"></i>发布</span>
-          </div>
-          
-          <div class="tab-row" id="communityTabs">
-            <span class="tab-pill active" data-tab="recommend">推荐</span>
-            <span class="tab-pill" data-tab="news">资讯</span>
-            <span class="tab-pill" data-tab="strategy">策略</span>
-            <span class="tab-pill" data-tab="social">动态</span>
-          </div>
-          
-          <div class="page-content" style="padding-bottom:12px">
-            <!-- 资讯卡片 -->
-            <div class="feed-card">
-              <div class="author">
-                <img class="avatar" src="https://picsum.photos/seed/cv1/64/64.jpg" alt="">
-                <div>
-                  <div class="author-name">ChatVault官方</div>
-                  <div class="author-tag" style="background:var(--accent-dim);color:var(--accent)">官方</div>
-                </div>
-                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">2小时前</span>
-              </div>
-              <div class="feed-title">BTC突破10万美金，市场情绪指数升至"极度贪婪"</div>
-              <div class="feed-text">比特币在今日凌晨突破10万美元大关，创历史新高。恐惧贪婪指数升至82，链上活跃地址数同步增长...</div>
-              <div class="feed-meta">
-                <span><i class="far fa-heart"></i> 328</span>
-                <span><i class="far fa-comment"></i> 56</span>
-                <span><i class="fas fa-share-nodes"></i> 42</span>
-              </div>
-            </div>
-
-            <!-- 策略分享 -->
-            <div class="strategy-card">
-              <div class="author">
-                <img class="avatar" src="https://picsum.photos/seed/cv2/64/64.jpg" alt="">
-                <div>
-                  <div class="author-name">CryptoWhale</div>
-                  <div class="author-tag" style="background:var(--amber-dim);color:var(--amber)">策略师</div>
-                </div>
-                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">5小时前</span>
-              </div>
-              <div class="feed-title">ETH网格策略分享 — 30天收益+12.3%</div>
-              <div class="feed-text">区间 $2,200 - $2,800 · 40格 · 每格利润1.5%<br>回测胜率82%，最大回撤-3.2%</div>
-              <div style="display:flex;gap:8px;margin-top:10px">
-                <button style="flex:1;padding:8px;border-radius:8px;background:var(--accent);color:#000;font-size:12px;font-weight:700;border:none;cursor:pointer">一键复制策略</button>
-                <button style="padding:8px 14px;border-radius:8px;background:var(--bg-card);border:1px solid var(--border);color:var(--fg-dim);font-size:12px;font-weight:600;cursor:pointer">详情</button>
-              </div>
-            </div>
-
-            <!-- 社媒动态 -->
-            <div class="feed-card">
-              <div class="author">
-                <img class="avatar" src="https://picsum.photos/seed/cv3/64/64.jpg" alt="">
-                <div>
-                  <div class="author-name">Vitalik.eth</div>
-                  <div class="author-tag" style="background:var(--blue-dim);color:var(--blue)">KOL</div>
-                </div>
-                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">8小时前</span>
-              </div>
-              <div class="feed-text" style="margin-bottom:8px">L2生态的TVL已经突破500亿美元，以太坊扩容路线图正在兑现。下一步关注Dencun升级后的blob使用率变化。</div>
-              <img class="feed-img" src="https://picsum.photos/seed/chart1/400/200.jpg" alt="">
-              <div class="feed-meta">
-                <span><i class="far fa-heart"></i> 1.2k</span>
-                <span><i class="far fa-comment"></i> 203</span>
-                <span><i class="fas fa-share-nodes"></i> 89</span>
-              </div>
-            </div>
-
-            <!-- 管理员策略 -->
-            <div class="strategy-card">
-              <div class="author">
-                <img class="avatar" src="https://picsum.photos/seed/cv4/64/64.jpg" alt="">
-                <div>
-                  <div class="author-name">ChatVault策略组</div>
-                  <div class="author-tag" style="background:var(--accent-dim);color:var(--accent)">官方策略</div>
-                </div>
-                <span style="margin-left:auto;font-size:11px;color:var(--fg-muted)">1天前</span>
-              </div>
-              <div class="feed-title">本周量化信号：SOL逢低做多</div>
-              <div class="feed-text">技术面：SOL在128-132形成强支撑<br>入场：$130-133 · 止损：$122 · 目标：$155<br>风险评级：中等</div>
-              <div class="feed-meta">
-                <span><i class="far fa-heart" style="color:var(--red)"></i> 856</span>
-                <span><i class="far fa-comment"></i> 134</span>
-                <span><i class="fas fa-share-nodes"></i> 67</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- === 交易页 === -->
-        <div class="page-section" id="page-trade">
-          <div class="section-header">
-            <span class="section-title">交易</span>
-            <span class="section-action"><i class="fas fa-clock-rotate-left" style="margin-right:4px"></i>历史</span>
-          </div>
-          
-          <div class="page-content" style="padding-bottom:12px">
-            <!-- 资产概览 -->
-            <div class="asset-card">
-              <div class="asset-label">总资产 (USDT)</div>
-              <div class="asset-value font-space">12,450.80</div>
-              <div class="asset-change up font-space">+$234.50 (+1.92%) 今日</div>
-              <div style="display:flex;gap:8px;margin-top:14px">
-                <div style="flex:1;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center">
-                  <div style="font-size:10px;color:var(--fg-muted)">现货</div>
-                  <div class="font-space" style="font-size:13px;font-weight:700;margin-top:2px">$8,230</div>
-                </div>
-                <div style="flex:1;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center">
-                  <div style="font-size:10px;color:var(--fg-muted)">理财</div>
-                  <div class="font-space" style="font-size:13px;font-weight:700;margin-top:2px">$3,220</div>
-                </div>
-                <div style="flex:1;background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center">
-                  <div style="font-size:10px;color:var(--fg-muted)">策略</div>
-                  <div class="font-space" style="font-size:13px;font-weight:700;margin-top:2px">$1,000</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 功能入口 -->
-            <div class="func-grid">
-              <div class="func-card">
-                <div class="icon" style="background:var(--accent-dim);color:var(--accent)"><i class="fas fa-lock"></i></div>
-                <div class="name">质押</div>
-                <div class="desc">Earn稳健收益</div>
-              </div>
-              <div class="func-card">
-                <div class="icon" style="background:var(--blue-dim);color:var(--blue)"><i class="fas fa-trophy"></i></div>
-                <div class="name">交易赛</div>
-                <div class="desc">社区竞技</div>
-              </div>
-              <div class="func-card">
-                <div class="icon" style="background:var(--amber-dim);color:var(--amber)"><i class="fas fa-chart-bar"></i></div>
-                <div class="name">AI量化</div>
-                <div class="desc">智能策略</div>
-              </div>
-              <div class="func-card">
-                <div class="icon" style="background:var(--red-dim);color:var(--red)"><i class="fas fa-robot"></i></div>
-                <div class="name">Agent</div>
-                <div class="desc">自动执行</div>
-              </div>
-            </div>
-
-            <!-- 活跃持仓 -->
-            <div style="padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:15px;font-weight:700">活跃持仓</span>
-              <span style="font-size:12px;color:var(--fg-muted)">查看全部 <i class="fas fa-chevron-right" style="font-size:9px"></i></span>
-            </div>
-            <div class="card">
-              <div class="position-row">
-                <div class="position-left">
-                  <div class="position-icon" style="background:rgba(98,126,234,0.15);color:#627eea">E</div>
-                  <div>
-                    <div style="font-size:13px;font-weight:600">ETH网格策略</div>
-                    <div style="font-size:11px;color:var(--fg-muted)">运行中 · 30格</div>
-                  </div>
-                </div>
-                <div style="text-align:right">
-                  <div class="font-space" style="font-size:13px;font-weight:600;color:var(--accent)">+7.2%</div>
-                  <div style="font-size:11px;color:var(--fg-muted)">$1,072</div>
-                </div>
-              </div>
-              <div class="position-row">
-                <div class="position-left">
-                  <div class="position-icon" style="background:rgba(240,160,48,0.15);color:var(--amber)">S</div>
-                  <div>
-                    <div style="font-size:13px;font-weight:600">SOL条件单</div>
-                    <div style="font-size:11px;color:var(--amber)">待触发 · ≤$130</div>
-                  </div>
-                </div>
-                <div style="text-align:right">
-                  <div style="font-size:13px;font-weight:600;color:var(--fg-muted)">--</div>
-                  <div style="font-size:11px;color:var(--fg-muted)">$1,300</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- 活跃交易赛 -->
-            <div style="padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:15px;font-weight:700">交易赛</span>
-              <span style="font-size:12px;color:var(--accent);cursor:pointer">+ 创建</span>
-            </div>
-            <div class="card" style="background:linear-gradient(135deg,rgba(59,139,255,0.08),rgba(0,212,170,0.05));border-color:rgba(59,139,255,0.15)">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                <span style="font-size:14px;font-weight:700">BTC周赛 #12</span>
-                <span style="font-size:11px;padding:3px 8px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-weight:600">进行中</span>
-              </div>
-              <div style="display:flex;gap:16px;font-size:12px;color:var(--fg-dim)">
-                <span><i class="fas fa-trophy" style="color:var(--amber);margin-right:4px"></i>奖池 700U</span>
-                <span><i class="fas fa-users" style="margin-right:4px"></i>28人</span>
-                <span><i class="fas fa-clock" style="margin-right:4px"></i>剩3天</span>
-              </div>
-              <div style="margin-top:10px;font-size:12px;color:var(--fg-muted)">
-                你的排名：<span style="color:var(--accent);font-weight:700">#5</span> · 收益率 <span style="color:var(--accent);font-weight:600">+4.8%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- === 钱包页 === -->
-        <div class="page-section" id="page-wallet">
-          <div class="section-header">
-            <span class="section-title">钱包</span>
-            <span class="section-action"><i class="fas fa-arrow-right-arrow-left" style="margin-right:4px"></i>转账</span>
-          </div>
-          
-          <div class="page-content" style="padding-bottom:12px">
-            <!-- 总资产 -->
-            <div style="text-align:center;padding:8px 20px 20px">
-              <div style="font-size:12px;color:var(--fg-muted);margin-bottom:4px">总资产估值</div>
-              <div class="font-space" style="font-size:36px;font-weight:900">$12,450<span style="font-size:22px">.80</span></div>
-              <div class="font-space" style="font-size:13px;color:var(--accent);font-weight:600;margin-top:4px">+$234.50 (1.92%)</div>
-            </div>
-
-            <!-- 操作按钮 -->
-            <div style="display:flex;gap:10px;padding:0 20px 20px;justify-content:center">
-              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
-                <div style="width:44px;height:44px;border-radius:14px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--accent)"><i class="fas fa-arrow-down"></i></div>
-                <span style="font-size:11px;font-weight:600">充值</span>
-              </div>
-              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
-                <div style="width:44px;height:44px;border-radius:14px;background:var(--blue-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--blue)"><i class="fas fa-arrow-up"></i></div>
-                <span style="font-size:11px;font-weight:600">提现</span>
-              </div>
-              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
-                <div style="width:44px;height:44px;border-radius:14px;background:var(--amber-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--amber)"><i class="fas fa-right-left"></i></div>
-                <span style="font-size:11px;font-weight:600">兑换</span>
-              </div>
-              <div style="flex:1;max-width:100px;text-align:center;cursor:pointer">
-                <div style="width:44px;height:44px;border-radius:14px;background:var(--red-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 6px;color:var(--red)"><i class="fas fa-bridge"></i></div>
-                <span style="font-size:11px;font-weight:600">跨链</span>
-              </div>
-            </div>
-
-            <!-- Agent任务 -->
-            <div style="padding:0 20px 8px;display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:15px;font-weight:700">Agent 任务</span>
-              <span style="font-size:12px;color:var(--accent);cursor:pointer">+ 新建</span>
-            </div>
-            <div class="agent-card">
-              <div class="agent-dot running"></div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600">SOL买入监控</div>
-                <div style="font-size:11px;color:var(--fg-muted)">触发：SOL ≤ $130 · 买入10个</div>
-              </div>
-              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-weight:600">运行中</span>
-            </div>
-            <div class="agent-card">
-              <div class="agent-dot pending"></div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600">BTC止盈</div>
-                <div style="font-size:11px;color:var(--fg-muted)">触发：BTC ≥ $105,000 · 全部卖出</div>
-              </div>
-              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:var(--amber-dim);color:var(--amber);font-weight:600">待触发</span>
-            </div>
-            <div class="agent-card">
-              <div class="agent-dot paused"></div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600">ETH DCA定投</div>
-                <div style="font-size:11px;color:var(--fg-muted)">每周一买入 $200 ETH</div>
-              </div>
-              <span style="font-size:10px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.05);color:var(--fg-muted);font-weight:600">已暂停</span>
-            </div>
-
-            <!-- 资产列表 -->
-            <div style="padding:16px 20px 8px;display:flex;align-items:center;justify-content:space-between">
-              <span style="font-size:15px;font-weight:700">资产</span>
-              <span style="font-size:12px;color:var(--fg-muted);cursor:pointer"><i class="fas fa-eye" style="margin-right:4px"></i></span>
-            </div>
-            <div class="card" style="padding:4px 16px">
-              <div class="position-row">
-                <div class="position-left">
-                  <div class="position-icon font-space" style="background:rgba(98,126,234,0.15);color:#627eea;font-size:11px">BTC</div>
-                  <div>
-                    <div style="font-size:13px;font-weight:600">Bitcoin</div>
-                    <div style="font-size:11px;color:var(--fg-muted)">0.12 BTC</div>
-                  </div>
-                </div>
-                <div style="text-align:right">
-                  <div class="font-space" style="font-size:13px;font-weight:600">$11,880</div>
-                  <div class="font-space" style="font-size:11px;color:var(--accent)">+3.2%</div>
-                </div>
-              </div>
-              <div class="position-row">
-                <div class="position-left">
-                  <div class="position-icon font-space" style="background:rgba(98,126,234,0.15);color:#627eea;font-size:11px">ETH</div>
-                  <div>
-                    <div style="font-size:13px;font-weight:600">Ethereum</div>
-                    <div style="font-size:11px;color:var(--fg-muted)">1.5 ETH</div>
-                  </div>
-                </div>
-                <div style="text-align:right">
-                  <div class="font-space" style="font-size:13px;font-weight:600">$3,675</div>
-                  <div class="font-space" style="font-size:11px;color:var(--red)">-1.4%</div>
-                </div>
-              </div>
-              <div class="position-row">
-                <div class="position-left">
-                  <div class="position-icon font-space" style="background:rgba(0,212,170,0.12);color:var(--accent);font-size:11px">USDT</div>
-                  <div>
-                    <div style="font-size:13px;font-weight:600">Tether</div>
-                    <div style="font-size:11px;color:var(--fg-muted)">$3,220 可用</div>
-                  </div>
-                </div>
-                <div style="text-align:right">
-                  <div class="font-space" style="font-size:13px;font-weight:600">$3,220</div>
-                  <div class="font-space" style="font-size:11px;color:var(--fg-muted)">--</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- === 我的页 === -->
-        <div class="page-section" id="page-profile">
-          <div class="page-content" style="padding-bottom:12px">
-            <div class="profile-header">
-              <div class="profile-avatar">V</div>
-              <div class="profile-name">Vault Trader</div>
-              <div class="profile-id font-space">@vault_trader · UID 829103</div>
-              <div class="profile-badge" style="background:var(--accent-dim);color:var(--accent)"><i class="fas fa-gem" style="font-size:10px"></i> Pro会员</div>
-            </div>
-
-            <!-- 统计 -->
-            <div style="display:flex;gap:0;margin:0 16px 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;overflow:hidden">
-              <div style="flex:1;text-align:center;padding:14px;border-right:1px solid var(--border)">
-                <div class="font-space" style="font-size:18px;font-weight:800;color:var(--accent)">47</div>
-                <div style="font-size:11px;color:var(--fg-muted);margin-top:2px">交易天数</div>
-              </div>
-              <div style="flex:1;text-align:center;padding:14px;border-right:1px solid var(--border)">
-                <div class="font-space" style="font-size:18px;font-weight:800;color:var(--accent)">+18.6%</div>
-                <div style="font-size:11px;color:var(--fg-muted);margin-top:2px">总收益率</div>
-              </div>
-              <div style="flex:1;text-align:center;padding:14px">
-                <div class="font-space" style="font-size:18px;font-weight:800">12</div>
-                <div style="font-size:11px;color:var(--fg-muted);margin-top:2px">社区策略</div>
-              </div>
-            </div>
-
-            <!-- 连接状态 -->
-            <div class="card" style="display:flex;align-items:center;justify-content:space-between">
-              <div style="display:flex;align-items:center;gap:10px">
-                <div style="width:32px;height:32px;border-radius:8px;background:white;display:flex;align-items:center;justify-content:center">
-                  <span class="font-space" style="font-weight:800;font-size:10px;color:#000">OKX</span>
-                </div>
-                <div>
-                  <div style="font-size:13px;font-weight:600">OKX账户</div>
-                  <div class="connect-status">
-                    <span class="connect-dot on"></span>
-                    <span style="color:var(--accent)">已连接</span>
-                  </div>
-                </div>
-              </div>
-              <span style="font-size:12px;color:var(--fg-muted);cursor:pointer">管理 <i class="fas fa-chevron-right" style="font-size:9px"></i></span>
-            </div>
-
-            <!-- 菜单 -->
-            <div class="menu-list" style="margin-top:4px">
-              <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-shield-halved"></i>安全设置</div>
-                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-sliders"></i>风控配置</div>
-                <div class="menu-right"><span style="font-size:11px;color:var(--accent)">L2 限额执行</span> <i class="fas fa-chevron-right"></i></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-bell"></i>通知设置</div>
-                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-user-plus"></i>邀请好友</div>
-                <div class="menu-right"><span style="font-size:11px;color:var(--amber)">赚佣金</span> <i class="fas fa-chevron-right"></i></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-circle-question"></i>帮助中心</div>
-                <div class="menu-right"><i class="fas fa-chevron-right"></i></div>
-              </div>
-              <div class="menu-item">
-                <div class="menu-left"><i class="fas fa-info-circle"></i>关于ChatVault</div>
-                <div class="menu-right"><span class="font-space" style="font-size:11px">v0.1.0</span> <i class="fas fa-chevron-right"></i></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 底部导航 -->
-        <div class="bottom-nav" id="bottomNav">
-          <div class="nav-item active" data-page="chat">
-            <i class="fas fa-comment-dots"></i>
-            <span>对话</span>
-          </div>
-          <div class="nav-item" data-page="community">
-            <i class="fas fa-users"></i>
-            <span>社区</span>
-          </div>
-          <div class="nav-item center-btn" data-page="trade">
-            <i class="fas fa-bolt"></i>
-          </div>
-          <div class="nav-item" data-page="wallet">
-            <i class="fas fa-wallet"></i>
-            <span>钱包</span>
-          </div>
-          <div class="nav-item" data-page="profile">
-            <i class="fas fa-user"></i>
-            <span>我的</span>
+          <div class="ac-f">
+            <button class="ab pri" onclick="event.stopPropagation();openSheet('swap')">跟单 Swap</button>
+            <button class="ab gh">路由</button>
+            <div class="ac-reacts"><span class="ar on">🧠 12</span><span class="ar">👀 7</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 设计说明 -->
-    <div class="design-notes" id="designNotes">
-      <!-- 动态填充 -->
-    </div>
-  </div>
-</div>
-
-<!-- 设计系统 -->
-<div class="design-system">
-  <div class="ds-section">
-    <h2>色彩系统</h2>
-    <div class="color-grid">
-      <div class="color-swatch">
-        <div class="swatch" style="background:#0b0f18"></div>
-        <div class="info"><div class="label">App背景</div><div class="value">#0B0F18</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#131a28"></div>
-        <div class="info"><div class="label">卡片背景</div><div class="value">#131A28</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#00d4aa"></div>
-        <div class="info"><div class="label">主色/涨/成功</div><div class="value">#00D4AA</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#3b8bff"></div>
-        <div class="info"><div class="label">信息/链接</div><div class="value">#3B8BFF</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#f0a030"></div>
-        <div class="info"><div class="label">警告/待触发</div><div class="value">#F0A030</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#ff4757"></div>
-        <div class="info"><div class="label">危险/跌</div><div class="value">#FF4757</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#e4e9f2"></div>
-        <div class="info"><div class="label">主文字</div><div class="value">#E4E9F2</div></div>
-      </div>
-      <div class="color-swatch">
-        <div class="swatch" style="background:#556070"></div>
-        <div class="info"><div class="label">次要文字</div><div class="value">#556070</div></div>
+    <!-- DAO Vote -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring green"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%235ee0a0' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🏛️%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name green">DAO Watcher</span><span class="m-tag delegator">DELEGATOR</span><span class="m-time">00:25</span></div>
+        <div class="m-text">Aave 新提案：调整 GHO 借贷利率，已投赞成 🗳️</div>
+        <div class="ac vote" onclick="openSheet('vote')">
+          <div class="ac-h"><span class="ac-badge vote">VOTE</span><span class="ac-pair">Aave ARC #142</span><span class="ac-st"><span class="dot"></span>投票中</span></div>
+          <div class="vb">
+            <div class="vo sel"><span class="vo-lbl">✅ 赞成</span><div class="vo-bar"><div class="vo-fill" style="width:68%"></div></div><span class="vo-pct">68%</span></div>
+            <div class="vo"><span class="vo-lbl">❌ 反对</span><div class="vo-bar"><div class="vo-fill" style="width:24%"></div></div><span class="vo-pct">24%</span></div>
+            <div class="vo"><span class="vo-lbl">⚪ 弃权</span><div class="vo-bar"><div class="vo-fill" style="width:8%"></div></div><span class="vo-pct">8%</span></div>
+          </div>
+          <div class="v-ends">⏳ 剩余 2天14时 · 已投 1.2M AAVE</div>
+          <div class="ac-f">
+            <button class="ab pri" onclick="event.stopPropagation();openSheet('vote')">投赞成票</button>
+            <button class="ab gh">反对</button>
+            <button class="ab gh">详情</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="ds-section">
-    <h2>字体规范</h2>
-    <div class="type-scale">
-      <div class="type-row">
-        <span class="name">H1 / 36px</span>
-        <span class="preview font-space" style="font-size:36px;font-weight:900">$12,450.80</span>
+    <!-- Stake -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring orange"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23f0a35e' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🥩%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name orange">StakeKing</span><span class="m-time">00:31</span></div>
+        <div class="m-text"><span class="tk eth">stETH</span> APR 回到 3.8%了，闲置 ETH 该质押了</div>
+        <div class="ac stake" onclick="openSheet('stake')">
+          <div class="ac-h"><span class="ac-badge stake">STAKE</span><span class="ac-pair">ETH → stETH</span><span class="ac-st"><span class="dot"></span>已质押</span></div>
+          <div class="ac-b">
+            <div><div class="ac-k">质押量</div><div class="ac-v">5.0 ETH</div></div>
+            <div><div class="ac-k">年化</div><div class="ac-v green">3.8% APR</div></div>
+            <div><div class="ac-k">协议</div><div class="ac-v cyan">Lido</div></div>
+            <div><div class="ac-k">日收益</div><div class="ac-v gold">0.00052 ETH</div></div>
+          </div>
+          <div class="ac-f">
+            <button class="ab grn" onclick="event.stopPropagation();openSheet('stake')">质押 ETH</button>
+            <button class="ab gh">比较协议</button>
+            <div class="ac-reacts"><span class="ar on">🔥 28</span></div>
+          </div>
+        </div>
       </div>
-      <div class="type-row">
-        <span class="name">H2 / 22px</span>
-        <span class="preview" style="font-size:22px;font-weight:900">页面标题</span>
+    </div>
+
+    <!-- Bridge -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring purple"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23a67bff' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🌈%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name purple">BridgeMaster</span><span class="m-tag builder">BUILDER</span><span class="m-time">00:38</span></div>
+        <div class="m-text">Base 链 meme 季！USDC 桥过去，LayerZero V2 秒到 🔥</div>
+        <div class="ac bridge" onclick="openSheet('bridge')">
+          <div class="ac-h"><span class="ac-badge bridge">BRIDGE</span><span class="ac-pair">Ethereum → Base</span><span class="ac-st"><span class="dot"></span>已完成</span></div>
+          <div class="ac-b">
+            <div><div class="ac-k">资产</div><div class="ac-v">2,000 USDC</div></div>
+            <div><div class="ac-k">协议</div><div class="ac-v orange">LayerZero V2</div></div>
+            <div><div class="ac-k">Gas</div><div class="ac-v green">$0.12</div></div>
+            <div><div class="ac-k">耗时</div><div class="ac-v">~5秒</div></div>
+          </div>
+          <div class="ac-f">
+            <button class="ab pri" onclick="event.stopPropagation();openSheet('bridge')">跨链桥接</button>
+            <button class="ab gh">其他路线</button>
+          </div>
+        </div>
       </div>
-      <div class="type-row">
-        <span class="name">Body / 14px</span>
-        <span class="preview" style="font-size:14px">正文内容文字</span>
+    </div>
+
+    <!-- NFT Mint -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring pink"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e07bff' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🎨%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name pink">ArtCollector</span><span class="m-tag founder">FOUNDER</span><span class="m-time">00:45</span></div>
+        <div class="m-text">OnChainMonsters 开放 mint！全链生成艺术 🐉</div>
+        <div class="ac mint" onclick="openSheet('mint')">
+          <div class="ac-h"><span class="ac-badge mint">MINT</span><span class="ac-pair">OnChainMonsters</span><span class="ac-st"><span class="dot"></span>铸造中</span></div>
+          <div class="ac-b">
+            <div><div class="ac-k">Mint 价</div><div class="ac-v purple">0.04 ETH</div></div>
+            <div><div class="ac-k">地板价</div><div class="ac-v green">0.07 ETH</div></div>
+            <div><div class="ac-k">链</div><div class="ac-v cyan">Base</div></div>
+            <div><div class="ac-k">剩余</div><div class="ac-v">1,247/5,000</div></div>
+          </div>
+          <div class="ac-f">
+            <button class="ab pri" onclick="event.stopPropagation();openSheet('mint')">立即 Mint</button>
+            <button class="ab gh">合集</button>
+            <div class="ac-reacts"><span class="ar on">🔥 34</span><span class="ar">🐉 18</span></div>
+          </div>
+        </div>
       </div>
-      <div class="type-row">
-        <span class="name">Caption / 12px</span>
-        <span class="preview" style="font-size:12px;color:var(--fg-dim)">辅助说明文字</span>
+    </div>
+
+    <!-- AI Agent -->
+    <div class="msg">
+      <div class="m-av"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%236b8afb' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🤖%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name blue">Omni Agent</span><span class="m-tag ai">AI</span><span class="m-time">00:46</span></div>
+        <div class="m-text">社区动态速览 👇</div>
+        <div class="ai-b">
+          <div class="ai-i">⚡</div>
+          <div class="ai-t">
+            <b>DeFi</b>：Uniswap V4 Hook 爆发<br>
+            <b>NFT</b>：Base 链 mint +320%<br>
+            <b>DAO</b>：Aave 提案通过率 78%<br>
+            <b>跨链</b>：LayerZero 桥接创新高<br>
+            <b>💡</b> 关注 Base 生态早期项目
+          </div>
+        </div>
       </div>
-      <div class="type-row">
-        <span class="name">Micro / 10px</span>
-        <span class="preview" style="font-size:10px;color:var(--fg-muted)">标签·徽章·时间</span>
+    </div>
+
+    <!-- Claim -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring cyan"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%237ed9df' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🎁%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name cyan">AirdropHunter</span><span class="m-time">00:52</span></div>
+        <div class="m-text">LayerZero 空投可查了！<span class="cmd">/claim</span> 一键领 👇</div>
+        <div class="ac claim" onclick="openSheet('claim')">
+          <div class="ac-h"><span class="ac-badge claim">CLAIM</span><span class="ac-pair">ZRO 空投</span><span class="ac-st" style="color:var(--orange)"><span class="dot" style="background:var(--orange)"></span>待领取</span></div>
+          <div class="ac-b">
+            <div><div class="ac-k">可领</div><div class="ac-v pink">284.7 ZRO</div></div>
+            <div><div class="ac-k">价值</div><div class="ac-v gold">~$427</div></div>
+            <div><div class="ac-k">来源</div><div class="ac-v">跨链 ×12</div></div>
+            <div><div class="ac-k">截止</div><div class="ac-v orange">7天</div></div>
+          </div>
+          <div class="ac-f">
+            <button class="ab pri" onclick="event.stopPropagation();openSheet('claim')">一键 Claim</button>
+            <button class="ab gh">详情</button>
+            <div class="ac-reacts"><span class="ar on">🪂 52</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Deploy -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring purple"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23a67bff' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E👩‍💻%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name purple">SolidityDev</span><span class="m-tag builder">BUILDER</span><span class="m-time">01:05</span></div>
+        <div class="m-text">部署了 Uniswap V4 Hook！<span class="cmd">/deploy</span> 直接聊天里部署合约 🔧</div>
+        <div class="ac deploy">
+          <div class="ac-h"><span class="ac-badge deploy">DEPLOY</span><span class="ac-pair">DynamicFeeHook</span><span class="ac-st"><span class="dot"></span>已部署</span></div>
+          <div class="ac-b">
+            <div><div class="ac-k">地址</div><div class="ac-v cyan" style="font-size:10px">0x8f2a...c7d3</div></div>
+            <div><div class="ac-k">网络</div><div class="ac-v">Sepolia</div></div>
+            <div><div class="ac-k">Gas</div><div class="ac-v green">2.1M</div></div>
+            <div><div class="ac-k">验证</div><div class="ac-v green">✅</div></div>
+          </div>
+          <div class="ac-f">
+            <button class="ab pri">交互测试</button>
+            <button class="ab gh">代码</button>
+            <div class="ac-reacts"><span class="ar on">🛠️ 22</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Casual -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring green"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%235ee0a0' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🐱%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name green">CryptoCat</span><span class="m-tag newbie">NEW</span><span class="m-time">01:12</span></div>
+        <div class="m-text">对话即交易太丝滑了！在聊天里完成了第一笔质押 🎉 信息差一下就消除了</div>
+      </div>
+    </div>
+
+    <!-- AI commands -->
+    <div class="msg">
+      <div class="m-av"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%236b8afb' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🤖%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name blue">Omni Agent</span><span class="m-tag ai">AI</span><span class="m-time">01:13</span></div>
+        <div class="m-text">💡 快捷指令</div>
+        <div class="ai-b">
+          <div class="ai-i">⌨️</div>
+          <div class="ai-t">
+            <span class="cmd">/buy</span> <span class="cmd">/sell</span> <span class="cmd">/swap</span> 交易<br>
+            <span class="cmd">/stake</span> 质押 · <span class="cmd">/bridge</span> 跨链<br>
+            <span class="cmd">/mint</span> 铸造 · <span class="cmd">/vote</span> 投票<br>
+            <span class="cmd">/claim</span> 领空投 · <span class="cmd">/deploy</span> 部署<br>
+            自然语言也行：说"买0.5个ETH"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SocialFi -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring pink"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23e07bff' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E✨%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name pink">LensPro</span><span class="m-time">01:30</span></div>
+        <div class="m-text">Lens 关注者可领限定 Profile NFT，社交影响力代币化 👥💎<br><span class="cmd">/follow @lenspro</span> 关注+铸造</div>
+      </div>
+    </div>
+
+    <!-- GameFi -->
+    <div class="msg">
+      <div class="m-av"><div class="m-ring orange"></div><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%23f0a35e' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🎮%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name orange">GameMaster</span><span class="m-time">01:35</span></div>
+        <div class="m-text">Dark Forest S4 开战！<span class="cmd">/join df4</span> 报名，战利品自动到账 🌍⚔️</div>
+      </div>
+    </div>
+
+    <!-- Typing -->
+    <div class="msg">
+      <div class="m-av"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect fill='%235ee0a0' width='40' height='40' rx='8'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='15'%3E🏦%3C/text%3E%3C/svg%3E" alt=""></div>
+      <div class="m-body">
+        <div class="m-head"><span class="m-name green">AaveBot</span></div>
+        <div class="m-text" style="color:var(--t3);font-style:italic;font-size:12px;">正在输入<span class="typing">...</span></div>
       </div>
     </div>
   </div>
 
-  <div class="ds-section">
-    <h2>核心组件</h2>
-    <div class="comp-grid">
-      <div class="comp-card">
-        <div class="comp-label">按钮 Primary</div>
-        <button style="width:100%;padding:12px;border-radius:12px;background:var(--accent);color:#000;font-weight:700;font-size:14px;border:none;cursor:pointer">确认执行</button>
+  <!-- INPUT -->
+  <div class="input-wrap">
+    <div class="input-box">
+      <div class="input-row">
+        <textarea class="input-f" rows="1" placeholder="消息或 /buy /swap /stake /vote ..."></textarea>
+        <button class="input-send">⚡</button>
       </div>
-      <div class="comp-card">
-        <div class="comp-label">按钮 Secondary</div>
-        <button style="width:100%;padding:12px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);color:var(--fg);font-weight:600;font-size:14px;cursor:pointer">查看详情</button>
-      </div>
-      <div class="comp-card">
-        <div class="comp-label">标签组</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span style="padding:4px 10px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-size:11px;font-weight:600">运行中</span>
-          <span style="padding:4px 10px;border-radius:6px;background:var(--amber-dim);color:var(--amber);font-size:11px;font-weight:600">待触发</span>
-          <span style="padding:4px 10px;border-radius:6px;background:var(--red-dim);color:var(--red);font-size:11px;font-weight:600">已止损</span>
-          <span style="padding:4px 10px;border-radius:6px;background:var(--blue-dim);color:var(--blue);font-size:11px;font-weight:600">官方</span>
-        </div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-label">输入框</div>
-        <input style="width:100%;padding:12px 16px;border-radius:24px;background:var(--bg-input);border:1px solid var(--border);color:var(--fg);font-size:14px;outline:none" placeholder="输入消息...">
-      </div>
-      <div class="comp-card">
-        <div class="comp-label">操作卡片 (对话内)</div>
-        <div style="background:var(--accent-dim);border:1px solid var(--accent-mid);border-radius:12px;padding:12px;font-size:12px;line-height:1.6">
-          <div style="font-weight:700;margin-bottom:4px">确认质押</div>
-          <div style="color:var(--fg-dim)">1000 USDT → 30天定期<br>APY: 5.8% · 预计收益: $15.9</div>
-        </div>
-      </div>
-      <div class="comp-card">
-        <div class="comp-label">连接状态</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px rgba(0,212,170,0.4)"></span>
-          <span style="font-size:13px;font-weight:600;color:var(--accent)">OKX 已连接</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-          <span style="width:8px;height:8px;border-radius:50%;background:var(--red)"></span>
-          <span style="font-size:13px;font-weight:600;color:var(--red)">钱包未连接</span>
-        </div>
+      <div class="quick-row">
+        <button class="qb buy">/BUY</button>
+        <button class="qb sell">/SELL</button>
+        <button class="qb swap">/SWAP</button>
+        <button class="qb stake">/STAKE</button>
+        <button class="qb vote">/VOTE</button>
+        <button class="qb bridge">/BRIDGE</button>
+        <button class="qb mint">/MINT</button>
+        <button class="qb claim">/CLAIM</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 下一步行动建议 -->
-<div class="next-steps">
-  <h2 style="font-size:24px;font-weight:900;margin-bottom:20px;display:flex;align-items:center;gap:10px">
-    <span style="width:4px;height:24px;background:var(--accent);border-radius:2px;display:inline-block"></span>
-    下一步行动建议
-  </h2>
-  
-  <div class="step-card">
-    <div class="step-num">1</div>
-    <div>
-      <h3>确认信息架构与导航</h3>
-      <p>当前5个Tab的划分是否合理？社区板块的子分类（推荐/资讯/策略/动态）是否需要调整？对话页是否应该是首页？</p>
-    </div>
+<!-- ═══ BOTTOM SHEET ═══ -->
+<div class="sheet-overlay" id="sheetOverlay"></div>
+<div class="sheet" id="sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-body" id="sheetBody">
+    <!-- Filled by JS -->
   </div>
-  <div class="step-card">
-    <div class="step-num">2</div>
-    <div>
-      <h3>细化每个页面的交互流程</h3>
-      <p>确定每个操作的完整用户路径：从对话输入→意图解析→操作卡片→确认→执行→结果反馈。特别是社区板块的发布、互动、策略复制流程。</p>
-    </div>
+</div>
+
+<!-- ═══ DISCOVER OVERLAY ═══ -->
+<div class="disc-overlay" id="discOverlay">
+  <div class="disc-head">
+    <span class="disc-title">🧭 发现社区</span>
+    <button class="disc-close" onclick="toggleDiscover()">✕</button>
   </div>
-  <div class="step-card">
-    <div class="step-num">3</div>
-    <div>
-      <h3>输出高保真设计稿</h3>
-      <p>基于确认的UI方案，用Figma输出完整的高保真设计稿，包含所有状态（空态/加载态/错误态/数据态）和动效标注。</p>
+  <div class="disc-body">
+    <input class="disc-search" placeholder="搜索社区、代币、地址..." />
+
+    <div class="disc-cat">
+      <div class="disc-cat-title"><span class="emoji">⚡</span>DeFi</div>
+      <div class="disc-card"><div class="dc-icon defi">🦄</div><div class="dc-info"><div class="dc-name">Uniswap 研究</div><div class="dc-desc">V4 Hook 新玩法 · 最优路由讨论</div></div><span class="dc-members">842</span></div>
+      <div class="disc-card"><div class="dc-icon defi">🏦</div><div class="dc-info"><div class="dc-name">Aave 治理</div><div class="dc-desc">GHO 利率提案 · 借贷策略</div></div><span class="dc-members">1.2K</span></div>
+      <div class="disc-card"><div class="dc-icon defi">💧</div><div class="dc-info"><div class="dc-name">流动性挖矿</div><div class="dc-desc">Base新池APY 47% · 收益追踪</div></div><span class="dc-members">567</span></div>
+      <div class="disc-card"><div class="dc-icon defi">🥩</div><div class="dc-info"><div class="dc-name">质押收益</div><div class="dc-desc">Lido · Rocket Pool · 质押比较</div></div><span class="dc-members">934</span></div>
     </div>
-  </div>
-  <div class="step-card">
-    <div class="step-num">4</div>
-    <div>
-      <h3>开发技术选型确认</h3>
-      <p>React Native vs Flutter？状态管理方案？与OKX SDK的集成方式？这些需要在开发前锁定。</p>
+
+    <div class="disc-cat">
+      <div class="disc-cat-title"><span class="emoji">🎨</span>NFT & 创作者</div>
+      <div class="disc-card"><div class="dc-icon nft">🖼️</div><div class="dc-info"><div class="dc-name">PFP 收藏家</div><div class="dc-desc">Azuki · Pudgy · 新项目挖掘</div></div><span class="dc-members">2.1K</span></div>
+      <div class="disc-card"><div class="dc-icon nft">🎵</div><div class="dc-info"><div class="dc-name">音乐 NFT</div><div class="dc-desc">Sound.xyz · 链上音乐发行</div></div><span class="dc-members">312</span></div>
+      <div class="disc-card"><div class="dc-icon nft">🐉</div><div class="dc-info"><div class="dc-name">OnChain Monsters</div><div class="dc-desc">全链生成艺术 · 铸造中</div></div><span class="dc-members">1.5K</span></div>
     </div>
-  </div>
-  <div class="step-card">
-    <div class="step-num">5</div>
-    <div>
-      <h3>MVP范围裁剪</h3>
-      <p>第一版不做全部功能，建议：对话+质押+社区资讯先行，交易赛和AI量化第二版，Agent Wallet第三版。快速验证核心假设。</p>
+
+    <div class="disc-cat">
+      <div class="disc-cat-title"><span class="emoji">🏛️</span>DAO & 治理</div>
+      <div class="disc-card"><div class="dc-icon dao">🗳️</div><div class="dc-info"><div class="dc-name">Arbitrum DAO</div><div class="dc-desc">AIP-42 · 生态基金分配</div></div><span class="dc-members">3.4K</span></div>
+      <div class="disc-card"><div class="dc-icon dao">🌿</div><div class="dc-info"><div class="dc-name">KlimaDAO</div><div class="dc-desc">碳信用代币化 · ReFi</div></div><span class="dc-members">478</span></div>
+    </div>
+
+    <div class="disc-cat">
+      <div class="disc-cat-title"><span class="emoji">⚔️</span>GameFi</div>
+      <div class="disc-card"><div class="dc-icon game">🎮</div><div class="dc-info"><div class="dc-name">全链游戏</div><div class="dc-desc">Dark Forest S4 · 策略讨论</div></div><span class="dc-members">689</span></div>
+      <div class="disc-card"><div class="dc-icon game">👾</div><div class="dc-info"><div class="dc-name">像素农场</div><div class="dc-desc">Play-to-Earn · 新版本</div></div><span class="dc-members">1.1K</span></div>
+    </div>
+
+    <div class="disc-cat">
+      <div class="disc-cat-title"><span class="emoji">🫂</span>SocialFi</div>
+      <div class="disc-card"><div class="dc-icon social">✨</div><div class="dc-info"><div class="dc-name">Lens 生态</div><div class="dc-desc">关注即 NFT · 社交代币</div></div><span class="dc-members">723</span></div>
+      <div class="disc-card"><div class="dc-icon social">🐦</div><div class="dc-info"><div class="dc-name">Farcaster 中文</div><div class="dc-desc">Frames 2.0 · 开发讨论</div></div><span class="dc-members">456</span></div>
+    </div>
+
+    <div class="disc-cat">
+      <div class="disc-cat-title"><span class="emoji">🔧</span>基础设施</div>
+      <div class="disc-card"><div class="dc-icon infra">🔗</div><div class="dc-info"><div class="dc-name">跨链桥讨论</div><div class="dc-desc">LayerZero V2 · 安全分析</div></div><span class="dc-members">891</span></div>
+      <div class="disc-card"><div class="dc-icon l2">⚡</div><div class="dc-info"><div class="dc-name">L2 生态追踪</div><div class="dc-desc">Blast · Base · Arbitrum</div></div><span class="dc-members">2.3K</span></div>
     </div>
   </div>
 </div>
+
+<!-- ═══ WALLET OVERLAY ═══ -->
+<div class="wal-overlay" id="walOverlay">
+  <div class="wal-head">
+    <button class="wal-close" onclick="toggleWallet()">✕</button>
+    <div class="wal-balance">
+      <div class="wal-bal-label">总资产</div>
+      <div class="wal-bal-val">$12,847.53</div>
+      <div class="wal-addr">0x7a3f...e9c2</div>
+      <div class="wal-chains">
+        <span class="wal-chain-tag on">全部</span>
+        <span class="wal-chain-tag">ETH</span>
+        <span class="wal-chain-tag">SOL</span>
+        <span class="wal-chain-tag">ARB</span>
+        <span class="wal-chain-tag">BASE</span>
+        <span class="wal-chain-tag">BSC</span>
+      </div>
+    </div>
+  </div>
+  <div class="wal-body">
+    <div class="wal-token">
+      <div class="wt-icon" style="background:rgba(126,217,223,0.1)">Ξ</div>
+      <div class="wt-info"><div class="wt-name">Ethereum</div><div class="wt-chain">Ethereum · stETH</div></div>
+      <div class="wt-val"><div class="wt-amt">4.21 ETH</div><div class="wt-usd">$8,314</div></div>
+    </div>
+    <div class="wal-token">
+      <div class="wt-icon" style="background:rgba(166,123,255,0.1)">◎</div>
+      <div class="wt-info"><div class="wt-name">Solana</div><div class="wt-chain">Solana</div></div>
+      <div class="wt-val"><div class="wt-amt">12.8 SOL</div><div class="wt-usd">$2,103</div></div>
+    </div>
+    <div class="wal-token">
+      <div class="wt-icon" style="background:rgba(255,255,255,0.06)">$</div>
+      <div class="wt-info"><div class="wt-name">USDC</div><div class="wt-chain">Ethereum · Base</div></div>
+      <div class="wt-val"><div class="wt-amt">1,630</div><div class="wt-usd">$1,630</div></div>
+    </div>
+    <div class="wal-token">
+      <div class="wt-icon" style="background:rgba(240,163,94,0.1)">A</div>
+      <div class="wt-info"><div class="wt-name">Arbitrum</div><div class="wt-chain">Arbitrum</div></div>
+      <div class="wt-val"><div class="wt-amt">1,420 ARB</div><div class="wt-usd">$482</div></div>
+    </div>
+    <div class="wal-token">
+      <div class="wt-icon" style="background:rgba(224,123,255,0.1)">Z</div>
+      <div class="wt-info"><div class="wt-name">LayerZero</div><div class="wt-chain">Ethereum · 待领取</div></div>
+      <div class="wt-val"><div class="wt-amt" style="color:var(--pink)">284.7 ZRO</div><div class="wt-usd">~$427</div></div>
+    </div>
+  </div>
+  <div class="wal-actions">
+    <div class="wa-btn"><span class="wa-icon">💸</span><span class="wa-label">发送</span></div>
+    <div class="wa-btn"><span class="wa-icon">📥</span><span class="wa-label">接收</span></div>
+    <div class="wa-btn"><span class="wa-icon">🔄</span><span class="wa-label">Swap</span></div>
+    <div class="wa-btn"><span class="wa-icon">🌉</span><span class="wa-label">桥接</span></div>
+  </div>
+</div>
+
+<div class="grain"></div>
 
 <script>
-// 设计说明数据
-const notesData = {
-  chat: {
-    title: '对话首页',
-    icon: 'fa-comment-dots',
-    color: 'var(--accent)',
-    items: [
-      '对话是整个App的核心入口，用户的所有操作都从这里开始',
-      'AI助手自动识别意图，路由到对应功能模块',
-      '操作卡片（Action Card）是对话中的关键交互，用户在卡片内确认后才执行',
-      '输入框支持文字和语音，降低输入门槛',
-      '顶部显示连接状态和通知入口',
-      '对话历史本地缓存，支持上下文连续对话'
-    ]
+// Textarea auto-resize
+const ta = document.querySelector('.input-f');
+ta.addEventListener('input', () => { ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,80)+'px'; });
+
+// Scroll to bottom
+const msgs = document.getElementById('msgs');
+msgs.scrollTop = msgs.scrollHeight;
+
+// Quick command insert
+document.querySelectorAll('.qb').forEach(b => {
+  b.addEventListener('click', () => { ta.value = b.textContent + ' '; ta.focus(); });
+});
+
+// Reactions
+document.querySelectorAll('.ar').forEach(e => e.addEventListener('click', ev => { ev.stopPropagation(); e.classList.toggle('on'); }));
+
+// Vote options
+document.querySelectorAll('.vo').forEach(o => o.addEventListener('click', ev => { ev.stopPropagation(); document.querySelectorAll('.vo').forEach(x=>x.classList.remove('sel')); o.classList.add('sel'); }));
+
+// ═══ BOTTOM SHEET ═══
+const sheetOverlay = document.getElementById('sheetOverlay');
+const sheet = document.getElementById('sheet');
+const sheetBody = document.getElementById('sheetBody');
+
+const sheetData = {
+  swap: {
+    title: '确认 Swap',
+    sub: 'ETH → USDC · Uniswap V3',
+    rows: [
+      ['卖出', '3.0 ETH'],
+      ['获得', '5,925 USDC'],
+      ['路由', 'Uniswap V3'],
+      ['滑点', '0.02%'],
+      ['Gas 估算', '~$2.40'],
+      ['价格影响', '< 0.01%'],
+    ],
+    btn: '确认 Swap',
+    btnClass: 'confirm'
   },
-  community: {
-    title: '社区板块',
-    icon: 'fa-users',
-    color: 'var(--blue)',
-    items: [
-      '四个子Tab：推荐（算法精选）、资讯（快讯+深度）、策略（可复制的交易策略）、动态（社媒聚合）',
-      '策略卡片是核心差异化功能——用户可以一键复制社区策略到自己的账户',
-      '官方策略组发布的内容带有特殊标识，增强可信度',
-      'KOL动态自动聚合Twitter/X内容，标注来源',
-      '互动数据（点赞/评论/分享）驱动内容排序',
-      '发布按钮支持发布动态、分享策略、发起讨论'
-    ]
+  vote: {
+    title: '确认投票',
+    sub: 'Aave ARC #142 · 赞成',
+    rows: [
+      ['提案', '调整 GHO 借贷利率'],
+      ['投票', '✅ 赞成'],
+      ['你的投票权', '142.5 AAVE'],
+      ['当前赞成率', '68%'],
+      ['剩余时间', '2天14小时'],
+    ],
+    btn: '确认投票',
+    btnClass: 'confirm'
   },
-  trade: {
-    title: '交易中心',
-    icon: 'fa-chart-line',
-    color: 'var(--amber)',
-    items: [
-      '顶部资产概览卡片，实时显示总资产和分布',
-      '四大功能入口：质押/交易赛/AI量化/Agent，点击进入对应详情页',
-      '活跃持仓列表，显示当前运行的策略和条件单状态',
-      '交易赛卡片突出显示当前参与的比赛和排名',
-      '功能入口也可以通过对话触发，这里提供可视化快捷入口',
-      '资产数据通过OKX WebSocket实时推送'
-    ]
+  stake: {
+    title: '确认质押',
+    sub: 'ETH → stETH · Lido',
+    rows: [
+      ['质押量', '5.0 ETH'],
+      ['年化收益', '3.8% APR'],
+      ['协议', 'Lido'],
+      ['预计日收益', '0.00052 ETH'],
+      ['Gas 估算', '~$3.10'],
+    ],
+    btn: '确认质押',
+    btnClass: 'confirm'
   },
-  wallet: {
-    title: '钱包管理',
-    icon: 'fa-wallet',
-    color: 'var(--red)',
-    items: [
-      '大字体显示总资产估值，一目了然',
-      '四个快捷操作：充值/提现/兑换/跨链桥',
-      'Agent任务列表是特色功能，显示所有监控任务的实时状态',
-      '运行中(绿)/待触发(黄)/已暂停(灰) 三种状态清晰区分',
-      '资产列表显示各币种持仓和涨跌幅',
-      '跨链桥对接OKX Onchain OS，支持多链资产统一管理'
-    ]
+  bridge: {
+    title: '确认跨链',
+    sub: 'Ethereum → Base · LayerZero V2',
+    rows: [
+      ['资产', '2,000 USDC'],
+      ['源链', 'Ethereum'],
+      ['目标链', 'Base'],
+      ['协议', 'LayerZero V2'],
+      ['Gas 费', '$0.12'],
+      ['到账时间', '~5 秒'],
+    ],
+    btn: '确认桥接',
+    btnClass: 'confirm'
   },
-  profile: {
-    title: '个人中心',
-    icon: 'fa-user',
-    color: 'var(--fg)',
-    items: [
-      '用户头像+昵称+UID+会员等级，一目了然',
-      '三个核心统计：交易天数/总收益率/社区策略数',
-      'OKX连接状态是关键信息——未连接时引导用户绑定API Key',
-      '风控配置入口：用户可以调整Agent权限级别(L0-L3)',
-      '邀请好友功能：社交裂变增长',
-      '安全设置：生物识别/交易密码/二次验证'
-    ]
+  mint: {
+    title: '确认 Mint',
+    sub: 'OnChainMonsters · Base',
+    rows: [
+      ['Mint 价格', '0.04 ETH'],
+      ['数量', '1'],
+      ['链', 'Base'],
+      ['Gas 估算', '~$0.05'],
+      ['总计', '0.04 ETH'],
+    ],
+    btn: '确认 Mint',
+    btnClass: 'confirm'
+  },
+  claim: {
+    title: '确认领取',
+    sub: 'LayerZero ZRO 空投',
+    rows: [
+      ['可领取', '284.7 ZRO'],
+      ['预估价值', '~$427'],
+      ['领取至', '0x7a3f...e9c2'],
+      ['Gas 估算', '~$1.80'],
+      ['截止时间', '剩余7天'],
+    ],
+    btn: '确认 Claim',
+    btnClass: 'confirm'
   }
 };
 
-// 渲染设计说明
-function renderNotes(page) {
-  const data = notesData[page];
-  const container = document.getElementById('designNotes');
-  container.innerHTML = `
-    <div class="note-card">
-      <h3><i class="fas ${data.icon}" style="color:${data.color}"></i> ${data.title}</h3>
-      ${data.items.map(item => `
-        <div class="note-item">
-          <div class="note-dot" style="background:${data.color}"></div>
-          <span>${item}</span>
-        </div>
-      `).join('')}
-    </div>
-    <div class="note-card">
-      <h3><i class="fas fa-lightbulb" style="color:var(--amber)"></i> 设计原则</h3>
-      <div class="note-item">
-        <div class="note-dot" style="background:var(--amber)"></div>
-        <span>对话优先：所有操作都可以通过对话完成，页面入口是补充而非替代</span>
-      </div>
-      <div class="note-item">
-        <div class="note-dot" style="background:var(--amber)"></div>
-        <span>确认机制：任何资金操作都必须经过操作卡片二次确认</span>
-      </div>
-      <div class="note-item">
-        <div class="note-dot" style="background:var(--amber)"></div>
-        <span>渐进披露：首页只展示核心信息，详情通过层级递进</span>
-      </div>
-    </div>
-  `;
+function openSheet(type) {
+  const d = sheetData[type];
+  if (!d) return;
+  let html = `<div class="sh-title">${d.title}</div><div class="sh-sub">${d.sub}</div>`;
+  d.rows.forEach(([l,v]) => {
+    html += `<div class="sh-row"><span class="sh-label">${l}</span><span class="sh-val">${v}</span></div>`;
+  });
+  html += `<button class="sh-btn ${d.btnClass}" onclick="closeSheet()">${d.btn}</button>`;
+  html += `<button class="sh-btn cancel" onclick="closeSheet()">取消</button>`;
+  sheetBody.innerHTML = html;
+  sheetOverlay.classList.add('show');
+  sheet.classList.add('show');
 }
 
-// 页面切换
-function switchPage(page) {
-  // 更新页面显示
-  document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  
-  // 更新顶部切换按钮
-  document.querySelectorAll('#pageSwitcher .page-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.page === page);
-  });
-  
-  // 更新底部导航
-  document.querySelectorAll('#bottomNav .nav-item').forEach(item => {
-    item.classList.toggle('active', item.dataset.page === page);
-  });
-  
-  // 更新设计说明
-  renderNotes(page);
+function closeSheet() {
+  sheetOverlay.classList.remove('show');
+  sheet.classList.remove('show');
 }
 
-// 顶部切换按钮事件
-document.querySelectorAll('#pageSwitcher .page-btn').forEach(btn => {
-  btn.addEventListener('click', () => switchPage(btn.dataset.page));
+sheetOverlay.addEventListener('click', closeSheet);
+
+// Sheet drag to close
+let startY = 0, dragging = false;
+sheet.addEventListener('touchstart', e => { startY = e.touches[0].clientY; dragging = true; });
+sheet.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  const dy = e.touches[0].clientY - startY;
+  if (dy > 0) { sheet.style.transform = `translateY(${dy}px)`; }
+});
+sheet.addEventListener('touchend', e => {
+  if (!dragging) return;
+  dragging = false;
+  const dy = e.changedTouches[0].clientY - startY;
+  if (dy > 80) { closeSheet(); } 
+  sheet.style.transform = '';
 });
 
-// 底部导航事件
-document.querySelectorAll('#bottomNav .nav-item').forEach(item => {
-  item.addEventListener('click', () => switchPage(item.dataset.page));
-});
+// ═══ DISCOVER ═══
+const discOverlay = document.getElementById('discOverlay');
+document.getElementById('btnDiscover').addEventListener('click', toggleDiscover);
 
-// 社区Tab切换
-document.querySelectorAll('#communityTabs .tab-pill').forEach(pill => {
-  pill.addEventListener('click', () => {
-    document.querySelectorAll('#communityTabs .tab-pill').forEach(p => p.classList.remove('active'));
-    pill.classList.add('active');
+function toggleDiscover() {
+  discOverlay.classList.toggle('show');
+}
+
+// ═══ WALLET ═══
+const walOverlay = document.getElementById('walOverlay');
+document.getElementById('btnWallet').addEventListener('click', toggleWallet);
+
+function toggleWallet() {
+  walOverlay.classList.toggle('show');
+}
+
+// Wallet chain filter
+document.querySelectorAll('.wal-chain-tag').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.wal-chain-tag').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');
   });
 });
 
-// 对话输入
-function sendChatMsg() {
-  const input = document.getElementById('chatInputField');
-  const text = input.value.trim();
-  if (!text) return;
-  
-  const area = document.getElementById('chatArea');
-  
-  // 用户消息
-  const userMsg = document.createElement('div');
-  userMsg.className = 'msg msg-user';
-  userMsg.textContent = text;
-  area.appendChild(userMsg);
-  input.value = '';
-  area.scrollTop = area.scrollHeight;
-  
-  // AI回复
-  setTimeout(() => {
-    const aiMsg = document.createElement('div');
-    aiMsg.className = 'msg msg-ai';
-    const lower = text.toLowerCase();
-    
-    let reply = '';
-    if (lower.includes('质押') || lower.includes('理财') || lower.includes('stak')) {
-      reply = '好的，我来查看当前OKX Earn上的质押产品。请确认你的资金量和偏好（灵活/定期/高收益优先）？';
-    } else if (lower.includes('交易赛') || lower.includes('比赛')) {
-      reply = '我可以帮你创建或加入交易赛。当前有3场进行中的比赛，你想查看还是创建新的？';
-    } else if (lower.includes('策略') || lower.includes('量化') || lower.includes('网格')) {
-      reply = '收到！请告诉我你想交易的币种和资金量，我会生成策略建议和回测报告。';
-    } else if (lower.includes('买入') || lower.includes('卖出') || lower.includes('监控') || lower.includes('提醒')) {
-      reply = '我来为Agent设置监控任务。请说明触发条件和执行操作，Agent会7×24小时自动监控。';
-    } else if (lower.includes('社区') || lower.includes('动态') || lower.includes('资讯')) {
-      reply = '你可以切换到社区页面查看最新资讯和策略分享，也可以在这里让我帮你筛选感兴趣的内容。';
-    } else {
-      reply = '我是你的Web3交易助手，可以帮你：\n· 质押理财\n· 创建/参加交易赛\n· AI量化策略\n· Agent自动监控\n\n用自然语言告诉我想做什么吧！';
-    }
-    
-    aiMsg.textContent = reply;
-    area.appendChild(aiMsg);
-    area.scrollTop = area.scrollHeight;
-  }, 800);
+// ═══ FLOATING TRADES ═══
+const actions = [
+  {type:'buy',text:'🟢 BUY 0.5 ETH'},{type:'sell',text:'🔴 SELL 100 ARB'},
+  {type:'stake',text:'🔵 STAKE 2 SOL'},{type:'mint',text:'🟣 MINT Punk'},
+  {type:'buy',text:'🟢 SWAP USDC→ETH'},{type:'sell',text:'🔴 SELL 1.2 BTC'},
+];
+function floatTrade() {
+  const a = actions[Math.floor(Math.random()*actions.length)];
+  const el = document.createElement('div');
+  el.className = `ft ${a.type}`;
+  el.textContent = a.text;
+  const r = document.getElementById('app').getBoundingClientRect();
+  el.style.left = (r.left + r.width*0.15 + Math.random()*r.width*0.6) + 'px';
+  el.style.top = (r.bottom - 60) + 'px';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2000);
 }
-
-document.getElementById('chatInputField').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') sendChatMsg();
-});
-
-// 初始化
-renderNotes('chat');
+setInterval(floatTrade, 4000);
+setTimeout(floatTrade, 1200);
 </script>
+
 </body>
 </html>
